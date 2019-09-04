@@ -4,12 +4,12 @@
 ##.getTSS_from_bam function takes two input files, bam and genome
 ##genome is BSgenome
 ##run script with the following example command:
-##.getTSS_from_bam(bam, genome, sequencingQualityThreshold = 10,
+##.getTSS_from_bam(bam, genome, sample.labels,sequencingQualityThreshold = 10,
 ##                            mappingQualityThreshold = 20,
 ##                            removeNewG = TRUE,
 ##                            correctG = TRUE)
 
-.getTSS_from_bam <- function(bam.files, genome, sequencingQualityThreshold = 10, mappingQualityThreshold = 20,removeNewG = TRUE,correctG = TRUE){
+.getTSS_from_bam <- function(bam.files, genome, sample.labels,sequencingQualityThreshold = 10, mappingQualityThreshold = 20,removeNewG = TRUE,correctG = TRUE){
   what <- c("rname", "strand", "pos", "seq", "qual", "mapq","flag","cigar")
   param <- ScanBamParam(what = what, flag = scanBamFlag(isUnmappedQuery = FALSE, isNotPassingQualityControls = FALSE)) 
   first <- TRUE
@@ -34,7 +34,7 @@
         start <- end + 1
       }
     }
-##repeat cigar, correct intron length problem
+##repeat cigar, correct intron length proble
     cigar <- bam[[1]]$cigar
     start <- 1
     chunksize <- 1e6
@@ -70,13 +70,13 @@
     }
     setnames(TSS, c("chr", "pos", "strand", sample.labels[i])) 
     setkey(TSS, chr, pos, strand)
+    if(first == TRUE) {
+      TSS.all.samples <- TSS
+    }else{
+      TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
+    }
+    first <- FALSE  
   }
-  if(first == TRUE) {
-    TSS.all.samples <- TSS
-  }else{
-    TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-  }
-  first <- FALSE
   return(TSS.all.samples)
 }
 

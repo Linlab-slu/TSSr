@@ -4,10 +4,10 @@
 library(Rsamtools)
 library(stringr)
 library(data.table)
+library(GenomicRanges)
 library(rtracklayer)
 library(GenomicFeatures)
 library(Gviz)
-library(GenomicRanges)
 library(Deseq2)
 library(BSgenome.Scerevisiae.UCSC.sacCer3)
 ##########################################################################################################
@@ -22,12 +22,13 @@ genome <- BSgenome.Scerevisiae.UCSC.sacCer3
 ##If input files are bam files
 bam.files <- c("ScerBY4741.1.sorted.bam","ScerBY4741.2.sorted.bam","ScerArrest.1.sorted.bam","ScerArrest.2.sorted.bam")
 
-TSS.all.samples <- .getTSS_from_bam(bam.files, genome, sequencingQualityThreshold = 10, mappingQualityThreshold = 20,removeNewG = TRUE,correctG = TRUE)
-
+TSS.all.samples <- .getTSS_from_bam(bam.files, genome, sample.labels = "SL42",sequencingQualityThreshold = 10, mappingQualityThreshold = 20,removeNewG = TRUE,correctG = TRUE)
+s
 .plotCorrelation(TSS.all.samples)
 
 
 library.sizes <- .library.sizes(TSS.all.samples)
+
 
 clusters <- clusterTSS2(tss,genome, pVal=0.01, normalizeData=TRUE, 
                           peakDistance=100, extensionDistance=30, nonOverLapping=TRUE,
