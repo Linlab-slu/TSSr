@@ -67,7 +67,6 @@ setMethod("clusterTSS","TSSr", function(object,data = "raw", method = "peakclu"
       tss.clusters <- tss.clusters[tags >clusterThreshold,]
       setorder(tss.clusters, "strand","chr","start")
       tss.clusters[, cluster := .I]
-      tss.clusters <- tss.clusters[,-ncol(tss.clusters)]
       return(tss.clusters)
     })
   }
