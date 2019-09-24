@@ -1,12 +1,17 @@
 ################################################################################################
 setGeneric("shapeCluster",function(object,...)standardGeneric("shapeCluster"))
-setMethod("shapeCluster","TSSr", function(object, method = "PSS",useMultiCore= FALSE, numCores = NULL
+setMethod("shapeCluster","TSSr", function(object, data = "tagClusters",method = "PSS",useMultiCore= FALSE, numCores = NULL
 ){
   message("\nCalculating cluster shape with ",method," method...")
   
   ##initialize data
   tss.dt <- object@TSSmergedMatrix
-  cs.dt <- object@tagClusters
+  if(data == "tagClusters"){
+    cs.dt <- object@tagClusters
+  }else if(data == "consensusClusters"){
+    cs.dt <- object@consensusClusters
+  }
+  
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(myTSSr))
   
