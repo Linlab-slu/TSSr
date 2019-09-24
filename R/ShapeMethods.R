@@ -15,7 +15,6 @@ setMethod("shapeCluster","TSSr", function(object, data = "consensusClusters",met
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(myTSSr))
   
-  
   if (useMultiCore) {
     library(parallel)
     if (is.null(numCores)) {

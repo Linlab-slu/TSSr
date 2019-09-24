@@ -14,8 +14,6 @@
   clusters <- merge(cx,cy, by = c("cluster","strand"), all = T)
   clusters[,c("dominant_tss.x","dominant_tss.y","tags.x","tags.y")][is.na(clusters[,c("dominant_tss.x","dominant_tss.y","tags.x","tags.y")])]=0
   clusters[,dominant_tss := do.call(pmax,clusters[,c("dominant_tss.x","dominant_tss.y")])]
-  clusters$gene.x <- as.character(clusters$gene.x)
-  clusters$gene.y <- as.character(clusters$gene.y)
   clusters <- clusters[!is.na(clusters$gene.x) | !is.na(clusters$gene.y),]
   genelist <- lapply(seq_len(clusters[,.N]),function(r){ifelse(is.na(clusters[r,gene.x]), clusters[r,gene.y], clusters[r,gene.x])})
   clusters[,gene:= genelist]
@@ -23,7 +21,7 @@
   clusters <- clusters[,c("cluster","strand","dominant_tss","gene","tags.x","tags.y")]
   setkey(clusters,gene)
   ##
-  cmp <- lapply(as.list(unique(clusters$gene)), function(my.gene) {
+  cmp <- lapply(as.list(clusters[,unique(gene)]), function(my.gene) {
     data <- clusters[.(my.gene)]
     if(sum(data[,tags.x]) == 0 | sum(data[,tags.y])==0){
       Ds <- NA
@@ -53,6 +51,9 @@
   Ds <- data.frame(matrix(unlist(cmp), nrow=length(cmp), byrow=T),stringsAsFactors=FALSE)
   colnames(Ds) <- c("gene","Ds","pval")
   Ds$padj <- p.adjust(Ds[,"pval"],method = "BH")
+  setDT(Ds)
+  Ds <- Ds[!is.na(padj),]
+  setorder(Ds, "padj")
   return(Ds)
 }
 
