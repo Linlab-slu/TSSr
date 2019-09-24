@@ -15,7 +15,7 @@
 .getConsensusQuantile <- function(tc, gr, tss.temp){
   tss_clusters <- lapply(seq_len(gr[,.N]), function(x) {
     data <- gr[x,]
-    temp <- tc[chr == gr[x,chr] & dominant_tss >= gr[x, start] & dominant_tss <= gr[x,end],]
+    temp <- tc[chr == gr[x,chr] & strand == gr[x,strand] & dominant_tss >= gr[x, start] & dominant_tss <= gr[x,end],]
     if(nrow(temp) >0){
       s <- tss.temp[chr == temp[1,chr] & strand == temp[1, strand] & pos >= temp[,min(start)] & pos <= temp[,max(end)],]
       q1 <- s[which(cumsum(tags) > 0.1*tags),min(pos)]

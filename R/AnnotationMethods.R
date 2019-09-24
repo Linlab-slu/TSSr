@@ -1,7 +1,7 @@
 ################################################################################################
 setGeneric("annotateCluster",function(object,...)standardGeneric("annotateCluster"))
 setMethod("annotateCluster","TSSr", function(object
-                                             ,clusters = "tagClusters"
+                                             ,clusters = "consensusClusters"
                                              ,reference
                                              ,organim
                                              ,annotationType = "genes"

@@ -1,8 +1,8 @@
 ################################################################################################
 setGeneric("shapeCluster",function(object,...)standardGeneric("shapeCluster"))
-setMethod("shapeCluster","TSSr", function(object, data = "tagClusters",method = "PSS",useMultiCore= FALSE, numCores = NULL
+setMethod("shapeCluster","TSSr", function(object, data = "consensusClusters",method = "PSS",useMultiCore= FALSE, numCores = NULL
 ){
-  message("\nCalculating cluster shape with ",method," method...")
+  message("\nCalculating ", data," shape with ",method," method...")
   
   ##initialize data
   tss.dt <- object@TSSmergedMatrix
