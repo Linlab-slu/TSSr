@@ -10,8 +10,10 @@ library(GenomicRanges)
 library(GenomicFeatures)
 library(GenomicAlignments)
 library(Gviz)
-library(Deseq2)
+library(DESeq2)
 library(BSgenome.Scerevisiae.UCSC.sacCer3)
+library(calibrate)
+library(ggfortify)
 ################################################################################################
 inputFiles <- list.files()[c(3,5,7,9)]
 myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
@@ -28,19 +30,26 @@ myTSSr <- normalizeTSS(myTSSr)
 myTSSr <- filterTSS(myTSSr, method = "TPM")
 myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1, useMultiCore=FALSE, numCores = NULL)
 myTSSr <- consensusCluster(myTSSr, data = "filtered", dis = 50)
-
 myTSSr <- shapeCluster(myTSSr,data = "consensusClusters" , method = "PSS",useMultiCore= FALSE, numCores = NULL)
 myTSSr <- annotateCluster(myTSSr,clusters = "consensusClusters",annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
-myTSSr <- deGene(myTSSr,"control","treat", pval = 0.01)
-myTSSr <- shiftPromoter(myTSSr,"control","treat", pval = 0.1) ##must be based on consensus, not done yet, Sep16
+myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 ##plot
 plotCorrelation(myTSSr, samples = "all")
+plotPCA(myTSSr)
 plotInterQuantile(myTSSr)
 plotShape(myTSSr)
 plotDE(myTSSr, withGeneName = "TRUE")
-plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBR298C"),up.dis =500,down.dis = 500)
+plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 500)
 ##exporting data table
 exportTSStable(myTSSr, data = "filtered")
 exportTagClustersTable(myTSSr, data = "assigned")
 exportShapeTable(myTSSr)
 exportDETable(myTSSr, data = "sig")
+exportShiftTable(myTSSr)
+
+
+
+##check run time
+ptm <- proc.time()
+proc.time() - ptm
