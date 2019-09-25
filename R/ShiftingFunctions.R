@@ -6,7 +6,7 @@
 ##.Ds(cx,cy, librarySizex, librarySizey, useRawCount = TRUE)
 
 ############################################################################################################
-.Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE){
+.Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE, pval){
   ##cx is control
   ##cy is treat
   cx <- cx[,c("cluster","strand","dominant_tss","tags","gene")]
@@ -53,6 +53,7 @@
   Ds$padj <- p.adjust(Ds[,"pval"],method = "BH")
   setDT(Ds)
   Ds <- Ds[!is.na(padj),]
+  Ds <- Ds[padj <= pval,]
   setorder(Ds, "padj")
   return(Ds)
 }
