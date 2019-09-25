@@ -27,7 +27,7 @@
 ##ref table has at least 5 columns (gene,chr, start, end, strand)
 ##run script with the following example command:
 ##.plotTSS(tss.tpm,clusters.cl, ref, up.dis = 500, down.dis=100)
-.plotTSS <- function(tss, clusters,df, sampleLables, up.dis, down.dis){
+.plotTSS <- function(tss, clusters,df, samples, up.dis, down.dis){
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
   if(df$strand == "+"){
     p <- df$start - up.dis
