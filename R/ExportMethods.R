@@ -18,6 +18,27 @@ setMethod("plotCorrelation","TSSr", function(object
 })
 
 ################################################################################################
+setGeneric("plotPCA",function(object,...)standardGeneric("plotPCA"))
+setMethod("plotPCA","TSSr", function(object
+                                     ,TSS.threshold=10
+){
+  message("Plotting TSS PCA...")
+  tss <- object@TSSrawMatrix
+  tss <- tss[,4:ncol(tss)]
+  tss <- tss[apply(tss>TSS.threshold, 1, any),]
+  y <- t(tss)
+  sampleLabels <- object@sampleLabels
+  sampleLabelsMerged <- object@sampleLabelsMerged
+  mergeIndex <- object@mergeIndex
+  s <- sampleLabelsMerged[mergeIndex]
+  pdf(file = "PCA_plot.pdf"
+      ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
+  print(autoplot(prcomp(y), data = data.frame(sample = s)
+           ,colour = "sample", size = 3) + theme_minimal()+theme(text = element_text(size=12)))
+  dev.off()
+})
+
+################################################################################################
 setGeneric("plotInterQuantile",function(object,...)standardGeneric("plotInterQuantile"))
 setMethod("plotInterQuantile","TSSr", function(object
                                                ,samples = "all"
@@ -85,26 +106,26 @@ setGeneric("plotDE",function(object,...)standardGeneric("plotDE"))
 setMethod("plotDE","TSSr", function(object
                                     ,withGeneName = "TRUE"
                                     ,xlim=c(-2.5, 2.5)
-                                    ,ylim=c()
+                                    ,ylim=c(0,10)
 ){
   message("Plotting DE graphs...")
-  res <- object@DEtables$DEtable
   pdf(file = paste("Volcano_plot.pdf", sep = ""),width = 8, height = 8,bg = "transparent"
       , family = "Helvetica", fonts = NULL)
+  D.names <- names(object@DEtables)
+  for(i in 1:length(D.names)){
+    res <- object@DEtables[[D.names[i]]]$DEtable
+    plot(res$log2FoldChange,-log10(res$pvalue), pch = 20, xlim = xlim, ylim = ylim
+         ,main = "Volcano plot", xlab = "log2FoldChange", ylab = "-log10(pvalue)")
+    # Add colored points: red if padj<0.05, orange of log2FC>1, green if both)
+    with(subset(res, padj<.05 ), points(log2FoldChange, -log10(pvalue), pch=20, col="red"))
+    with(subset(res, abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="orange"))
+    with(subset(res, padj<.05 & abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="green"))
+    if(withGeneName == "TRUE"){
+      with(subset(res, padj<.05 & abs(log2FoldChange)>1), textxy(log2FoldChange, -log10(pvalue), labs=gene, cex=.8))
+    }
+    
+  }
   ##
-  if(is.null(xlim)){
-    with(res, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot"))
-  }else{
-    with(res, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", xlim=xlim,ylim = ylim))
-  }
-  
-  # Add colored points: red if padj<0.05, orange of log2FC>1, green if both)
-  with(subset(res, padj<.05 ), points(log2FoldChange, -log10(pvalue), pch=20, col="red"))
-  with(subset(res, abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="orange"))
-  with(subset(res, padj<.05 & abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="green"))
-  if(withGeneName == "TRUE"){
-    with(subset(res, padj<.05 & abs(log2FoldChange)>1), textxy(log2FoldChange, -log10(pvalue), labs=gene, cex=.8))
-  }
   dev.off()
 })
 
@@ -119,13 +140,14 @@ setMethod("plotTSS","TSSr", function(object
   message("Plotting TSS graphs...")
   ##initialize data
   tss.filtered <- object@TSSfilteredMatrix
-  clusters <- object@tagClusters[[1]]
+  clusters <- object@consensusClusters[[1]]
   tss.raw <- object@TSSfilteredMatrix
   refGFF <- object@refSource
   organismName <- object@organismName
+  sampleLabelsMerged <- object@sampleLabelsMerged
   
   ##prepare tss table
-  if(FALSE %in% unique(samples %in% sampleLabels)){
+  if(FALSE %in% unique(samples %in% sampleLabelsMerged)){
     stop("No data for one or more given samples! ")
   }else{
     cols <- c("chr","pos","strand", samples)
@@ -160,14 +182,14 @@ setMethod("exportTSStable","TSSr", function(object
   if(data == "raw"){
     if(merged == "TRUE"){
       tss <- object@TSSmergedMatrix
-      write.table(tss, file = "TSS_table_ALL_samples_merged.txt", sep = "\t", quote = F, row.nams = F)
+      write.table(tss, file = "TSS_table_ALL_samples_merged.txt", sep = "\t", quote = F, row.names = F)
     }else{
       tss <- object@TSSrawMatrix
-      write.table(tss, file = "TSS_table_ALL_samples_unmerged.txt", sep = "\t", quote = F, row.nams = F)
+      write.table(tss, file = "TSS_table_ALL_samples_unmerged.txt", sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "filtered"){
     tss <- object@TSSfilteredMatrix
-    write.table(tss, file = "TSS_table_ALL_samples_filtered.txt", sep = "\t", quote = F, row.nams = F)
+    write.table(tss, file = "TSS_table_ALL_samples_filtered.txt", sep = "\t", quote = F, row.names = F)
   }else{
     stop("No data for the given TSS data type!")
   }
@@ -184,14 +206,14 @@ setMethod("exportTagClustersTable","TSSr", function(object
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste("TagClusters_assigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.nams = F)
+      write.table(temp, file = paste("TagClusters_assigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "unassigned"){
     tc <- object@unassignedClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste("TagClusters_unassigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.nams = F)
+      write.table(temp, file = paste("TagClusters_unassigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the given tag cluster data type!")
@@ -208,7 +230,7 @@ setMethod("exportShapeTable","TSSr", function(object
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- s[[samples[i]]]
-      write.table(temp, file = paste("Peomoter_shape_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.nams = F)
+      write.table(temp, file = paste("Promoter_shape_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the promoter shape!")
@@ -221,14 +243,31 @@ setMethod("exportDETable","TSSr", function(object
                                            ,data = "all"
 ){
   message("Exporting differential expression table...")
+  D.names <- names(object@DEtables)
   if(data == "all"){
-    temp <- object@DEtables$DEtable
-    write.table(temp, file = paste("DE_table_ALL.txt", sep = ""), sep = "\t", quote = F, row.nams = F)
+    for(i in 1:length(D.names)){
+      temp <- object@DEtables[[D.names[i]]]$DEtable
+      write.table(temp, file = paste(D.names[i],"DE_table_ALL.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
+    }
   }else if(data == "sig"){
-    temp <- object@DEtables$DEsig
-    write.table(temp, file = paste("DE_table_sig.txt", sep = ""), sep = "\t", quote = F, row.nams = F)
+    for(i in 1:length(D.names)){
+      temp <- object@DEtables[[D.names[i]]]$DEsig
+      write.table(temp, file = paste(D.names[i],"DE_table_sig.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
+    }
   }else{
     stop("No data for the differential expression!")
+  }
+})
+
+################################################################################################
+setGeneric("exportShiftTable",function(object,...)standardGeneric("exportShiftTable"))
+setMethod("exportShiftTable","TSSr", function(object
+){
+  message("Exporting promoter shift table...")
+  D.names <- names(object@PromoterShift)
+  for(i in 1:length(D.names)){
+    temp <- object@PromoterShift[[D.names[i]]]
+    write.table(temp, file = paste(D.names[i],"promoter_shift_table.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
   }
 })
 
