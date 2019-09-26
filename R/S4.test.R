@@ -15,7 +15,7 @@ library(BSgenome.Scerevisiae.UCSC.sacCer3)
 library(calibrate)
 library(ggfortify)
 ################################################################################################
-inputFiles <- list.files()[c(3,5,7,9)]
+inputFiles <- c("S01.sorted.bam","S02.sorted.bam","S03.sorted.bam","S04.sorted.bam")
 myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
               ,inputFiles = inputFiles
               ,inputFilesType= "bam"
@@ -28,9 +28,9 @@ myTSSr <- getTSS(myTSSr)
 myTSSr <- mergeSamples(myTSSr, mergeIndex = c(1,1,2,2))
 myTSSr <- normalizeTSS(myTSSr)
 myTSSr <- filterTSS(myTSSr, method = "TPM")
-myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1, useMultiCore=FALSE, numCores = NULL)
+myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
 myTSSr <- consensusCluster(myTSSr, data = "filtered", dis = 50)
-myTSSr <- shapeCluster(myTSSr,data = "consensusClusters" , method = "PSS",useMultiCore= FALSE, numCores = NULL)
+myTSSr <- shapeCluster(myTSSr,data = "consensusClusters" , method = "PSS",useMultiCore= TRUE, numCores = NULL)
 myTSSr <- annotateCluster(myTSSr,clusters = "consensusClusters",annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
 myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
@@ -47,9 +47,12 @@ exportTagClustersTable(myTSSr, data = "assigned")
 exportShapeTable(myTSSr)
 exportDETable(myTSSr, data = "sig")
 exportShiftTable(myTSSr)
-
-
+##export to bedGraph/BigWig
+exportTSStoBedgraph(myTSSr, data = "filtered", format = "bedGraph")
+exportTSStoBedgraph(myTSSr, data = "filtered", format = "BigWig")
+exportClustersToBed(myTSSr, data = "consensusClusters")
 
 ##check run time
 ptm <- proc.time()
+myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
 proc.time() - ptm

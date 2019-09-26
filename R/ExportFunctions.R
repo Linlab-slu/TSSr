@@ -63,8 +63,45 @@
   plotTracks(c(list(gtrack, atrack.gene,atrack.clusters),dtrack),main = df$gene)
 }
 ###################################################################################################################
-
-.plotInterQuantile <- function(tc, tagsThreshold){
-  temp <- tc[tags >= tagsThreshold ]
+.getBed <- function(cs){
+  p <- cs[strand == "+",]
+  m <- cs[strand == "-",]
+  pbed <- lapply(as.list(seq_len(p[,.N])), function(i){
+    l <- p[i,]
+    if(p[i,q_0.1] == p[i, q_0.9]){
+      nrBlocks = length(unique(c(p[i,start],p[i,end],p[i,q_0.1],p[i,q_0.9])))
+    }else{nrBlocks = length(unique(c(p[i,start],p[i,end],p[i,q_0.1],p[i,q_0.9]))) -1}
+    
+    if(nrBlocks == 3){
+      block.sizes = paste(1, p[i,q_0.9]-p[i,q_0.1]+1, 1, sep = ",")
+      block.starts = paste(0, p[i,q_0.1]-p[i,start], p[i,end]-p[i,start], sep = ",")
+    }else if(nrBlocks ==2){
+      if(p[i,q_0.1] == p[i, start]){
+        block.sizes = paste(p[i,q_0.9]-p[i,q_0.1]+1,1, sep = ",")
+        block.starts = paste(0, p[i,end]-p[i,start], sep = ",")
+      }else if(p[i,end] == p[i, q_0.9]){
+        block.sizes = paste(1, p[i,q_0.9]-p[i,q_0.1]+1, sep = ",")
+        block.starts = paste(0, p[i,q_0.1]-p[i,start], sep = ",")
+      }else{
+        message("\nWhat is the additional condition which has two blocks...")
+        print(p[i,])
+      }
+    }else{
+      block.sizes = paste(p[i,end]-p[i,start])
+      block.starts = paste(0)
+    }
+    list(p[i,chr]
+         ,p[i,start]-1
+         ,p[i,end]
+         ,"."
+         ,0
+         ,"+"
+         ,p[i,dominant_tss]-1
+         ,p[i,dominant_tss]
+         ,0
+         ,nrBlocks
+         ,block.sizes
+         ,block.starts)
+  })
   
 }

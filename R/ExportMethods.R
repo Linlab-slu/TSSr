@@ -182,14 +182,14 @@ setMethod("exportTSStable","TSSr", function(object
   if(data == "raw"){
     if(merged == "TRUE"){
       tss <- object@TSSmergedMatrix
-      write.table(tss, file = "TSS_table_ALL_samples_merged.txt", sep = "\t", quote = F, row.names = F)
+      write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }else{
       tss <- object@TSSrawMatrix
-      write.table(tss, file = "TSS_table_ALL_samples_unmerged.txt", sep = "\t", quote = F, row.names = F)
+      write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "filtered"){
     tss <- object@TSSfilteredMatrix
-    write.table(tss, file = "TSS_table_ALL_samples_filtered.txt", sep = "\t", quote = F, row.names = F)
+    write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
   }else{
     stop("No data for the given TSS data type!")
   }
@@ -206,14 +206,14 @@ setMethod("exportTagClustersTable","TSSr", function(object
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste("TagClusters_assigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"tagClusters.assigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "unassigned"){
     tc <- object@unassignedClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste("TagClusters_unassigned_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"tagClusters.unassigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the given tag cluster data type!")
@@ -230,7 +230,7 @@ setMethod("exportShapeTable","TSSr", function(object
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- s[[samples[i]]]
-      write.table(temp, file = paste("Promoter_shape_",samples[i],".txt", sep = ""), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"promoter.shape","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the promoter shape!")
@@ -247,12 +247,12 @@ setMethod("exportDETable","TSSr", function(object
   if(data == "all"){
     for(i in 1:length(D.names)){
       temp <- object@DEtables[[D.names[i]]]$DEtable
-      write.table(temp, file = paste(D.names[i],"DE_table_ALL.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(D.names[i],"DE.table.aLL.txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "sig"){
     for(i in 1:length(D.names)){
       temp <- object@DEtables[[D.names[i]]]$DEsig
-      write.table(temp, file = paste(D.names[i],"DE_table_sig.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(D.names[i],"DE.table.sig.txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the differential expression!")
@@ -267,7 +267,7 @@ setMethod("exportShiftTable","TSSr", function(object
   D.names <- names(object@PromoterShift)
   for(i in 1:length(D.names)){
     temp <- object@PromoterShift[[D.names[i]]]
-    write.table(temp, file = paste(D.names[i],"promoter_shift_table.txt", sep = "_"), sep = "\t", quote = F, row.names = F)
+    write.table(temp, file = paste(D.names[i],"promoter.shift.table.txt", sep = "."), sep = "\t", quote = F, row.names = F)
   }
 })
 

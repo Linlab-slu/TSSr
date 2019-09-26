@@ -84,9 +84,9 @@
     end <- clusters[i,V2]
     #copied.dt[, ID := .I]##NEW April18
     cluster.data <- copied.dt[pos %between% c(start,end), ]
-    tags <- cluster.data[,sum(tags)]
-    q1 <- cluster.data[which(cumsum(tags) > 0.1*tags),min(pos)]
-    q9 <- cluster.data[order(-pos)][which(cumsum(tags) > 0.1*tags),max(pos)]
+    tags.sum <- cluster.data[,sum(tags)]##NEW Sep25, tags -> tags.sum
+    q1 <- cluster.data[which(cumsum(tags) > 0.1*tags.sum),min(pos)]
+    q9 <- cluster.data[order(-pos)][which(cumsum(tags) > 0.1*tags.sum),max(pos)]
     list(i
          ,cluster.data[,chr[[1]]]
          ,start
@@ -94,7 +94,7 @@
          ,cluster.data[,strand[[1]]]
          #,cluster.data[which(ID %in% peakID), pos]  # NEW - use id column to find the intersection for the peakID vector (should hopefully only be 1!)
          ,cluster.data[which.max(tags),pos]
-         ,tags
+         ,tags.sum
          ,cluster.data[,max(tags)]
          ,q1
          ,q9
