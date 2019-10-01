@@ -1,27 +1,20 @@
 #####################################################################################################
-#####################################################################################################
-##.assign2gene function assign clusters to reference
-##.assign2gene function takes two input files, clusters and refernce
-##users need to provide organism scientific name like Saccharomyces cerevisiae
-##reference could be "gff3" or "gtf" file, or an URL
-##clusters table has 11 columns (cluster,chr,start,end,strand,dominant_tss,tpm,tpm.dominant_tss,q_0.1,q_0.9,interquantile_width) 
-##run script with the following example command:
-##.assign2gene(clusters,reference,organim,upstream=1000, upstreamOverlap = 500)
-
-
-.assign2gene <- function(clusters,ref,upstream, upstreamOverlap, downstream){
+##.assign2gene function assign cs.temp to reference
+.assign2gene <- function(cs.temp,ref,upstream, upstreamOverlap, downstream, filterCluster){
   ref[, "subset" := paste0(seqnames,"_",strand)]
   setkey(ref,subset)
-  clusters[, "subset" := paste0(chr,"_",strand)]
-  setkey(clusters,subset)
-  asn <- lapply(as.list(clusters[,unique(subset)]), function(x) {
-    cs <- clusters[.(x)]
+  cs.temp[, "subset" := paste0(chr,"_",strand)]
+  setkey(cs.temp,subset)
+  asn <- lapply(as.list(cs.temp[,unique(subset)]), function(x) {
+    cs <- cs.temp[.(x)]
     cs[,subset:= NULL]
     colnames(cs)[3:4] <- c("start.c","end.c")
     gr <- makeGRangesFromDataFrame(cs, keep.extra.columns= T, start.field = "dominant_tss", end.field = "dominant_tss")
-    ref_sub <- subset(ref[ref$subset == x,]) ## why ref_sub <- ref[.(x)] not working when x == "chrM_-"?
+    ref_sub <- subset(ref[ref$subset == x,])
+    ref_coding <- subset(ref[ref$subset == x,])
     if(nrow(ref_sub) == 0){
       mcols(gr)[,"gene"] <- NA
+      mcols(gr)[,"inCoding"] <- NA
     }else{
       if(cs$strand[1] == "+"){
         setorder(ref_sub,start)
@@ -49,23 +42,34 @@
       }
       rownames(ref_sub) <- ref_sub$gene_id
       ref_sub <- makeGRangesFromDataFrame(ref_sub, keep.extra.columns= F)
+      ##find overlap with promoter region
       hits <- findOverlaps(gr,ref_sub)
       hits <- breakTies(hits, method = "first")
       hits <- methods::as(hits, "List")
       hits <- extractList(names(ref_sub), hits)
       hits <- as.character(hits)
       mcols(gr)[,"gene"] <- hits
+      if(filterCluster == TRUE){
+        ##find overlap with coding regions
+        ##coding
+        rownames(ref_coding) <- ref_coding$gene_id
+        ref_coding <- makeGRangesFromDataFrame(ref_coding, keep.extra.columns = F)
+        hits <- findOverlaps(gr,ref_coding)
+        hits <- breakTies(hits, method = "first")
+        hits <- methods::as(hits, "List")
+        hits <- extractList(names(ref_coding), hits)
+        hits <- as.character(hits)
+        mcols(gr)[,"inCoding"] <- hits
+      }
     }
     gr <- as.data.frame(gr)
     gr$dominant_tss <- gr$start
     colnames(gr)[c(1,7,8)] <- c("chr","start","end")
-    gr <- gr[,c(6,1,7,8,5,15,9:14)]
+    gr <- gr[,c(6,1,7,8,5,ncol(gr),9:(ncol(gr)-1))]
+    setDT(gr)
     return(gr)
   })
   setorder(do.call("rbind",asn), cluster)
 }
-
-
-
 #####################################################################################################
 

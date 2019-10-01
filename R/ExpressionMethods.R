@@ -3,10 +3,12 @@ setGeneric("deGene",function(object,...)standardGeneric("deGene"))
 setMethod("deGene","TSSr", function(object
                                     ,comparePairs
                                     ,pval=0.01
+                                    ,useMultiCore
+                                    ,numCores
 ){
   ##initialize data
   message("\nCalculating gene differential expression...")
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
   
@@ -19,7 +21,7 @@ setMethod("deGene","TSSr", function(object
     mergeIndex <- object@mergeIndex
     samplex <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == sampleOne))]
     sampley <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == sampleTwo))]
-    DE.dt <- .deseq2(cx,cy,tss.raw,samplex, sampley, sampleOne, sampleTwo)
+    DE.dt <- .deseq2(cx,cy,tss.raw,samplex, sampley, sampleOne, sampleTwo,useMultiCore, numCores)
     DE.sig <- subset(DE.dt, padj < pval)
     DE.dt$gene <- row.names(DE.dt)
     DE.sig$gene <- row.names(DE.sig)

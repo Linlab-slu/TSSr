@@ -264,7 +264,7 @@
     TSS.minus <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = F)
     TSS <- rbind(TSS.plus, TSS.minus)
     TSS$tag_count <- 1
-    TSS <- data.table(TSS)
+    setDT(TSS)
     TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
     setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)
@@ -294,7 +294,7 @@
     TSS <- read.table(file = inputFiles[i], header = F, sep = "\t"
                       ,colClasses = c("character", "integer", "character", "integer")
                       ,col.names = c("chr", "pos", "strand", sampleLabels[i]))
-    TSS <- data.table(TSS)
+    setDT(TSS)
     setkeyv(TSS, cols = c("chr", "pos", "strand"))
     if(first == TRUE) {
       TSS.all.samples <- TSS
@@ -313,17 +313,20 @@
 ##run script with the following example command:
 ##.getTSS_from_TSStable(inputFiles)
 
-.getTSS_from_TSStable <- function(inputFiles){
+.getTSS_from_TSStable <- function(inputFiles, sampleLabels){
   if(length(inputFiles) > 1){
     stop("Only one file should be provided when inputFilesType = \"TSStable\"!")
   }
   if(file.exists(inputFiles) == FALSE){
     stop("Could not locate input file ", inputFiles)
   }			
-  TSS.all.samples <- read.table(file = inputFiles, header = F, stringsAsFactors = FALSE)
+  TSS.all.samples <- read.table(file = inputFiles, header = T, stringsAsFactors = FALSE
+                                ,colClasses = c("character", "integer", "character", rep("integer", length(sampleLabels)))
+                                ,col.names = c("chr", "pos", "strand", sampleLabels))
   if(ncol(TSS.all.samples) != (length(sampleLabels) + 3)){
     stop("Number of provided sample labels must match the number of samples in the TSS table!")
   }
+  setDT(TSS.all.samples)
   return(TSS.all.samples)
 }
 

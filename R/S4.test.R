@@ -22,28 +22,30 @@ myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
               ,sampleLabels = c("SL01","SL02","SL03","SL04")
               ,sampleLabelsMerged = c("control","treat")
               ,refSource = "saccharomyces_cerevisiae.SGD.gff"
-              ,organismName = "saccharomyces cerevisiae"
-)
+              ,organismName = "saccharomyces cerevisiae")
 myTSSr <- getTSS(myTSSr)
 myTSSr <- mergeSamples(myTSSr, mergeIndex = c(1,1,2,2))
 myTSSr <- normalizeTSS(myTSSr)
 myTSSr <- filterTSS(myTSSr, method = "TPM")
+myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1
+                     , useMultiCore=TRUE, numCores = NULL)
 myTSSr <- clusterTSS(myTSSr, data = "filtered", method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
-myTSSr <- consensusCluster(myTSSr, data = "filtered", dis = 50)
-myTSSr <- shapeCluster(myTSSr,data = "consensusClusters" , method = "PSS",useMultiCore= TRUE, numCores = NULL)
-myTSSr <- annotateCluster(myTSSr,clusters = "consensusClusters",annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
-myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+myTSSr <- shapeCluster(myTSSr,data = "consensusClusters", method = "PSS",useMultiCore= TRUE, numCores = NULL)
+myTSSr <- annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE, 
+                          filterClusterThreshold = 0.01, annotationType = "genes"
+                          ,upstream=1000,upstreamOverlap = 500,downstream = 0)
+myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=TRUE, numCores=NULL)
 myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-##plot
+##plot graphs
 plotCorrelation(myTSSr, samples = "all")
 plotPCA(myTSSr)
 plotInterQuantile(myTSSr)
 plotShape(myTSSr)
 plotDE(myTSSr, withGeneName = "TRUE")
-plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 500)
-##exporting data table
+plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),clusters = "filtered",up.dis =500,down.dis = 100)
+##exporting data tables
 exportTSStable(myTSSr, data = "filtered")
-exportTagClustersTable(myTSSr, data = "assigned")
+exportClustersTable(myTSSr, data = "filtered")
 exportShapeTable(myTSSr)
 exportDETable(myTSSr, data = "sig")
 exportShiftTable(myTSSr)

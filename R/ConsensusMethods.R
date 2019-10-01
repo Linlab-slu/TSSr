@@ -1,6 +1,6 @@
 ################################################################################################
 setGeneric("consensusCluster",function(object,...)standardGeneric("consensusCluster"))
-setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 50
+setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 50,useMultiCore=TRUE, numCores = NULL
 ){
   message("\nCreating consensus clusters...")
   
@@ -11,7 +11,7 @@ setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 5
     tss.dt <- object@TSSfilteredMatrix
   }
   sampleLabelsMerged <- object@sampleLabelsMerged
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   cs <- object@tagClusters
   ##get consensus peak range
   cx <- cs[[sampleLabelsMerged[1]]]
@@ -35,7 +35,8 @@ setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 5
     setnames(tss.temp, colnames(tss.temp)[[4]], "tags")
     tss.temp <- tss.temp[tags >0,]
     tc <- cs[[sampleLabelsMerged[[i]]]]
-    new <- .getConsensusQuantile(tc, gr, tss.temp)
+    new <- .getConsensusQuantile(tc, gr, tss.temp,useMultiCore, numCores)
+    return(new)
     })
   names(cs.consensus) <- sampleLabelsMerged
   cat("\n")

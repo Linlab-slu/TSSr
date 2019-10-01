@@ -6,7 +6,7 @@ setMethod("shiftPromoter","TSSr", function(object
 ){
   ##initialize data
   message("\nCalculating core promoter shifts...")
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   sampleLabelsMerged <- object@sampleLabelsMerged
   
   D <- lapply(as.list(seq(comparePairs)), function(i){

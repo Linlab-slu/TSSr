@@ -2,7 +2,7 @@
 ##
 ################################################################################################
 setGeneric("clusterTSS",function(object,...)standardGeneric("clusterTSS"))
-setMethod("clusterTSS","TSSr", function(object,data = "raw", method = "peakclu"
+setMethod("clusterTSS","TSSr", function(object,data = "filtered", method = "peakclu"
                                         ,peakDistance=100, localThreshold = 0.02
                                         ,extensionDistance=30,clusterThreshold = 1
                                         , nonOverLapping=TRUE
@@ -12,7 +12,7 @@ setMethod("clusterTSS","TSSr", function(object,data = "raw", method = "peakclu"
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   
   ##pick which data will be used for clustering
   if(data == "raw"){
