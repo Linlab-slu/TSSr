@@ -55,8 +55,6 @@ setGeneric("getTSS",function(object,...)standardGeneric("getTSS"))
 setMethod("getTSS","TSSr", function(object
                                     ,sequencingQualityThreshold = 10
                                     ,mappingQualityThreshold = 20
-                                    ,removeNewG = TRUE
-                                    ,correctG = TRUE
                                     ){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
@@ -67,9 +65,7 @@ setMethod("getTSS","TSSr", function(object
                      ,Genome
                      ,sampleLabels
                      ,sequencingQualityThreshold
-                     ,mappingQualityThreshold
-                     ,removeNewG
-                     ,correctG)
+                     ,mappingQualityThreshold)
   }else if(object@inputFilesType == "bed"){
     tss <- .getTSS_from_bed(object@inputFiles, Genome, sampleLabels)
   }else if(object@inputFilesType == "BigWig"){
