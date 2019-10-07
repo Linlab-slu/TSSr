@@ -86,5 +86,3 @@ setMethod("getTSS","TSSr", function(object
   object@TSSrawMatrix <- tss
   assign(objName, object, envir = parent.frame())
 })
-
-
