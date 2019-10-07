@@ -2,13 +2,14 @@ setGeneric("filterTSS",function(object,...)standardGeneric("filterTSS"))
 setMethod("filterTSS","TSSr", function(object
                                        ,Genome
                                        ,method = "poisson"
+                                       ,Normalization = TRUE
                                        ,pVal=0.01
                                        ,tpmLow = 0.1
 ){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   library.size <- object@librarySizes
   # calculate size of genome
   genomeSize <- 0

@@ -8,7 +8,7 @@ setMethod("normalizeTSS","TSSr", function(object
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   tss.dt <- object@TSSmergedMatrix
   library.size <- object@librarySizes
   # calculate size of genome

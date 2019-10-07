@@ -7,9 +7,10 @@ setMethod("mergeSamples","TSSr", function(object
 ){
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
+  mergeIndex <- object@mergeIndex
   tss <- object@TSSrawMatrix
   mergeIndex <- as.integer(mergeIndex)
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   if(length(mergeIndex) != length(sampleLabels)){
     stop("Length of mergeIndex must match number of samples.")
   }

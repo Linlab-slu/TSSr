@@ -8,7 +8,7 @@ setClass(Class = "TSSr",
                         ,sampleLabelsMerged = "character"
                         ,librarySizes = "integer"
                         ,TSSrawMatrix = "data.frame"
-                        ,mergeIndex = "integer"
+                        ,mergeIndex = "numeric"
                         ,TSSmergedMatrix = "data.frame"
                         ,TSSnormalizedMatrix = "data.frame"
                         ,TSSfilteredMatrix = "data.frame"
@@ -19,6 +19,7 @@ setClass(Class = "TSSr",
                         ,organismName = "character"
                         ,assignedClusters = "list"
                         ,unassignedClusters = "list"
+                        ,filteredClusters = "list"
                         ,DEtables = "list"
                         ,PromoterShift = "list"
                         ),
@@ -29,7 +30,7 @@ setClass(Class = "TSSr",
                    ,sampleLabelsMerged = character()
                    ,librarySizes = integer()
                    ,TSSrawMatrix = data.frame()
-                   ,mergeIndex = integer()
+                   ,mergeIndex = numeric()
                    ,TSSmergedMatrix = data.frame()
                    ,TSSnormalizedMatrix = data.frame()
                    ,TSSfilteredMatrix = data.frame()
@@ -40,11 +41,12 @@ setClass(Class = "TSSr",
                    ,organismName = character()
                    ,assignedClusters = list()
                    ,unassignedClusters = list()
+                   ,filteredClusters = list()
                    ,DEtables = list()
                    ,PromoterShift = list()
                    ),
          validity=function(object){
-           supportedTypes <- c("bam", "bamPairedEnd", "bed", "ctss", "CTSStable", "BigWig")
+           supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
            if(!(object@inputFilesType %in% supportedTypes))
              return(paste(sQuote("inputFilesType"), "must be one of supported input file types:",
                           paste(sQuote(supportedTypes), collapse = ", "), "."))
@@ -55,30 +57,32 @@ setGeneric("getTSS",function(object,...)standardGeneric("getTSS"))
 setMethod("getTSS","TSSr", function(object
                                     ,sequencingQualityThreshold = 10
                                     ,mappingQualityThreshold = 20
+                                    ,removeNewG = TRUE
+                                    ,correctG = TRUE
                                     ){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabels <- object@sampleLabels
-  objName <- deparse(substitute(myTSSr))
+  objName <- deparse(substitute(object))
   if(object@inputFilesType == "bam" | object@inputFilesType == "bamPairedEnd"){
     tss <- .getTSS_from_bam(object@inputFiles
                      ,Genome
                      ,sampleLabels
                      ,sequencingQualityThreshold
-                     ,mappingQualityThreshold)
+                     ,mappingQualityThreshold
+                     ,removeNewG
+                     ,correctG)
   }else if(object@inputFilesType == "bed"){
     tss <- .getTSS_from_bed(object@inputFiles, Genome, sampleLabels)
   }else if(object@inputFilesType == "BigWig"){
     tss <- .getTSS_from_BigWig(object@inputFiles,Genome, sampleLabels)
-  }else if(object@inputFilesType == "ctss"){
+  }else if(object@inputFilesType == "tss"){
     tss <- .getTSS_from_tss(object@inputFiles, sampleLabels)
-  }else if(object@inputFilesType == "ctssTable"){
-    tss <- .getTSS_from_TSStable(object@inputFiles)
+  }else if(object@inputFilesType == "TSStable"){
+    tss <- .getTSS_from_TSStable(object@inputFiles, sampleLabels)
   }
   setorder(tss, "strand","chr","pos")
   cat("\n")
   object@TSSrawMatrix <- tss
   assign(objName, object, envir = parent.frame())
 })
-
-

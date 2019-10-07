@@ -133,15 +133,29 @@ setMethod("plotDE","TSSr", function(object
 setGeneric("plotTSS",function(object,...)standardGeneric("plotTSS"))
 setMethod("plotTSS","TSSr", function(object
                                      ,samples
+                                     ,tssData = "filtered"
+                                     ,clusters = "filtered"
+                                     ,clusterThreshold = 0.02
                                      ,genelist
                                      ,up.dis =500
                                      ,down.dis = 500
 ){
   message("Plotting TSS graphs...")
   ##initialize data
-  tss.filtered <- object@TSSfilteredMatrix
-  clusters <- object@consensusClusters[[1]]
-  tss.raw <- object@TSSfilteredMatrix
+  if(clusters == "all"){
+    cs <- object@consensusClusters
+  }else if(clusters == "assigned"){
+    cs <- object@assignedClusters
+  }else if(clusters == "filtered"){
+    cs <- object@filteredClusters
+  }else{
+    stop("No cluster data for the given clusters option! ")
+  }
+  if(tssData == "filtered"){
+    tss <- object@TSSfilteredMatrix
+  }else if(tssData == "raw"){
+    tss <- object@TSSmergedMatrix
+  }
   refGFF <- object@refSource
   organismName <- object@organismName
   sampleLabelsMerged <- object@sampleLabelsMerged
@@ -151,7 +165,8 @@ setMethod("plotTSS","TSSr", function(object
     stop("No data for one or more given samples! ")
   }else{
     cols <- c("chr","pos","strand", samples)
-    tss <- tss.filtered[,.SD, .SDcols = cols]
+    tss <- tss[,.SD, .SDcols = cols]
+    cs <- cs[samples]
   }
   tss.p <- tss[tss$strand == "+",]
   tss.m <- tss[tss$strand == "-",]
@@ -167,7 +182,7 @@ setMethod("plotTSS","TSSr", function(object
       ,width = 10, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
   for (i in 1:nrow(ref)){
     df <- ref[i,]
-    .plotTSS(tss, clusters,df, samples, up.dis, down.dis)
+    .plotTSS(tss, cs,df, samples, up.dis, down.dis)
   }
   dev.off()
 })
@@ -196,9 +211,9 @@ setMethod("exportTSStable","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportTagClustersTable",function(object,...)standardGeneric("exportTagClustersTable"))
-setMethod("exportTagClustersTable","TSSr", function(object
-                                                    ,data = "assigned"
+setGeneric("exportClustersTable",function(object,...)standardGeneric("exportClustersTable"))
+setMethod("exportClustersTable","TSSr", function(object
+                                                    ,data = "filtered"
 ){
   message("Exporting tagClusters table...")
   if(data == "assigned"){
@@ -206,14 +221,21 @@ setMethod("exportTagClustersTable","TSSr", function(object
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste(samples[i],"tagClusters.assigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"Clusters.assigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "unassigned"){
     tc <- object@unassignedClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste(samples[i],"tagClusters.unassigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"Clusters.unassigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+    }
+  }else if(data == "filtered"){
+    tc <- object@filteredClusters
+    samples <- object@sampleLabelsMerged
+    for(i in 1:length(samples)){
+      temp <- tc[[samples[i]]]
+      write.table(temp, file = paste(samples[i],"filteredClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the given tag cluster data type!")
@@ -268,6 +290,73 @@ setMethod("exportShiftTable","TSSr", function(object
   for(i in 1:length(D.names)){
     temp <- object@PromoterShift[[D.names[i]]]
     write.table(temp, file = paste(D.names[i],"promoter.shift.table.txt", sep = "."), sep = "\t", quote = F, row.names = F)
+  }
+})
+
+################################################################################################
+setGeneric("exportTSStoBedgraph",function(object,...)standardGeneric("exportTSStoBedgraph"))
+setMethod("exportTSStoBedgraph","TSSr", function(object
+                                                 ,data = "filtered"
+                                                 ,format = "bedGraph"
+                                                 ,oneFile = FALSE
+){
+  Genome <- .getGenome(object@genomeName)
+  sampleLabelsMerged <- object@sampleLabelsMerged
+  if(data == "filtered"){
+    tss.dt <- object@TSSfilteredMatrix
+  }else{tss.dt <- object@TSSmergedMatrix}
+  for (i in 1:length(sampleLabelsMerged)){
+    temp <- tss.dt[,.SD, .SDcols = c("chr","pos","strand",sampleLabelsMerged[i])]
+    setnames(temp, colnames(temp)[[4]], "score")
+    temp <- temp[score >0,]
+    if(oneFile == TRUE){
+      message("Exporting TSS to bedgraph...")
+      temp[, score := ifelse(strand == "+", score, score*(-1))]
+      temp <- makeGRangesFromDataFrame(temp, start.field = "pos", end.field = "pos", keep.extra.columns = TRUE)
+      export(temp,paste(sampleLabelsMerged[i], "TSS", data, "bedGraph", sep = "."), format = "bedGraph")
+    }else{
+      temp.p <- temp[strand == "+",]
+      temp.m <- temp[strand == "-",]
+      temp.m[, score := score*(-1)]
+      temp.p <- makeGRangesFromDataFrame(temp.p, start.field = "pos", end.field = "pos", keep.extra.columns = TRUE)
+      temp.m <- makeGRangesFromDataFrame(temp.m, start.field = "pos", end.field = "pos", keep.extra.columns = TRUE)
+      if(format == "bedGraph"){
+        message("Exporting TSS to bedgraph...")
+        export(temp.p,paste(sampleLabelsMerged[i], "TSS", data, "plus.bedGraph", sep = "."), format = "bedGraph")
+        export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.bedGraph", sep = "."), format = "bedGraph")
+      }else if(format == "BigWig"){
+        message("Exporting TSS to BigWig...")
+        seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% seqnames(temp.p)]
+        seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% seqnames(temp.m)]
+        export(temp.p,paste(sampleLabelsMerged[i], "TSS", data, "plus.BigWig", sep = "."), format = "BigWig")
+        export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.BigWig", sep = "."), format = "BigWig")
+      }
+    }
+  }
+})
+################################################################################################
+setGeneric("exportClustersToBed",function(object,...)standardGeneric("exportClustersToBed"))
+setMethod("exportClustersToBed","TSSr", function(object
+                                                 ,data = "consensusClusters"
+){
+  message("Exporting clusters to bed...")
+  sampleLabelsMerged <- object@sampleLabelsMerged
+  if(data == "tagClusters"){
+    cs <- object@tagClusters
+  }else if(data == "consensusClusters"){
+    cs <- object@consensusClusters}
+  for (i in 1:length(sampleLabelsMerged)){
+    temp <- cs[[sampleLabelsMerged[i]]]
+    temp <- .getBed(temp)
+    df <- file(paste(sampleLabelsMerged[i],data,"bed", sep = "."), open = "wt")
+    writeLines(paste('track name="',sampleLabelsMerged[i]
+                     ,"(",data
+                     ,'(TC) q0.1-q0.9)" description="'
+                     ,sampleLabelsMerged[i],"(",data
+                     ,'(TC) q0.1-q0.9)" '
+                     ,'visibility="pack" color=0,255,255', sep = ""), df)
+    write.table(temp, df, sep = "\t", quote = F, row.names = F, col.names = F)
+    close(df)
   }
 })
 
