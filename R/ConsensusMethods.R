@@ -39,7 +39,6 @@ setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 5
     return(new)
     })
   names(cs.consensus) <- sampleLabelsMerged
-  cat("\n")
   object@consensusClusters <- cs.consensus
   assign(objName, object, envir = parent.frame())
 })

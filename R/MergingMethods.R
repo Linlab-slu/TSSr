@@ -27,7 +27,6 @@ setMethod("mergeSamples","TSSr", function(object
   for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
   re <- cbind(tss[,1:3],re)
   
-  cat("\n")
   object@mergeIndex <- mergeIndex
   object@TSSmergedMatrix <- re
   object@librarySizes <- as.integer(colSums(re[,4:ncol(re), drop = F], na.rm = T))

@@ -70,7 +70,6 @@ setMethod("clusterTSS","TSSr", function(object,data = "filtered", method = "peak
       return(tss.clusters)
     })
   }
-  cat("\n")
   names(cs) <- sampleLabelsMerged
   object@tagClusters <- cs
   assign(objName, object, envir = parent.frame())

@@ -82,7 +82,8 @@ setMethod("getTSS","TSSr", function(object
     tss <- .getTSS_from_TSStable(object@inputFiles, sampleLabels)
   }
   setorder(tss, "strand","chr","pos")
-  cat("\n")
   object@TSSrawMatrix <- tss
   assign(objName, object, envir = parent.frame())
 })
+
+

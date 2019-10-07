@@ -77,7 +77,6 @@ setMethod("annotateCluster","TSSr", function(object
       return(cs)
     })
   }
-  cat("\n")
   names(asned) <- sampleLabelsMerged
   names(unasn) <- sampleLabelsMerged
   object@assignedClusters <- asned

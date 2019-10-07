@@ -33,7 +33,6 @@ setMethod("normalizeTSS","TSSr", function(object
   for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
   re <- cbind(tss.dt[,1:3],re)
   setorder(re, "strand","chr","pos")
-  cat("\n")
   object@TSSnormalizedMatrix <- re
   assign(objName, object, envir = parent.frame())
 })

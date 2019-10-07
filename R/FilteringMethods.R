@@ -37,7 +37,6 @@ setMethod("filterTSS","TSSr", function(object
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")
-    cat("\n")
     object@TSSfilteredMatrix <- re
     assign(objName, object, envir = parent.frame())
   }else if(method  == "TPM"){
@@ -56,7 +55,6 @@ setMethod("filterTSS","TSSr", function(object
   ##removes filtered rows
   re <- re[rowSums(re[,4:ncol(re)]) >0,]
   setorder(re, "strand","chr","pos")
-  cat("\n")
   object@TSSfilteredMatrix <- re
   assign(objName, object, envir = parent.frame())
   }else{

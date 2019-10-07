@@ -215,22 +215,40 @@ setGeneric("exportClustersTable",function(object,...)standardGeneric("exportClus
 setMethod("exportClustersTable","TSSr", function(object
                                                     ,data = "filtered"
 ){
-  message("Exporting tagClusters table...")
-  if(data == "assigned"){
+  if(data == "tagClusters"){
+    message("Exporting tagClusters table...")
+    tc <- object@tagClusters
+    samples <- object@sampleLabelsMerged
+    for(i in 1:length(samples)){
+      temp <- tc[[samples[i]]]
+      write.table(temp, file = paste(samples[i],"tagClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+    }
+  }else if(data == "consensusClusters"){
+    message("Exporting consensusClusters table...")
+    tc <- object@consensusClusters
+    samples <- object@sampleLabelsMerged
+    for(i in 1:length(samples)){
+      temp <- tc[[samples[i]]]
+      write.table(temp, file = paste(samples[i],"consensusClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+    }
+  }else if(data == "assigned"){
+    message("Exporting assignedClusters table...")
     tc <- object@assignedClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste(samples[i],"Clusters.assigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"assignedClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "unassigned"){
+    message("Exporting unassignedClusters table...")
     tc <- object@unassignedClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      write.table(temp, file = paste(samples[i],"Clusters.unassigned","txt", sep = "."), sep = "\t", quote = F, row.names = F)
+      write.table(temp, file = paste(samples[i],"unassignedClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "filtered"){
+    message("Exporting filteredClusters table...")
     tc <- object@filteredClusters
     samples <- object@sampleLabelsMerged
     for(i in 1:length(samples)){

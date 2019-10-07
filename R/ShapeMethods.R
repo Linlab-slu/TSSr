@@ -66,7 +66,6 @@ setMethod("shapeCluster","TSSr", function(object, data = "consensusClusters",met
     })
   }
   names(cs.shape) <- sampleLabelsMerged
-  cat("\n")
   object@clusterShape <- cs.shape
   assign(objName, object, envir = parent.frame())
 })

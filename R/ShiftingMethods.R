@@ -24,7 +24,6 @@ setMethod("shiftPromoter","TSSr", function(object
     paste0(comparePairs[[i]][1],"_VS_",comparePairs[[i]][2], sep ="")
   })
   names(D) <- D.names
-  cat("\n")
   object@PromoterShift <- D
   assign(objName, object, envir = parent.frame())
 })
