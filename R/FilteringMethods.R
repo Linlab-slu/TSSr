@@ -42,6 +42,7 @@ setMethod("filterTSS","TSSr", function(object
   }else if(method  == "TPM"){
     message("\nFiltering data with ", method," method...")
     tss.tpm <- object@TSSnormalizedMatrix
+    #tss.tpm <- object@TSSmergedMatrix
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
       temp <- tss.tpm[,.SD, .SDcols = sampleLabelsMerged[i]]
       setnames(temp, colnames(temp)[[1]], "tags")

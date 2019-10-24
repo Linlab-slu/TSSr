@@ -7,7 +7,7 @@ setMethod("mergeSamples","TSSr", function(object
 ){
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
-  mergeIndex <- object@mergeIndex
+  #mergeIndex <- object@mergeIndex
   tss <- object@TSSrawMatrix
   mergeIndex <- as.integer(mergeIndex)
   objName <- deparse(substitute(object))

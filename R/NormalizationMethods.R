@@ -11,6 +11,7 @@ setMethod("normalizeTSS","TSSr", function(object
   objName <- deparse(substitute(object))
   tss.dt <- object@TSSmergedMatrix
   library.size <- object@librarySizes
+  # if library size is empty, get library size
   # calculate size of genome
   genomeSize <- 0
   for (chrom in seq(Genome)) {

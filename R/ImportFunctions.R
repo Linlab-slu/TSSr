@@ -174,17 +174,15 @@
     readsGR <- import(inputFiles[i], format = "BigWig")
     readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
-    readsGR.p <- readsGR[strand(readsGR) == "+"]
-    readsGR.m <- readsGR[strand(readsGR) == "-"]
+    readsGR.p <- readsGR[score(readsGR) > 0]
+    readsGR.m <- readsGR[score(readsGR) < 0]
     message("\t-> Making TSS table...")
-    TSS.plus <- data.frame(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = F)
-    TSS.minus <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = F)
+    TSS.plus <- data.frame(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = F)
+    TSS.minus <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = F)
     TSS <- rbind(TSS.plus, TSS.minus)
-    TSS$tag_count <- 1
 
     setDT(TSS)
 
-    TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
     setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)
     
@@ -196,6 +194,7 @@
     }
     first <- FALSE
   }   
+  TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
 
