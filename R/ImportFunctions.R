@@ -167,7 +167,7 @@
 ##.getTSS_from_BigWig(inputFiles, Genome)
 
 .getTSS_from_BigWig <- function(inputFiles, Genome, sampleLabels){
-  library.sizes <- vector()
+  #library.sizes <- vector()
   first <- TRUE
   for(i in 1:length(inputFiles)) {
     message("\nReading in file: ", inputFiles[i], "...")
@@ -186,7 +186,7 @@
     setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)
     
-    library.sizes <- c(library.sizes, as.integer(sum(data.frame(TSS)[,4])))
+    #library.sizes <- c(library.sizes, as.integer(sum(data.frame(TSS)[,4])))
     if(first == TRUE) {
       TSS.all.samples <- TSS
     }else{

@@ -133,7 +133,7 @@ setMethod("plotDE","TSSr", function(object
 setGeneric("plotTSS",function(object,...)standardGeneric("plotTSS"))
 setMethod("plotTSS","TSSr", function(object
                                      ,samples
-                                     ,tssData = "filtered"
+                                     ,tssData = "processed"
                                      ,clusters = "filtered"
                                      ,clusterThreshold = 0.02
                                      ,genelist
@@ -151,8 +151,8 @@ setMethod("plotTSS","TSSr", function(object
   }else{
     stop("No cluster data for the given clusters option! ")
   }
-  if(tssData == "filtered"){
-    tss <- object@TSSfilteredMatrix
+  if(tssData == "processed"){
+    tss <- object@TSSprocessedMatrix
   }else if(tssData == "raw"){
     tss <- object@TSSmergedMatrix
   }
@@ -196,14 +196,14 @@ setMethod("exportTSStable","TSSr", function(object
   message("Exporting TSS table...")
   if(data == "raw"){
     if(merged == "TRUE"){
-      tss <- object@TSSmergedMatrix
+      tss <- object@TSSprocessedMatrix
       write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }else{
       tss <- object@TSSrawMatrix
       write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
-  }else if(data == "filtered"){
-    tss <- object@TSSfilteredMatrix
+  }else if(data == "processed"){
+    tss <- object@TSSprocessedMatrix
     write.table(tss, file = paste("ALL.samples.TSS",data,"txt", sep = "."), sep = "\t", quote = F, row.names = F)
   }else{
     stop("No data for the given TSS data type!")
@@ -314,15 +314,15 @@ setMethod("exportShiftTable","TSSr", function(object
 ################################################################################################
 setGeneric("exportTSStoBedgraph",function(object,...)standardGeneric("exportTSStoBedgraph"))
 setMethod("exportTSStoBedgraph","TSSr", function(object
-                                                 ,data = "filtered"
+                                                 ,data = "processed"
                                                  ,format = "bedGraph"
                                                  ,oneFile = FALSE
 ){
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
-  if(data == "filtered"){
-    tss.dt <- object@TSSfilteredMatrix
-  }else{tss.dt <- object@TSSmergedMatrix}
+  if(data == "processed"){
+    tss.dt <- object@TSSprocessedMatrix
+  }else{tss.dt <- object@TSSrawMatrix}
   for (i in 1:length(sampleLabelsMerged)){
     temp <- tss.dt[,.SD, .SDcols = c("chr","pos","strand",sampleLabelsMerged[i])]
     setnames(temp, colnames(temp)[[4]], "score")

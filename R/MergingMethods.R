@@ -7,9 +7,10 @@ setMethod("mergeSamples","TSSr", function(object
 ){
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
-  #mergeIndex <- object@mergeIndex
-  tss <- object@TSSrawMatrix
-  mergeIndex <- as.integer(mergeIndex)
+  mergeIndex <- as.integer(object@mergeIndex)
+  
+  tss <- object@TSSprocessedMatrix
+  
   objName <- deparse(substitute(object))
   if(length(mergeIndex) != length(sampleLabels)){
     stop("Length of mergeIndex must match number of samples.")
@@ -27,8 +28,8 @@ setMethod("mergeSamples","TSSr", function(object
   for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
   re <- cbind(tss[,1:3],re)
   
-  object@mergeIndex <- mergeIndex
-  object@TSSmergedMatrix <- re
-  object@librarySizes <- as.integer(colSums(re[,4:ncol(re), drop = F], na.rm = T))
+  #object@mergeIndex <- mergeIndex
+  object@TSSprocessedMatrix <- re
+  #object@librarySizes <- as.integer(colSums(re[,4:ncol(re), drop = F], na.rm = T))
   assign(objName, object, envir = parent.frame())
 })

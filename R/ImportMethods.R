@@ -1,17 +1,18 @@
 ################################################################################################
 ##myTSSr class hold all data and metadata about one TSS experiment
-setClass(Class = "TSSr",
+TSSr <- setClass(Class = "TSSr",
          representation(genomeName = "character" 
                         ,inputFiles = "character"
                         ,inputFilesType = "character"
                         ,sampleLabels = "character"
                         ,sampleLabelsMerged = "character"
-                        ,librarySizes = "integer"
+                        ,librarySizes = "numeric"
                         ,TSSrawMatrix = "data.frame"
                         ,mergeIndex = "numeric"
-                        ,TSSmergedMatrix = "data.frame"
-                        ,TSSnormalizedMatrix = "data.frame"
-                        ,TSSfilteredMatrix = "data.frame"
+                        ,TSSprocessedMatrix = "data.frame"
+                        #,TSSmergedMatrix = "data.frame"
+                        #,TSSnormalizedMatrix = "data.frame"
+                        #,TSSfilteredMatrix = "data.frame"
                         ,tagClusters = "list"
                         ,consensusClusters = "list"
                         ,clusterShape = "list"
@@ -28,12 +29,13 @@ setClass(Class = "TSSr",
                    ,inputFilesType = character()
                    ,sampleLabels = character()
                    ,sampleLabelsMerged = character()
-                   ,librarySizes = integer()
+                   ,librarySizes = numeric()
                    ,TSSrawMatrix = data.frame()
                    ,mergeIndex = numeric()
-                   ,TSSmergedMatrix = data.frame()
-                   ,TSSnormalizedMatrix = data.frame()
-                   ,TSSfilteredMatrix = data.frame()
+                   ,TSSprocessedMatrix = data.frame()
+                   #,TSSmergedMatrix = data.frame()
+                   #,TSSnormalizedMatrix = data.frame()
+                   #,TSSfilteredMatrix = data.frame()
                    ,tagClusters = list()
                    ,consensusClusters = list()
                    ,clusterShape = list()
@@ -57,12 +59,15 @@ setGeneric("getTSS",function(object,...)standardGeneric("getTSS"))
 setMethod("getTSS","TSSr", function(object
                                     ,sequencingQualityThreshold = 10
                                     ,mappingQualityThreshold = 20
-                                    ,removeNewG = TRUE
-                                    ,correctG = TRUE
+                                    #,removeNewG = TRUE
+                                    #,correctG = TRUE
                                     ){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabels <- object@sampleLabels
+  if (length(object@sampleLabelsMerged) == 0) {
+    object@sampleLabelsMerged <- sampleLabels
+  }
   objName <- deparse(substitute(object))
   if(object@inputFilesType == "bam" | object@inputFilesType == "bamPairedEnd"){
     tss <- .getTSS_from_bam(object@inputFiles
@@ -70,8 +75,9 @@ setMethod("getTSS","TSSr", function(object
                      ,sampleLabels
                      ,sequencingQualityThreshold
                      ,mappingQualityThreshold
-                     ,removeNewG
-                     ,correctG)
+                     #,removeNewG
+                     #,correctG
+                     )
   }else if(object@inputFilesType == "bed"){
     tss <- .getTSS_from_bed(object@inputFiles, Genome, sampleLabels)
   }else if(object@inputFilesType == "BigWig"){
@@ -82,7 +88,12 @@ setMethod("getTSS","TSSr", function(object
     tss <- .getTSS_from_TSStable(object@inputFiles, sampleLabels)
   }
   setorder(tss, "strand","chr","pos")
+  # get library sizes
+  #library.sizes <- unname(colSums(tss[,4:length(tss)]))
+  object@librarySizes <- colSums(tss[,4:ncol(tss), drop = F], na.rm = T)
+  
   object@TSSrawMatrix <- tss
+  object@TSSprocessedMatrix <- tss
   assign(objName, object, envir = parent.frame())
 })
 

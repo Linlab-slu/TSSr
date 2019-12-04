@@ -9,7 +9,13 @@ setMethod("normalizeTSS","TSSr", function(object
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
-  tss.dt <- object@TSSmergedMatrix
+  
+  tss.dt <- object@TSSprocessedMatrix
+  is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+  if (all(is.wholenumber(object@librarySizes)) == FALSE) {
+    stop('\tStopping... data is already normalized')
+  }
+  
   library.size <- object@librarySizes
   # if library size is empty, get library size
   # calculate size of genome
@@ -34,6 +40,6 @@ setMethod("normalizeTSS","TSSr", function(object
   for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
   re <- cbind(tss.dt[,1:3],re)
   setorder(re, "strand","chr","pos")
-  object@TSSnormalizedMatrix <- re
+  object@TSSprocessedMatrix <- re
   assign(objName, object, envir = parent.frame())
 })

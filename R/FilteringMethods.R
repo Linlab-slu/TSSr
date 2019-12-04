@@ -16,12 +16,15 @@ setMethod("filterTSS","TSSr", function(object
   for (chrom in 1:length(Genome)) {
     genomeSize <- genomeSize + length(Genome[[chrom]])
   }
+  tss.dt <- object@TSSprocessedMatrix
   ##filter tss data
   if(method  == "poisson"){
     message("\nFiltering data with ", method," method...")
-    tss.raw <- object@TSSmergedMatrix
+    if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1)){
+      stop("Warning! Raw count data required for poisson method.")
+    }
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
-      temp <- tss.raw[,.SD, .SDcols = sampleLabelsMerged[i]]
+      temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
       setnames(temp, colnames(temp)[[1]], "tags")
       temp <- .filterWithPoisson(temp, library.size[i], genomeSize, pVal)
       if(Normalization == "TRUE"){
@@ -33,31 +36,32 @@ setMethod("filterTSS","TSSr", function(object
     })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-    re <- cbind(tss.raw[,1:3],re)
+    re <- cbind(tss.dt[,1:3],re)
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")
-    object@TSSfilteredMatrix <- re
+    object@TSSprocessedMatrix <- re
     assign(objName, object, envir = parent.frame())
   }else if(method  == "TPM"){
     message("\nFiltering data with ", method," method...")
-    tss.tpm <- object@TSSnormalizedMatrix
-    #tss.tpm <- object@TSSmergedMatrix
+    if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1) == FALSE){
+      stop("Warning! Data must be normalized.")
+    }
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
-      temp <- tss.tpm[,.SD, .SDcols = sampleLabelsMerged[i]]
+      temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
       setnames(temp, colnames(temp)[[1]], "tags")
-      temp[sampleLabelsMerged[i] < tpmLow,]=0
+      temp[tags < tpmLow,]=0
       setnames(temp, colnames(temp)[[1]], sampleLabelsMerged[i])
       return(temp)
     })
-  re <- NULL
-  for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-  re <- cbind(tss.tpm[,1:3],re)
-  ##removes filtered rows
-  re <- re[rowSums(re[,4:ncol(re)]) >0,]
-  setorder(re, "strand","chr","pos")
-  object@TSSfilteredMatrix <- re
-  assign(objName, object, envir = parent.frame())
+    re <- NULL
+    for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
+    re <- cbind(tss.dt[,1:3],re)
+    ##removes filtered rows
+    re <- re[rowSums(re[,4:ncol(re)]) >0,]
+    setorder(re, "strand","chr","pos")
+    object@TSSprocessedMatrix <- re
+    assign(objName, object, envir = parent.frame())
   }else{
     message("\tNo filtering method is defined...")
   }
