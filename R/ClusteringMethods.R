@@ -2,10 +2,10 @@
 ##
 ################################################################################################
 setGeneric("clusterTSS",function(object,...)standardGeneric("clusterTSS"))
-setMethod("clusterTSS","TSSr", function(object,data = "filtered", method = "peakclu"
+setMethod("clusterTSS","TSSr", function(object, method = "peakclu"
                                         ,peakDistance=100, localThreshold = 0.02
                                         ,extensionDistance=30,clusterThreshold = 1
-                                        , nonOverLapping=TRUE
+                                        ,nonOverLapping=TRUE
                                         ,useMultiCore=FALSE, numCores=NULL
 ){
   message("\nClustering TSS data with ", method, " method...")
@@ -14,12 +14,9 @@ setMethod("clusterTSS","TSSr", function(object,data = "filtered", method = "peak
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   
-  ##pick which data will be used for clustering
-  if(data == "raw"){
-    tss.dt <- object@TSSrawMatrix
-  }else if(data == "filtered"){
-    tss.dt <- object@TSSfilteredMatrix
-  }
+  # initialize data
+  tss.dt <- object@TSSprocessedMatrix
+  
   # pass sub datatables to peak-caller and clustering functions
   if (useMultiCore) {
     library(parallel)

@@ -1,14 +1,15 @@
 ################################################################################################
 setGeneric("shapeCluster",function(object,...)standardGeneric("shapeCluster"))
-setMethod("shapeCluster","TSSr", function(object, data = "consensusClusters",method = "PSS",useMultiCore= FALSE, numCores = NULL
+setMethod("shapeCluster","TSSr", function(object, clusters = "consensusClusters", method = "PSS", useMultiCore= FALSE, numCores = NULL
 ){
-  message("\nCalculating ", data," shape with ",method," method...")
+  message("\nCalculating ", clusters," shape with ",method," method...")
   
   ##initialize data
-  tss.dt <- object@TSSmergedMatrix
-  if(data == "tagClusters"){
+  tss.dt <- object@TSSprocessedMatrix
+  
+  if(clusters == "tagClusters"){
     cs.dt <- object@tagClusters
-  }else if(data == "consensusClusters"){
+  }else if(clusters == "consensusClusters"){
     cs.dt <- object@consensusClusters
   }
   

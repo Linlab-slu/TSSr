@@ -1,18 +1,18 @@
 ################################################################################################
 setGeneric("consensusCluster",function(object,...)standardGeneric("consensusCluster"))
-setMethod("consensusCluster","TSSr", function(object, data = "filtered", dis = 50,useMultiCore=TRUE, numCores = NULL
+setMethod("consensusCluster","TSSr", function(object, dis = 50,useMultiCore=TRUE, numCores = NULL
 ){
   message("\nCreating consensus clusters...")
   
   ##initialize data
-  if(data == "raw"){
-    tss.dt <- object@TSSrawMatrix
-  }else if(data == "filtered"){
-    tss.dt <- object@TSSfilteredMatrix
-  }
+  tss.dt <- object@TSSprocessedMatrix
+  
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   cs <- object@tagClusters
+  if(length(cs) == 0){
+    stop("Error: You must have tagClusters data in order to proceed.")
+  }
   ##get consensus peak range
   cx <- cs[[sampleLabelsMerged[1]]]
   colnames(cx)[3:4] <- c("start.c","end.c")
