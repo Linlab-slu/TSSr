@@ -10,15 +10,9 @@
 
 ################################################################################################
 ##.getTSS_from_bam function calls TSS from bam file
-##.getTSS_from_bam function takes two input files, bam and Genome
-##Genome is BSgenome
-##run script with the following example command:
-##.getTSS_from_bam(bam, Genome, sampleLabels,sequencingQualityThreshold = 10,
-##                            mappingQualityThreshold = 20)
-
 .getTSS_from_bam <- function(bam.files, Genome, sampleLabels, inputFilesType
-                             ,sequencingQualityThreshold = 10
-                             ,mappingQualityThreshold = 20){
+                             ,sequencingQualityThreshold
+                             ,mappingQualityThreshold){
 
   what <- c("rname", "strand", "pos", "seq", "qual", "mapq","flag","cigar")
   param <- ScanBamParam( what = what
@@ -36,25 +30,24 @@
     qual <- bam[[1]]$qual
     start <- 1
     chunksize <- 1e6
-    qa.avg <- vector(mode = "integer")	  
+    qa.avg <- vector(mode = "integer")
     repeat {
       if (start + chunksize <= length(qual)) {
         end <- start + chunksize
       } else {
         end <- length(qual)
       }
-      qa.avg <- c(qa.avg, as.integer(mean(as(qual[start:end], "IntegerList"))))
+      qa.avg <- c(qa.avg, as.integer(sapply(as(qual[start:end], "IntegerList"),mean)))
       if (end == length(qual)) {
         break
       } else {
         start <- end + 1
       }
     }
-    ##repeat cigar, correct intron length proble
     cigar <- bam[[1]]$cigar
     start <- 1
     chunksize <- 1e6
-    mapped.length <- vector(mode = "integer")	  
+    mapped.length <- vector(mode = "integer")
     repeat {
       if (start + chunksize <= length(cigar)) {
         end <- start + chunksize
@@ -68,24 +61,25 @@
         start <- end + 1
       }
     }
-    readsGR <- GRanges(seqnames = as.vector(bam[[1]]$rname), IRanges(start = bam[[1]]$pos, width = mapped.length), strand = bam[[1]]$strand, qual = qa.avg, mapq = bam[[1]]$mapq, seq = bam[[1]]$seq, read.length = width(bam[[1]]$seq), flag = bam[[1]]$flag)
-    readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
+    readsGR <- GRanges(seqnames = as.vector(bam[[1]]$rname), IRanges(start = bam[[1]]$pos, width = mapped.length),
+                       strand = bam[[1]]$strand, qual = qa.avg, mapq = bam[[1]]$mapq, seq = bam[[1]]$seq, read.length = width(bam[[1]]$seq),
+                       flag = bam[[1]]$flag)
+    readsGR <- readsGR[unique(as.character(readsGR@seqnames)) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
-    elementMetadata(readsGR)$mapq[is.na(elementMetadata(readsGR)$mapq)] <- Inf
-    readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-    readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-    
+    GenomicRanges::elementMetadata(readsGR)$mapq[is.na(GenomicRanges::elementMetadata(readsGR)$mapq)] <- Inf
+    readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
+    readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
     # remove G mismatch
     TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
-    
-    setnames(TSS, c("chr", "pos", "strand", sampleLabels[i])) 
+
+    setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)
     if(first == TRUE) {
       TSS.all.samples <- TSS
     }else{
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
-    first <- FALSE  
+    first <- FALSE
   }
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
@@ -95,33 +89,33 @@
 .removeNewG <- function(readsGR.p, readsGR.m, Genome) {
 
   message("\t-> Removing the first base of the reads if mismatched 'G'...")
-  G.reads.p <- which(substr(elementMetadata(readsGR.p)$seq, start = 1, stop = 1) == "G")
-  G.reads.m <- which(substr(elementMetadata(readsGR.m)$seq, start = elementMetadata(readsGR.m)$read.length, stop = elementMetadata(readsGR.m)$read.length) == "C")
+  G.reads.p <- which(substr(GenomicRanges::elementMetadata(readsGR.p)$seq, start = 1, stop = 1) == "G")
+  G.reads.m <- which(substr(GenomicRanges::elementMetadata(readsGR.m)$seq, start = GenomicRanges::elementMetadata(readsGR.m)$read.length, stop = GenomicRanges::elementMetadata(readsGR.m)$read.length) == "C")
   if(length(G.reads.p)>0){
-    G.mismatch.p <- G.reads.p[getSeq(Genome, resize(readsGR.p[G.reads.p], width = 1, fix = "start"), as.character = TRUE) != "G"]
-    elementMetadata(readsGR.p)$removedG <- FALSE
-    elementMetadata(readsGR.p)$removedG[G.mismatch.p] <- TRUE
+    G.mismatch.p <- G.reads.p[getSeq(Genome, GenomicRanges::resize(readsGR.p[G.reads.p], width = 1, fix = "start"), as.character = TRUE) != "G"]
+    GenomicRanges::elementMetadata(readsGR.p)$removedG <- FALSE
+    GenomicRanges::elementMetadata(readsGR.p)$removedG[G.mismatch.p] <- TRUE
     start(readsGR.p)[G.mismatch.p] <- start(readsGR.p)[G.mismatch.p] + as.integer(1)
-    TSS.p <- data.frame(chr = as.character(seqnames(readsGR.p)), pos = start(readsGR.p), strand = "+", removedG = elementMetadata(readsGR.p)$removedG, stringsAsFactors = FALSE)
+    TSS.p <- data.table(chr = as.character(seqnames(readsGR.p)), pos = start(readsGR.p), strand = "+", removedG = GenomicRanges::elementMetadata(readsGR.p)$removedG, stringsAsFactors = FALSE)
   }else{
     G.mismatch.p <- NULL
-    TSS.p <- data.frame()
+    TSS.p <- data.table()
   }
   if(length(G.reads.m)>0){
-    G.mismatch.m <- G.reads.m[getSeq(Genome, resize(readsGR.m[G.reads.m], width = 1, fix = "start"), as.character = TRUE) != "G"]
-    elementMetadata(readsGR.m)$removedG <- FALSE
-    elementMetadata(readsGR.m)$removedG[G.mismatch.m] <- TRUE
+    G.mismatch.m <- G.reads.m[getSeq(Genome, GenomicRanges::resize(readsGR.m[G.reads.m], width = 1, fix = "start"), as.character = TRUE) != "G"]
+    GenomicRanges::elementMetadata(readsGR.m)$removedG <- FALSE
+    GenomicRanges::elementMetadata(readsGR.m)$removedG[G.mismatch.m] <- TRUE
     end(readsGR.m)[G.mismatch.m] <- end(readsGR.m)[G.mismatch.m] - as.integer(1)
-    TSS.m <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = end(readsGR.m), strand = "-", removedG = elementMetadata(readsGR.m)$removedG, stringsAsFactors = FALSE)
+    TSS.m <- data.table(chr = as.character(seqnames(readsGR.m)), pos = end(readsGR.m), strand = "-", removedG = GenomicRanges::elementMetadata(readsGR.m)$removedG, stringsAsFactors = FALSE)
   }else{
     G.mismatch.m <- NULL
-    TSS.m <- data.frame()
+    TSS.m <- data.table()
   }
   TSS <- rbind(TSS.p, TSS.m)
   TSS <- TSS[,c("chr", "pos", "strand")]
   TSS$tag_count <- 1
-  TSS <- data.table(TSS)
-  TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]		
+  setDT(TSS)
+  TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
 
   return(TSS)
 }
@@ -143,8 +137,8 @@
     readsGR.p <- readsGR[strand(readsGR) == "+"]
     readsGR.m <- readsGR[strand(readsGR) == "-"]
     message("\t-> Making TSS table...")
-    TSS.plus <- data.frame(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = F)
-    TSS.minus <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = F)
+    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = F)
+    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = F)
     TSS <- rbind(TSS.plus, TSS.minus)
     TSS$tag_count <- 1
     TSS <- data.table(TSS)
@@ -177,23 +171,23 @@
     readsGR.p <- readsGR[score(readsGR) > 0]
     readsGR.m <- readsGR[score(readsGR) < 0]
     message("\t-> Making TSS table...")
-    TSS.plus <- data.frame(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = F)
-    TSS.minus <- data.frame(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = F)
+    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = F)
+    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = F)
     TSS <- rbind(TSS.plus, TSS.minus)
 
     setDT(TSS)
 
     setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)
-    
-    #library.sizes <- c(library.sizes, as.integer(sum(data.frame(TSS)[,4])))
+
+    #library.sizes <- c(library.sizes, as.integer(sum(data.table(TSS)[,4])))
     if(first == TRUE) {
       TSS.all.samples <- TSS
     }else{
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
     first <- FALSE
-  }   
+  }
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
@@ -220,10 +214,10 @@
       TSS.all.samples <- TSS
     }else{
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-    }			
+    }
     first <- FALSE
   }
-  TSS.all.samples <- data.frame(TSS.all.samples)
+  TSS.all.samples <- data.table(TSS.all.samples)
   return(TSS.all.samples)
 }
 
@@ -239,7 +233,7 @@
   }
   if(file.exists(inputFiles) == FALSE){
     stop("Could not locate input file ", inputFiles)
-  }			
+  }
 
   TSS.all.samples <- read.table(file = inputFiles, header = T, stringsAsFactors = FALSE
                                 ,colClasses = c("character", "integer", "character", rep("integer", length(sampleLabels)))

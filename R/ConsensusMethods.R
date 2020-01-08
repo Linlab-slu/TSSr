@@ -1,12 +1,32 @@
 ################################################################################################
-setGeneric("consensusCluster",function(object,...)standardGeneric("consensusCluster"))
-setMethod("consensusCluster","TSSr", function(object, dis = 50,useMultiCore=TRUE, numCores = NULL
+#' Make consensus clusters across multiple samples.
+#'
+#' @description Makes consensus clusters from multiple samples in TSSr object and calculates
+#' inter-quantile positions within consensus clusters for each sample.
+#'
+#' @usage consensusCluster(object, data = "filtered", dis = 50
+#' , useMultiCore=TRUE, numCores = NULL)
+#'
+#' @param object A TSSr object.
+#' @param dis Minimum distance between two peaks to be aggregated together into the same consensus cluster.
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' consensusCluster(myTSSr)
+setGeneric("consensusCluster",function(object, dis, useMultiCore, numCores)standardGeneric("consensusCluster"))
+#' @rdname consensusCluster
+#' @export
+setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis = 50,useMultiCore=TRUE, numCores = NULL
 ){
   message("\nCreating consensus clusters...")
-  
+
   ##initialize data
   tss.dt <- object@TSSprocessedMatrix
-  
+
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   cs <- object@tagClusters

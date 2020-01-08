@@ -1,10 +1,10 @@
 ###############################################################################
 
-.clusterByPeak <- function(tss.dt, peakDistance, localThreshold, extensionDistance, nonOverLapping) {
+.clusterByPeak <- function(tss.dt, peakDistance, localThreshold, extensionDistance) {
   # create copy for reference later
   copied.dt <- copy(tss.dt)
   setkey(tss.dt, pos)
-  
+
   # get peakID
   # TODO could potentially by optimized more
   peakID <- vapply(seq_len(tss.dt[,.N]), function(x) {
@@ -16,7 +16,7 @@
     }else{id <- 0}
     return(id)
   }, numeric(1))
-  
+
   # manipulate data.table to collapse clustered rows
   tss.dt[, peak := peakID]
   tss.dt[, ID := .I]
@@ -36,16 +36,16 @@
   if(length(unlist(localF)) >0){tss.dt <- tss.dt[-unlist(localF),]}
   #######################################################################################################################
   #######################################################################################################################
-  tss.dt[, forward := ifelse(data.table::shift(pos,1,type="lead") < pos + extensionDistance, 1, 0)] #  
+  tss.dt[, forward := ifelse(data.table::shift(pos,1,type="lead") < pos + extensionDistance, 1, 0)] #
   tss.dt[, reverse := ifelse(data.table::shift(pos,1,type="lag") > pos - extensionDistance, 1, 0)]
   tss.dt <- tss.dt[,list(peak=max(peak),start=min(pos),end=max(pos),tags=sum(tags)),by=.(rleid(peak, forward, reverse))]##ZL?
-  
+
   # get start and end boundaries for clusters
   # TODO revisit this code for better optimization
   clusters <- lapply(as.list(tss.dt[peak>0,rleid]), function(x) {
     start <- tss.dt[x,start]
     end <- tss.dt[x,end]
-    
+
     if (x-1>0 && tss.dt[x-1,!peak>0] && tss.dt[x-1,end] > start - extensionDistance) {
       start <- tss.dt[x-1,start]
       if (x-2>0 && tss.dt[x-2,!peak>0] && tss.dt[x-2,end] > start - extensionDistance) {
@@ -60,12 +60,12 @@
     }
     list(start, end)
   })
-  
+
   clusters <- rbindlist(clusters)
-  
+
   # deal with overlapping clusters here
   # TODO this section needs some more optimization/work
-  if (nonOverLapping) {
+
     rowVec <- which(clusters$V2 >= data.table::shift(clusters$V1,1,type="lead"))
     if (length(rowVec)>0) {
       #######################################################################################################################
@@ -73,10 +73,10 @@
       for(i in 1:length(rowVec)){clusters$V1[rowVec[i]+1] = clusters$V1[rowVec[i]]}
       clusters <- clusters[-rowVec,]
     }##
-  }
-  
+
+
   #  clusters <- unique(clusters)
-  
+
   # get full clustering data
   # core promoter boundaries are calculated here (i.e. cumsum distribution)
   tss_clusters <- lapply(as.list(seq_len(clusters[,.N])), function(i) {
@@ -100,7 +100,7 @@
          ,q9
          ,q9 - q1 + 1)
   })
-  
+
   # set names
   tss_clusters <- rbindlist(tss_clusters)
   setnames(tss_clusters, c( "cluster"

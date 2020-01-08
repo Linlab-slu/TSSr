@@ -1,21 +1,50 @@
-################################################################################################
-setGeneric("shapeCluster",function(object,...)standardGeneric("shapeCluster"))
-setMethod("shapeCluster","TSSr", function(object, clusters = "consensusClusters", method = "PSS", useMultiCore= FALSE, numCores = NULL
+#' Analysis of core promoter shape
+#'
+#' @description Calculates core promoter shape based on the distributions of TSSs within core
+#'  promoters using Shape Index (SI) algorithm (Hoskins et al. 2011) or Promoter Shape Score (PSS)
+#'   algorithm (Lu et al. 2019).
+#'
+#' @usage shapeCluster(object,data = "consensusClusters" , method = "PSS", useMultiCore=TRUE, numCores = NULL)
+#'
+#' @param object A TSSr object.
+#' @param clusters Clusters to be used for calculating shape score: "tagClusters" or "consensusClusters".
+#'  Default is "consensusClusters".
+#' @param method Method to be used for calculating core promoter shape score: "SI" or "PSS". Default is "PSS".
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 	shapeCluster(myTSSr,clusters = "consensusClusters" , method = "PSS")
+#' 	shapeCluster(myTSSr,clusters = "tagClusters" , method = "SI")
+
+setGeneric("shapeCluster",function(object, clusters
+                                   , method, useMultiCore, numCores)standardGeneric("shapeCluster"))
+#' @rdname shapeCluster
+#' @export
+setMethod("shapeCluster",signature(object = "TSSr"), function(object
+                                          , clusters = "consensusClusters"
+                                          , method = "PSS"
+                                          , useMultiCore= FALSE
+                                          , numCores = NULL
 ){
   message("\nCalculating ", clusters," shape with ",method," method...")
-  
+
   ##initialize data
   tss.dt <- object@TSSprocessedMatrix
-  
+
   if(clusters == "tagClusters"){
     cs.dt <- object@tagClusters
   }else if(clusters == "consensusClusters"){
     cs.dt <- object@consensusClusters
   }
-  
+
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
-  
+
   if (useMultiCore) {
     library(parallel)
     if (is.null(numCores)) {
@@ -43,7 +72,7 @@ setMethod("shapeCluster","TSSr", function(object, clusters = "consensusClusters"
       }, mc.cores = numCores)
       ce <- rbindlist(ce)
     })
-    
+
   }else{
     cs.shape <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
       cs <- cs.dt[[sampleLabelsMerged[i]]]

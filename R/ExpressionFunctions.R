@@ -1,9 +1,9 @@
 ###################################################################################################################
 ##.deseq2 function calcuates gene differential expression based on Deseq2 package
 ##.deseq2 function takes two assigned clusters and tss.raw table
-##users need to provide which sample they want to compare and 
-##run script with the following example command:           
-##.deseq2(clustersx.asn,clustersy.asn, tss.raw, 
+##users need to provide which sample they want to compare and
+##run script with the following example command:
+##.deseq2(clustersx.asn,clustersy.asn, tss.raw,
 ##                              samplex <- c("ScerBY4741.1","ScerBY4741.2"),
 ##                              sampley <- c("ScerArrest.1","ScerArrest.2"),
 ##                              sampleOne <- "ScerBY4741",sampleTwo <- "ScerArrest")
@@ -15,6 +15,7 @@
   yCounts <-.tagCount(cy, tss.raw,sampley,useMultiCore, numCores)
   xCounts <- xCounts[,-c(2:11)]
   yCounts <- yCounts[,-c(2:11)]
+
   ##tag counts by gene for sampleOne
   setkey(xCounts, gene)
   if(useMultiCore){
@@ -32,7 +33,7 @@
     })
   }
   one <- data.frame(matrix(unlist(one), nrow=length(one), byrow=T),stringsAsFactors=FALSE)
-  
+
   ##tag counts by gene for sampleTwo
   setkey(yCounts, gene)
   if(useMultiCore){
@@ -43,7 +44,7 @@
       data <- yCounts[.(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     }, mc.cores = numCores)
-    
+
   }else{
     two <- lapply(as.list(unique(yCounts$gene)), function(my.gene) {
       data <- yCounts[.(my.gene)]
@@ -89,7 +90,7 @@
       })
       return(temp)
     }, mc.cores = numCores)
-    
+
   }else{
     tags <- lapply(seq_len(cs[,.N]),function(r){
       data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]
@@ -98,7 +99,6 @@
       })
       return(temp)
     })
-    
   }
   tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=T),stringsAsFactors=FALSE)
   colnames(tags) <- samples

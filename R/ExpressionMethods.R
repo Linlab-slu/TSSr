@@ -1,17 +1,37 @@
 ################################################################################################
+#' Analysis of gene differential expression.
+#'
+#' @description Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
+#' @usage deGene(object,comparePairs=list(c("control","treat")), pval = 0.01)
+#'
+#' @param object A TSSr object.
+#' @param comparePairs Specified list of sample pairs for comparison with DESeq2 method.
+#' @param pVal Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+#'
+#'
+#' @return
+#' @export
+#'
+#' @import DESeq2
+#' @examples
+#' deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 setGeneric("deGene",function(object,...)standardGeneric("deGene"))
-setMethod("deGene","TSSr", function(object
+#' @rdname deGene
+#' @export
+setMethod("deGene",signature(object = "TSSr"), function(object
                                     ,comparePairs
                                     ,pval=0.01
-                                    ,useMultiCore
-                                    ,numCores
+                                    ,useMultiCore=FALSE
+                                    ,numCores = NULL
 ){
   ##initialize data
   message("\nCalculating gene differential expression...")
   objName <- deparse(substitute(object))
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
-  
+
   D <- lapply(as.list(seq(comparePairs)), function(i){
     sampleOne <- comparePairs[[i]][1]
     sampleTwo <- comparePairs[[i]][2]

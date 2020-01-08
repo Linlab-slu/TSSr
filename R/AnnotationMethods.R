@@ -1,6 +1,37 @@
-################################################################################################
-setGeneric("annotateCluster",function(object,...)standardGeneric("annotateCluster"))
-setMethod("annotateCluster","TSSr", function(object
+#' Annotate clusters with GFF annotation file.
+#'
+#' @description Annotates clusters with gene or transcript names from GFF annotation file.
+#'
+#' @usage 	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE
+#' , filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+#'
+#' @param object  A TSSr object
+#' @param clusters Clusters to be annotated: "consensusClusters" or "tagClusters". Default is "consensusClusters".
+#' @param filterCluster Logical indicating whether clusters downstream of a highly expressed cluster
+#'  are filtered. Setting filterCluster as "TRUE" would reduce weak clusters brought from recapping,
+#'  transcriptional or sequencing noise. Default is TRUE.
+#' @param filterClusterThreshold  Ignore downstream clusters if signal < filterClusterThreshold*the
+#' strongest clusters within the same gene promoter region. Default value = 0.02.
+#' @param annotationType  Specify annotation feature to be associated with: "gene" or "transcript".
+#' Default is "gene".
+#' @param upstream  Upstream distance to the start position of annotation feature. Default value = 1000.
+#' @param upstreamOverlap Upstream distance to the start position of annotation feature if overlapped
+#' with the upstream neighboring feature. Default value = 500.
+#' @param dowmstream  Downstream distance to the start position of annotation feature. Default value = 0.
+#' Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
+#'  the recommended value = 500.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE, filterClusterThreshold = 0.02
+#' 	,annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+setGeneric("annotateCluster",function(object, clusters, filterCluster, filterClusterThreshold
+                                      ,annotationType, upstream, upstreamOverlap, downstream)standardGeneric("annotateCluster"))
+#' @rdname annotateCluster
+#' @export
+setMethod("annotateCluster",signature(object = "TSSr"), function(object
                                              ,clusters = "consensusClusters"
                                              ,filterCluster = TRUE
                                              ,filterClusterThreshold = 0.02
@@ -15,7 +46,7 @@ setMethod("annotateCluster","TSSr", function(object
   objName <- deparse(substitute(object))
   refGFF <- object@refSource
   organismName <- object@organismName
-  
+
   ##prepare annotation file
   txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
   if(annotationType == "genes"){
@@ -23,14 +54,14 @@ setMethod("annotateCluster","TSSr", function(object
   }else if(annotationType == "transcripts"){
     ref <- setDT(as.data.frame(transcripts(txdb)))
   }
-  
+
   ##prepare clusters
   if(clusters == "tagClusters"){
     cs.dt <- object@tagClusters
   }else if(clusters == "consensusClusters"){
     cs.dt <- object@consensusClusters
   }
-  
+
   ##
   asn <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
     cs.temp <- cs.dt[[sampleLabelsMerged[i]]]

@@ -22,14 +22,14 @@
         ref_sub[,width:=data.table::shift(width, 1, fill = 1000,type='lag')]
         ref_sub[,dis := start - end.b]
         ##        ref_sub[,dis:= ifelse(dis < 0, 0,dis)] ##Oct1
-        ref_sub[,up:= ifelse(dis > upstream, upstream, 
+        ref_sub[,up:= ifelse(dis > upstream, upstream,
                              ifelse(dis + width  <= upstreamOverlap, dis + width -1,
                                     ifelse(dis < upstreamOverlap, upstreamOverlap, dis)))]
         ##add down to solve overlap issue
         ref_sub[,start.a:=data.table::shift(start, 1, fill = 1000,type='lead')]
         ref_sub[, dis.start := start.a - start]
         ref_sub[, down.up := data.table::shift(up, 1, fill = 1000,type='lead')]
-        ref_sub[,down:= ifelse(dis.start > downstream + down.up, downstream, 
+        ref_sub[,down:= ifelse(dis.start > downstream + down.up, downstream,
                              ifelse(dis.start  < down.up, 0, dis.start-down.up))]
         ##
         ref_sub[,end:= start + down] ##start - 1 -> start April10
@@ -41,14 +41,14 @@
         ref_sub[,width:=data.table::shift(width, 1, fill = 1000,type='lead')]
         ref_sub[,dis := end.b - end] ##start -> end April10
         ##        ref_sub[,dis:= ifelse(dis < 0,0,dis)]
-        ref_sub[,up:= ifelse(dis > upstream, upstream, 
+        ref_sub[,up:= ifelse(dis > upstream, upstream,
                              ifelse(dis + width  <= upstreamOverlap, dis + width -1,
                                     ifelse(dis < upstreamOverlap, upstreamOverlap, dis)))]
         ##add down to solve overlap issue
         ref_sub[,start.a:=data.table::shift(end, 1, fill = 1000,type='lag')]
         ref_sub[, dis.start := end -start.a]
         ref_sub[, down.up := data.table::shift(up, 1, fill = 1000,type='lag')]
-        ref_sub[,down:= ifelse(dis.start >= downstream+ down.up, downstream, 
+        ref_sub[,down:= ifelse(dis.start >= downstream+ down.up, downstream,
                                ifelse(dis.start  < down.up, 0,dis.start - down.up))]
         ##
         ref_sub[,start:= end- down]##end + 1 -> end April10

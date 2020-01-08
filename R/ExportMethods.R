@@ -1,6 +1,23 @@
 ################################################################################################
-setGeneric("plotCorrelation",function(object,...)standardGeneric("plotCorrelation"))
-setMethod("plotCorrelation","TSSr", function(object
+#' Pairwise scatter plots and correlations of TSS signal
+#'
+#' @description Calculates the pairwise correlation coefficients between samples and
+#' creates a matix showing pairwise scatter plots and correlation coefficients.
+#'
+#' @usage plotCorrelation(object, samples = "all")
+#' @param object A TSSr object.
+#' @param samples Specify samples to be plotted. Can be either "all" to plot all samples in the object
+#' or a subset of samples in the object. Default is "all".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' plotCorrelation(myTSSr, samples = "all")
+setGeneric("plotCorrelation",function(object, samples)standardGeneric("plotCorrelation"))
+#' @rdname plotCorrelation
+#' @export
+setMethod("plotCorrelation",signature(object = "TSSr"), function(object
                                              ,samples = "all"
 ){
   message("Plotting TSS correlations...")
@@ -18,8 +35,24 @@ setMethod("plotCorrelation","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("plotPCA",function(object,...)standardGeneric("plotPCA"))
-setMethod("plotPCA","TSSr", function(object
+#' Plotting principle component analysis (PCA)
+#'
+#' @description Calculates principle component analysis (PCA) of all samples and creates a biplot
+#' which includes the position of each sample in terms of PC1 and PC2.
+#'
+#' @usage plotTssPCA(object)
+#'
+#' @param object A TSSr object.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' plotTssPCA(myTSSr)
+setGeneric("plotTssPCA",function(object, TSS.threshold)standardGeneric("plotTssPCA"))
+#' @rdname plotTssPCA
+#' @export
+setMethod("plotTssPCA",signature(object = "TSSr"), function(object
                                      ,TSS.threshold=10
 ){
   message("Plotting TSS PCA...")
@@ -39,8 +72,24 @@ setMethod("plotPCA","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("plotInterQuantile",function(object,...)standardGeneric("plotInterQuantile"))
-setMethod("plotInterQuantile","TSSr", function(object
+#' Plot core promoter interquantile width
+#'
+#' @description Plots histograms of the interquantile width of processed clusters.
+#' @usage plotInterQuantile(object, sample ="all", tagsThreshold = 1)
+#'
+#' @param object A TSSr object.
+#' @param sample Specify samples to be plotted. Default is "all".
+#' @param tagsThreshold Excludes clusters with tags < tagsThreshold.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' plotInterQuantile(myTSSr, samples = "all")
+setGeneric("plotInterQuantile",function(object, samples, tagsThreshold)standardGeneric("plotInterQuantile"))
+#' @rdname plotInterQuantile
+#' @export
+setMethod("plotInterQuantile",signature(object = "TSSr"), function(object
                                                ,samples = "all"
                                                ,tagsThreshold = 1
 ){
@@ -72,8 +121,24 @@ setMethod("plotInterQuantile","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("plotShape",function(object,...)standardGeneric("plotShape"))
-setMethod("plotShape","TSSr", function(object
+#' Plot core promoter shape
+#'
+#' @description Plots histograms of core promoter shape scores.
+#'
+#' @usage plotShape(object)
+#'
+#' @param object A TSSr object.
+#' @param sample Specify samples to be plotted. Default is "all".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' plotShape(myTSSr)
+setGeneric("plotShape",function(object, samples)standardGeneric("plotShape"))
+#' @rdname plotShape
+#' @export
+setMethod("plotShape",signature(object = "TSSr"), function(object
                                        ,samples = "all"
 ){
   message("Plotting Shape graphs...")
@@ -102,8 +167,29 @@ setMethod("plotShape","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("plotDE",function(object,...)standardGeneric("plotDE"))
-setMethod("plotDE","TSSr", function(object
+#' Plot gene differential expressions
+#'
+#' @description Vocano plots of gene differential expression (with DESeq2 method) results.
+#'
+#' @usage plotDE(object, withGeneName = "TRUE",xlim, ylim)
+#'
+#' @param object A TSSr object.
+#' @param withGeneName Specify whether to display names for genes which are differentially expressed. Default is "TRUE".
+#' @param xlim Only enes of which log2FoldChange value within the xlim range are plotted. Default xlim = c(-2.5, 2.5).
+#' @param ylim Only genes of which -log10(pvalue) within the ylim range are plotted. Default ylim = c(0, 10).
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' plotDE(myTSSr, withGeneName = "TRUE")
+#' plotDE(myTSSr, withGeneName = "FALSE")
+setGeneric("plotDE",function(object
+                             , withGeneName, xlim
+                             , ylim)standardGeneric("plotDE"))
+#' @rdname plotDE
+#' @export
+setMethod("plotDE",signature(object = "TSSr"), function(object
                                     ,withGeneName = "TRUE"
                                     ,xlim=c(-2.5, 2.5)
                                     ,ylim=c(0,10)
@@ -123,15 +209,42 @@ setMethod("plotDE","TSSr", function(object
     if(withGeneName == "TRUE"){
       with(subset(res, padj<.05 & abs(log2FoldChange)>1), textxy(log2FoldChange, -log10(pvalue), labs=gene, cex=.8))
     }
-    
+
   }
   ##
   dev.off()
 })
 
 ################################################################################################
-setGeneric("plotTSS",function(object,...)standardGeneric("plotTSS"))
-setMethod("plotTSS","TSSr", function(object
+#' Plot TSSs and clusters
+#'
+#' @description Plots Gviz-track of TSSs, clusters, and genes.
+#' @usage plotTSS(object, samples=c("control","treat"), genelist=c("YBL017C","YBL067C"), up.dis=500, down.dis = 500)
+#'
+#' @param object A TSSr object.
+#' @param samples Specify samples to be included for plotting.
+#' @param tssData Specify which TSS data to be included for plotting: "raw" or "process".
+#' @param clusters Specify which cluster data to be included for plotting: "all", "assigned", or "processed".
+#' @param clusterThreshold Ignore downstream clusters if signal < filterClusterThreshold*the strongest
+#' clusters within the same gene promoter region. Default value = 0.02.
+#' @param genelist List of gene names used for plotting.
+#' @param up.dis Distance upstream of genes to specify plotting range. Default value = 500.
+#' @param down.dis Distance downstream of genes to specify plotting range. Default value = 500.
+#'
+#' @return
+#' @export
+#'
+#' @importFrom GenomicRanges GRanges
+#' @importFrom GenomicRanges makeGRangesFromDataFrame
+#' @importFrom GenomicFeatures makeTxDbFromGFF
+#'
+#' @examples
+#' plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 500)
+setGeneric("plotTSS",function(object, samples, tssData, clusters, clusterThreshold
+                              , genelist, up.dis, down.dis)standardGeneric("plotTSS"))
+#' @rdname plotTSS
+#' @export
+setMethod("plotTSS",signature(object = "TSSr"), function(object
                                      ,samples
                                      ,tssData = "processed"
                                      ,clusters = "filtered"
@@ -159,7 +272,7 @@ setMethod("plotTSS","TSSr", function(object
   refGFF <- object@refSource
   organismName <- object@organismName
   sampleLabelsMerged <- object@sampleLabelsMerged
-  
+
   ##prepare tss table
   if(FALSE %in% unique(samples %in% sampleLabelsMerged)){
     stop("No data for one or more given samples! ")
@@ -172,12 +285,12 @@ setMethod("plotTSS","TSSr", function(object
   tss.m <- tss[tss$strand == "-",]
   tss.m[,(samples) := lapply(.SD, "*",-1), .SDcols = samples]
   tss <- rbind(tss.p,tss.m)
-  
+
   ##prepare annotation file
   txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
   ref <- setDT(as.data.frame(genes(txdb)))
   ref <- ref[gene_id %in% genelist,]
-  
+
   pdf(file = paste("TSS_graphs.pdf", sep = "")
       ,width = 10, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
   for (i in 1:nrow(ref)){
@@ -188,8 +301,25 @@ setMethod("plotTSS","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportTSStable",function(object,...)standardGeneric("exportTSStable"))
-setMethod("exportTSStable","TSSr", function(object
+#' Export TSS tables
+#'
+#' @description Exports TSS tables to text file.
+#' @usage exportTSStable(object, data = "processed")
+#'
+#' @param object A TSSr object.
+#' @param data Specify which data will be exported: "raw" or "processed". Default is "processed".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' exportTSStable(myTSSr)
+#' exportTSStable(myTSSr, data="raw")
+
+setGeneric("exportTSStable",function(object, data, merged)standardGeneric("exportTSStable"))
+#' @rdname exportTSStable
+#' @export
+setMethod("exportTSStable",signature(object = "TSSr"), function(object
                                             ,data = "raw"
                                             ,merged = "TRUE"
 ){
@@ -211,8 +341,27 @@ setMethod("exportTSStable","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportClustersTable",function(object,...)standardGeneric("exportClustersTable"))
-setMethod("exportClustersTable","TSSr", function(object
+#' Export cluster tables
+#'
+#' @description Export cluster tables to text files.
+#' @usage exportClustersTable(object, data = "assigned")
+#'
+#' @param object A TSSr object.
+#' @param data Specify which cluster data will be exported: "tagClusters", "consensusClusters",
+#' "assigned", "unassigned", "filtered". Default is "filtered".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 	exportClustersTable(myTSSr, data = " tagClusters")
+#' 	exportClustersTable(myTSSr, data = " consensusClusters")
+#' 	exportClustersTable(myTSSr, data = "assigned")
+#' 	exportClustersTable(myTSSr, data = "unassigned")
+setGeneric("exportClustersTable",function(object, data)standardGeneric("exportClustersTable"))
+#' @rdname exportClustersTable
+#' @export
+setMethod("exportClustersTable",signature(object = "TSSr"), function(object
                                                     ,data = "filtered"
 ){
   if(data == "tagClusters"){
@@ -261,8 +410,23 @@ setMethod("exportClustersTable","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportShapeTable",function(object,...)standardGeneric("exportShapeTable"))
-setMethod("exportShapeTable","TSSr", function(object
+#' Export core promoter shape score tables
+#'
+#' @description Exports core promoter shape score tables to text files. Shape score is calculated with
+#' shapeCluster(object) method.
+#' @usage exportShapeTable(object)
+#'
+#' @param object A TSSr object.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' exportShapeTable(myTSSr)
+setGeneric("exportShapeTable",function(object)standardGeneric("exportShapeTable"))
+#' @rdname exportShapeTable
+#' @export
+setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 ){
   message("Exporting promoter shape table...")
   s <- object@clusterShape
@@ -278,8 +442,23 @@ setMethod("exportShapeTable","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportDETable",function(object,...)standardGeneric("exportDETable"))
-setMethod("exportDETable","TSSr", function(object
+#' Export gene differential expression results table
+#'
+#' @description Exports gene differential expression results table to text files.
+#' @usage exportDETable(object, data = "sig")
+#'
+#' @param object A TSSr object.
+#' @param data Specify which data will be exported: "all" or "sig".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' exportDETable(myTSSr, data="sig")
+setGeneric("exportDETable",function(object, data)standardGeneric("exportDETable"))
+#' @rdname exportDETable
+#' @export
+setMethod("exportDETable",signature(object = "TSSr"), function(object
                                            ,data = "all"
 ){
   message("Exporting differential expression table...")
@@ -300,8 +479,22 @@ setMethod("exportDETable","TSSr", function(object
 })
 
 ################################################################################################
-setGeneric("exportShiftTable",function(object,...)standardGeneric("exportShiftTable"))
-setMethod("exportShiftTable","TSSr", function(object
+#' Export core promoter shift table
+#'
+#' @description Export core promoter shift tables to text files.
+#' @usage exportShiftTable(object)
+#'
+#' @param object A TSSr object.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' exportShiftTable(myTSSr)
+setGeneric("exportShiftTable",function(object)standardGeneric("exportShiftTable"))
+#' @rdname exportShiftTable
+#' @export
+setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 ){
   message("Exporting promoter shift table...")
   D.names <- names(object@PromoterShift)
@@ -312,8 +505,26 @@ setMethod("exportShiftTable","TSSr", function(object
 })
 
 ################################################################################################
+#' Creating Bedgraph/BigWig tracks of TSSs
+#' @description Creates bedGraph/BigWig files of TSSs that can be visualized in the UCSC Genome Browser
+#'  and Integrative Genomics Viewer (IGV).
+#'
+#' @usage exportTSStoBedgraph(object, data = "processed", format = "bedGraph")
+#'
+#' @param object A TSSr object.
+#' @param data Specify which data will be exported: "raw" or "processed". Default is "processed".
+#' @param format The format of output files: "bedGraph" or "BigWig". Default is "bedGraph".
+#'
+#' @return
+#' @export
+#'
+#' @importFrom GenomicRanges makeGRangesFromDataFrame
+#' @examples
+#' exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
 setGeneric("exportTSStoBedgraph",function(object,...)standardGeneric("exportTSStoBedgraph"))
-setMethod("exportTSStoBedgraph","TSSr", function(object
+#' @rdname exportTSStoBedgraph
+#' @export
+setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object
                                                  ,data = "processed"
                                                  ,format = "bedGraph"
                                                  ,oneFile = FALSE
@@ -344,8 +555,8 @@ setMethod("exportTSStoBedgraph","TSSr", function(object
         export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.bedGraph", sep = "."), format = "bedGraph")
       }else if(format == "BigWig"){
         message("Exporting TSS to BigWig...")
-        seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% seqnames(temp.p)]
-        seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% seqnames(temp.m)]
+        seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.p@seqnames)]
+        seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.m@seqnames)]
         export(temp.p,paste(sampleLabelsMerged[i], "TSS", data, "plus.BigWig", sep = "."), format = "BigWig")
         export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.BigWig", sep = "."), format = "BigWig")
       }
@@ -353,8 +564,24 @@ setMethod("exportTSStoBedgraph","TSSr", function(object
   }
 })
 ################################################################################################
+#' Creating bed files of clusters
+#'
+#' @description Creates bed files of clusters.
+#' @usage exportTSStoBedgraph(object, data = "consensusClusters")
+#'
+#' @param object A TSSr object.
+#' @param data Specify which data will be exported: "tagClusters" or "consensusClusters". Default is "consensusClusters".
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' exportTSStoBedgraph(myTSSr, data = "tagClusters")
+#' exportTSStoBedgraph(myTSSr, data = "consensusClusters")
 setGeneric("exportClustersToBed",function(object,...)standardGeneric("exportClustersToBed"))
-setMethod("exportClustersToBed","TSSr", function(object
+#' @rdname exportClustersToBed
+#' @export
+setMethod("exportClustersToBed",signature(object = "TSSr"), function(object
                                                  ,data = "consensusClusters"
 ){
   message("Exporting clusters to bed...")

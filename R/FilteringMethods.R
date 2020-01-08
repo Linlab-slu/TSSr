@@ -1,5 +1,27 @@
-setGeneric("filterTSS",function(object,...)standardGeneric("filterTSS"))
-setMethod("filterTSS","TSSr", function(object
+#' Filter raw TSS counts or normalized TSS
+#'
+#' @description Filters transcriptional or sequencing noise.
+#'
+#' @usage filterTSS(object, method = "TPM")
+#'
+#' @param object A TSSr object.
+#' @param method Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
+#' only if the input TSS data in raw number of counts.
+#' @param pVal Used only if method = "poisson". Default value is 0.01.
+#' @param tpmLow Used only if method = "TPM". Default value is 0.1.
+#'
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' filterTSS(myTSSr, method = "TPM", tpmLow=0.1)
+#' filterTSS(myTSSr, method = "poisson", pVal = 0.01)
+setGeneric("filterTSS",function(object, Genome, method, Normalization
+                                , pVal, tpmLow)standardGeneric("filterTSS"))
+#' @rdname filterTSS
+#' @export
+setMethod("filterTSS",signature(object = "TSSr"), function(object
                                        ,Genome
                                        ,method = "poisson"
                                        ,Normalization = TRUE

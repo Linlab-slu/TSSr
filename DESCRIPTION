@@ -1,0 +1,11 @@
+Package: TSSr
+Type: Package
+Title: TSS Package
+Version: 0.1.0
+Author: Zhaolian Lu
+Maintainer: Zhaolian Lu <zhaolian.lu@slu.edu>
+Description: TSS sequencing data analysis
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
