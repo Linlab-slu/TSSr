@@ -7,12 +7,10 @@
 \usage{
 normalizeTSS(object, Genome)
 
-\S4method{normalizeTSS}{TSSr}(object, Genome, Normalization = "TRUE")
+\S4method{normalizeTSS}{TSSr}(object)
 }
 \arguments{
 \item{object}{A TSSr object.}
-
-\item{...}{}
 }
 \value{
 

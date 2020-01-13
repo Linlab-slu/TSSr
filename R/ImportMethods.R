@@ -21,31 +21,6 @@
 #' @return
 #' @export
 #'
-#' @importFrom Rsamtools ScanBamParam
-#' @importFrom Rsamtools scanBamFlag
-#' @importFrom Rsamtools scanBam
-#' @importFrom GenomicRanges makeGRangesFromDataFrame
-#' @importFrom GenomicRanges GRanges
-#' @importFrom GenomicRanges GRangesList
-#' @importFrom GenomicRanges findOverlaps
-#' @importFrom GenomicRanges elementMetadata
-#' @importFrom GenomicAlignments seqnames
-#' @importFrom GenomeInfoDb seqlengths
-#'
-#' @importFrom GenomicRanges resize
-#' @importFrom BiocGenerics union
-#'
-#' @importFrom IRanges IPos
-#' @importFrom IRanges IRanges
-#' @importFrom IRanges RleList
-#' @importFrom IRanges Views
-#' @importFrom IRanges extractList
-#' @importFrom IRanges reduce
-#' @importFrom IRanges reverse
-#' @importFrom IRanges viewApply
-#'
-#'
-#' @importFrom stringr str_extract_all
 #' @examples
 #' getTSS(myTSSr)
 setGeneric("getTSS",function(object
@@ -54,8 +29,8 @@ setGeneric("getTSS",function(object
 #' @rdname getTSS
 #' @export
 setMethod("getTSS",signature(object = "TSSr"), function(object
-                                    ,sequencingQualityThreshold = 10
-                                    ,mappingQualityThreshold = 20
+                                    ,sequencingQualityThreshold
+                                    ,mappingQualityThreshold
                                     ){
   ##initialize values
   Genome <- .getGenome(object@genomeName)

@@ -9,7 +9,6 @@ filterTSS(object, method = "TPM")
 
 \S4method{filterTSS}{TSSr}(
   object,
-  Genome,
   method = "poisson",
   Normalization = TRUE,
   pVal = 0.01,
@@ -21,6 +20,8 @@ filterTSS(object, method = "TPM")
 
 \item{method}{Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
 only if the input TSS data in raw number of counts.}
+
+\item{Normalization}{Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.}
 
 \item{pVal}{Used only if method = "poisson". Default value is 0.01.}
 

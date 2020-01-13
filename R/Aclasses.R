@@ -6,17 +6,34 @@
 #' @export
 #'
 #' @import stringr
-#' @import data.table
 #' @import rtracklayer
 #' @import ggplot2
-#' @importFrom GenomicAlignments qwidth
-#' @importFrom GenomicAlignments readGAlignments
 #' @import GenomicFeatures
 #' @import Gviz
 #' @import DESeq2
 #' @import BSgenome.Scerevisiae.UCSC.sacCer3
 #' @import calibrate
 #' @import ggfortify
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges findOverlaps
+#' @importFrom GenomicRanges GRanges
+#' @importFrom GenomicRanges makeGRangesFromDataFrame
+#' @importFrom GenomicRanges elementMetadata
+#' @importFrom GenomicRanges resize
+#' @importFrom GenomicRanges mcols
+#'
+#' @importFrom Rsamtools scanBam
+#' @importFrom Rsamtools ScanBamParam
+#' @importFrom Rsamtools bamFlag
+#' @importFrom Rsamtools scanBamFlag
+#' @importFrom GenomicAlignments qwidth
+#' @importFrom GenomicAlignments readGAlignments
+#' @importFrom GenomicAlignments seqnames
+#' @import GenomeInfoDb
+#' @importFrom BiocGenerics union
+#' @import data.table
+#'
+#'
 #'
 #'
 #' @slot genomeName character.

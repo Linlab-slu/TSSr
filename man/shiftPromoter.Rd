@@ -7,7 +7,7 @@
 \usage{
 shiftPromoter(object,comparePairs=list(c("control","treat")), pval = 0.01)
 
-\S4method{shiftPromoter}{TSSr}(object, comparePairs, pval)
+\S4method{shiftPromoter}{TSSr}(object, comparePairs, pval = 0.01)
 }
 \arguments{
 \item{object}{A TSSr object.}

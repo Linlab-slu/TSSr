@@ -27,18 +27,18 @@
 #' @examples
 #' 	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE, filterClusterThreshold = 0.02
 #' 	,annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
-setGeneric("annotateCluster",function(object, clusters, filterCluster, filterClusterThreshold
-                                      ,annotationType, upstream, upstreamOverlap, downstream)standardGeneric("annotateCluster"))
+setGeneric("annotateCluster",function(object, clusters = "consensusClusters"
+                                      ,filterCluster = TRUE
+                                      ,filterClusterThreshold = 0.02
+                                      ,annotationType = "genes"
+                                      ,upstream=1000
+                                      ,upstreamOverlap = 500
+                                      ,downstream = 0)standardGeneric("annotateCluster"))
 #' @rdname annotateCluster
 #' @export
-setMethod("annotateCluster",signature(object = "TSSr"), function(object
-                                             ,clusters = "consensusClusters"
-                                             ,filterCluster = TRUE
-                                             ,filterClusterThreshold = 0.02
-                                             ,annotationType = "genes"
-                                             ,upstream=1000
-                                             ,upstreamOverlap = 500
-                                             ,downstream = 0
+setMethod("annotateCluster",signature(object = "TSSr"), function(object, clusters, filterCluster
+                                                                 , filterClusterThreshold,annotationType
+                                                                 , upstream, upstreamOverlap, downstream
 ){
   message("\nAnnotating...")
   Genome <- .getGenome(object@genomeName)

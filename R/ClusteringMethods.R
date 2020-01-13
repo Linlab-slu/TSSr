@@ -27,17 +27,14 @@
 #' @examples
 #' clusterTSS(myTSSr, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
 
-setGeneric("clusterTSS",function(object, method
-                                 , peakDistance, extensionDistance
-                                 , localThreshold,clusterThreshold
-                                 ,useMultiCore, numCores)standardGeneric("clusterTSS"))
+setGeneric("clusterTSS",function(object, method = "peakclu"
+                                 ,peakDistance=100,extensionDistance=30
+                                 ,localThreshold = 0.02,clusterThreshold = 1
+                                 ,useMultiCore=FALSE, numCores=NULL)standardGeneric("clusterTSS"))
 #' @rdname clusterTSS
 #' @export
-setMethod("clusterTSS",signature(object = "TSSr"), function(object, method = "peakclu"
-                                        ,peakDistance=100,extensionDistance=30
-                                        ,localThreshold = 0.02,clusterThreshold = 1
-                                        ,useMultiCore=FALSE, numCores=NULL
-){
+setMethod("clusterTSS",signature(object = "TSSr"), function(object, method, peakDistance, extensionDistance
+                                                            , localThreshold,clusterThreshold,useMultiCore, numCores){
   message("\nClustering TSS data with ", method, " method...")
   ##initialize values
   Genome <- .getGenome(object@genomeName)

@@ -7,12 +7,12 @@
 \usage{
 mergeSamples(object, mergeIndex)
 
-\S4method{mergeSamples}{TSSr}(object, sampleLabels, sampleLabelsMerged, mergeIndex = NULL)
+\S4method{mergeSamples}{TSSr}(object, mergeIndex = NULL)
 }
 \arguments{
 \item{object}{A TSSr object}
 
-\item{...}{}
+\item{mergeIndex}{Integer vector specifying which samples to be merged}
 }
 \value{
 

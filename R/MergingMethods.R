@@ -5,22 +5,17 @@
 #' @usage mergeSamples(object, mergeIndex)
 #'
 #' @param object A TSSr object
-#' @param ...
+#' @param mergeIndex Integer vector specifying which samples to be merged
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' mergeSamples(myTSSr, mergeIndex = c(1,1,2,2))
-setGeneric("mergeSamples",function(object, sampleLabels,
-                                   sampleLabelsMerged, mergeIndex)standardGeneric("mergeSamples"))
+setGeneric("mergeSamples",function(object, mergeIndex = NULL)standardGeneric("mergeSamples"))
 #' @rdname mergeSamples
 #' @export
-setMethod("mergeSamples",signature(object = "TSSr"), function(object
-                                      ,sampleLabels
-                                      ,sampleLabelsMerged
-                                      ,mergeIndex=NULL
-){
+setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex){
   if(is.null(mergeIndex)){
     mergeIndex <- as.integer(object@mergeIndex)
   }else{
@@ -50,6 +45,5 @@ setMethod("mergeSamples",signature(object = "TSSr"), function(object
 
   #object@mergeIndex <- mergeIndex
   object@TSSprocessedMatrix <- re
-  #object@librarySizes <- as.integer(colSums(re[,4:ncol(re), drop = F], na.rm = T))
   assign(objName, object, envir = parent.frame())
 })

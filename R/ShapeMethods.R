@@ -21,16 +21,11 @@
 #' 	shapeCluster(myTSSr,clusters = "consensusClusters" , method = "PSS")
 #' 	shapeCluster(myTSSr,clusters = "tagClusters" , method = "SI")
 
-setGeneric("shapeCluster",function(object, clusters
-                                   , method, useMultiCore, numCores)standardGeneric("shapeCluster"))
+setGeneric("shapeCluster",function(object, clusters = "consensusClusters"
+                                   , method = "PSS", useMultiCore = FALSE, numCores = NULL)standardGeneric("shapeCluster"))
 #' @rdname shapeCluster
 #' @export
-setMethod("shapeCluster",signature(object = "TSSr"), function(object
-                                          , clusters = "consensusClusters"
-                                          , method = "PSS"
-                                          , useMultiCore= FALSE
-                                          , numCores = NULL
-){
+setMethod("shapeCluster",signature(object = "TSSr"), function(object, clusters, method, useMultiCore, numCores){
   message("\nCalculating ", clusters," shape with ",method," method...")
 
   ##initialize data

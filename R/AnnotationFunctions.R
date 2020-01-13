@@ -27,8 +27,8 @@
                                     ifelse(dis < upstreamOverlap, upstreamOverlap, dis)))]
         ##add down to solve overlap issue
         ref_sub[,start.a:=data.table::shift(start, 1, fill = 1000,type='lead')]
-        ref_sub[, dis.start := start.a - start]
-        ref_sub[, down.up := data.table::shift(up, 1, fill = 1000,type='lead')]
+        ref_sub[,dis.start := start.a - start]
+        ref_sub[,down.up := data.table::shift(up, 1, fill = 1000,type='lead')]
         ref_sub[,down:= ifelse(dis.start > downstream + down.up, downstream,
                              ifelse(dis.start  < down.up, 0, dis.start-down.up))]
         ##
@@ -58,22 +58,41 @@
       ref_sub <- makeGRangesFromDataFrame(ref_sub, keep.extra.columns= F)
       ##find overlap with promoter region
       hits <- findOverlaps(gr,ref_sub)
-      hits <- breakTies(hits, method = "first")
-      hits <- methods::as(hits, "List")
-      hits <- extractList(names(ref_sub), hits)
-      hits <- as.character(hits)
-      mcols(gr)[,"gene"] <- hits
+      ################fix breakTies issue, Jan09,2020##############
+      hits <- as.data.frame(hits)
+      hits <- hits[!duplicated(hits$queryHits),]
+      gr1 <- gr[hits$queryHits]
+      gr2 <- gr[-hits$queryHits]
+      mcols(gr1)[,"gene"] <- names(ref_sub)[hits$subjectHits]
+      mcols(gr2)[,"gene"] <- NA
+      gr <- c(gr1,gr2)
+      # hits <- breakTies(hits, method = "first")
+      # hits <- methods::as(hits, "List")
+      # hits <- extractList(names(ref_sub), hits)
+      # hits <- as.character(hits)
+      # mcols(gr)[,"gene"] <- hits
+      #############################################################
+
       if(filterCluster == TRUE){
         ##find overlap with coding regions
         ##coding
         rownames(ref_coding) <- ref_coding$gene_id
         ref_coding <- makeGRangesFromDataFrame(ref_coding, keep.extra.columns = F)
         hits <- findOverlaps(gr,ref_coding)
-        hits <- breakTies(hits, method = "first")
-        hits <- methods::as(hits, "List")
-        hits <- extractList(names(ref_coding), hits)
-        hits <- as.character(hits)
-        mcols(gr)[,"inCoding"] <- hits
+        ################fix breakTies issue, Jan09,2020##############
+        hits <- as.data.frame(hits)
+        hits <- hits[!duplicated(hits$queryHits),]
+        gr1 <- gr[hits$queryHits]
+        gr2 <- gr[-hits$queryHits]
+        mcols(gr1)[,"inCoding"] <- names(ref_sub)[hits$subjectHits]
+        mcols(gr2)[,"inCoding"] <- NA
+        gr <- c(gr1,gr2)
+        # hits <- breakTies(hits, method = "first")
+        # hits <- methods::as(hits, "List")
+        # hits <- extractList(names(ref_coding), hits)
+        # hits <- as.character(hits)
+        # mcols(gr)[,"inCoding"] <- hits
+        #############################################################
       }
     }
     gr <- as.data.frame(gr)
@@ -81,6 +100,7 @@
     colnames(gr)[c(1,7,8)] <- c("chr","start","end")
     gr <- gr[,c(6,1,7,8,5,ncol(gr),9:(ncol(gr)-1))]
     setDT(gr)
+    setorder(gr, start)
     return(gr)
   })
   setorder(do.call("rbind",asn), cluster)

@@ -7,6 +7,7 @@
 #' @param object A TSSr object.
 #' @param method Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
 #' only if the input TSS data in raw number of counts.
+#' @param Normalization Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
 #'
@@ -17,17 +18,11 @@
 #' @examples
 #' filterTSS(myTSSr, method = "TPM", tpmLow=0.1)
 #' filterTSS(myTSSr, method = "poisson", pVal = 0.01)
-setGeneric("filterTSS",function(object, Genome, method, Normalization
-                                , pVal, tpmLow)standardGeneric("filterTSS"))
+setGeneric("filterTSS",function(object, method = "poisson", Normalization = TRUE
+                                , pVal =0.01, tpmLow = 0.1)standardGeneric("filterTSS"))
 #' @rdname filterTSS
 #' @export
-setMethod("filterTSS",signature(object = "TSSr"), function(object
-                                       ,Genome
-                                       ,method = "poisson"
-                                       ,Normalization = TRUE
-                                       ,pVal=0.01
-                                       ,tpmLow = 0.1
-){
+setMethod("filterTSS",signature(object = "TSSr"), function(object, method, Normalization, pVal, tpmLow){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
