@@ -14,12 +14,10 @@
 #'
 #' @examples
 #' plotCorrelation(myTSSr, samples = "all")
-setGeneric("plotCorrelation",function(object, samples)standardGeneric("plotCorrelation"))
+setGeneric("plotCorrelation",function(object, samples = "all")standardGeneric("plotCorrelation"))
 #' @rdname plotCorrelation
 #' @export
-setMethod("plotCorrelation",signature(object = "TSSr"), function(object
-                                             ,samples = "all"
-){
+setMethod("plotCorrelation",signature(object = "TSSr"), function(object, samples){
   message("Plotting TSS correlations...")
   tss.raw <- object@TSSrawMatrix
   if(samples == "all"){
@@ -49,12 +47,10 @@ setMethod("plotCorrelation",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' plotTssPCA(myTSSr)
-setGeneric("plotTssPCA",function(object, TSS.threshold)standardGeneric("plotTssPCA"))
+setGeneric("plotTssPCA",function(object, TSS.threshold =10)standardGeneric("plotTssPCA"))
 #' @rdname plotTssPCA
 #' @export
-setMethod("plotTssPCA",signature(object = "TSSr"), function(object
-                                     ,TSS.threshold=10
-){
+setMethod("plotTssPCA",signature(object = "TSSr"), function(object, TSS.threshold){
   message("Plotting TSS PCA...")
   tss <- object@TSSrawMatrix
   tss <- tss[,4:ncol(tss)]
@@ -86,13 +82,10 @@ setMethod("plotTssPCA",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' plotInterQuantile(myTSSr, samples = "all")
-setGeneric("plotInterQuantile",function(object, samples, tagsThreshold)standardGeneric("plotInterQuantile"))
+setGeneric("plotInterQuantile",function(object, samples = "all", tagsThreshold = 1)standardGeneric("plotInterQuantile"))
 #' @rdname plotInterQuantile
 #' @export
-setMethod("plotInterQuantile",signature(object = "TSSr"), function(object
-                                               ,samples = "all"
-                                               ,tagsThreshold = 1
-){
+setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, samples, tagsThreshold){
   message("Plotting interquantile graphs...")
   TCs <- object@clusterShape
   sampleLabels <- object@sampleLabelsMerged
@@ -135,12 +128,10 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' plotShape(myTSSr)
-setGeneric("plotShape",function(object, samples)standardGeneric("plotShape"))
+setGeneric("plotShape",function(object, samples = "all")standardGeneric("plotShape"))
 #' @rdname plotShape
 #' @export
-setMethod("plotShape",signature(object = "TSSr"), function(object
-                                       ,samples = "all"
-){
+setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
   message("Plotting Shape graphs...")
   TCs <- object@clusterShape
   sampleLabels <- object@sampleLabelsMerged
@@ -185,15 +176,12 @@ setMethod("plotShape",signature(object = "TSSr"), function(object
 #' plotDE(myTSSr, withGeneName = "TRUE")
 #' plotDE(myTSSr, withGeneName = "FALSE")
 setGeneric("plotDE",function(object
-                             , withGeneName, xlim
-                             , ylim)standardGeneric("plotDE"))
+                             ,withGeneName = "TRUE"
+                             ,xlim=c(-2.5, 2.5)
+                             ,ylim=c(0,10))standardGeneric("plotDE"))
 #' @rdname plotDE
 #' @export
-setMethod("plotDE",signature(object = "TSSr"), function(object
-                                    ,withGeneName = "TRUE"
-                                    ,xlim=c(-2.5, 2.5)
-                                    ,ylim=c(0,10)
-){
+setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xlim, ylim){
   message("Plotting DE graphs...")
   pdf(file = paste("Volcano_plot.pdf", sep = ""),width = 8, height = 8,bg = "transparent"
       , family = "Helvetica", fonts = NULL)
@@ -234,25 +222,19 @@ setMethod("plotDE",signature(object = "TSSr"), function(object
 #' @return
 #' @export
 #'
-#' @importFrom GenomicRanges GRanges
-#' @importFrom GenomicRanges makeGRangesFromDataFrame
-#' @importFrom GenomicFeatures makeTxDbFromGFF
-#'
 #' @examples
 #' plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 500)
-setGeneric("plotTSS",function(object, samples, tssData, clusters, clusterThreshold
-                              , genelist, up.dis, down.dis)standardGeneric("plotTSS"))
+setGeneric("plotTSS",function(object,samples
+                              ,tssData = "processed"
+                              ,clusters = "filtered"
+                              ,clusterThreshold = 0.02
+                              ,genelist
+                              ,up.dis =500
+                              ,down.dis = 500)standardGeneric("plotTSS"))
 #' @rdname plotTSS
 #' @export
-setMethod("plotTSS",signature(object = "TSSr"), function(object
-                                     ,samples
-                                     ,tssData = "processed"
-                                     ,clusters = "filtered"
-                                     ,clusterThreshold = 0.02
-                                     ,genelist
-                                     ,up.dis =500
-                                     ,down.dis = 500
-){
+setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssData, clusters, clusterThreshold
+                                                         , genelist, up.dis, down.dis){
   message("Plotting TSS graphs...")
   ##initialize data
   if(clusters == "all"){
@@ -316,13 +298,10 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object
 #' exportTSStable(myTSSr)
 #' exportTSStable(myTSSr, data="raw")
 
-setGeneric("exportTSStable",function(object, data, merged)standardGeneric("exportTSStable"))
+setGeneric("exportTSStable",function(object, data = "raw", merged = "TRUE")standardGeneric("exportTSStable"))
 #' @rdname exportTSStable
 #' @export
-setMethod("exportTSStable",signature(object = "TSSr"), function(object
-                                            ,data = "raw"
-                                            ,merged = "TRUE"
-){
+setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, merged){
   message("Exporting TSS table...")
   if(data == "raw"){
     if(merged == "TRUE"){
@@ -358,12 +337,10 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object
 #' 	exportClustersTable(myTSSr, data = " consensusClusters")
 #' 	exportClustersTable(myTSSr, data = "assigned")
 #' 	exportClustersTable(myTSSr, data = "unassigned")
-setGeneric("exportClustersTable",function(object, data)standardGeneric("exportClustersTable"))
+setGeneric("exportClustersTable",function(object, data = "filtered")standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
 #' @export
-setMethod("exportClustersTable",signature(object = "TSSr"), function(object
-                                                    ,data = "filtered"
-){
+setMethod("exportClustersTable",signature(object = "TSSr"), function(object, data){
   if(data == "tagClusters"){
     message("Exporting tagClusters table...")
     tc <- object@tagClusters
@@ -455,12 +432,10 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' exportDETable(myTSSr, data="sig")
-setGeneric("exportDETable",function(object, data)standardGeneric("exportDETable"))
+setGeneric("exportDETable",function(object, data = "all")standardGeneric("exportDETable"))
 #' @rdname exportDETable
 #' @export
-setMethod("exportDETable",signature(object = "TSSr"), function(object
-                                           ,data = "all"
-){
+setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
   message("Exporting differential expression table...")
   D.names <- names(object@DEtables)
   if(data == "all"){
@@ -518,17 +493,14 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 #' @return
 #' @export
 #'
-#' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @examples
 #' exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
-setGeneric("exportTSStoBedgraph",function(object,...)standardGeneric("exportTSStoBedgraph"))
+setGeneric("exportTSStoBedgraph",function(object,data = "processed"
+                                          ,format = "bedGraph"
+                                          ,oneFile = FALSE)standardGeneric("exportTSStoBedgraph"))
 #' @rdname exportTSStoBedgraph
 #' @export
-setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object
-                                                 ,data = "processed"
-                                                 ,format = "bedGraph"
-                                                 ,oneFile = FALSE
-){
+setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, data, format, oneFile){
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
   if(data == "processed"){
@@ -578,12 +550,10 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object
 #' @examples
 #' exportTSStoBedgraph(myTSSr, data = "tagClusters")
 #' exportTSStoBedgraph(myTSSr, data = "consensusClusters")
-setGeneric("exportClustersToBed",function(object,...)standardGeneric("exportClustersToBed"))
+setGeneric("exportClustersToBed",function(object,data = "consensusClusters")standardGeneric("exportClustersToBed"))
 #' @rdname exportClustersToBed
 #' @export
-setMethod("exportClustersToBed",signature(object = "TSSr"), function(object
-                                                 ,data = "consensusClusters"
-){
+setMethod("exportClustersToBed",signature(object = "TSSr"), function(object, data){
   message("Exporting clusters to bed...")
   sampleLabelsMerged <- object@sampleLabelsMerged
   if(data == "tagClusters"){

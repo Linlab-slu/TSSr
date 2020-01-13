@@ -6,7 +6,7 @@
   cy[,end := dominant_tss + round(dis/2)]
   gr2 <- makeGRangesFromDataFrame(cy, keep.extra.columns= F)
   hits <- findOverlaps(gr1, gr2)
-  new <- c(union(gr1[queryHits(hits)], gr2[subjectHits(hits)]),gr1[-queryHits(hits)],gr2[-subjectHits(hits)])
+  new <- c(BiocGenerics::union(gr1[unname(as.data.frame(hits)[,1])], gr2[unname(as.data.frame(hits)[,2])]),gr1[-unname(as.data.frame(hits)[,1])],gr2[-unname(as.data.frame(hits)[,2])])
   return(new)
 }
 

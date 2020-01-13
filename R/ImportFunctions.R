@@ -152,6 +152,7 @@
     }
     first <- FALSE
   }
+  TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
 ################################################################################################
@@ -218,6 +219,7 @@
     first <- FALSE
   }
   TSS.all.samples <- data.table(TSS.all.samples)
+  TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
 
@@ -242,6 +244,7 @@
     stop("Number of provided sample labels must match the number of samples in the TSS table!")
   }
   setDT(TSS.all.samples)
+  TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
 

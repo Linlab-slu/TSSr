@@ -17,10 +17,10 @@
 #'
 #' @examples
 #' consensusCluster(myTSSr)
-setGeneric("consensusCluster",function(object, dis, useMultiCore, numCores)standardGeneric("consensusCluster"))
+setGeneric("consensusCluster",function(object, dis = 50,useMultiCore=TRUE, numCores = NULL)standardGeneric("consensusCluster"))
 #' @rdname consensusCluster
 #' @export
-setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis = 50,useMultiCore=TRUE, numCores = NULL
+setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, useMultiCore, numCores
 ){
   message("\nCreating consensus clusters...")
 
@@ -39,7 +39,7 @@ setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis = 
   cx[,start := dominant_tss-round(dis/2)]
   cx[,end := dominant_tss + round(dis/2)]
   gr1 <- makeGRangesFromDataFrame(cx, keep.extra.columns= F)
-  gr <- union(gr1,gr1)
+  gr <- BiocGenerics::union(gr1,gr1)
   for(i in 2:length(sampleLabelsMerged)){
     gr <- .getConsensus(gr, cs[[sampleLabelsMerged[[i]]]], dis)
   }

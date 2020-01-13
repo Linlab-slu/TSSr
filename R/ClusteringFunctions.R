@@ -25,12 +25,12 @@
   #######################################################################################################################
   if(unique(tss.dt$strand)== "+"){
     localF <- sapply(peakID[peakID >0],function(i){
-      temp <- tss.dt[pos %between% c(tss.dt$pos[i],tss.dt$pos[i]+100),]
+      temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i]+100,]
       temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
     })}
   else{
     localF <- sapply(peakID[peakID >0],function(i){
-      temp <- tss.dt[pos %between% c(tss.dt$pos[i]-100,tss.dt$pos[i]),]
+      temp <- tss.dt[pos>= tss.dt$pos[i]-100 & pos <= tss.dt$pos[i],]
       temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
     })}
   if(length(unlist(localF)) >0){tss.dt <- tss.dt[-unlist(localF),]}
@@ -83,7 +83,7 @@
     start <- clusters[i,V1]
     end <- clusters[i,V2]
     #copied.dt[, ID := .I]##NEW April18
-    cluster.data <- copied.dt[pos %between% c(start,end), ]
+    cluster.data <- copied.dt[pos >= start & pos <= end, ]
     tags.sum <- cluster.data[,sum(tags)]##NEW Sep25, tags -> tags.sum
     q1 <- cluster.data[which(cumsum(tags) > 0.1*tags.sum),min(pos)]
     q9 <- cluster.data[order(-pos)][which(cumsum(tags) > 0.1*tags.sum),max(pos)]
