@@ -14,18 +14,12 @@
 #' @return
 #' @export
 #'
-#' @import DESeq2
 #' @examples
 #' deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-setGeneric("deGene",function(object,...)standardGeneric("deGene"))
+setGeneric("deGene",function(object, comparePairs, pval=0.01, useMultiCore=FALSE, numCores = NULL)standardGeneric("deGene"))
 #' @rdname deGene
 #' @export
-setMethod("deGene",signature(object = "TSSr"), function(object
-                                    ,comparePairs
-                                    ,pval=0.01
-                                    ,useMultiCore=FALSE
-                                    ,numCores = NULL
-){
+setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pval, useMultiCore, numCores){
   ##initialize data
   message("\nCalculating gene differential expression...")
   objName <- deparse(substitute(object))
