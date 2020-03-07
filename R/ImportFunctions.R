@@ -9,14 +9,15 @@
 }
 
 ################################################################################################
-##.getTSS_from_bam function calls TSS from bam file
+##.getTSS_from_bam function calls TSS from bam files
 .getTSS_from_bam <- function(bam.files, Genome, sampleLabels, inputFilesType
                              ,sequencingQualityThreshold
                              ,mappingQualityThreshold){
 
   what <- c("rname", "strand", "pos", "seq", "qual", "mapq","flag","cigar")
   param <- ScanBamParam( what = what
-                         , flag = scanBamFlag(isUnmappedQuery = FALSE)
+                         , flag = scanBamFlag(isUnmappedQuery = FALSE,
+                                              isNotPassingQualityControls = FALSE)
                          , mapqFilter = mappingQualityThreshold)
   if (inputFilesType == "bamPairedEnd"){
     bamFlag(param) <- scanBamFlag( isUnmappedQuery = FALSE
@@ -121,13 +122,8 @@
 }
 
 ################################################################################################
-
 ##.getTSS_from_bed function calls TSS from bed files
-##.getTSS_from_tss function takes bed files and Genome
-##run script with the following example command:
-##.getTSS_from_bed(inputFiles, Genome)
-
-.getTSS_from_bed <- function(inputFiles, Genome, sampleLabels){
+.getTSS_from_bed <- function(bed.files, Genome, sampleLabels){
   first <- TRUE
   for(i in 1:length(inputFiles)) {
     message("\nReading in file: ", inputFiles[i], "...")
@@ -157,11 +153,8 @@
 }
 ################################################################################################
 ##.getTSS_from_BigWig function calls TSS from BigWig files
-##.getTSS_from_tss function takes BigWig files and Genome
-##run script with the following example command:
-##.getTSS_from_BigWig(inputFiles, Genome)
 
-.getTSS_from_BigWig <- function(inputFiles, Genome, sampleLabels){
+.getTSS_from_BigWig <- function(BigWig.files, Genome, sampleLabels){
   #library.sizes <- vector()
   first <- TRUE
   for(i in 1:length(inputFiles)) {
@@ -195,12 +188,9 @@
 
 
 ################################################################################################
-##.getTSS_from_tss function calls TSS from bam file
-##.getTSS_from_tss function takes tss files
-##run script with the following example command:
-##.getTSS_from_tss(inputFiles)
+##.getTSS_from_tss function calls TSS from tss files
 
-.getTSS_from_tss <- function(inputFiles, sampleLabels){
+.getTSS_from_tss <- function(tss.files, sampleLabels){
   first <- TRUE
   for(i in 1:length(inputFiles)) {
     message("\nReading in file: ", inputFiles[i], "...")
@@ -225,11 +215,8 @@
 
 ################################################################################################
 ##.getTSS_from_TSStable function calls TSS from one TSStable file
-##.getTSS_from_tss function takes one TSS table file
-##run script with the following example command:
-##.getTSS_from_TSStable(inputFiles)
 
-.getTSS_from_TSStable <- function(inputFiles, sampleLabels){
+.getTSS_from_TSStable <- function(TSStable.file, sampleLabels){
   if(length(inputFiles) > 1){
     stop("Only one file should be provided when inputFilesType = \"TSStable\"!")
   }

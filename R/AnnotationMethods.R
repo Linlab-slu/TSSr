@@ -3,7 +3,8 @@
 #' @description Annotates clusters with gene or transcript names from GFF annotation file.
 #'
 #' @usage 	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE
-#' , filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+#' , filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000
+#' , upstreamOverlap = 500,downstream = 0)
 #'
 #' @param object  A TSSr object
 #' @param clusters Clusters to be annotated: "consensusClusters" or "tagClusters". Default is "consensusClusters".
@@ -17,7 +18,7 @@
 #' @param upstream  Upstream distance to the start position of annotation feature. Default value = 1000.
 #' @param upstreamOverlap Upstream distance to the start position of annotation feature if overlapped
 #' with the upstream neighboring feature. Default value = 500.
-#' @param dowmstream  Downstream distance to the start position of annotation feature. Default value = 0.
+#' @param downstream  Downstream distance to the start position of annotation feature. Default value = 0.
 #' Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
 #'  the recommended value = 500.
 #'
@@ -25,8 +26,9 @@
 #' @export
 #'
 #' @examples
-#' 	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE, filterClusterThreshold = 0.02
-#' 	,annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+#' 	annotateCluster(TSSr,clusters = "consensusClusters", filterCluster = TRUE
+#' 	, filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
+#' 	, upstreamOverlap = 500, downstream = 0)
 setGeneric("annotateCluster",function(object, clusters = "consensusClusters"
                                       ,filterCluster = TRUE
                                       ,filterClusterThreshold = 0.02

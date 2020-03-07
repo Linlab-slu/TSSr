@@ -4,11 +4,11 @@
 #' shifting across different experiments. Generates gene list with Ds (degree of shift)
 #' value (Lu et al., 2019), p value and adjusted p value.
 #'
-#' @usage shiftPromoter(object,comparePairs=list(c("control","treat")), pval = 0.01)
+#' @usage shiftPromoter(object, comparePairs, pval=0.01)
 #'
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison.
-#' @param pVal Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
+#' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
 #'
 #' @return
 #' @export

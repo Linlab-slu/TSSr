@@ -2,11 +2,12 @@
 #' Analysis of gene differential expression.
 #'
 #' @description Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
-#' @usage deGene(object,comparePairs=list(c("control","treat")), pval = 0.01)
+#' @usage deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
+#'  useMultiCore=FALSE, numCores = NULL)
 #'
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison with DESeq2 method.
-#' @param pVal Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
+#' @param pval Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
 #'
@@ -16,7 +17,7 @@
 #'
 #' @examples
 #' deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-setGeneric("deGene",function(object, comparePairs, pval=0.01, useMultiCore=FALSE, numCores = NULL)standardGeneric("deGene"))
+setGeneric("deGene",function(object, comparePairs=list(c("control","treat")), pval=0.01, useMultiCore=FALSE, numCores = NULL)standardGeneric("deGene"))
 #' @rdname deGene
 #' @export
 setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pval, useMultiCore, numCores){

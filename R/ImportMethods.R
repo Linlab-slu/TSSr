@@ -5,14 +5,7 @@
 #' The files include users' home-made alignment files (bam format) or downloaded files from public databases.
 #'  See inputFilesType for details on the supported input file formats.
 #'
-#' @usage 	getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20
-#' , removeNewG = TRUE, correctG = TRUE)
-#' @usage .getTSS_from_bam(bam.files, Genome, sampleLabels,inputFilesType
-#' , sequencingQualityThreshold, mappingQualityThreshold)
-#' @usage .getTSS_from_bed(bed.files, Genome, sampleLabels)
-#' @usage .getTSS_from_BigWig(BigWig.files, Genome, sampleLabels)
-#' @usage .getTSS_from_tss(tss.files, sampleLabels)
-#' @usage .getTSS_from_TSStable(TSStable.file, sampleLabels)
+#' @usage getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 #'
 #' @param object A TSSr object.
 #' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.

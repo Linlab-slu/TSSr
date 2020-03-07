@@ -4,7 +4,7 @@
 #' @description Makes consensus clusters from multiple samples in TSSr object and calculates
 #' inter-quantile positions within consensus clusters for each sample.
 #'
-#' @usage consensusCluster(object, data = "filtered", dis = 50
+#' @usage consensusCluster(object, dis = 50
 #' , useMultiCore=TRUE, numCores = NULL)
 #'
 #' @param object A TSSr object.

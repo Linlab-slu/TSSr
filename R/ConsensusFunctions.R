@@ -14,7 +14,6 @@
 ##
 .getConsensusQuantile <- function(tc, gr, tss.temp,useMultiCore, numCores){
   if(useMultiCore){
-    library(parallel)
     if(is.null(numCores)){
       numCores <- detectCores()
     }

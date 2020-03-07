@@ -6,7 +6,7 @@
 #'   peaks can be specified.
 #'
 #' @usage clusterTSS(object, method = "peakclu", peakDistance=100,extensionDistance=30
-#' , localThreshold = 0.02,clusterThreshold = 1, nonOverLapping=TRUE, useMultiCore=FALSE, numCores=NULL)
+#' , localThreshold = 0.02,clusterThreshold = 1, useMultiCore=FALSE, numCores=NULL)
 #'
 #'
 #' @param object  A TSSr object
@@ -46,7 +46,6 @@ setMethod("clusterTSS",signature(object = "TSSr"), function(object, method, peak
 
   # pass sub datatables to peak-caller and clustering functions
   if (useMultiCore) {
-    library(parallel)
     if (is.null(numCores)) {
       numCores <- detectCores()
     }

@@ -2,7 +2,8 @@
 #'
 #' @description Filters transcriptional or sequencing noise.
 #'
-#' @usage filterTSS(object, method = "TPM")
+#' @usage filterTSS(object, method = "poisson", Normalization = TRUE,
+#' pVal =0.01, tpmLow = 0.1)
 #'
 #' @param object A TSSr object.
 #' @param method Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
@@ -83,3 +84,14 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, Norma
     message("\tNo filtering method is defined...")
   }
 })
+
+################################################################################################
+.filterWithPoisson <- function(data, coverageDepth, genomeSize, pVal) {
+  # calculate lambda value (average)
+  lambda <- coverageDepth / (genomeSize * 2)
+  # get cutoff value
+  cutoff <- qpois(pVal, lambda, lower.tail=FALSE, log.p=FALSE)
+  # fiter tss table
+  data[data<cutoff,] =0
+  return(data)
+}

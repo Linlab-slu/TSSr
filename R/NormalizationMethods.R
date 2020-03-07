@@ -3,7 +3,7 @@
 #'
 #' @description Normalizes raw TSS counts in all samples by tags per million (TPM)
 #'
-#' @usage normalizeTSS(object, Genome)
+#' @usage normalizeTSS(object)
 #'
 #' @param object A TSSr object.
 #'

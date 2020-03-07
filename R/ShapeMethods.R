@@ -4,7 +4,8 @@
 #'  promoters using Shape Index (SI) algorithm (Hoskins et al. 2011) or Promoter Shape Score (PSS)
 #'   algorithm (Lu et al. 2019).
 #'
-#' @usage shapeCluster(object,data = "consensusClusters" , method = "PSS", useMultiCore=TRUE, numCores = NULL)
+#' @usage shapeCluster(object, clusters = "consensusClusters", method = "PSS",
+#'  useMultiCore=FALSE, numCores = NULL)
 #'
 #' @param object A TSSr object.
 #' @param clusters Clusters to be used for calculating shape score: "tagClusters" or "consensusClusters".
@@ -41,7 +42,6 @@ setMethod("shapeCluster",signature(object = "TSSr"), function(object, clusters, 
   objName <- deparse(substitute(object))
 
   if (useMultiCore) {
-    library(parallel)
     if (is.null(numCores)) {
       numCores <- detectCores()
     }

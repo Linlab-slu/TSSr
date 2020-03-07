@@ -25,12 +25,12 @@
   #######################################################################################################################
   if(unique(tss.dt$strand)== "+"){
     localF <- sapply(peakID[peakID >0],function(i){
-      temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i]+100,]
+      temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i]+peakDistance,]
       temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
     })}
   else{
     localF <- sapply(peakID[peakID >0],function(i){
-      temp <- tss.dt[pos>= tss.dt$pos[i]-100 & pos <= tss.dt$pos[i],]
+      temp <- tss.dt[pos>= tss.dt$pos[i]-peakDistance & pos <= tss.dt$pos[i],]
       temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
     })}
   if(length(unlist(localF)) >0){tss.dt <- tss.dt[-unlist(localF),]}

@@ -78,7 +78,6 @@
   cols <- c("chr","pos","strand", samples)
   tss <- tss.raw[,.SD, .SDcols = cols]
   if(useMultiCore){
-    library(parallel)
     if(is.null(numCores)){
       numCores <- detectCores()
     }

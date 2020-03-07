@@ -13,8 +13,10 @@
     ref_sub <- ref[.(x)]
     ref_coding <- ref[.(x)]
     if(!(x %in% ref[,unique(subset)])){
-      mcols(gr)[,"gene"] <- NA
-      mcols(gr)[,"inCoding"] <- NA
+      GenomicRanges::mcols(gr)[,"gene"] <- NA
+      if(filterCluster == TRUE){
+        GenomicRanges::mcols(gr)[,"inCoding"] <- NA
+      }
     }else{
       if(cs$strand[1] == "+"){
         setorder(ref_sub,start)
@@ -63,9 +65,10 @@
       hits <- hits[!duplicated(hits$queryHits),]
       gr1 <- gr[hits$queryHits]
       gr2 <- gr[-hits$queryHits]
-      mcols(gr1)[,"gene"] <- names(ref_sub)[hits$subjectHits]
-      mcols(gr2)[,"gene"] <- NA
+      GenomicRanges::mcols(gr1)[,"gene"] <- names(ref_sub)[hits$subjectHits]
+      GenomicRanges::mcols(gr2)[,"gene"] <- NA
       gr <- c(gr1,gr2)
+
       # hits <- breakTies(hits, method = "first")
       # hits <- methods::as(hits, "List")
       # hits <- extractList(names(ref_sub), hits)
@@ -84,8 +87,8 @@
         hits <- hits[!duplicated(hits$queryHits),]
         gr1 <- gr[hits$queryHits]
         gr2 <- gr[-hits$queryHits]
-        mcols(gr1)[,"inCoding"] <- names(ref_sub)[hits$subjectHits]
-        mcols(gr2)[,"inCoding"] <- NA
+        GenomicRanges::mcols(gr1)[,"inCoding"] <- names(ref_sub)[hits$subjectHits]
+        GenomicRanges::mcols(gr2)[,"inCoding"] <- NA
         gr <- c(gr1,gr2)
         # hits <- breakTies(hits, method = "first")
         # hits <- methods::as(hits, "List")

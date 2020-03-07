@@ -27,7 +27,7 @@
 ##ref table has at least 5 columns (gene,chr, start, end, strand)
 ##run script with the following example command:
 ##.plotTSS(tss.tpm,cs.cl, ref, up.dis = 500, down.dis=100)
-.plotTSS <- function(tss, cs,df, samples, up.dis, down.dis){
+.plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis){
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
   if(df$strand == "+"){
     p <- df$start - up.dis
@@ -40,11 +40,21 @@
   range.gr <- GRanges(seqnames = as.character(df$chr),ranges = IRanges(start = p,end = q),strand = as.character(df$strand))
   gtrack <- GenomeAxisTrack(range = range.gr,fontcolor = "black")
   ##GeneRegion track
-  gene.gr <- makeGRangesFromDataFrame(df,keep.extra.columns=FALSE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
-                                      start.field="start",end.field=c("end"),strand.field="strand",starts.in.df.are.0based=FALSE)
-  atrack.gene <- GeneRegionTrack(gene.gr, name = "gene",col.title="black")
+  df[, gene:= gene_id]
+  gene.gr <- makeGRangesFromDataFrame(df,keep.extra.columns=FALSE,ignore.strand=FALSE,
+                                      seqinfo=NULL,seqnames.field=c("chr"),
+                                      start.field="start",end.field=c("end"),
+                                      strand.field="strand",starts.in.df.are.0based=FALSE)
+  atrack.gene <- GeneRegionTrack(gene.gr, name = "gene",col.title="black",
+                                 transcriptAnnotation = "gene")
   ##cluster and Data track
-  tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand) & tss$pos >= p & tss$pos <= q,]
+  if(Bidirection == TRUE){
+    tss_sub <- tss[tss$chr == as.character(df$chr)
+                   & tss$pos >= p & tss$pos <= q,]
+  }else{
+    tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand)
+                   & tss$pos >= p & tss$pos <= q,]
+  }
   data_tss_track <- list()
   dtrack <- list()
   s <- c()
@@ -59,12 +69,13 @@
     temp <- tss_sub[,.SD, .SDcols = c("chr","pos","strand",samples[my.sample])]
     data_tss_track <- makeGRangesFromDataFrame(temp,keep.extra.columns=TRUE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
                                                                start.field="pos",end.field=c("pos"),strand.field="strand",starts.in.df.are.0based=FALSE)
-    dtrack <- DataTrack(data_tss_track, name = paste(samples[my.sample],"TSS", sep = " "),type = "h",col = rainbow(length(samples))[my.sample],baseline = 0, 
+    dtrack <- DataTrack(data_tss_track, name = paste(samples[my.sample],"TSS", sep = " "),type = "h",col = rainbow(length(samples))[my.sample],baseline = 0,
                                         col.baseline = "grey",col.title="black",col.axis = "black")
     s <- c(s, atrack.cs, dtrack)
   }
   ##plot Genome range track, gene track, clusters track, TSS track
-  plotTracks(c(list(gtrack, atrack.gene),s),main = df$gene)
+  plotTracks(c(list(gtrack, atrack.gene),s),main = df$gene,
+             featureAnnotation="id",fontcolor.feature="black", cex.feature=0.7, shape = "arrow")
 }
 ###################################################################################################################
 .getBed <- function(p){
@@ -72,7 +83,7 @@
     if(p[i,q_0.1] == p[i, q_0.9]){
       nrBlocks = length(unique(c(p[i,start],p[i,end],p[i,q_0.1],p[i,q_0.9])))
     }else{nrBlocks = length(unique(c(p[i,start],p[i,end],p[i,q_0.1],p[i,q_0.9]))) -1}
-    
+
     if(nrBlocks == 3){
       block.sizes = paste(1, p[i,q_0.9]-p[i,q_0.1]+1, 1, sep = ",")
       block.starts = paste(0, p[i,q_0.1]-p[i,start], p[i,end]-p[i,start], sep = ",")
