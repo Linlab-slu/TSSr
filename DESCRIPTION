@@ -1,11 +1,22 @@
 Package: TSSr
 Type: Package
-Title: TSS Package
+Title: TSS sequencing data analysis
 Version: 0.1.0
-Author: Zhaolian Lu
+biocViews: Software, Transcription, Coverage, GeneExpression,
+        GeneRegulation, PeakDetection, DataImport, DataRepresentation,
+        Transcriptomics, Sequencing, Annotation, GenomeBrowsers,
+        Normalization, Preprocessing, Visualization
+Depends: R (>= 3.4)
+Imports: stringr, rtracklayer,ggplot2, GenomicFeatures, Gviz, DESeq2,
+        BSgenome.Scerevisiae.UCSC.sacCer3, calibrate,ggfortify, IRanges,
+        GenomicRanges, Rsamtools, GenomicAlignments, GenomeInfoDb,
+        BiocGenerics, data.table, parallel, methods, grDevices, graphics, stats, utils
+Author: Zhaolian Lu <zhaolian.lu@slu.edu>, Keenan Berry <keenan.berry@slu.edu>, 
+        Tae-Hyuk (Ted) Ahn <ted.ahn@slu.edu>, Zhenguo Lin <zhenguo.lin@slu.edu>
 Maintainer: Zhaolian Lu <zhaolian.lu@slu.edu>
-Description: TSS sequencing data analysis
-License: GPL-2
+Description: Identification of transcription start sites, normalization, filtering,
+              TSS clustering and downstream analysis of TSSs and core promoters.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2

@@ -186,20 +186,12 @@ Email: zhaolian.lu@slu.edu
 # Reference:
 
 Arribere, J. A. and W. V. Gilbert (2013). "Roles for transcript leaders in translation and mRNA decay revealed by transcript leader sequencing." Genome Res 23(6): 977-987.
-
 Cumbie, J. S., M. G. Ivanchenko and M. Megraw (2015). "NanoCAGE-XL and CapFilter: an approach to genome wide identification of high confidence transcription start sites." BMC Genomics 16: 597.
-
 Cvetesic, N., H. G. Leitch, M. Borkowska, F. Muller, P. Carninci, P. Hajkova and B. Lenhard (2018). "SLIC-CAGE: high-resolution transcription start site mapping using nanogram-levels of total RNA." Genome Res 28(12): 1943-1956.
-
 Kruesi, W. S., L. J. Core, C. T. Waters, J. T. Lis and B. J. Meyer (2013). "Condensin controls recruitment of RNA polymerase II to achieve nematode X-chromosome dosage compensation." Elife 2: e00808.
-
 Mahat, D. B., H. Kwak, G. T. Booth, I. H. Jonkers, C. G. Danko, R. K. Patel, C. T. Waters, K. Munson, L. J. Core and J. T. Lis (2016). "Base-pair-resolution genome-wide mapping of active RNA polymerases using precision nuclear run-on (PRO-seq)." Nat Protoc 11(8): 1455-1476.
-
 Malabat, C., F. Feuerbach, L. Ma, C. Saveanu and A. Jacquier (2015). "Quality control of transcription start site selection by nonsense-mediated-mRNA decay." Elife 4.
-
 Murata, M., H. Nishiyori-Sueki, M. Kojima-Ishiyama, P. Carninci, Y. Hayashizaki and M. Itoh (2014). "Detecting expressed genes using CAGE." Methods Mol Biol 1164: 67-85.
-
 Pelechano, V., W. Wei and L. M. Steinmetz (2013). "Extensive transcriptional heterogeneity revealed by isoform profiling." Nature 497(7447): 127-131.
-
 Takahashi, H., T. Lassmann, M. Murata and P. Carninci (2012). "5' end-centered expression profiling using cap-analysis gene expression and next-generation sequencing." Nat Protoc 7(3): 542-561.
 
