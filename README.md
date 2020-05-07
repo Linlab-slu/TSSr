@@ -1,4 +1,4 @@
-# TSSr: an R/Bioconductor package for transcription start sit (TSS) data analysis
+# TSSr: an R/Bioconductor package for comprehensive analyses of transcription start sit (TSS) data
 
 Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/TSSr
 
