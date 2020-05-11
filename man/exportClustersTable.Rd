@@ -5,7 +5,7 @@
 \alias{exportClustersTable,TSSr-method}
 \title{Export cluster tables}
 \usage{
-exportClustersTable(object, data = "assigned")
+exportClustersTable(object, data = "filtered")
 
 \S4method{exportClustersTable}{TSSr}(object, data = "filtered")
 }
@@ -26,4 +26,5 @@ Export cluster tables to text files.
 	exportClustersTable(myTSSr, data = " consensusClusters")
 	exportClustersTable(myTSSr, data = "assigned")
 	exportClustersTable(myTSSr, data = "unassigned")
+	exportClustersTable(myTSSr, data = "filtered")
 }

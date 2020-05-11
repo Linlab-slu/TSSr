@@ -5,7 +5,8 @@
 \alias{shapeCluster,TSSr-method}
 \title{Analysis of core promoter shape}
 \usage{
-shapeCluster(object,data = "consensusClusters" , method = "PSS", useMultiCore=TRUE, numCores = NULL)
+shapeCluster(object, clusters = "consensusClusters", method = "PSS",
+ useMultiCore=FALSE, numCores = NULL)
 
 \S4method{shapeCluster}{TSSr}(
   object,

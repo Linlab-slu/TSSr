@@ -5,7 +5,7 @@
 \alias{exportTSStoBedgraph,TSSr-method}
 \title{Creating Bedgraph/BigWig tracks of TSSs}
 \usage{
-exportTSStoBedgraph(object, data = "processed", format = "bedGraph")
+exportTSStoBedgraph(object, data = "processed", format = "bedGraph",oneFile = FALSE)
 
 \S4method{exportTSStoBedgraph}{TSSr}(
   object,
@@ -20,6 +20,9 @@ exportTSStoBedgraph(object, data = "processed", format = "bedGraph")
 \item{data}{Specify which data will be exported: "raw" or "processed". Default is "processed".}
 
 \item{format}{The format of output files: "bedGraph" or "BigWig". Default is "bedGraph".}
+
+\item{oneFile}{Logical, specify whether to export individual TSS tracks into the one bedGraph
+file (TRUE) of in separate bedGraph files (FALSE).}
 }
 \value{
 

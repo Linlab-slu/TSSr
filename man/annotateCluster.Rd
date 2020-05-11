@@ -6,7 +6,8 @@
 \title{Annotate clusters with GFF annotation file.}
 \usage{
 annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE
-, filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+, filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000
+, upstreamOverlap = 500,downstream = 0)
 
 \S4method{annotateCluster}{TSSr}(
   object,
@@ -39,7 +40,7 @@ Default is "gene".}
 \item{upstreamOverlap}{Upstream distance to the start position of annotation feature if overlapped
 with the upstream neighboring feature. Default value = 500.}
 
-\item{dowmstream}{Downstream distance to the start position of annotation feature. Default value = 0.
+\item{downstream}{Downstream distance to the start position of annotation feature. Default value = 0.
 Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
  the recommended value = 500.}
 }
@@ -50,6 +51,7 @@ Note: if annotationType == "transctipt" or the gene annotations start from trans
 Annotates clusters with gene or transcript names from GFF annotation file.
 }
 \examples{
-	annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE, filterClusterThreshold = 0.02
-	,annotationType = "genes",upstream=1000,upstreamOverlap = 500,downstream = 0)
+	annotateCluster(TSSr,clusters = "consensusClusters", filterCluster = TRUE
+	, filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
+	, upstreamOverlap = 500, downstream = 0)
 }

@@ -209,7 +209,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #'
 #' @description Plots Gviz-track of TSSs, clusters, and genes.
 #' @usage plotTSS(object,samples,tssData = "processed",clusters = "filtered",
-#' clusterThreshold = 0.02,genelist,up.dis =500,down.dis = 500)
+#' clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
 #'
 #' @param object A TSSr object.
 #' @param samples Specify samples to be included for plotting.
@@ -546,7 +546,7 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' Creating bed files of clusters
 #'
 #' @description Creates bed files of clusters.
-#' @usage exportClustersToBed(object, data = "consensusClusters")
+#' @usage exportClustersToBed(object, data = "consensusClusters", filtered = TRUE)
 #'
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "tagClusters" or "consensusClusters". Default is "consensusClusters".

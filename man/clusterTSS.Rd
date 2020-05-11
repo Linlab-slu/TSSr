@@ -6,7 +6,7 @@
 \title{Cluster TSSs into tag clusters}
 \usage{
 clusterTSS(object, method = "peakclu", peakDistance=100,extensionDistance=30
-, localThreshold = 0.02,clusterThreshold = 1, nonOverLapping=TRUE, useMultiCore=FALSE, numCores=NULL)
+, localThreshold = 0.02,clusterThreshold = 1, useMultiCore=FALSE, numCores=NULL)
 
 \S4method{clusterTSS}{TSSr}(
   object,

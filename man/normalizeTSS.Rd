@@ -5,7 +5,7 @@
 \alias{normalizeTSS,TSSr-method}
 \title{Normalize raw TSS counts}
 \usage{
-normalizeTSS(object, Genome)
+normalizeTSS(object)
 
 \S4method{normalizeTSS}{TSSr}(object)
 }

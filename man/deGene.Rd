@@ -5,11 +5,12 @@
 \alias{deGene,TSSr-method}
 \title{Analysis of gene differential expression.}
 \usage{
-deGene(object,comparePairs=list(c("control","treat")), pval = 0.01)
+deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
+ useMultiCore=FALSE, numCores = NULL)
 
 \S4method{deGene}{TSSr}(
   object,
-  comparePairs,
+  comparePairs = list(c("control", "treat")),
   pval = 0.01,
   useMultiCore = FALSE,
   numCores = NULL
@@ -20,11 +21,11 @@ deGene(object,comparePairs=list(c("control","treat")), pval = 0.01)
 
 \item{comparePairs}{Specified list of sample pairs for comparison with DESeq2 method.}
 
+\item{pval}{Genes with adjusted p value >= pVal will be returned. Default value = 0.01.}
+
 \item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.}
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
-
-\item{pVal}{Genes with adjusted p value >= pVal will be returned. Default value = 0.01.}
 }
 \value{
 

@@ -5,12 +5,14 @@
 \alias{plotTssPCA,TSSr-method}
 \title{Plotting principle component analysis (PCA)}
 \usage{
-plotTssPCA(object)
+plotTssPCA(object, TSS.threshold =10)
 
 \S4method{plotTssPCA}{TSSr}(object, TSS.threshold = 10)
 }
 \arguments{
 \item{object}{A TSSr object.}
+
+\item{TSS.threshold}{Only TSSs with raw signal >= TSS.threshold will be included in PCA analysis}
 }
 \value{
 

@@ -5,7 +5,8 @@
 \alias{filterTSS,TSSr-method}
 \title{Filter raw TSS counts or normalized TSS}
 \usage{
-filterTSS(object, method = "TPM")
+filterTSS(object, method = "poisson", Normalization = TRUE,
+pVal =0.01, tpmLow = 0.1)
 
 \S4method{filterTSS}{TSSr}(
   object,

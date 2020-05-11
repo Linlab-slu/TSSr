@@ -7,7 +7,7 @@
 \usage{
 exportDETable(object, data = "sig")
 
-\S4method{exportDETable}{TSSr}(object, data = "all")
+\S4method{exportDETable}{TSSr}(object, data = "sig")
 }
 \arguments{
 \item{object}{A TSSr object.}

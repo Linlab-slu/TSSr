@@ -5,14 +5,16 @@
 \alias{exportTSStable,TSSr-method}
 \title{Export TSS tables}
 \usage{
-exportTSStable(object, data = "processed")
+exportTSStable(object, data = "raw", merged = "TRUE")
 
 \S4method{exportTSStable}{TSSr}(object, data = "raw", merged = "TRUE")
 }
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{data}{Specify which data will be exported: "raw" or "processed". Default is "processed".}
+\item{data}{Specify which data will be exported: "raw" or "processed". Default is "raw".}
+
+\item{merged}{Specify whether to export merged TSS table. Used only if data = "raw".}
 }
 \value{
 

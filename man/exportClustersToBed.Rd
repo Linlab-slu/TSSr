@@ -5,14 +5,16 @@
 \alias{exportClustersToBed,TSSr-method}
 \title{Creating bed files of clusters}
 \usage{
-exportTSStoBedgraph(object, data = "consensusClusters")
+exportClustersToBed(object, data = "consensusClusters", filtered = TRUE)
 
-\S4method{exportClustersToBed}{TSSr}(object, data = "consensusClusters")
+\S4method{exportClustersToBed}{TSSr}(object, data = "consensusClusters", filtered = TRUE)
 }
 \arguments{
 \item{object}{A TSSr object.}
 
 \item{data}{Specify which data will be exported: "tagClusters" or "consensusClusters". Default is "consensusClusters".}
+
+\item{filtered}{Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.}
 }
 \value{
 

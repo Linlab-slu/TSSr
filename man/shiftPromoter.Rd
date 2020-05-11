@@ -5,7 +5,7 @@
 \alias{shiftPromoter,TSSr-method}
 \title{Select genes which have core promoter shift across different experiments.}
 \usage{
-shiftPromoter(object,comparePairs=list(c("control","treat")), pval = 0.01)
+shiftPromoter(object, comparePairs, pval=0.01)
 
 \S4method{shiftPromoter}{TSSr}(object, comparePairs, pval = 0.01)
 }
@@ -14,7 +14,7 @@ shiftPromoter(object,comparePairs=list(c("control","treat")), pval = 0.01)
 
 \item{comparePairs}{Specified list of sample pairs for comparison.}
 
-\item{pVal}{Genes with adjusted p value >= pVal will be returned. Default value = 0.01.}
+\item{pval}{Genes with adjusted p value >= pval will be returned. Default value = 0.01.}
 }
 \value{
 

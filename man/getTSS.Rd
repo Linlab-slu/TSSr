@@ -5,19 +5,7 @@
 \alias{getTSS,TSSr-method}
 \title{Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables.}
 \usage{
-getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20
-, removeNewG = TRUE, correctG = TRUE)
-
-.getTSS_from_bam(bam.files, Genome, sampleLabels,inputFilesType
-, sequencingQualityThreshold, mappingQualityThreshold)
-
-.getTSS_from_bed(bed.files, Genome, sampleLabels)
-
-.getTSS_from_BigWig(BigWig.files, Genome, sampleLabels)
-
-.getTSS_from_tss(tss.files, sampleLabels)
-
-.getTSS_from_TSStable(TSStable.file, sampleLabels)
+getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 
 \S4method{getTSS}{TSSr}(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 }

@@ -5,14 +5,14 @@
 \alias{plotShape,TSSr-method}
 \title{Plot core promoter shape}
 \usage{
-plotShape(object)
+plotShape(object, samples = "all")
 
 \S4method{plotShape}{TSSr}(object, samples = "all")
 }
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{sample}{Specify samples to be plotted. Default is "all".}
+\item{samples}{Specify samples to be plotted. Default is "all".}
 }
 \value{
 

@@ -5,7 +5,8 @@
 \alias{plotTSS,TSSr-method}
 \title{Plot TSSs and clusters}
 \usage{
-plotTSS(object, samples=c("control","treat"), genelist=c("YBL017C","YBL067C"), up.dis=500, down.dis = 500)
+plotTSS(object,samples,tssData = "processed",clusters = "filtered",
+clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
 
 \S4method{plotTSS}{TSSr}(
   object,
@@ -14,6 +15,7 @@ plotTSS(object, samples=c("control","treat"), genelist=c("YBL017C","YBL067C"), u
   clusters = "filtered",
   clusterThreshold = 0.02,
   genelist,
+  Bidirection = TRUE,
   up.dis = 500,
   down.dis = 500
 )
@@ -32,6 +34,8 @@ clusters within the same gene promoter region. Default value = 0.02.}
 
 \item{genelist}{List of gene names used for plotting.}
 
+\item{Bidirection}{Specify whether to display bidirectional TSS signals within defined region. Default is TRUE.}
+
 \item{up.dis}{Distance upstream of genes to specify plotting range. Default value = 500.}
 
 \item{down.dis}{Distance downstream of genes to specify plotting range. Default value = 500.}
@@ -43,5 +47,6 @@ clusters within the same gene promoter region. Default value = 0.02.}
 Plots Gviz-track of TSSs, clusters, and genes.
 }
 \examples{
-plotTSS(myTSSr,samples=c("control","treat"),genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 500)
+plotTSS(myTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
+,up.dis =500, down.dis = 500)
 }

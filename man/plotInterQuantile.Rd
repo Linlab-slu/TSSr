@@ -5,16 +5,16 @@
 \alias{plotInterQuantile,TSSr-method}
 \title{Plot core promoter interquantile width}
 \usage{
-plotInterQuantile(object, sample ="all", tagsThreshold = 1)
+plotInterQuantile(object, samples ="all", tagsThreshold = 1)
 
 \S4method{plotInterQuantile}{TSSr}(object, samples = "all", tagsThreshold = 1)
 }
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{tagsThreshold}{Excludes clusters with tags < tagsThreshold.}
+\item{samples}{Specify samples to be plotted. Default is "all".}
 
-\item{sample}{Specify samples to be plotted. Default is "all".}
+\item{tagsThreshold}{Excludes clusters with tags < tagsThreshold.}
 }
 \value{
 

@@ -5,7 +5,7 @@
 \alias{consensusCluster,TSSr-method}
 \title{Make consensus clusters across multiple samples.}
 \usage{
-consensusCluster(object, data = "filtered", dis = 50
+consensusCluster(object, dis = 50
 , useMultiCore=TRUE, numCores = NULL)
 
 \S4method{consensusCluster}{TSSr}(object, dis = 50, useMultiCore = TRUE, numCores = NULL)
