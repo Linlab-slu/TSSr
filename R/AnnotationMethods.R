@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @examples
-#' 	annotateCluster(TSSr,clusters = "consensusClusters", filterCluster = TRUE
+#' 	annotateCluster(object,clusters = "consensusClusters", filterCluster = TRUE
 #' 	, filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
 #' 	, upstreamOverlap = 500, downstream = 0)
 setGeneric("annotateCluster",function(object, clusters = "consensusClusters"

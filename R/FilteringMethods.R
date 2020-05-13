@@ -17,8 +17,8 @@
 #' @export
 #'
 #' @examples
-#' filterTSS(myTSSr, method = "TPM", tpmLow=0.1)
-#' filterTSS(myTSSr, method = "poisson", pVal = 0.01)
+#' filterTSS(object, method = "TPM", tpmLow=0.1)
+#' filterTSS(object, method = "poisson", pVal = 0.01)
 setGeneric("filterTSS",function(object, method = "poisson", Normalization = TRUE
                                 , pVal =0.01, tpmLow = 0.1)standardGeneric("filterTSS"))
 #' @rdname filterTSS

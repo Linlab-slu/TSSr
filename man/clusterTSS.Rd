@@ -48,5 +48,5 @@ Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakcl
   peaks can be specified.
 }
 \examples{
-clusterTSS(myTSSr, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
+clusterTSS(object, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
 }

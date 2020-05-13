@@ -19,8 +19,8 @@
 #' @export
 #'
 #' @examples
-#' 	shapeCluster(myTSSr,clusters = "consensusClusters" , method = "PSS")
-#' 	shapeCluster(myTSSr,clusters = "tagClusters" , method = "SI")
+#' 	shapeCluster(object,clusters = "consensusClusters" , method = "PSS")
+#' 	shapeCluster(object,clusters = "tagClusters" , method = "SI")
 
 setGeneric("shapeCluster",function(object, clusters = "consensusClusters"
                                    , method = "PSS", useMultiCore = FALSE, numCores = NULL)standardGeneric("shapeCluster"))

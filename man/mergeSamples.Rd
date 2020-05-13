@@ -21,5 +21,5 @@ mergeSamples(object, mergeIndex)
 Merges individual samples within TSSr object into specified groups.
 }
 \examples{
-mergeSamples(myTSSr, mergeIndex = c(1,1,2,2))
+mergeSamples(object, mergeIndex = c(1,1,2,2))
 }

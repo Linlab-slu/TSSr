@@ -25,6 +25,6 @@ plotDE(object, withGeneName = "TRUE",xlim, ylim)
 Vocano plots of gene differential expression (with DESeq2 method) results.
 }
 \examples{
-plotDE(myTSSr, withGeneName = "TRUE")
-plotDE(myTSSr, withGeneName = "FALSE")
+plotDE(object, withGeneName = "TRUE")
+plotDE(object, withGeneName = "FALSE")
 }

@@ -25,5 +25,5 @@ The files include users' home-made alignment files (bam format) or downloaded fi
  See inputFilesType for details on the supported input file formats.
 }
 \examples{
-getTSS(myTSSr)
+getTSS(object)
 }

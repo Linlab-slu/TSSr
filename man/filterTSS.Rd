@@ -35,6 +35,6 @@ only if the input TSS data in raw number of counts.}
 Filters transcriptional or sequencing noise.
 }
 \examples{
-filterTSS(myTSSr, method = "TPM", tpmLow=0.1)
-filterTSS(myTSSr, method = "poisson", pVal = 0.01)
+filterTSS(object, method = "TPM", tpmLow=0.1)
+filterTSS(object, method = "poisson", pVal = 0.01)
 }

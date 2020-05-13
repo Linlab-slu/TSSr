@@ -27,5 +27,5 @@ Makes consensus clusters from multiple samples in TSSr object and calculates
 inter-quantile positions within consensus clusters for each sample.
 }
 \examples{
-consensusCluster(myTSSr)
+consensusCluster(object)
 }

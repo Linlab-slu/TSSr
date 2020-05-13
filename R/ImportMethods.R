@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' getTSS(myTSSr)
+#' getTSS(object)
 setGeneric("getTSS",function(object
                              ,sequencingQualityThreshold = 10
                              ,mappingQualityThreshold = 20)standardGeneric("getTSS"))

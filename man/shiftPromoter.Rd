@@ -25,5 +25,5 @@ shifting across different experiments. Generates gene list with Ds (degree of sh
 value (Lu et al., 2019), p value and adjusted p value.
 }
 \examples{
-shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+shiftPromoter(object,comparePairs=list(c("control","treat")), pval = 0.01)
 }

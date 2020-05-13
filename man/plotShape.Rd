@@ -21,5 +21,5 @@ plotShape(object, samples = "all")
 Plots histograms of core promoter shape scores.
 }
 \examples{
-plotShape(myTSSr)
+plotShape(object)
 }
