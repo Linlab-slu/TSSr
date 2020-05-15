@@ -23,5 +23,5 @@ Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
-plotCorrelation(object, samples = "all")
+plotCorrelation(exampleTSSr, samples = "all")
 }

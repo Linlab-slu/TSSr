@@ -47,6 +47,6 @@ clusters within the same gene promoter region. Default value = 0.02.}
 Plots Gviz-track of TSSs, clusters, and genes.
 }
 \examples{
-plotTSS(object, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
+plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
 ,up.dis =500, down.dis = 500)
 }
