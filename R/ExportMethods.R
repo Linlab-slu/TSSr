@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' plotCorrelation(object, samples = "all")
+#' plotCorrelation(exampleTSSr, samples = "all")
 setGeneric("plotCorrelation",function(object, samples = "all")standardGeneric("plotCorrelation"))
 #' @rdname plotCorrelation
 #' @export
@@ -47,7 +47,7 @@ setMethod("plotCorrelation",signature(object = "TSSr"), function(object, samples
 #' @export
 #'
 #' @examples
-#' plotTssPCA(object)
+#' plotTssPCA(exampleTSSr)
 setGeneric("plotTssPCA",function(object, TSS.threshold =10)standardGeneric("plotTssPCA"))
 #' @rdname plotTssPCA
 #' @export
@@ -82,7 +82,7 @@ setMethod("plotTssPCA",signature(object = "TSSr"), function(object, TSS.threshol
 #' @export
 #'
 #' @examples
-#' plotInterQuantile(object, samples = "all")
+#' plotInterQuantile(exampleTSSr, samples = "all")
 setGeneric("plotInterQuantile",function(object, samples = "all", tagsThreshold = 1)standardGeneric("plotInterQuantile"))
 #' @rdname plotInterQuantile
 #' @export
@@ -128,7 +128,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
 #' @export
 #'
 #' @examples
-#' plotShape(object)
+#' plotShape(exampleTSSr)
 setGeneric("plotShape",function(object, samples = "all")standardGeneric("plotShape"))
 #' @rdname plotShape
 #' @export
@@ -174,8 +174,8 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
 #' @export
 #'
 #' @examples
-#' plotDE(object, withGeneName = "TRUE")
-#' plotDE(object, withGeneName = "FALSE")
+#' plotDE(exampleTSSr, withGeneName = "TRUE")
+#' plotDE(exampleTSSr, withGeneName = "FALSE")
 setGeneric("plotDE",function(object
                              ,withGeneName = "TRUE"
                              ,xlim=c(-2.5, 2.5)
@@ -226,7 +226,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' @export
 #'
 #' @examples
-#' plotTSS(object, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
+#' plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
 #' ,up.dis =500, down.dis = 500)
 setGeneric("plotTSS",function(object,samples
                               ,tssData = "processed"
@@ -300,8 +300,8 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
 #' @export
 #'
 #' @examples
-#' exportTSStable(object)
-#' exportTSStable(object, data="raw")
+#' exportTSStable(exampleTSSr)
+#' exportTSStable(exampleTSSr, data="raw")
 
 setGeneric("exportTSStable",function(object, data = "raw", merged = "TRUE")standardGeneric("exportTSStable"))
 #' @rdname exportTSStable
@@ -338,11 +338,11 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #' @export
 #'
 #' @examples
-#' 	exportClustersTable(object, data = " tagClusters")
-#' 	exportClustersTable(object, data = " consensusClusters")
-#' 	exportClustersTable(object, data = "assigned")
-#' 	exportClustersTable(object, data = "unassigned")
-#' 	exportClustersTable(object, data = "filtered")
+#' 	exportClustersTable(exampleTSSr, data = " tagClusters")
+#' 	exportClustersTable(exampleTSSr, data = " consensusClusters")
+#' 	exportClustersTable(exampleTSSr, data = "assigned")
+#' 	exportClustersTable(exampleTSSr, data = "unassigned")
+#' 	exportClustersTable(exampleTSSr, data = "filtered")
 setGeneric("exportClustersTable",function(object, data = "filtered")standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
 #' @export
@@ -405,7 +405,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
 #' @export
 #'
 #' @examples
-#' exportShapeTable(object)
+#' exportShapeTable(exampleTSSr)
 setGeneric("exportShapeTable",function(object)standardGeneric("exportShapeTable"))
 #' @rdname exportShapeTable
 #' @export
@@ -437,7 +437,7 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 #' @export
 #'
 #' @examples
-#' exportDETable(object, data="sig")
+#' exportDETable(exampleTSSr, data="sig")
 setGeneric("exportDETable",function(object, data = "sig")standardGeneric("exportDETable"))
 #' @rdname exportDETable
 #' @export
@@ -471,7 +471,7 @@ setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
 #' @export
 #'
 #' @examples
-#' exportShiftTable(object)
+#' exportShiftTable(exampleTSSr)
 setGeneric("exportShiftTable",function(object)standardGeneric("exportShiftTable"))
 #' @rdname exportShiftTable
 #' @export
@@ -501,7 +501,7 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 #' @export
 #'
 #' @examples
-#' exportTSStoBedgraph(object, data = "processed", format = "bedGraph")
+#' exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
 setGeneric("exportTSStoBedgraph",function(object,data = "processed"
                                           ,format = "bedGraph"
                                           ,oneFile = FALSE)standardGeneric("exportTSStoBedgraph"))
@@ -556,8 +556,8 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' @export
 #'
 #' @examples
-#' exportTSStoBedgraph(object, data = "tagClusters")
-#' exportTSStoBedgraph(object, data = "consensusClusters")
+#' exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
+#' exportTSStoBedgraph(exampleTSSr, dataexampleTSSr = "consensusClusters")
 setGeneric("exportClustersToBed",function(object,data = "consensusClusters", filtered = TRUE)
   standardGeneric("exportClustersToBed"))
 #' @rdname exportClustersToBed

@@ -25,7 +25,7 @@
 #' @export
 #'
 #' @examples
-#' clusterTSS(object, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
+#' clusterTSS(exampleTSSr, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
 
 setGeneric("clusterTSS",function(object, method = "peakclu"
                                  ,peakDistance=100,extensionDistance=30
