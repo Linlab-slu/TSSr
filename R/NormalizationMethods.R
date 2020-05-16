@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' normalizeTSS(object)
+#' normalizeTSS(exampleTSSr)
 setGeneric("normalizeTSS",function(object)standardGeneric("normalizeTSS"))
 #' @rdname normalizeTSS
 #' @export

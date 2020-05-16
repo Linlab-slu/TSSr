@@ -22,9 +22,9 @@ exportClustersTable(object, data = "filtered")
 Export cluster tables to text files.
 }
 \examples{
-	exportClustersTable(object, data = " tagClusters")
-	exportClustersTable(object, data = " consensusClusters")
-	exportClustersTable(object, data = "assigned")
-	exportClustersTable(object, data = "unassigned")
-	exportClustersTable(object, data = "filtered")
+	exportClustersTable(exampleTSSr, data = " tagClusters")
+	exportClustersTable(exampleTSSr, data = " consensusClusters")
+	exportClustersTable(exampleTSSr, data = "assigned")
+	exportClustersTable(exampleTSSr, data = "unassigned")
+	exportClustersTable(exampleTSSr, data = "filtered")
 }

@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' deGene(object,comparePairs=list(c("control","treat")), pval = 0.01)
+#' deGene(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 setGeneric("deGene",function(object, comparePairs=list(c("control","treat")), pval=0.01, useMultiCore=FALSE, numCores = NULL)standardGeneric("deGene"))
 #' @rdname deGene
 #' @export
