@@ -51,6 +51,7 @@ Note: if annotationType == "transctipt" or the gene annotations start from trans
 Annotates clusters with gene or transcript names from GFF annotation file.
 }
 \examples{
+load("exampleTSSr.RData")
 annotateCluster(exampleTSSr,clusters = "consensusClusters", filterCluster = TRUE
 , filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
 , upstreamOverlap = 500, downstream = 0)
