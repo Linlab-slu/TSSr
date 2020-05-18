@@ -178,7 +178,11 @@ or sequencing noise. Default value = 0.02.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>clusterTSS</span>(<span class='no'>myTSSr</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"peakclu"</span>,<span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>useMultiCore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>numCores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='error'>Error in clusterTSS(myTSSr, method = "peakclu", clusterThreshold = 1,     useMultiCore = TRUE, numCores = NULL): object 'myTSSr' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>clusterTSS</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"peakclu"</span>,<span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>useMultiCore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>numCores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Clustering TSS data with peakclu method...</span></div><div class='output co'>#&gt; [1] "process is running on 8 cores..."</div><div class='input'># }
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
