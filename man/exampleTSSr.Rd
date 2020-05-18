@@ -5,7 +5,7 @@
 \alias{exampleTSSr}
 \title{TSSr example data}
 \format{
-Example data from various stages of CAGEfightR:
+An object of class TSSr
 \describe{
   \item{exampleTSSr}{RangedSummarizedExperiment:TSSr}}
 
@@ -15,7 +15,7 @@ An object of class \code{TSSr} of length 1.
 \url{https://genome.cshlp.org/content/29/7/1198.short}
 }
 \usage{
-exampleTSSr
+data(exampleTSSr)
 
 exampleTSSr
 }

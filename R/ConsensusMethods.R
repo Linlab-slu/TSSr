@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' consensusCluster(exampleTSSr)
+#' consensusCluster(exampleTSSr,useMultiCore=FALSE)
 setGeneric("consensusCluster",function(object, dis = 50,useMultiCore=TRUE, numCores = NULL)standardGeneric("consensusCluster"))
 #' @rdname consensusCluster
 #' @export

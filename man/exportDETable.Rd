@@ -21,5 +21,7 @@ exportDETable(object, data = "sig")
 Exports gene differential expression results table to text files.
 }
 \examples{
+\donttest{
 exportDETable(exampleTSSr, data="sig")
+}
 }

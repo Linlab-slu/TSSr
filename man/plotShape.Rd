@@ -21,5 +21,7 @@ plotShape(object, samples = "all")
 Plots histograms of core promoter shape scores.
 }
 \examples{
+\donttest{
 plotShape(exampleTSSr)
+}
 }

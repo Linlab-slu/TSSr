@@ -23,5 +23,8 @@ Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
+\donttest{
 plotCorrelation(exampleTSSr, samples = "all")
+}
+
 }
