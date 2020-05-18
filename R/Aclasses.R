@@ -1,11 +1,11 @@
 ################################################################################################
+#' TSSr Class
 #' @name TSSr-class
 #' @docType class
 #' @noRd
-#' @export
+#' @exportClass TSSr
 #'
 #' @importFrom methods setClass setGeneric setMethod setRefClass
-#'
 #' @import stringr
 #' @import rtracklayer
 #' @import ggplot2
@@ -22,7 +22,6 @@
 #' @importFrom GenomicRanges elementMetadata
 #' @importFrom GenomicRanges resize
 #' @importFrom GenomicRanges mcols
-#'
 #' @importFrom Rsamtools scanBam
 #' @importFrom Rsamtools ScanBamParam
 #' @importFrom Rsamtools bamFlag
@@ -34,15 +33,11 @@
 #' @importFrom BiocGenerics union
 #' @import data.table
 #' @import parallel
-#'
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics hist pairs par plot points strwidth text
 #' @importFrom methods as new
 #' @importFrom stats chisq.test cor p.adjust prcomp qpois
 #' @importFrom utils installed.packages read.table write.table
-#'
-#'
-#'
 #'
 #' @slot genomeName character.
 #' @slot inputFiles character.
@@ -66,7 +61,6 @@
 #'
 ###############################################################
 # Function for displaying CAGEset object in user friendly way
-
 TSSr <- setClass(Class = "TSSr",
          representation(genomeName = "character"
                         ,inputFiles = "character"
