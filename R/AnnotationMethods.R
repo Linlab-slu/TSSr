@@ -26,7 +26,6 @@
 #' @export
 #'
 #' @examples
-#' load("exampleTSSr.RData")
 #' annotateCluster(exampleTSSr,clusters = "consensusClusters", filterCluster = TRUE
 #' , filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
 #' , upstreamOverlap = 500, downstream = 0)
