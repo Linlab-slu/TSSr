@@ -145,7 +145,11 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>plotDE</span>(<span class='no'>myTSSr</span>, <span class='kw'>withGeneName</span> <span class='kw'>=</span> <span class='st'>"TRUE"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plotDE(myTSSr, withGeneName = "TRUE"): object 'myTSSr' not found</span></div><div class='input'><span class='fu'>plotDE</span>(<span class='no'>myTSSr</span>, <span class='kw'>withGeneName</span> <span class='kw'>=</span> <span class='st'>"FALSE"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plotDE(myTSSr, withGeneName = "FALSE"): object 'myTSSr' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>plotDE</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>withGeneName</span> <span class='kw'>=</span> <span class='st'>"TRUE"</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting DE graphs...</span></div><div class='output co'>#&gt; pdf 
+#&gt;   2 </div><div class='input'><span class='fu'>plotDE</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>withGeneName</span> <span class='kw'>=</span> <span class='st'>"FALSE"</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting DE graphs...</span></div><div class='output co'>#&gt; pdf 
+#&gt;   2 </div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

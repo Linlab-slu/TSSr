@@ -15,7 +15,9 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' getTSS(exampleTSSr)
+#' }
 setGeneric("getTSS",function(object
                              ,sequencingQualityThreshold = 10
                              ,mappingQualityThreshold = 20)standardGeneric("getTSS"))

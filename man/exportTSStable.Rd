@@ -23,6 +23,8 @@ exportTSStable(object, data = "raw", merged = "TRUE")
 Exports TSS tables to text file.
 }
 \examples{
+\donttest{
 exportTSStable(exampleTSSr)
 exportTSStable(exampleTSSr, data="raw")
+}
 }

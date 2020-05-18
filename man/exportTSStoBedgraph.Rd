@@ -32,5 +32,7 @@ Creates bedGraph/BigWig files of TSSs that can be visualized in the UCSC Genome 
  and Integrative Genomics Viewer (IGV).
 }
 \examples{
+\donttest{
 exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+}
 }

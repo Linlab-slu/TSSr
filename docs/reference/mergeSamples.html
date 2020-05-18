@@ -137,7 +137,9 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>mergeSamples</span>(<span class='no'>myTSSr</span>, <span class='kw'>mergeIndex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='error'>Error in mergeSamples(myTSSr, mergeIndex = c(1, 1, 2, 2)): object 'myTSSr' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>mergeSamples</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>mergeIndex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.table`(tss, , .SD, .SDcols = sampleLabels[which(mergeIndex ==     i)]): Some items of .SDcols are not column names: [SL01, SL02]</span></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

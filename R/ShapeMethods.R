@@ -19,9 +19,10 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' 	shapeCluster(exampleTSSr,clusters = "consensusClusters" , method = "PSS")
 #' 	shapeCluster(exampleTSSr,clusters = "tagClusters" , method = "SI")
-
+#' }
 setGeneric("shapeCluster",function(object, clusters = "consensusClusters"
                                    , method = "PSS", useMultiCore = FALSE, numCores = NULL)standardGeneric("shapeCluster"))
 #' @rdname shapeCluster

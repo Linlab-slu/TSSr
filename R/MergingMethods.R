@@ -11,7 +11,9 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' mergeSamples(exampleTSSr, mergeIndex = c(1,1,2,2))
+#' }
 setGeneric("mergeSamples",function(object, mergeIndex = NULL)standardGeneric("mergeSamples"))
 #' @rdname mergeSamples
 #' @export

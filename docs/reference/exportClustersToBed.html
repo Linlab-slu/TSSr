@@ -141,7 +141,9 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='exportTSStoBedgraph.html'>exportTSStoBedgraph</a></span>(<span class='no'>myTSSr</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"tagClusters"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in exportTSStoBedgraph(myTSSr, data = "tagClusters"): object 'myTSSr' not found</span></div><div class='input'><span class='fu'><a href='exportTSStoBedgraph.html'>exportTSStoBedgraph</a></span>(<span class='no'>myTSSr</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"consensusClusters"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in exportTSStoBedgraph(myTSSr, data = "consensusClusters"): object 'myTSSr' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'><a href='exportTSStoBedgraph.html'>exportTSStoBedgraph</a></span>(<span class='no'>exampleTSSr</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"tagClusters"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.table`(tss.dt, , .SD, .SDcols = c("chr", "pos", "strand",     sampleLabelsMerged[i])): Some items of .SDcols are not column names: [control]</span></div><div class='input'><span class='fu'><a href='exportTSStoBedgraph.html'>exportTSStoBedgraph</a></span>(<span class='no'>exampleTSSr</span>, <span class='kw'>dataexampleTSSr</span> <span class='kw'>=</span> <span class='st'>"consensusClusters"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in exportTSStoBedgraph(exampleTSSr, dataexampleTSSr = "consensusClusters"): unused argument (dataexampleTSSr = "consensusClusters")</span></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
