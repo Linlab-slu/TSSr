@@ -1,9 +1,12 @@
 ################################################################################################
 #' TSSr Class
 #' @name TSSr-class
+#' @rdname TSSr-class
+#' @aliases TSSr-class
 #' @docType class
 #' @noRd
 #' @exportClass TSSr
+#' @export TSSr
 #'
 #' @importFrom methods setClass setGeneric setMethod setRefClass
 #' @import stringr
@@ -59,8 +62,6 @@
 #' @slot DEtables list.
 #' @slot PromoterShift list.
 #'
-###############################################################
-# Function for displaying CAGEset object in user friendly way
 TSSr <- setClass(Class = "TSSr",
          representation(genomeName = "character"
                         ,inputFiles = "character"
