@@ -3,4 +3,4 @@
 /R/Package.test.R
 .Rhistory
 .Rproj.user
-docs
+.Rbuildignore
