@@ -60,7 +60,7 @@
 #' @docType class
 #' @noRd
 #' @exportClass TSSr
-#' @export TSSr
+#' @export
 #'
 TSSr <- setClass(Class = "TSSr",
          representation(genomeName = "character"
