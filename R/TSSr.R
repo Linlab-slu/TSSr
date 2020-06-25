@@ -29,6 +29,6 @@ NULL
 #'
 #' TSSr object
 #'
-#' @aliases TSSr
-#' @exportClass TSSr
+#' @aliases TSSr-package
+#' @exportClass TSSr-package
 #'
