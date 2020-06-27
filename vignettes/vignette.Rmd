@@ -106,7 +106,11 @@ After confirming those packages are installed, you can install the development v
 
         > library(TSSr)
       
-* Creating a TSSr object
+* Creating a TSSr object with system example data
+
+        > myTSSr <- exampleTSSr
+
+* Creating a TSSr object with self-defined data
 
         > myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 	              ,inputFiles = inputFiles

@@ -31,5 +31,7 @@ deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 }
 \examples{
+\donttest{
 deGene(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+}
 }

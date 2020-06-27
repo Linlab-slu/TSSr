@@ -16,5 +16,7 @@ normalizeTSS(object)
 Normalizes raw TSS counts in all samples by tags per million (TPM)
 }
 \examples{
+\donttest{
 normalizeTSS(exampleTSSr)
+}
 }
