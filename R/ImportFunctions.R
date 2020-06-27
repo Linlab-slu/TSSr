@@ -13,6 +13,8 @@
 .getTSS_from_bam <- function(bam.files, Genome, sampleLabels, inputFilesType
                              ,sequencingQualityThreshold
                              ,mappingQualityThreshold){
+  ##define variable as a NULL value
+  chr = pos = NULL
 
   what <- c("rname", "strand", "pos", "seq", "qual", "mapq","flag","cigar")
   param <- ScanBamParam( what = what
@@ -20,7 +22,7 @@
                                               isNotPassingQualityControls = FALSE)
                          , mapqFilter = mappingQualityThreshold)
   if (inputFilesType == "bamPairedEnd"){
-    bamFlag(param) <- scanBamFlag( isUnmappedQuery = FALSE
+    Rsamtools::bamFlag(param) <- scanBamFlag( isUnmappedQuery = FALSE
                                    , isProperPair    = TRUE
                                    , isFirstMateRead = TRUE)}
   first <- TRUE
@@ -88,6 +90,8 @@
 
 ################################################################################################
 .removeNewG <- function(readsGR.p, readsGR.m, Genome) {
+  ##define variable as a NULL value
+  chr = pos = tag_count = NULL
 
   message("\t-> Removing the first base of the reads if mismatched 'G'...")
   G.reads.p <- which(substr(GenomicRanges::elementMetadata(readsGR.p)$seq, start = 1, stop = 1) == "G")
@@ -125,9 +129,12 @@
 ##.getTSS_from_bed function calls TSS from bed files
 .getTSS_from_bed <- function(bed.files, Genome, sampleLabels){
   first <- TRUE
-  for(i in 1:length(inputFiles)) {
-    message("\nReading in file: ", inputFiles[i], "...")
-    readsGR <- import(inputFiles[i], format = "BED")
+  ##define variable as a NULL value
+  chr = pos = tag_count = NULL
+
+  for(i in 1:length(bed.files)) {
+    message("\nReading in file: ", bed.files[i], "...")
+    readsGR <- import(bed.files[i], format = "BED")
     readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     readsGR.p <- readsGR[strand(readsGR) == "+"]
@@ -156,10 +163,12 @@
 
 .getTSS_from_BigWig <- function(BigWig.files, Genome, sampleLabels){
   #library.sizes <- vector()
+  ##define variable as a NULL value
+  chr = pos = NULL
   first <- TRUE
-  for(i in 1:length(inputFiles)) {
-    message("\nReading in file: ", inputFiles[i], "...")
-    readsGR <- import(inputFiles[i], format = "BigWig")
+  for(i in 1:length(BigWig.files)) {
+    message("\nReading in file: ", BigWig.files[i], "...")
+    readsGR <- import(BigWig.files[i], format = "BigWig")
     readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     readsGR.p <- readsGR[score(readsGR) > 0]
@@ -192,9 +201,10 @@
 
 .getTSS_from_tss <- function(tss.files, sampleLabels){
   first <- TRUE
-  for(i in 1:length(inputFiles)) {
-    message("\nReading in file: ", inputFiles[i], "...")
-    TSS <- read.table(file = inputFiles[i], header = F, sep = "\t"
+
+  for(i in 1:length(tss.files)) {
+    message("\nReading in file: ", tss.files[i], "...")
+    TSS <- read.table(file = tss.files[i], header = F, sep = "\t"
                       ,colClasses = c("character", "integer", "character", "integer")
                       ,col.names = c("chr", "pos", "strand", sampleLabels[i]))
 
@@ -217,14 +227,14 @@
 ##.getTSS_from_TSStable function calls TSS from one TSStable file
 
 .getTSS_from_TSStable <- function(TSStable.file, sampleLabels){
-  if(length(inputFiles) > 1){
+  if(length(TSStable.file) > 1){
     stop("Only one file should be provided when inputFilesType = \"TSStable\"!")
   }
-  if(file.exists(inputFiles) == FALSE){
-    stop("Could not locate input file ", inputFiles)
+  if(file.exists(TSStable.file) == FALSE){
+    stop("Could not locate input file ", TSStable.file)
   }
 
-  TSS.all.samples <- read.table(file = inputFiles, header = T, stringsAsFactors = FALSE
+  TSS.all.samples <- read.table(file = TSStable.file, header = T, stringsAsFactors = FALSE
                                 ,colClasses = c("character", "integer", "character", rep("integer", length(sampleLabels)))
                                 ,col.names = c("chr", "pos", "strand", sampleLabels))
   if(ncol(TSS.all.samples) != (length(sampleLabels) + 3)){

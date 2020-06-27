@@ -29,6 +29,9 @@
 ##.plotTSS(tss.tpm,cs.cl, ref, up.dis = 500, down.dis=100)
 .plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis){
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
+  ##define variable as a NULL value
+  gene_id = NULL
+
   if(df$strand == "+"){
     p <- df$start - up.dis
     q <- df$end + down.dis
@@ -79,6 +82,8 @@
 }
 ###################################################################################################################
 .getBed <- function(p){
+  ##define variable as a NULL value
+  chr = q_0.1 = q_0.9 = dominant_tss = NULL
   pbed <- lapply(as.list(seq_len(p[,.N])), function(i){
     if(p[i,q_0.1] == p[i, q_0.9]){
       nrBlocks = length(unique(c(p[i,start],p[i,end],p[i,q_0.1],p[i,q_0.9])))

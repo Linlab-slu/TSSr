@@ -52,6 +52,9 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
   refGFF <- object@refSource
   organismName <- object@organismName
 
+  ##define variable as a NULL value
+  inCoding = r = f = dominant_tss = NULL
+
   ##prepare annotation file
   txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
   if(annotationType == "genes"){
@@ -98,7 +101,7 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
       n[, r := ifelse(is.na(gene), inCoding, gene)]
       setkey(n, r)
       new <- lapply(as.list(n[,unique(r)]), function(i){
-        temp <- n[.(i)]
+        temp <- n[list(i)]
         max.tags <- temp[,max(tags)]
         if(temp[1,strand] == "+"){
           temp[,f := ifelse(dominant_tss > temp[which.max(tags),dominant_tss] & tags < max.tags * filterClusterThreshold, 0,1)]

@@ -4,7 +4,8 @@
   # create copy for reference later
   copied.dt <- copy(tss.dt)
   setkey(tss.dt, pos)
-
+  ##define variable as a NULL value
+  pos = peak = ID = forward = reverse = V1 = V2 = chr = NULL
   # get peakID
   # TODO could potentially by optimized more
   peakID <- vapply(seq_len(tss.dt[,.N]), function(x) {

@@ -97,6 +97,9 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
   message("Plotting interquantile graphs...")
   TCs <- object@clusterShape
   sampleLabels <- object@sampleLabelsMerged
+  ##define variable as a NULL value
+  interquantile_width = NULL
+
   if(samples == "all"){
     tc <- TCs
     pdf(file = paste("Interquantile_plot_of_ALL_samples.pdf", sep = "")
@@ -198,6 +201,9 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
   pdf(file = paste("Volcano_plot.pdf", sep = ""),width = 8, height = 8,bg = "transparent"
       , family = "Helvetica", fonts = NULL)
   D.names <- names(object@DEtables)
+  ##define variable as a NULL value
+  padj = log2FoldChange = NULL
+
   for(i in 1:length(D.names)){
     res <- object@DEtables[[D.names[i]]]$DEtable
     plot(res$log2FoldChange,-log10(res$pvalue), pch = 20, xlim = xlim, ylim = ylim
@@ -254,6 +260,9 @@ setGeneric("plotTSS",function(object,samples
 setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssData, clusters, clusterThreshold
                                                          , genelist, Bidirection, up.dis, down.dis){
   message("Plotting TSS graphs...")
+  ##define variable as a NULL value
+  gene_id = NULL
+
   ##initialize data
   if(clusters == "all"){
     cs <- object@consensusClusters
@@ -534,6 +543,9 @@ setGeneric("exportTSStoBedgraph",function(object,data = "processed"
 setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, data, format, oneFile){
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
+  ##define variable as a NULL value
+  score = strand = NULL
+
   if(data == "processed"){
     tss.dt <- object@TSSprocessedMatrix
   }else{tss.dt <- object@TSSrawMatrix}

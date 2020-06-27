@@ -29,6 +29,8 @@ setGeneric("shapeCluster",function(object, clusters = "consensusClusters"
 #' @export
 setMethod("shapeCluster",signature(object = "TSSr"), function(object, clusters, method, useMultiCore, numCores){
   message("\nCalculating ", clusters," shape with ",method," method...")
+  ##define variable as a NULL value
+  pos = interquantile_width = chr= NULL
 
   ##initialize data
   tss.dt <- object@TSSprocessedMatrix

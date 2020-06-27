@@ -26,6 +26,8 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
   objName <- deparse(substitute(object))
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
+  ##define variable as a NULL value
+  padj = NULL
 
   D <- lapply(as.list(seq(comparePairs)), function(i){
     sampleOne <- comparePairs[[i]][1]

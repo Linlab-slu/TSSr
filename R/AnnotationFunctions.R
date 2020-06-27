@@ -1,17 +1,19 @@
 #####################################################################################################
 ##.assign2gene function assign cs.temp to reference
 .assign2gene <- function(cs.temp,ref,upstream, upstreamOverlap, downstream, filterCluster){
+  ##define variable as a NULL value
+  chr = strand = start.a = end.b = dis = dis.start = up = down = down.up = cluster = NULL
   ref[, "subset" := paste0(seqnames,"_",strand)]
   setkey(ref,subset)
   cs.temp[, "subset" := paste0(chr,"_",strand)]
   setkey(cs.temp,subset)
   asn <- lapply(as.list(cs.temp[,unique(subset)]), function(x) {
-    cs <- cs.temp[.(x)]
+    cs <- cs.temp[list(x)]
     cs[,subset:= NULL]
     colnames(cs)[3:4] <- c("start.c","end.c")
     gr <- makeGRangesFromDataFrame(cs, keep.extra.columns= T, start.field = "dominant_tss", end.field = "dominant_tss")
-    ref_sub <- ref[.(x)]
-    ref_coding <- ref[.(x)]
+    ref_sub <- ref[list(x)]
+    ref_coding <- ref[list(x)]
     if(!(x %in% ref[,unique(subset)])){
       GenomicRanges::mcols(gr)[,"gene"] <- NA
       if(filterCluster == TRUE){

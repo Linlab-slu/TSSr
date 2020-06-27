@@ -27,6 +27,9 @@ setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, u
   ##initialize data
   tss.dt <- object@TSSprocessedMatrix
 
+  ##define variable as a NULL value
+  dominant_tss = NULL
+
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   cs <- object@tagClusters

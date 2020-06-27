@@ -37,6 +37,9 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, Norma
     genomeSize <- genomeSize + length(Genome[[chrom]])
   }
   tss.dt <- object@TSSprocessedMatrix
+  ##define variable as a NULL value
+  tags = NULL
+
   ##filter tss data
   if(method  == "poisson"){
     message("\nFiltering data with ", method," method...")
