@@ -27,9 +27,6 @@ deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
-\value{
-
-}
 \description{
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 }

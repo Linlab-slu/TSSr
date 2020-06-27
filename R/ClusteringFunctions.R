@@ -4,7 +4,8 @@
   # create copy for reference later
   copied.dt <- copy(tss.dt)
   setkey(tss.dt, pos)
-
+  ##define variable as a NULL value
+  pos = peak = ID = forward = reverse = V1 = V2 = chr = NULL
   # get peakID
   # TODO could potentially by optimized more
   peakID <- vapply(seq_len(tss.dt[,.N]), function(x) {
@@ -38,7 +39,7 @@
   #######################################################################################################################
   tss.dt[, forward := ifelse(data.table::shift(pos,1,type="lead") < pos + extensionDistance, 1, 0)] #
   tss.dt[, reverse := ifelse(data.table::shift(pos,1,type="lag") > pos - extensionDistance, 1, 0)]
-  tss.dt <- tss.dt[,list(peak=max(peak),start=min(pos),end=max(pos),tags=sum(tags)),by=.(rleid(peak, forward, reverse))]##ZL?
+  tss.dt <- tss.dt[,list(peak=max(peak),start=min(pos),end=max(pos),tags=sum(tags)),by=list(rleid(peak, forward, reverse))]##ZL?
 
   # get start and end boundaries for clusters
   # TODO revisit this code for better optimization

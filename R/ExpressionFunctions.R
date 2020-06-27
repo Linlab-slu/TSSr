@@ -23,12 +23,12 @@
       numCores <- detectCores()
     }
     one <- mclapply(as.list(unique(xCounts$gene)), function(my.gene) {
-      data <- xCounts[.(my.gene)]
+      data <- xCounts[list(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     }, mc.cores = numCores)
   }else{
     one <- lapply(as.list(unique(xCounts$gene)), function(my.gene) {
-      data <- xCounts[.(my.gene)]
+      data <- xCounts[list(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     })
   }
@@ -41,13 +41,13 @@
       numCores <- detectCores()
     }
     two <- mclapply(as.list(unique(yCounts$gene)), function(my.gene) {
-      data <- yCounts[.(my.gene)]
+      data <- yCounts[list(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     }, mc.cores = numCores)
 
   }else{
     two <- lapply(as.list(unique(yCounts$gene)), function(my.gene) {
-      data <- yCounts[.(my.gene)]
+      data <- yCounts[list(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     })
   }
@@ -77,6 +77,9 @@
 .tagCount <- function(cs, tss.raw, samples, useMultiCore, numCores){
   cols <- c("chr","pos","strand", samples)
   tss <- tss.raw[,.SD, .SDcols = cols]
+  ##define variable as a NULL value
+  chr = strand = start = end = NULL
+
   if(useMultiCore){
     if(is.null(numCores)){
       numCores <- detectCores()

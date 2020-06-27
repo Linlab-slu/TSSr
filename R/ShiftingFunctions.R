@@ -1,14 +1,17 @@
 ###################################################################################################################
 ##.Ds function calcuates gene differential expression based on Deseq2 package
 ##.Ds function takes two assigned clusters and library sizes of the two samples
-##users need to provide which sample they want to compare and 
-##run script with the following example command:           
+##users need to provide which sample they want to compare and
+##run script with the following example command:
 ##.Ds(cx,cy, librarySizex, librarySizey, useRawCount = TRUE)
 
 ############################################################################################################
 .Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE, pval){
   ##cx is control
   ##cy is treat
+  ##define variable as a NULL value
+  dominant_tss = gene.x = gene.y = tags.x = tags.y = cluster = padj = NULL
+
   cx <- cx[,c("cluster","strand","dominant_tss","tags","gene")]
   cy <- cy[,c("cluster","strand","dominant_tss","tags","gene")]
   clusters <- merge(cx,cy, by = c("cluster","strand"), all = T)
@@ -22,7 +25,7 @@
   setkey(clusters,gene)
   ##
   cmp <- lapply(as.list(clusters[,unique(gene)]), function(my.gene) {
-    data <- clusters[.(my.gene)]
+    data <- clusters[list(my.gene)]
     if(sum(data[,tags.x]) == 0 | sum(data[,tags.y])==0){
       Ds <- NA
       pval = NA

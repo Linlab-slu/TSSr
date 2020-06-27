@@ -15,9 +15,6 @@ exportClustersTable(object, data = "filtered")
 \item{data}{Specify which cluster data will be exported: "tagClusters", "consensusClusters",
 "assigned", "unassigned", "filtered". Default is "filtered".}
 }
-\value{
-
-}
 \description{
 Export cluster tables to text files.
 }

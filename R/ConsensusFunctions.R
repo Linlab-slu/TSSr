@@ -1,6 +1,10 @@
 ##############################################################################################################
 ##
 .getConsensus <- function(gr1,cy, dis){
+
+  ##define variable as a NULL value
+  dominant_tss = NULL
+
   colnames(cy)[3:4] <- c("start.c","end.c")
   cy[,start := dominant_tss-round(dis/2)]
   cy[,end := dominant_tss + round(dis/2)]
@@ -13,6 +17,10 @@
 ##############################################################################################################
 ##
 .getConsensusQuantile <- function(tc, gr, tss.temp,useMultiCore, numCores){
+  ##define variable as a NULL value
+  chr = pos = dominant_tss = NULL
+
+
   if(useMultiCore){
     if(is.null(numCores)){
       numCores <- detectCores()

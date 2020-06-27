@@ -39,9 +39,6 @@ or sequencing noise. Default value = 0.02.}
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
-\value{
-
-}
 \description{
 Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakclu" method.
  "peakclu" method is an implementation of peak-based clustering. The minimum distance of two neighboring

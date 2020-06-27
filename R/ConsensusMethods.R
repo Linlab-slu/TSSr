@@ -12,7 +12,6 @@
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -26,6 +25,9 @@ setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, u
 
   ##initialize data
   tss.dt <- object@TSSprocessedMatrix
+
+  ##define variable as a NULL value
+  dominant_tss = NULL
 
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))

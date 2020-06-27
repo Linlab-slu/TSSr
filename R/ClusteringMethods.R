@@ -21,7 +21,6 @@
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -47,6 +46,9 @@ setMethod("clusterTSS",signature(object = "TSSr"), function(object, method, peak
   # initialize data
   tss.dt <- object@TSSprocessedMatrix
 
+  ##define variable as a NULL value
+  chr = pos = cluster = NULL
+
   # pass sub datatables to peak-caller and clustering functions
   if (useMultiCore) {
     if (is.null(numCores)) {
@@ -61,7 +63,7 @@ setMethod("clusterTSS",signature(object = "TSSr"), function(object, method, peak
       temp[, "subset" := paste0(chr,"_",strand)]
       setkey(temp,subset)
       clusters <- mclapply(as.list(temp[,unique(subset)]), function(x) {
-        tss <- temp[.(x)]
+        tss <- temp[list(x)]
         setkey(tss, NULL)
         setorder(tss, pos)
         if(method == "peakclu"){
@@ -82,7 +84,7 @@ setMethod("clusterTSS",signature(object = "TSSr"), function(object, method, peak
       temp[, "subset" := paste0(chr,"_",strand)]
       setkey(temp,subset)
       clusters <- lapply(as.list(temp[,unique(subset)]), function(x) {
-        tss <- temp[.(x)]
+        tss <- temp[list(x)]
         setkey(tss, NULL)
         setorder(tss, pos)
         if(method == "peakclu"){

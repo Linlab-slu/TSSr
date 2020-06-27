@@ -22,7 +22,6 @@
 #' Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
 #'  the recommended value = 500.
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -51,6 +50,9 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
   objName <- deparse(substitute(object))
   refGFF <- object@refSource
   organismName <- object@organismName
+
+  ##define variable as a NULL value
+  inCoding = r = f = dominant_tss = NULL
 
   ##prepare annotation file
   txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
@@ -98,7 +100,7 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
       n[, r := ifelse(is.na(gene), inCoding, gene)]
       setkey(n, r)
       new <- lapply(as.list(n[,unique(r)]), function(i){
-        temp <- n[.(i)]
+        temp <- n[list(i)]
         max.tags <- temp[,max(tags)]
         if(temp[1,strand] == "+"){
           temp[,f := ifelse(dominant_tss > temp[which.max(tags),dominant_tss] & tags < max.tags * filterClusterThreshold, 0,1)]

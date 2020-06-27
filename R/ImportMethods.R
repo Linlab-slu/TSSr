@@ -11,7 +11,6 @@
 #' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.
 #' @param mappingQualityThreshold Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.
 #'
-#' @return
 #' @export
 #'
 #' @examples

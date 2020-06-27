@@ -14,9 +14,6 @@ plotTssPCA(object, TSS.threshold =10)
 
 \item{TSS.threshold}{Only TSSs with raw signal >= TSS.threshold will be included in PCA analysis}
 }
-\value{
-
-}
 \description{
 Calculates principle component analysis (PCA) of all samples and creates a biplot
 which includes the position of each sample in terms of PC1 and PC2.

@@ -28,9 +28,6 @@ only if the input TSS data in raw number of counts.}
 
 \item{tpmLow}{Used only if method = "TPM". Default value is 0.1.}
 }
-\value{
-
-}
 \description{
 Filters transcriptional or sequencing noise.
 }

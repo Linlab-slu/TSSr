@@ -19,9 +19,6 @@ consensusCluster(object, dis = 50
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
-\value{
-
-}
 \description{
 Makes consensus clusters from multiple samples in TSSr object and calculates
 inter-quantile positions within consensus clusters for each sample.
