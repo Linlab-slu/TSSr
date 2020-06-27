@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' normalizeTSS(exampleTSSr)
+#' }
 setGeneric("normalizeTSS",function(object)standardGeneric("normalizeTSS"))
 #' @rdname normalizeTSS
 #' @export
