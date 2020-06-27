@@ -24,9 +24,6 @@ exportTSStoBedgraph(object, data = "processed", format = "bedGraph",oneFile = FA
 \item{oneFile}{Logical, specify whether to export individual TSS tracks into the one bedGraph
 file (TRUE) of in separate bedGraph files (FALSE).}
 }
-\value{
-
-}
 \description{
 Creates bedGraph/BigWig files of TSSs that can be visualized in the UCSC Genome Browser
  and Integrative Genomics Viewer (IGV).

@@ -9,7 +9,7 @@
 #' @param samples Specify samples to be plotted. Can be either "all" to plot all samples in the object
 #' or a subset of samples in the object. Default is "all".
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -46,7 +46,7 @@ setMethod("plotCorrelation",signature(object = "TSSr"), function(object, samples
 #' @param object A TSSr object.
 #' @param TSS.threshold Only TSSs with raw signal >= TSS.threshold will be included in PCA analysis
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -83,7 +83,7 @@ setMethod("plotTssPCA",signature(object = "TSSr"), function(object, TSS.threshol
 #' @param samples Specify samples to be plotted. Default is "all".
 #' @param tagsThreshold Excludes clusters with tags < tagsThreshold.
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -134,7 +134,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
 #' @param object A TSSr object.
 #' @param samples Specify samples to be plotted. Default is "all".
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -182,7 +182,6 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
 #' @param xlim Only enes of which log2FoldChange value within the xlim range are plotted. Default xlim = c(-2.5, 2.5).
 #' @param ylim Only genes of which -log10(pvalue) within the ylim range are plotted. Default ylim = c(0, 10).
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -239,7 +238,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' @param up.dis Distance upstream of genes to specify plotting range. Default value = 500.
 #' @param down.dis Distance downstream of genes to specify plotting range. Default value = 500.
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -318,7 +317,7 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "raw" or "processed". Default is "raw".
 #' @param merged Specify whether to export merged TSS table. Used only if data = "raw".
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -357,7 +356,7 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #' @param data Specify which cluster data will be exported: "tagClusters", "consensusClusters",
 #' "assigned", "unassigned", "filtered". Default is "filtered".
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -426,7 +425,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
 #'
 #' @param object A TSSr object.
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -460,7 +459,7 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "all" or "sig".
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -496,7 +495,7 @@ setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
 #'
 #' @param object A TSSr object.
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -528,7 +527,7 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 #' @param format The format of output files: "bedGraph" or "BigWig". Default is "bedGraph".
 #' @param oneFile Logical, specify whether to export individual TSS tracks into the one bedGraph
 #' file (TRUE) of in separate bedGraph files (FALSE).
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -588,7 +587,7 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' @param data Specify which data will be exported: "tagClusters" or "consensusClusters". Default is "consensusClusters".
 #' @param filtered Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

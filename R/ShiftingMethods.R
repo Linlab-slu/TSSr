@@ -10,7 +10,6 @@
 #' @param comparePairs Specified list of sample pairs for comparison.
 #' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
 #'
-#' @return
 #' @export
 #'
 #' @examples

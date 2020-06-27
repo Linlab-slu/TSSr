@@ -15,7 +15,6 @@
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
 
 #'
-#' @return
 #' @export
 #'
 #' @examples

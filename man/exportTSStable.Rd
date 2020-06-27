@@ -16,9 +16,6 @@ exportTSStable(object, data = "raw", merged = "TRUE")
 
 \item{merged}{Specify whether to export merged TSS table. Used only if data = "raw".}
 }
-\value{
-
-}
 \description{
 Exports TSS tables to text file.
 }

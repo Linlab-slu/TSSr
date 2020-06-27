@@ -14,9 +14,6 @@ plotShape(object, samples = "all")
 
 \item{samples}{Specify samples to be plotted. Default is "all".}
 }
-\value{
-
-}
 \description{
 Plots histograms of core promoter shape scores.
 }

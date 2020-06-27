@@ -13,7 +13,6 @@
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
 #'
 #'
-#' @return
 #' @export
 #'
 #' @examples

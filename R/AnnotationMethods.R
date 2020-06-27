@@ -22,7 +22,6 @@
 #' Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
 #'  the recommended value = 500.
 #'
-#' @return
 #' @export
 #'
 #' @examples

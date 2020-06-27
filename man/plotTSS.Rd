@@ -40,9 +40,6 @@ clusters within the same gene promoter region. Default value = 0.02.}
 
 \item{down.dis}{Distance downstream of genes to specify plotting range. Default value = 500.}
 }
-\value{
-
-}
 \description{
 Plots Gviz-track of TSSs, clusters, and genes.
 }

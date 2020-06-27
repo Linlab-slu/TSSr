@@ -14,9 +14,6 @@ mergeSamples(object, mergeIndex)
 
 \item{mergeIndex}{Integer vector specifying which samples to be merged}
 }
-\value{
-
-}
 \description{
 Merges individual samples within TSSr object into specified groups.
 }

@@ -16,9 +16,6 @@ plotInterQuantile(object, samples ="all", tagsThreshold = 1)
 
 \item{tagsThreshold}{Excludes clusters with tags < tagsThreshold.}
 }
-\value{
-
-}
 \description{
 Plots histograms of the interquantile width of processed clusters.
 }

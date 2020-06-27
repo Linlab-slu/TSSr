@@ -15,9 +15,6 @@ plotCorrelation(object, samples = "all")
 \item{samples}{Specify samples to be plotted. Can be either "all" to plot all samples in the object
 or a subset of samples in the object. Default is "all".}
 }
-\value{
-
-}
 \description{
 Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.

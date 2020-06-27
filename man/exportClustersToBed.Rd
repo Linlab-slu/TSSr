@@ -16,9 +16,6 @@ exportClustersToBed(object, data = "consensusClusters", filtered = TRUE)
 
 \item{filtered}{Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.}
 }
-\value{
-
-}
 \description{
 Creates bed files of clusters.
 }

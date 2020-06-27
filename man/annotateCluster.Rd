@@ -44,9 +44,6 @@ with the upstream neighboring feature. Default value = 500.}
 Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
  the recommended value = 500.}
 }
-\value{
-
-}
 \description{
 Annotates clusters with gene or transcript names from GFF annotation file.
 }

@@ -28,9 +28,6 @@ Default is "consensusClusters".}
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
-\value{
-
-}
 \description{
 Calculates core promoter shape based on the distributions of TSSs within core
  promoters using Shape Index (SI) algorithm (Hoskins et al. 2011) or Promoter Shape Score (PSS)

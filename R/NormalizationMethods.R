@@ -7,7 +7,6 @@
 #'
 #' @param object A TSSr object.
 #'
-#' @return
 #' @export
 #'
 #' @examples

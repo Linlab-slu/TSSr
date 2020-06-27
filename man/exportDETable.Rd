@@ -14,9 +14,6 @@ exportDETable(object, data = "sig")
 
 \item{data}{Specify which data will be exported: "all" or "sig".}
 }
-\value{
-
-}
 \description{
 Exports gene differential expression results table to text files.
 }
