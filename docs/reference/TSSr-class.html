@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot TSSs and clusters — plotTSS • TSSr</title>
+<title>TSSr: A package for transcription start site sequencing data analyses. — TSSr-class • TSSr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,17 @@
 
 
 
-<meta property="og:title" content="Plot TSSs and clusters — plotTSS" />
-<meta property="og:description" content="Plots Gviz-track of TSSs, clusters, and genes." />
+<meta property="og:title" content="TSSr: A package for transcription start site sequencing data analyses. — TSSr-class" />
+<meta property="og:description" content="TSSr is designed to analyze transcription start sites (TSSs) and core promoters
+with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE)
+(Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for
+Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014),
+a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018),
+NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015),
+transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013),
+transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013),
+precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016),
+and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013)." />
 
 
 
@@ -115,79 +124,83 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot TSSs and clusters</h1>
+    <h1>TSSr: A package for transcription start site sequencing data analyses.</h1>
     
-    <div class="hidden name"><code>plotTSS.Rd</code></div>
+    <div class="hidden name"><code>TSSr-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plots Gviz-track of TSSs, clusters, and genes.</p>
+    <p>TSSr is designed to analyze transcription start sites (TSSs) and core promoters
+with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE)
+(Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for
+Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014),
+a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018),
+NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015),
+transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013),
+transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013),
+precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016),
+and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotTSS</span>(<span class='no'>object</span>,<span class='no'>samples</span>,<span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"filtered"</span>,
-<span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,<span class='no'>genelist</span>,<span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>up.dis</span> <span class='kw'>=</span><span class='fl'>500</span>,<span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>)
-
-<span class='co'># S4 method for TSSr</span>
-<span class='fu'>plotTSS</span>(
-  <span class='no'>object</span>,
-  <span class='no'>samples</span>,
-  <span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"filtered"</span>,
-  <span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
-  <span class='no'>genelist</span>,
-  <span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>up.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-  <span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>
-)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>object</th>
-      <td><p>A TSSr object.</p></td>
-    </tr>
-    <tr>
-      <th>samples</th>
-      <td><p>Specify samples to be included for plotting.</p></td>
-    </tr>
-    <tr>
-      <th>tssData</th>
-      <td><p>Specify which TSS data to be included for plotting: "raw" or "process".</p></td>
-    </tr>
-    <tr>
-      <th>clusters</th>
-      <td><p>Specify which cluster data to be included for plotting: "all", "assigned", or "processed".</p></td>
-    </tr>
-    <tr>
-      <th>clusterThreshold</th>
-      <td><p>Ignore downstream clusters if signal &lt; filterClusterThreshold*the strongest
-clusters within the same gene promoter region. Default value = 0.02.</p></td>
-    </tr>
-    <tr>
-      <th>genelist</th>
-      <td><p>List of gene names used for plotting.</p></td>
-    </tr>
-    <tr>
-      <th>Bidirection</th>
-      <td><p>Specify whether to display bidirectional TSS signals within defined region. Default is TRUE.</p></td>
-    </tr>
-    <tr>
-      <th>up.dis</th>
-      <td><p>Distance upstream of genes to specify plotting range. Default value = 500.</p></td>
-    </tr>
-    <tr>
-      <th>down.dis</th>
-      <td><p>Distance downstream of genes to specify plotting range. Default value = 500.</p></td>
-    </tr>
-    </table>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>plotTSS</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>samples</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"control"</span>,<span class='st'>"treat"</span>), <span class='kw'>genelist</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"YBL017C"</span>,<span class='st'>"YBL067C"</span>)
-,<span class='kw'>up.dis</span> <span class='kw'>=</span><span class='fl'>500</span>, <span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting TSS graphs...</span></div><div class='output co'>#&gt; <span class='message'>Import genomic features from the file as a GRanges object ... </span></div><div class='output co'>#&gt; <span class='error'>Error in open.connection(con, open): cannot open the connection</span></div><div class='input'># }
-</div></pre>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>TSSr package provides a comprehensive workflow on TSS data starts from identification
+of accurate TSS locations, clustering TSSs within small genomic regions corresponding
+to core promoters, and transcriptional activity quantifications, as well as specialized
+downstream analyses including core promoter shape, cluster annotation, gene differential
+expression, core promoter shift. TSSr can take multiple formats of files as input, such
+as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser
+Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates
+various types of TSS or core promoter track files which can be visualized in the UCSC
+Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses
+result tables and plots. Multiple cores are supported on Linux or Mac platforms.</p>
+    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
+
+    
+
+<dl'>
+<dt><code>genomeName</code></dt><dd><p>character.</p></dd>
+
+<dt><code>inputFiles</code></dt><dd><p>character.</p></dd>
+
+<dt><code>inputFilesType</code></dt><dd><p>character.</p></dd>
+
+<dt><code>sampleLabels</code></dt><dd><p>character.</p></dd>
+
+<dt><code>sampleLabelsMerged</code></dt><dd><p>character.</p></dd>
+
+<dt><code>librarySizes</code></dt><dd><p>numeric.</p></dd>
+
+<dt><code>TSSrawMatrix</code></dt><dd><p>data.frame.</p></dd>
+
+<dt><code>mergeIndex</code></dt><dd><p>numeric.</p></dd>
+
+<dt><code>TSSprocessedMatrix</code></dt><dd><p>data.frame.</p></dd>
+
+<dt><code>tagClusters</code></dt><dd><p>list.</p></dd>
+
+<dt><code>consensusClusters</code></dt><dd><p>list.</p></dd>
+
+<dt><code>clusterShape</code></dt><dd><p>list.</p></dd>
+
+<dt><code>refSource</code></dt><dd><p>character.</p></dd>
+
+<dt><code>organismName</code></dt><dd><p>character.</p></dd>
+
+<dt><code>assignedClusters</code></dt><dd><p>list.</p></dd>
+
+<dt><code>unassignedClusters</code></dt><dd><p>list.</p></dd>
+
+<dt><code>filteredClusters</code></dt><dd><p>list.</p></dd>
+
+<dt><code>DEtables</code></dt><dd><p>list.</p></dd>
+
+<dt><code>PromoterShift</code></dt><dd><p>list.</p></dd>
+
+</dl>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
