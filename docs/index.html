@@ -47,6 +47,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/vignette.html">TSSr Vignette</a>
+    </li>
+  </ul>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -61,18 +73,22 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
+<hr>
+<p>output: pdf_document: default html_document: default —</p>
 <div id="tssr-an-rbioconductor-package-for-comprehensive-analyses-of-transcription-start-sit-tss-data" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#tssr-an-rbioconductor-package-for-comprehensive-analyses-of-transcription-start-sit-tss-data" class="anchor"></a>TSSr: an R/Bioconductor package for comprehensive analyses of transcription start sit (TSS) data</h1></div>
 <p>Documentation is also available on GitHub Pages: <a href="https://github.com/Linlab-slu/TSSr" class="uri">https://github.com/Linlab-slu/TSSr</a></p>
-<p>TSSr is designed to analyze transcription start sites (TSSs) and core promoters with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE) (Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014), a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018), NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015), transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013), transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013), precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016), and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).</p>
+<p>TSSr is designed to analyze transcription start sites (TSSs) and core promoters with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE) (Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014), a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018), NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015), transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013), transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013), precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016), and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).</p>
 <p>TSSr package provides a comprehensive workflow on TSS data starts from identification of accurate TSS locations, clustering TSSs within small genomic regions corresponding to core promoters, and transcriptional activity quantifications, as well as specialized downstream analyses including core promoter shape, cluster annotation, gene differential expression, core promoter shift. TSSr can take multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates various types of TSS or core promoter track files which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. Multiple cores are supported on Linux or Mac platforms.</p>
 </div>
 <div id="pre-requisites" class="section level1">
 <h1 class="hasAnchor">
 <a href="#pre-requisites" class="anchor"></a>Pre-requisites:</h1>
 <ul>
-<li>R version</li>
+<li>
+<p>R version</p>
+<ul>
 <li>Download R (&gt;3.4.0) version from CRAN.
 <ul>
 <li>Windows: <a href="https://cran.r-project.org/bin/windows/base/" class="uri">https://cran.r-project.org/bin/windows/base/</a>
@@ -83,64 +99,102 @@
 </li>
 </ul>
 </li>
-<li><p>Rsamtools package</p></li>
+</ul>
+</li>
+<li>
+<p>Rsamtools package</p>
+<ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Rsamtools"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Rsamtools"</span>)</span></code></pre></div>
 </li>
-<li><p>GenomicRanges</p></li>
+</ul>
+</li>
+<li>
+<p>GenomicRanges</p>
+<ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicRanges"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicRanges"</span>)</span></code></pre></div>
 </li>
-<li><p>GenomicFeature package</p></li>
+</ul>
+</li>
+<li>
+<p>GenomicFeature package</p>
+<ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicFeatures"</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;</span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;</span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicFeatures"</span>)</span></code></pre></div>
 </li>
-<li><p>Gviz package</p></li>
+</ul>
+</li>
+<li>
+<p>Gviz package</p>
+<ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Gviz"</span>)  </code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Gviz"</span>)  </span></code></pre></div>
 </li>
-<li><p>rtracklayer package</p></li>
+</ul>
+</li>
+<li>
+<p>rtracklayer package</p>
+<ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"rtracklayer"</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"rtracklayer"</span>)</span></code></pre></div>
 </li>
-<li><p>DESeq2 package:</p></li>
+</ul>
+</li>
+<li>
+<p>DESeq2 package:</p>
+<ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"DESeq2"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"DESeq2"</span>)</span></code></pre></div>
 </li>
-<li><p>BSgenome package</p></li>
+</ul>
+</li>
+<li>
+<p>BSgenome package</p>
+<ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
-<span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"BSgenome"</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"BSgenome"</span>)</span></code></pre></div>
 </li>
-<li><p>data.table package</p></li>
+</ul>
+</li>
+<li>
+<p>data.table package</p>
+<ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"data.table"</span>)  </code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"data.table"</span>)  </span></code></pre></div>
 </li>
-<li><p>stringr package:</p></li>
+</ul>
+</li>
+<li>
+<p>stringr package:</p>
+<ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"stringr"</span>)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"stringr"</span>)</span></code></pre></div>
+</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -148,7 +202,7 @@
 <h1 class="hasAnchor">
 <a href="#installing-tssr-package" class="anchor"></a>Installing TSSr Package:</h1>
 <p>To install the TSSr package all the prerequisites above need to be installed. After confirming those packages are installed, you can install the development version directly from GitHub using devtools:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">    <span class="op">&gt;</span><span class="st"> </span>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"Linlab-slu/TSSr"</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>    <span class="op">&gt;</span><span class="st"> </span>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"Linlab-slu/TSSr"</span>)</span></code></pre></div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
@@ -156,80 +210,84 @@
 <ul>
 <li>
 <p>Launch TSSr</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(TSSr)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(TSSr)</span></code></pre></div>
+</li>
+<li>
+<p>Creating a TSSr object with system example data</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr &lt;-<span class="st"> </span>exampleTSSr</span></code></pre></div>
 </li>
 <li>
 <p>Creating a TSSr object</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>myTSSr &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"TSSr"</span>, <span class="dt">genomeName =</span> <span class="st">"BSgenome.Scerevisiae.UCSC.sacCer3"</span>
-          ,<span class="dt">inputFiles =</span> inputFiles
-          ,<span class="dt">inputFilesType=</span> <span class="st">"bam"</span>
-          ,<span class="dt">sampleLabels =</span> <span class="kw">c</span>(<span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span>)
-          ,<span class="dt">sampleLabelsMerged =</span> <span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)
-          ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span>
-          ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"TSSr"</span>, <span class="dt">genomeName =</span> <span class="st">"BSgenome.Scerevisiae.UCSC.sacCer3"</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>            ,<span class="dt">inputFiles =</span> inputFiles</span>
+<span id="cb13-3"><a href="#cb13-3"></a>            ,<span class="dt">inputFilesType=</span> <span class="st">"bam"</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>            ,<span class="dt">sampleLabels =</span> <span class="kw">c</span>(<span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>            ,<span class="dt">sampleLabelsMerged =</span> <span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>            ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>            ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Reading in the data and TSS processing</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">getTSS</span>(myTSSr)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">mergeSamples</span>(myTSSr)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">normalizeTSS</span>(myTSSr)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">filterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"TPM"</span>,<span class="dt">tpmLow=</span><span class="fl">0.1</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">plotCorrelation</span>(myTSSr, <span class="dt">samples =</span> <span class="st">"all)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">getTSS</span>(myTSSr)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">mergeSamples</span>(myTSSr)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">normalizeTSS</span>(myTSSr)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">filterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"TPM"</span>,<span class="dt">tpmLow=</span><span class="fl">0.1</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotCorrelation</span>(myTSSr, <span class="dt">samples =</span> <span class="st">"all)</span></span></code></pre></div>
 </li>
 </ul>
 <p><img src="./vignettes/figures/01_TSS_correlation_plot_of_all_samples.png" alt="figure 1"></p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">    <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTssPCA</span>(myTSSr, <span class="dt">TSS.threshold=</span><span class="dv">10</span>)</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTssPCA</span>(myTSSr, <span class="dt">TSS.threshold=</span><span class="dv">10</span>)</span></code></pre></div>
 <p><img src="./vignettes/figures/02_PCA_plot.png" alt="figure 2"></p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"raw"</span>, <span class="dt">merged =</span> <span class="st">"TRUE"</span>)
-    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"bedGraph"</span>)
-    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"BigWig"</span>)
-    </code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"raw"</span>, <span class="dt">merged =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"bedGraph"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"BigWig"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    </span></code></pre></div>
 <ul>
 <li>
 <p>TSS clustering</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">clusterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"peakclu"</span>,<span class="dt">peakDistance=</span><span class="dv">100</span>,<span class="dt">extensionDistance=</span><span class="dv">30</span>
-       ,<span class="dt">localThreshold =</span> <span class="fl">0.02</span>,<span class="dt">clusterThreshold =</span> <span class="dv">1</span>
-       ,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"filtered"</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"tagClusters"</span>)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">clusterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"peakclu"</span>,<span class="dt">peakDistance=</span><span class="dv">100</span>,<span class="dt">extensionDistance=</span><span class="dv">30</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>         ,<span class="dt">localThreshold =</span> <span class="fl">0.02</span>,<span class="dt">clusterThreshold =</span> <span class="dv">1</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>         ,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"filtered"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"tagClusters"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Aggregating consensus clusters</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">consensusCluster</span>(myTSSr, <span class="dt">dis =</span> <span class="dv">50</span>, <span class="dt">useMultiCore =</span> <span class="ot">FALSE</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"consensusClusters"</span>)</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">consensusCluster</span>(myTSSr, <span class="dt">dis =</span> <span class="dv">50</span>, <span class="dt">useMultiCore =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"consensusClusters"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Core promoter shape</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">shapeCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>, <span class="dt">method =</span> <span class="st">"PSS"</span>,<span class="dt">useMultiCore=</span> <span class="ot">FALSE</span>, <span class="dt">numCores =</span> <span class="ot">NULL</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">plotInterQuantile</span>(myTSSr,<span class="dt">samples =</span> <span class="st">"all"</span>,<span class="dt">tagsThreshold =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">shapeCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>, <span class="dt">method =</span> <span class="st">"PSS"</span>,<span class="dt">useMultiCore=</span> <span class="ot">FALSE</span>, <span class="dt">numCores =</span> <span class="ot">NULL</span>)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotInterQuantile</span>(myTSSr,<span class="dt">samples =</span> <span class="st">"all"</span>,<span class="dt">tagsThreshold =</span> <span class="dv">1</span>)</span></code></pre></div>
 </li>
 </ul>
 <p><img src="./vignettes/figures/03_Interquantile_plot_of_ALL_samples.png" alt="figure 3"></p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">    <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotShape</span>(myTSSr)</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotShape</span>(myTSSr)</span></code></pre></div>
 <p><img src="./vignettes/figures/04_Shape_plot_of_ALL_samples.png" alt="figure 4"></p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShapeTable</span>(myTSSr)</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShapeTable</span>(myTSSr)</span></code></pre></div>
 <ul>
 <li>
 <p>Annotation</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">annotateCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>,<span class="dt">filterCluster =</span> <span class="ot">TRUE</span>,
-            <span class="dt">filterClusterThreshold =</span> <span class="fl">0.02</span>, <span class="dt">annotationType =</span> <span class="st">"genes"</span>
-            ,<span class="dt">upstream=</span><span class="dv">1000</span>, <span class="dt">upstreamOverlap =</span> <span class="dv">500</span>, <span class="dt">downstream =</span> <span class="dv">0</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">exportDETable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"sig"</span>)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">annotateCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>,<span class="dt">filterCluster =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb22-2"><a href="#cb22-2"></a>              <span class="dt">filterClusterThreshold =</span> <span class="fl">0.02</span>, <span class="dt">annotationType =</span> <span class="st">"genes"</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>              ,<span class="dt">upstream=</span><span class="dv">1000</span>, <span class="dt">upstreamOverlap =</span> <span class="dv">500</span>, <span class="dt">downstream =</span> <span class="dv">0</span>)</span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportDETable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"sig"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Differential expression analysis</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">deGene</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShiftTable</span>(myTSSr)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">plotDE</span>(myTSSr, <span class="dt">withGeneName =</span> <span class="st">"TRUE"</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>),<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>))</code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">deGene</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShiftTable</span>(myTSSr)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotDE</span>(myTSSr, <span class="dt">withGeneName =</span> <span class="st">"TRUE"</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>),<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>))</span></code></pre></div>
 </li>
 </ul>
 <p><img src="./vignettes/figures/05_Volcano_plot.png" alt="figure 5"></p>
 <ul>
 <li>
 <p>Core promoter shifts</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">shiftPromoter</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"filtered"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span>
-    ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>)</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">shiftPromoter</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"filtered"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>      ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>)</span></code></pre></div>
 </li>
 </ul>
 <p><img src="./vignettes/figures/06_TSS_graphs.png" alt="figure 6"></p>
@@ -239,7 +297,7 @@
 <a href="#contact-author" class="anchor"></a>Contact Author:</h1>
 <p>Zhaolian Lu</p>
 <p>Affiliation: Lin Lab, Department of Biology, Saint Louis University, MO, USA.</p>
-<p>Email: <a href="mailto:zhaolian.lu@slu.edu">zhaolian.lu@slu.edu</a></p>
+<p>Email: <a href="mailto:zhaolian.lu@slu.edu" class="email">zhaolian.lu@slu.edu</a></p>
 </div>
 <div id="reference" class="section level1">
 <h1 class="hasAnchor">

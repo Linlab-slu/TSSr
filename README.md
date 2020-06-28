@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # TSSr: an R/Bioconductor package for comprehensive analyses of transcription start sit (TSS) data
 
 Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/TSSr
@@ -96,6 +101,10 @@ After confirming those packages are installed, you can install the development v
 
         > library(TSSr)
       
+* Creating a TSSr object with system example data
+
+        > myTSSr <- exampleTSSr
+
 * Creating a TSSr object
 
         > myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
