@@ -29,8 +29,6 @@
 ##.plotTSS(tss.tpm,cs.cl, ref, up.dis = 500, down.dis=100)
 .plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis){
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
-  ##define variable as a NULL value
-  gene_id = NULL
 
   if(df$strand == "+"){
     p <- df$start - up.dis
@@ -43,7 +41,6 @@
   range.gr <- GRanges(seqnames = as.character(df$chr),ranges = IRanges(start = p,end = q),strand = as.character(df$strand))
   gtrack <- GenomeAxisTrack(range = range.gr,fontcolor = "black")
   ##GeneRegion track
-  df[, gene:= gene_id]
   gene.gr <- makeGRangesFromDataFrame(df,keep.extra.columns=FALSE,ignore.strand=FALSE,
                                       seqinfo=NULL,seqnames.field=c("chr"),
                                       start.field="start",end.field=c("end"),
@@ -54,6 +51,7 @@
   if(Bidirection == TRUE){
     tss_sub <- tss[tss$chr == as.character(df$chr)
                    & tss$pos >= p & tss$pos <= q,]
+    tss_sub[, strand:= df$strand]
   }else{
     tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand)
                    & tss$pos >= p & tss$pos <= q,]
@@ -67,7 +65,9 @@
     cs_sub <- cs.temp[cs.temp$chr == as.character(df$chr) & cs.temp$strand == as.character(df$strand) & cs.temp$q_0.1 >= p & cs.temp$q_0.9 <= q,]
     cs.gr <- makeGRangesFromDataFrame(cs_sub,keep.extra.columns=FALSE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
                                             start.field="q_0.1",end.field=c("q_0.9"),strand.field="strand",starts.in.df.are.0based=FALSE)
-    atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),col.title="black")
+    # atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),col.title="black")
+    atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),
+                                 id = cs_sub$cluster, col.title="black")
     ##tss track
     temp <- tss_sub[,.SD, .SDcols = c("chr","pos","strand",samples[my.sample])]
     data_tss_track <- makeGRangesFromDataFrame(temp,keep.extra.columns=TRUE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),

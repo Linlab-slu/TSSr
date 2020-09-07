@@ -5,14 +5,14 @@
 \alias{plotTSS,TSSr-method}
 \title{Plot TSSs and clusters}
 \usage{
-plotTSS(object,samples,tssData = "processed",clusters = "filtered",
+plotTSS(object,samples,tssData = "processed",clusters = "assigned",
 clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
 
 \S4method{plotTSS}{TSSr}(
   object,
   samples,
   tssData = "processed",
-  clusters = "filtered",
+  clusters = "assigned",
   clusterThreshold = 0.02,
   genelist,
   Bidirection = TRUE,
@@ -25,9 +25,9 @@ clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
 
 \item{samples}{Specify samples to be included for plotting.}
 
-\item{tssData}{Specify which TSS data to be included for plotting: "raw" or "process".}
+\item{tssData}{Specify which TSS data to be included for plotting: "raw" or "processed".}
 
-\item{clusters}{Specify which cluster data to be included for plotting: "all", "assigned", or "processed".}
+\item{clusters}{Specify which cluster data to be included for plotting: "all" or "assigned".}
 
 \item{clusterThreshold}{Ignore downstream clusters if signal < filterClusterThreshold*the strongest
 clusters within the same gene promoter region. Default value = 0.02.}

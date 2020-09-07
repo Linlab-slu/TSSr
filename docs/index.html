@@ -249,8 +249,9 @@
 <span id="cb13-3"><a href="#cb13-3"></a>            ,<span class="dt">inputFilesType=</span> <span class="st">"bam"</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a>            ,<span class="dt">sampleLabels =</span> <span class="kw">c</span>(<span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span>)</span>
 <span id="cb13-5"><a href="#cb13-5"></a>            ,<span class="dt">sampleLabelsMerged =</span> <span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6"></a>            ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a>            ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</span></code></pre></div>
+<span id="cb13-6"><a href="#cb13-6"></a>            ,<span class="dt">mergeIndex =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>)</span>
+<span id="cb13-7"><a href="#cb13-7"></a>            ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a>            ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</span></code></pre></div>
 <p>To display the available slots in the created TSSr object:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>   <span class="op">&gt;</span><span class="st"> </span>myTSSr</span>
 <span id="cb14-2"><a href="#cb14-2"></a></span>
@@ -309,14 +310,11 @@
 <span id="cb14-55"><a href="#cb14-55"></a>  <span class="co"># Slot "unassignedClusters":</span></span>
 <span id="cb14-56"><a href="#cb14-56"></a>  <span class="co">#   list()</span></span>
 <span id="cb14-57"><a href="#cb14-57"></a>  <span class="co"># </span></span>
-<span id="cb14-58"><a href="#cb14-58"></a>  <span class="co"># Slot "filteredClusters":</span></span>
+<span id="cb14-58"><a href="#cb14-58"></a>  <span class="co"># Slot "DEtables":</span></span>
 <span id="cb14-59"><a href="#cb14-59"></a>  <span class="co">#   list()</span></span>
 <span id="cb14-60"><a href="#cb14-60"></a>  <span class="co"># </span></span>
-<span id="cb14-61"><a href="#cb14-61"></a>  <span class="co"># Slot "DEtables":</span></span>
-<span id="cb14-62"><a href="#cb14-62"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-63"><a href="#cb14-63"></a>  <span class="co"># </span></span>
-<span id="cb14-64"><a href="#cb14-64"></a>  <span class="co"># Slot "PromoterShift":</span></span>
-<span id="cb14-65"><a href="#cb14-65"></a>  <span class="co">#   list()</span></span></code></pre></div>
+<span id="cb14-61"><a href="#cb14-61"></a>  <span class="co"># Slot "PromoterShift":</span></span>
+<span id="cb14-62"><a href="#cb14-62"></a>  <span class="co">#   list()</span></span></code></pre></div>
 <p>The information that was provided when creating the TSSr object can be seen in myTSSr object, whereas all other slots are empty since no data has been read and no analysis has been conducted.</p>
 </li>
 <li>
@@ -349,7 +347,7 @@
 <p>Based on the calculated correlations, two replicates are highly correlated. To facilitate the downstream analysis and comparisons between different growth condition, we merge the two replicates for each growth condition together with mergeSamples function. mergeIndex argument directs which samples will be merged and how the final dataset will be ordered accordingly.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">mergeSamples</span>(myTSSr)</span>
 <span id="cb18-2"><a href="#cb18-2"></a>    </span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSmergedMatrix</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
 <span id="cb18-4"><a href="#cb18-4"></a>    </span>
 <span id="cb18-5"><a href="#cb18-5"></a>    <span class="co"># chr    pos strand control treat</span></span>
 <span id="cb18-6"><a href="#cb18-6"></a>    <span class="co"># 1:  chrI   1561      +       0     1</span></span>
@@ -372,7 +370,7 @@
 <p>There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: “poisson” or “TPM”.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">filterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"TPM"</span>,<span class="dt">tpmLow=</span><span class="fl">0.1</span>)</span>
 <span id="cb21-2"><a href="#cb21-2"></a></span>
-<span id="cb21-3"><a href="#cb21-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSfilteredMatrix</span>
+<span id="cb21-3"><a href="#cb21-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
 <span id="cb21-4"><a href="#cb21-4"></a>    </span>
 <span id="cb21-5"><a href="#cb21-5"></a>    <span class="co"># chr    pos strand  control    treat</span></span>
 <span id="cb21-6"><a href="#cb21-6"></a>    <span class="co"># 1:  chrI   1561      + 0.000000 0.179736</span></span>
@@ -386,7 +384,7 @@
 <span id="cb21-14"><a href="#cb21-14"></a>    <span class="co"># 171539: chrII 812802      - 0.000000 0.359473</span></span>
 <span id="cb21-15"><a href="#cb21-15"></a>    <span class="co"># 171540: chrII 812805      - 0.000000 0.179736</span></span>
 <span id="cb21-16"><a href="#cb21-16"></a>    <span class="co"># 171541: chrII 812818      - 0.000000 0.179736</span></span></code></pre></div>
-<p>The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser and Integrative Genomics Viewer (IGV).</p>
+<p>The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"raw"</span>, <span class="dt">merged =</span> <span class="st">"TRUE"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"bedGraph"</span>)</span>
 <span id="cb22-3"><a href="#cb22-3"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"BigWig"</span>)</span>
@@ -429,7 +427,7 @@
 <span id="cb23-32"><a href="#cb23-32"></a>  <span class="co"># 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255</span></span>
 <span id="cb23-33"><a href="#cb23-33"></a>  <span class="co"># # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9</span></span>
 <span id="cb23-34"><a href="#cb23-34"></a></span>
-<span id="cb23-35"><a href="#cb23-35"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"filtered"</span>)</span>
+<span id="cb23-35"><a href="#cb23-35"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"assigned"</span>)</span>
 <span id="cb23-36"><a href="#cb23-36"></a></span>
 <span id="cb23-37"><a href="#cb23-37"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"tagClusters"</span>)</span></code></pre></div>
 </li>
@@ -589,7 +587,7 @@
 <span id="cb34-47"><a href="#cb34-47"></a>  <span class="co"># 41:   YBR300C    0.86895953363737                     1  1.000000e+00</span></span>
 <span id="cb34-48"><a href="#cb34-48"></a>  <span class="co"># gene                  Ds                  pval          padj</span></span></code></pre></div>
 <p>Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"filtered"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span> ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"assigned"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span> ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>)</span></code></pre></div>
 </li>
 </ul>
 <p><img src="./vigettes/figures/06_TSS_graphs.png" alt="06_TSS_graphs">{width=50%}</p>

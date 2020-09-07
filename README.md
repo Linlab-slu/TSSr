@@ -132,6 +132,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 	              ,inputFilesType= "bam"
 	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
 	              ,sampleLabelsMerged = c("control","treat")
+	              ,mergeIndex = c(1,1,2,2,3,3,4,4,5,5)
 	              ,refSource = "saccharomyces_cerevisiae.SGD.gff"
 	              ,organismName = "saccharomyces cerevisiae")
 	
@@ -194,9 +195,6 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
         # Slot "unassignedClusters":
         #   list()
         # 
-        # Slot "filteredClusters":
-        #   list()
-        # 
         # Slot "DEtables":
         #   list()
         # 
@@ -242,7 +240,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
   
         > mergeSamples(myTSSr)
         
-        > myTSSr@TSSmergedMatrix
+        > myTSSr@TSSprocessedMatrix
         
         # chr    pos strand control treat
         # 1:  chrI   1561      +       0     1
@@ -270,7 +268,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
         > filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
     
-        > myTSSr@TSSfilteredMatrix
+        > myTSSr@TSSprocessedMatrix
         
         # chr    pos strand  control    treat
         # 1:  chrI   1561      + 0.000000 0.179736
@@ -285,7 +283,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
         # 171540: chrII 812805      - 0.000000 0.179736
         # 171541: chrII 812818      - 0.000000 0.179736
 
-  The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser and Integrative Genomics Viewer (IGV).    
+  The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).    
 
         > exportTSStable(myTSSr, data = "raw", merged = "TRUE")
         > exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
@@ -331,7 +329,7 @@ This clustering step might be slow especially when the number of TSSs is in mill
         # 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255
         # # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9
 
-		    > exportClustersTable(myTSSr, data = "filtered")
+		    > exportClustersTable(myTSSr, data = "assigned")
 		    
 		    > exportClustersToBed(myTSSr, data = "tagClusters")
 
@@ -513,7 +511,7 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
   Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
 
-        > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "filtered",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)
+        > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)
           
 ![06_TSS_graphs](./vigettes/figures/06_TSS_graphs.png){width=50%}
 
