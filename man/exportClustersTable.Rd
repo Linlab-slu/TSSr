@@ -5,15 +5,15 @@
 \alias{exportClustersTable,TSSr-method}
 \title{Export cluster tables}
 \usage{
-exportClustersTable(object, data = "filtered")
+exportClustersTable(object, data = "assigned")
 
-\S4method{exportClustersTable}{TSSr}(object, data = "filtered")
+\S4method{exportClustersTable}{TSSr}(object, data = "assigned")
 }
 \arguments{
 \item{object}{A TSSr object.}
 
 \item{data}{Specify which cluster data will be exported: "tagClusters", "consensusClusters",
-"assigned", "unassigned", "filtered". Default is "filtered".}
+"assigned", "unassigned". Default is "assigned".}
 }
 \description{
 Export cluster tables to text files.
@@ -24,6 +24,5 @@ Export cluster tables to text files.
 	exportClustersTable(exampleTSSr, data = "consensusClusters")
 	exportClustersTable(exampleTSSr, data = "assigned")
 	exportClustersTable(exampleTSSr, data = "unassigned")
-	exportClustersTable(exampleTSSr, data = "filtered")
 }
 }

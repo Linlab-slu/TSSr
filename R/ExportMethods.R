@@ -224,13 +224,13 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' Plot TSSs and clusters
 #'
 #' @description Plots Gviz-track of TSSs, clusters, and genes.
-#' @usage plotTSS(object,samples,tssData = "processed",clusters = "filtered",
+#' @usage plotTSS(object,samples,tssData = "processed",clusters = "assigned",
 #' clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
 #'
 #' @param object A TSSr object.
 #' @param samples Specify samples to be included for plotting.
-#' @param tssData Specify which TSS data to be included for plotting: "raw" or "process".
-#' @param clusters Specify which cluster data to be included for plotting: "all", "assigned", or "processed".
+#' @param tssData Specify which TSS data to be included for plotting: "raw" or "processed".
+#' @param clusters Specify which cluster data to be included for plotting: "all" or "assigned".
 #' @param clusterThreshold Ignore downstream clusters if signal < filterClusterThreshold*the strongest
 #' clusters within the same gene promoter region. Default value = 0.02.
 #' @param genelist List of gene names used for plotting.
@@ -248,7 +248,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' }
 setGeneric("plotTSS",function(object,samples
                               ,tssData = "processed"
-                              ,clusters = "filtered"
+                              ,clusters = "assigned"
                               ,clusterThreshold = 0.02
                               ,genelist
                               ,Bidirection= TRUE
@@ -267,15 +267,13 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
     cs <- object@consensusClusters
   }else if(clusters == "assigned"){
     cs <- object@assignedClusters
-  }else if(clusters == "filtered"){
-    cs <- object@filteredClusters
   }else{
     stop("No cluster data for the given clusters option! ")
   }
   if(tssData == "processed"){
     tss <- object@TSSprocessedMatrix
   }else if(tssData == "raw"){
-    tss <- object@TSSmergedMatrix
+    tss <- object@TSSrawMatrix
   }
   refGFF <- object@refSource
   organismName <- object@organismName
@@ -350,11 +348,11 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #' Export cluster tables
 #'
 #' @description Export cluster tables to text files.
-#' @usage exportClustersTable(object, data = "filtered")
+#' @usage exportClustersTable(object, data = "assigned")
 #'
 #' @param object A TSSr object.
 #' @param data Specify which cluster data will be exported: "tagClusters", "consensusClusters",
-#' "assigned", "unassigned", "filtered". Default is "filtered".
+#' "assigned", "unassigned". Default is "assigned".
 #'
 #'
 #' @export
@@ -365,9 +363,8 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #' 	exportClustersTable(exampleTSSr, data = "consensusClusters")
 #' 	exportClustersTable(exampleTSSr, data = "assigned")
 #' 	exportClustersTable(exampleTSSr, data = "unassigned")
-#' 	exportClustersTable(exampleTSSr, data = "filtered")
 #' }
-setGeneric("exportClustersTable",function(object, data = "filtered")standardGeneric("exportClustersTable"))
+setGeneric("exportClustersTable",function(object, data = "assigned")standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
 #' @export
 setMethod("exportClustersTable",signature(object = "TSSr"), function(object, data){
@@ -402,14 +399,6 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
       write.table(temp, file = paste(samples[i],"unassignedClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
-    }
-  }else if(data == "filtered"){
-    message("Exporting filteredClusters table...")
-    tc <- object@filteredClusters
-    samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
-      temp <- tc[[samples[i]]]
-      write.table(temp, file = paste(samples[i],"filteredClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else{
     stop("No data for the given tag cluster data type!")
@@ -581,11 +570,11 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' Creating bed files of clusters
 #'
 #' @description Creates bed files of clusters.
-#' @usage exportClustersToBed(object, data = "consensusClusters", filtered = TRUE)
+#' @usage exportClustersToBed(object, data = "consensusClusters", assigned = TRUE)
 #'
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "tagClusters" or "consensusClusters". Default is "consensusClusters".
-#' @param filtered Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.
+#' @param assigned Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.
 #'
 #'
 #' @export
@@ -595,18 +584,18 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
 #' exportTSStoBedgraph(exampleTSSr, dataexampleTSSr = "consensusClusters")
 #' }
-setGeneric("exportClustersToBed",function(object,data = "consensusClusters", filtered = TRUE)
+setGeneric("exportClustersToBed",function(object,data = "consensusClusters", assigned = TRUE)
   standardGeneric("exportClustersToBed"))
 #' @rdname exportClustersToBed
 #' @export
-setMethod("exportClustersToBed",signature(object = "TSSr"), function(object, data, filtered){
+setMethod("exportClustersToBed",signature(object = "TSSr"), function(object, data, assigned){
   message("Exporting clusters to bed...")
   sampleLabelsMerged <- object@sampleLabelsMerged
   if(data == "tagClusters"){
     cs <- object@tagClusters
   }else if(data == "consensusClusters"){
-    if(filtered == TRUE){
-      cs <- object@filteredClusters
+    if(assigned == TRUE){
+      cs <- object@assignedClusters
     }else{
       cs <- object@consensusClusters
     }

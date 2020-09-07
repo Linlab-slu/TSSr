@@ -124,7 +124,7 @@
     <p>Plots Gviz-track of TSSs, clusters, and genes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotTSS</span>(<span class='no'>object</span>,<span class='no'>samples</span>,<span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"filtered"</span>,
+    <pre class="usage"><span class='fu'>plotTSS</span>(<span class='no'>object</span>,<span class='no'>samples</span>,<span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"assigned"</span>,
 <span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,<span class='no'>genelist</span>,<span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>up.dis</span> <span class='kw'>=</span><span class='fl'>500</span>,<span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>)
 
 <span class='co'># S4 method for TSSr</span>
@@ -132,7 +132,7 @@
   <span class='no'>object</span>,
   <span class='no'>samples</span>,
   <span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"filtered"</span>,
+  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"assigned"</span>,
   <span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
   <span class='no'>genelist</span>,
   <span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -153,11 +153,11 @@
     </tr>
     <tr>
       <th>tssData</th>
-      <td><p>Specify which TSS data to be included for plotting: "raw" or "process".</p></td>
+      <td><p>Specify which TSS data to be included for plotting: "raw" or "processed".</p></td>
     </tr>
     <tr>
       <th>clusters</th>
-      <td><p>Specify which cluster data to be included for plotting: "all", "assigned", or "processed".</p></td>
+      <td><p>Specify which cluster data to be included for plotting: "all" or "assigned".</p></td>
     </tr>
     <tr>
       <th>clusterThreshold</th>

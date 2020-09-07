@@ -67,7 +67,7 @@
     readsGR <- GRanges(seqnames = as.vector(bam[[1]]$rname), IRanges(start = bam[[1]]$pos, width = mapped.length),
                        strand = bam[[1]]$strand, qual = qa.avg, mapq = bam[[1]]$mapq, seq = bam[[1]]$seq, read.length = width(bam[[1]]$seq),
                        flag = bam[[1]]$flag)
-    readsGR <- readsGR[unique(as.character(readsGR@seqnames)) %in% seqnames(Genome)]
+    readsGR <- readsGR[as.character(readsGR@seqnames) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     GenomicRanges::elementMetadata(readsGR)$mapq[is.na(GenomicRanges::elementMetadata(readsGR)$mapq)] <- Inf
     readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
@@ -204,7 +204,7 @@
 
   for(i in 1:length(tss.files)) {
     message("\nReading in file: ", tss.files[i], "...")
-    TSS <- read.table(file = tss.files[i], header = F, sep = "\t"
+    TSS <- read.table(file = tss.files[i], header = T, sep = "\t"
                       ,colClasses = c("character", "integer", "character", "integer")
                       ,col.names = c("chr", "pos", "strand", sampleLabels[i]))
 

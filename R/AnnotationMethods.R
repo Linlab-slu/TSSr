@@ -51,6 +51,11 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
   refGFF <- object@refSource
   organismName <- object@organismName
 
+  ##check whether there is refSource provided
+  if(length(object@refSource) == 0 | !(object@refSource %in% list.files())){
+    stop("Please provide correct refSource file!")
+  }
+
   ##define variable as a NULL value
   inCoding = r = f = dominant_tss = NULL
 

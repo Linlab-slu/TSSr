@@ -124,14 +124,14 @@
     <p>Filters transcriptional or sequencing noise.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>filterTSS</span>(<span class='no'>object</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"poisson"</span>, <span class='kw'>Normalization</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>filterTSS</span>(<span class='no'>object</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"poisson"</span>, <span class='kw'>normalization</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
 <span class='kw'>pVal</span> <span class='kw'>=</span><span class='fl'>0.01</span>, <span class='kw'>tpmLow</span> <span class='kw'>=</span> <span class='fl'>0.1</span>)
 
 <span class='co'># S4 method for TSSr</span>
 <span class='fu'>filterTSS</span>(
   <span class='no'>object</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"poisson"</span>,
-  <span class='kw'>Normalization</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>normalization</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>pVal</span> <span class='kw'>=</span> <span class='fl'>0.01</span>,
   <span class='kw'>tpmLow</span> <span class='kw'>=</span> <span class='fl'>0.1</span>
 )</pre>
@@ -149,7 +149,7 @@
 only if the input TSS data in raw number of counts.</p></td>
     </tr>
     <tr>
-      <th>Normalization</th>
+      <th>normalization</th>
       <td><p>Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.</p></td>
     </tr>
     <tr>

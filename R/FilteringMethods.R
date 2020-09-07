@@ -2,13 +2,13 @@
 #'
 #' @description Filters transcriptional or sequencing noise.
 #'
-#' @usage filterTSS(object, method = "poisson", Normalization = TRUE,
+#' @usage filterTSS(object, method = "poisson", normalization = TRUE,
 #' pVal =0.01, tpmLow = 0.1)
 #'
 #' @param object A TSSr object.
 #' @param method Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
 #' only if the input TSS data in raw number of counts.
-#' @param Normalization Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.
+#' @param normalization Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
 #'
@@ -20,11 +20,11 @@
 #' filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
 #' filterTSS(exampleTSSr, method = "poisson", pVal = 0.01)
 #' }
-setGeneric("filterTSS",function(object, method = "poisson", Normalization = TRUE
+setGeneric("filterTSS",function(object, method = "poisson", normalization = TRUE
                                 , pVal =0.01, tpmLow = 0.1)standardGeneric("filterTSS"))
 #' @rdname filterTSS
 #' @export
-setMethod("filterTSS",signature(object = "TSSr"), function(object, method, Normalization, pVal, tpmLow){
+setMethod("filterTSS",signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
@@ -49,7 +49,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, Norma
       temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
       setnames(temp, colnames(temp)[[1]], "tags")
       temp <- .filterWithPoisson(temp, library.size[i], genomeSize, pVal)
-      if(Normalization == "TRUE"){
+      if(normalization == "TRUE"){
         sizePerMillion <- library.size[i] / 1e6
         temp[, tags := round(tags / sizePerMillion, 6)]
       }
