@@ -226,7 +226,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
 	To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kedall”, or “spearman”.
 	
-        > plotCorrelation(myTSSr, samples = "all)
+        > plotCorrelation(myTSSr, samples = "all")
         
 ![01_TSS_correlation_plot_of_all_samples](./vigettes/figures/01_TSS_correlation_plot_of_all_samples.png?raw=true){width=50%}
 
