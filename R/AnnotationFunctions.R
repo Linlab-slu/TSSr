@@ -82,6 +82,7 @@
         ##find overlap with coding regions
         ##coding
         rownames(ref_coding) <- ref_coding$gene_id
+        setorder(ref_coding,start)
         ref_coding <- makeGRangesFromDataFrame(ref_coding, keep.extra.columns = F)
         hits <- findOverlaps(gr,ref_coding)
         ################fix breakTies issue, Jan09,2020##############
