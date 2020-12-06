@@ -65,6 +65,7 @@
   Dtable <- data.matrix(Dtable)
   condition <- factor(c(rep(sampleOne, times = length(samplex)), rep(sampleTwo, times = length(sampley))))
   dds <- DESeqDataSetFromMatrix(countData = Dtable,data.frame(condition), ~ condition)
+  dds$condition <- factor(dds$condition, levels = c(sampleOne, sampleTwo))
   dds <- DESeq(dds)
   res <- results(dds)
   res <- res[order(res$padj),]
