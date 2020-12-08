@@ -435,9 +435,9 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
   Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.
                   
-  A function of exportTagClustersTable is provided to export cluster tables with associated gene information.
+  A function of exportClustersTable is provided to export cluster tables with associated gene information.
         
-        > exportTagClustersTable(myTSSr, data = "assigned")
+        > exportClustersTable(myTSSr, data = "assigned")
 
 * Differential expression analysis
 
