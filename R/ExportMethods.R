@@ -106,7 +106,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
     for(i in 1:length(sampleLabels)){
       temp <- tc[[sampleLabels[i]]]
-      temp <- temp[tags >= tagsThreshold & interquantile_width <= 200,]
+      temp <- temp[temp$tags >= tagsThreshold & temp$interquantile_width <= 200,]
       hist(temp$interquantile_width, breaks = 40, col = rainbow(length(sampleLabels))[i]
            , xlab = "TC interquantile width q0.1-q0.9", ylab = "Frequency", main = sampleLabels[i])
     }
@@ -116,7 +116,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
     for(i in 1:length(samples)){
       temp <- tc[[samples[i]]]
-      temp <- temp[tags >= tagsThreshold & interquantile_width <= 200,]
+      temp <- temp[temp$tags >= tagsThreshold & temp$interquantile_width <= 200,]
       hist(temp$interquantile_width, breaks = 40, col = rainbow(length(samples))[i]
            , xlab = "TC interquantile width q0.1-q0.9", ylab = "Frequency", main = samples[i])
     }
