@@ -25,6 +25,7 @@
     Rsamtools::bamFlag(param) <- scanBamFlag( isUnmappedQuery = FALSE
                                    , isProperPair    = TRUE
                                    , isFirstMateRead = TRUE)}
+  chunksize <- 1e6
   first <- TRUE
   for(i in 1:length(bam.files)) {
     message("\nReading in file: ", bam.files[i], "...")
@@ -32,7 +33,7 @@
     message("\t-> Filtering out low quality reads...")
     qual <- bam[[1]]$qual
     start <- 1
-    chunksize <- 1e6
+    # chunksize <- 1e6
     qa.avg <- vector(mode = "integer")
     repeat {
       if (start + chunksize <= length(qual)) {
@@ -49,7 +50,7 @@
     }
     cigar <- bam[[1]]$cigar
     start <- 1
-    chunksize <- 1e6
+    # chunksize <- 1e6
     mapped.length <- vector(mode = "integer")
     repeat {
       if (start + chunksize <= length(cigar)) {
