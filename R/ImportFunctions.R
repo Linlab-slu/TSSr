@@ -83,6 +83,7 @@
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
     first <- FALSE
+    gc()
   }
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
@@ -154,6 +155,7 @@
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
     first <- FALSE
+    gc()
   }
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
@@ -190,6 +192,7 @@
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
     first <- FALSE
+    gc()
   }
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
@@ -217,6 +220,7 @@
       TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
     }
     first <- FALSE
+    gc()
   }
   TSS.all.samples <- data.table(TSS.all.samples)
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
