@@ -15,13 +15,9 @@
   
   list.tag<-list.files(pattern="tagCount.txt")
   
-  if()
-  
   xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
   yCounts <-.tagCount(cy, tss.raw,sampley,useMultiCore, numCores)
-  write.table(xCounts,sprintf("%s.tagCount.txt",samplex),row.names=F)
-  write.table(yCounts,sprintf("%s.tagCount.txt",sampley),row.names=F)
-  
+
   xCounts <- xCounts[,-c(2:11)]
   yCounts <- yCounts[,-c(2:11)]
 
