@@ -13,10 +13,19 @@
   ##get raw count tables
   ## save the tagCount results
   
-  list.tag<-list.files(pattern="tagCount.txt")
-  
-  xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
-  yCounts <-.tagCount(cy, tss.raw,sampley,useMultiCore, numCores)
+    if(samplex%in%names(myTSSr@TAGtables)){
+       xCounts<-myTSSr@TAGtables[[which(names(myTSSr@TAGtables)==samplex)]]
+      } else{
+             xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
+             myTSSr@TAGtables[[samplex]]<-xCounts
+             }
+
+   if(sampley%in%names(myTSSr@TAGtables)){
+             yCounts<-myTSSr@TAGtables[[which(names(myTSSr@TAGtables)==sampley)]]
+     } else{
+             yCounts <-.tagCount(cx, tss.raw,sampley,useMultiCore, numCores)
+             myTSSr@TAGtables[[sampley]]<-yCounts
+            }
 
   xCounts <- xCounts[,-c(2:11)]
   yCounts <- yCounts[,-c(2:11)]
