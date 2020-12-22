@@ -99,6 +99,7 @@ setClass(Class = "TSSr",
                         ,filteredClusters = "list"
                         ,DEtables = "list"
                         ,PromoterShift = "list"
+                        ,TAGtable = "list"
          ),
          prototype(genomeName = character()
                    ,inputFiles = character()
@@ -119,6 +120,7 @@ setClass(Class = "TSSr",
                    ,filteredClusters = list()
                    ,DEtables = list()
                    ,PromoterShift = list()
+                   ,TAGtable = list()
          ),
          validity=function(object){
            supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
