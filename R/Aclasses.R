@@ -74,6 +74,7 @@
 #' @slot filteredClusters list.
 #' @slot DEtables list.
 #' @slot PromoterShift list.
+#' @slot TAGtables list
 #' @docType class
 #' @name TSSr-class
 #' @rdname TSSr-class
@@ -99,7 +100,7 @@ setClass(Class = "TSSr",
                         ,filteredClusters = "list"
                         ,DEtables = "list"
                         ,PromoterShift = "list"
-                        ,TAGtable = "list"
+                        ,TAGtables = "list"
          ),
          prototype(genomeName = character()
                    ,inputFiles = character()
@@ -120,7 +121,7 @@ setClass(Class = "TSSr",
                    ,filteredClusters = list()
                    ,DEtables = list()
                    ,PromoterShift = list()
-                   ,TAGtable = list()
+                   ,TAGtables = list()
          ),
          validity=function(object){
            supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
