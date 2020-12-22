@@ -13,19 +13,22 @@
   ##get raw count tables
   ## save the tagCount results
   
-    if(samplex%in%names(myTSSr@TAGtables)){
-       xCounts<-myTSSr@TAGtables[[which(names(myTSSr@TAGtables)==samplex)]]
-      } else{
-             xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
-             myTSSr@TAGtables[[samplex]]<-xCounts
-             }
+   sampleX <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
+   sampleY <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
 
-   if(sampley%in%names(myTSSr@TAGtables)){
-             yCounts<-myTSSr@TAGtables[[which(names(myTSSr@TAGtables)==sampley)]]
+   if(all(samplex%in%sampleX)){
+     xCounts<-object@TAGtables[[which(names(object@TAGtables)==samplex)]]
      } else{
-             yCounts <-.tagCount(cx, tss.raw,sampley,useMultiCore, numCores)
-             myTSSr@TAGtables[[sampley]]<-yCounts
-            }
+           xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
+           object@TAGtables[[sampleOne]]<-xCounts
+     }
+
+   if(all(sampley%in%sampleY)){
+     yCounts<-object@TAGtables[[which(names(object@TAGtables)==sampley)]]
+     } else{
+            yCounts <-.tagCount(cx, tss.raw,sampley,useMultiCore, numCores)
+            object@TAGtables[[sampleTwo]]<-yCounts
+     }
 
   xCounts <- xCounts[,-c(2:11)]
   yCounts <- yCounts[,-c(2:11)]
