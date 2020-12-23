@@ -39,7 +39,7 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
     mergeIndex <- object@mergeIndex
     samplex <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == sampleOne))]
     sampley <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == sampleTwo))]
-    DE.dt <- .deseq2(cx,cy,tss.raw,samplex, sampley, sampleOne, sampleTwo,useMultiCore, numCores)
+    DE.dt <- .deseq2(object,cx,cy,tss.raw,samplex, sampley, sampleOne, sampleTwo,useMultiCore, numCores)
     DE.sig <- subset(DE.dt, padj < pval)
     DE.dt$gene <- row.names(DE.dt)
     DE.sig$gene <- row.names(DE.sig)
