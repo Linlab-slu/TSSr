@@ -9,7 +9,7 @@
 ##                              sampleOne <- "ScerBY4741",sampleTwo <- "ScerArrest")
 ############################################################################
 ##tss.raw is the raw tss merged tables, before any sums
-.deseq2 <- function(cx,cy, tss.raw, samplex,sampley, sampleOne,sampleTwo,useMultiCore, numCores){
+.deseq2 <- function(object,cx,cy, tss.raw, samplex,sampley, sampleOne,sampleTwo,useMultiCore, numCores){
   ##get raw count tables
   ## save the tagCount results
    sampleLabels <- object@sampleLabels
