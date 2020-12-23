@@ -14,6 +14,8 @@
   ## save the tagCount results
    sampleLabels <- object@sampleLabels
    sampleLabelsMerged <- object@sampleLabelsMerged
+   mergeIndex <- object@mergeIndex
+   
    sampleX <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
    sampleY <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
 
