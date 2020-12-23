@@ -12,7 +12,8 @@
 .deseq2 <- function(cx,cy, tss.raw, samplex,sampley, sampleOne,sampleTwo,useMultiCore, numCores){
   ##get raw count tables
   ## save the tagCount results
-  
+   sampleLabels <- object@sampleLabels
+   sampleLabelsMerged <- object@sampleLabelsMerged
    sampleX <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
    sampleY <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
 
