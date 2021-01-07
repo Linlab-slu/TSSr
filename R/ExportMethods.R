@@ -253,11 +253,12 @@ setGeneric("plotTSS",function(object,samples
                               ,genelist
                               ,Bidirection= TRUE
                               ,up.dis =500
-                              ,down.dis = 500)standardGeneric("plotTSS"))
+                              ,down.dis = 500
+                              ,yFixed)standardGeneric("plotTSS"))
 #' @rdname plotTSS
 #' @export
 setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssData, clusters, clusterThreshold
-                                                         , genelist, Bidirection, up.dis, down.dis){
+                                                         , genelist, Bidirection, up.dis, down.dis,yFixed){
   message("Plotting TSS graphs...")
   ##define variable as a NULL value
   gene_id = NULL
@@ -301,7 +302,7 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
       ,width = 10, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
   for (i in 1:nrow(ref)){
     df <- ref[i,]
-    .plotTSS(tss, cs,df, samples, Bidirection, up.dis, down.dis)
+    .plotTSS(tss, cs,df, samples, Bidirection, up.dis, down.dis,yFixed)
   }
   dev.off()
 })
