@@ -27,7 +27,7 @@
 ##ref table has at least 5 columns (gene,chr, start, end, strand)
 ##run script with the following example command:
 ##.plotTSS(tss.tpm,cs.cl, ref, up.dis = 500, down.dis=100)
-.plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis){
+.plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis,yFixed){
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
 
   if(df$strand == "+"){
@@ -56,6 +56,16 @@
     tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand)
                    & tss$pos >= p & tss$pos <= q,]
   }
+  
+  # setup y_range
+  if(yFixed==TRUE){
+    tss_sub1 <- tss_sub[,.SD, .SDcols = c(samples)]
+    max(tss_sub1)
+    y_range=c(0,max(tss_sub1))
+  }else{
+    y_range=NULL  
+  }
+  
   data_tss_track <- list()
   dtrack <- list()
   s <- c()
@@ -73,7 +83,7 @@
     data_tss_track <- makeGRangesFromDataFrame(temp,keep.extra.columns=TRUE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
                                                                start.field="pos",end.field=c("pos"),strand.field="strand",starts.in.df.are.0based=FALSE)
     dtrack <- DataTrack(data_tss_track, name = paste(samples[my.sample],"TSS", sep = " "),type = "h",col = rainbow(length(samples))[my.sample],baseline = 0,
-                                        col.baseline = "grey",col.title="black",col.axis = "black")
+                                        col.baseline = "grey",col.title="black",col.axis = "black",ylim = y_range)
     s <- c(s, atrack.cs, dtrack)
   }
   ##plot Genome range track, gene track, clusters track, TSS track
