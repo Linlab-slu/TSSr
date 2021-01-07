@@ -511,7 +511,7 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
   Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
 
-        > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)
+        > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
           
 ![06_TSS_graphs](./vigettes/figures/06_TSS_graphs.png){width=50%}
 
