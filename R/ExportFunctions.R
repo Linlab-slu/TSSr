@@ -58,11 +58,14 @@
   }
   
   # setup y_range
+  tss_sub1 <- tss_sub[,.SD, .SDcols = c(samples)]
   if(yFixed==TRUE){
-    tss_sub1 <- tss_sub[,.SD, .SDcols = c(samples)]
-    max(tss_sub1)
+    if(tss_sub$strand == "+"){
     y_range=c(0,max(tss_sub1))
-  }else{
+    } else {
+      y_range=c(min(tss_sub1),0)
+           }
+  } else {
     y_range=NULL  
   }
   
