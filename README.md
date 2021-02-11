@@ -1,8 +1,7 @@
 # TSSr: an R/Bioconductor package for comprehensive analyses of transcription start sit (TSS) data
 
-##### Zhaolian Lu, Keenan Berry, Tae-Hyuk Ahn, Zhenguo Lin
+##### Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk Ahn, Zhenguo Lin
 
-##### 28 June 2020
 
 ## 1. Intruduction
 
