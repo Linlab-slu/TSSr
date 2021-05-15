@@ -523,13 +523,13 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
         > exportShiftTable(myTSSr)
     
 
-## 7. Contact Author:
+## 7. Contact:
 
-Zhaolian Lu
+Zhenguo Lin, PhD
 
-Affiliation: Lin Lab, Department of Biology, Saint Louis University, MO, USA.
+Department of Biology, Saint Louis University, USA.
 
-Email: zhaolian.lu@slu.edu
+Email: zhenguo.lin@slu.edu
 
 ## 8. Reference:
 
