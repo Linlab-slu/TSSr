@@ -227,13 +227,13 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 	
         > plotCorrelation(myTSSr, samples = "all")
         
-![01_TSS_correlation_plot_of_all_samples](./vigettes/figures/01_TSS_correlation_plot_of_all_samples.png?raw=true){width=50%}
+![01_TSS_correlation_plot_of_all_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples.png){width=50%}
 
   To further explore the variation present in the TSS dataset and identify which samples are similar to each other and which samples are very different, we can apply plotPCA function to plot principle component analysis among all samples. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of PC1 and PC2 and simultaneously show how each variable contributes to each principal component.
   
     > plotTssPCA(myTSSr, TSS.threshold=10)
 
-![02_PCA_plot](./vigettes/figures/02_PCA_plot.png){width=50%}
+![02_PCA_plot](https://raw.githubusercontent.com/Linlab-slu/TSSr/master/vignettes/figures/02_PCA_plot.png){width=50%}
 
   Based on the calculated correlations, two replicates are highly correlated. To facilitate the downstream analysis and comparisons between different growth condition, we merge the two replicates for each growth condition together with mergeSamples function. mergeIndex argument directs which samples will be merged and how the final dataset will be ordered accordingly.
   
@@ -349,7 +349,7 @@ This clustering step might be slow especially when the number of TSSs is in mill
 
         > plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
     
-![03_Interquantile_plot_of_ALL_samples](./vigettes/figures/03_Interquantile_plot_of_ALL_samples.png){width=50%}
+![03_Interquantile_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples.png){width=50%}
 
   Another way to characterize core promoter shape is shape index (SI) which is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.
 
@@ -389,7 +389,7 @@ This clustering step might be slow especially when the number of TSSs is in mill
 
         > plotShape(myTSSr)
     
-![04_Shape_plot_of_ALL_samples](./vigettes/figures/04_Shape_plot_of_ALL_samples.png){width=50%}
+![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples.png){width=50%}
 
 		    > exportShapeTable(myTSSr)
 
@@ -453,7 +453,7 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
         > exportDETable(myTSSr, data = "sig")
 
-![05_Volcano_plot](./vigettes/figures/05_Volcano_plot.png){width=50%}
+![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot.png){width=50%}
 
 * Core promoter shifts
 
@@ -512,7 +512,7 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
         > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
           
-![06_TSS_graphs](./vigettes/figures/06_TSS_graphs.png){width=50%}
+![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs.png){width=50%}
 
   Results of core promoter shift analysis can also be exported to a text file with exportShiftTable function.
         
