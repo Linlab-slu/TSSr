@@ -56,5 +56,6 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
   })
   names(D) <- D.names
   object@DEtables <- D
+  object@TAGtables <- object@TAGtables
   assign(objName, object, envir = parent.frame())
 })
