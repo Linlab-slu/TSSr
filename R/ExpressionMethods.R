@@ -55,6 +55,9 @@ D.names <- sapply(as.list(seq(comparePairs)), function(i){
 })
 names(D) <- D.names
 object@DEtables <- D
+load("TAGtable_temp.RData")
+object@TAGtables <- TAGtables
+file.remove("TAGtable_temp.RData")
 assign(objName, object, envir = parent.frame())
 
 })
