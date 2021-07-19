@@ -131,9 +131,7 @@
 ############################################################################
 .deseq2_test <- function(object,cx,cy, tss.raw, samplex,sampley, sampleOne,sampleTwo,useMultiCore, numCores){
   ##get raw count tables
-  load("TAGtable_temp.RData")
-  #sampleX <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
-  #sampleY <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == names(object@TAGtables)))]
+  TAGtables <- object@TAGtables
   if(sampleOne%in%names(TAGtables)){
     xCounts<-TAGtables[[which(names(TAGtables)==sampleOne)]]
   } else{
