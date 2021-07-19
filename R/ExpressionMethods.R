@@ -27,7 +27,7 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
   objName <- deparse(substitute(object))
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
-  
+  mergeIndex <- object@mergeIndex
   ##define variable as a NULL value
   padj = NULL
   
