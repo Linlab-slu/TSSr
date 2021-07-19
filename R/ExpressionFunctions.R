@@ -128,3 +128,81 @@
   cs <- cbind(cs,tags)
   return(cs)
 }
+############################################################################
+#tagcounts for all genes for all samples
+genes_counts_for_DESeq2 <- function(object,useMultiCore,numCores){
+gene_raw_count <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
+  cx <- object@assignedClusters[[i]]
+  tss.raw <- object@TSSrawMatrix
+  mergeIndex <- object@mergeIndex
+  sampleOne <- sampleLabelsMerged[i]
+  samplex <- sampleLabels[which(mergeIndex ==which(sampleLabelsMerged == sampleOne))]
+  xCounts <-.tagCount_updated(cx, tss.raw,samplex,useMultiCore, numCores)
+  xCounts <- xCounts[,-c(2:11)]
+  ##tag counts by gene for sampleOne
+  setkey(xCounts, gene)
+  if(useMultiCore){
+    if(is.null(numCores)){
+      numCores <- detectCores()
+    }
+    one_temp <- mclapply(as.list(unique(xCounts$gene)), function(my.gene) {
+      data <- xCounts[list(my.gene)]
+      return(c(my.gene,colSums(data[,-c(1,2,3)])))
+    }, mc.cores = numCores)
+  }else{
+    one_temp <- lapply(as.list(unique(xCounts$gene)), function(my.gene) {
+      data <- xCounts[list(my.gene)]
+      return(c(my.gene,colSums(data[,-c(1,2,3)])))
+    })
+  }
+  one_temp <- data.frame(matrix(unlist(one_temp), nrow=length(one_temp), byrow=T),stringsAsFactors=FALSE)
+  one_temp <- as.data.frame(one_temp)
+  colnames(one_temp) <- c("gene",samplex)
+  return(one_temp)
+})
+names(gene_raw_count) <- sampleLabelsMerged
+object@TAGtables <- gene_raw_count
+}
+############################################################################
+##.tagCount updated
+.tagCount_updated <- function(cs, tss.raw, samples, useMultiCore, numCores){
+  cols <- c("chr","pos","strand", samples)
+  tss1 <- tss.raw[,.SD, .SDcols = cols]
+  #exclude rows with no count
+  tss1$tag_sum <- rowSums(tss1[, -c(1,2,3)])
+  tss <- tss1  %>%
+    filter(tag_sum != 0)
+  tss$tag_sum<- NULL
+  ##define variable as a NULL value
+  chr = strand = start = end = NULL
+  if(useMultiCore){
+    if(is.null(numCores)){
+      numCores <- detectCores()
+    }
+    print(paste("process is running on",numCores, "cores..."))
+    tags <- mclapply(seq_len(cs[,.N]),function(r){
+      data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]
+      temp <- sapply(as.list(samples), function(s){
+        sum(data[,.SD,.SDcols = s])
+      })
+      return(temp)
+    }, mc.cores = numCores)
+    
+  }else{
+    tags <- lapply(seq_len(cs[,.N]),function(r){
+      data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]
+      temp <- sapply(as.list(samples), function(s){
+        sum(data[,.SD,.SDcols = s])
+      })
+      return(temp)
+    })
+  }
+  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=T),stringsAsFactors=FALSE)
+  colnames(tags) <- samples
+  cs <- cbind(cs,tags)
+  return(cs)
+}
+
+
+
+
