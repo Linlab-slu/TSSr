@@ -35,7 +35,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
   for (chrom in 1:length(Genome)) {
     genomeSize <- genomeSize + length(Genome[[chrom]])
   }
-  tss.dt <- object@TSSrawMatrix
+  tss.dt <- object@TSSprocessedMatrix
   ##define variable as a NULL value
   tags = NULL
 
