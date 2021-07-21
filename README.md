@@ -227,7 +227,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
         # 171540: chrII 812805      -    0    0    0    1
         # 171541: chrII 812818      -    0    0    0    1
 
-	To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kedall”, or “spearman”.
+	To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”.
 	
         > plotCorrelation(myTSSr, samples = "all")
         
