@@ -24,7 +24,7 @@ setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex
   sampleLabels <- object@sampleLabels
   sampleLabelsMerged <- object@sampleLabelsMerged
 
-  tss <- object@TSSprocessedMatrix
+  tss <- object@TSSrawMatrix
 
   objName <- deparse(substitute(object))
   if(length(mergeIndex) != length(sampleLabels)){
