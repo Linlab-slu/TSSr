@@ -94,8 +94,7 @@
   tss1 <- tss.raw[,.SD, .SDcols = cols]
   #exclude rows with no count
   tss1$tag_sum <- rowSums(tss1[, -c(1,2,3)])
-  tss <- tss1  %>%
-    filter(tag_sum != 0)
+  tss <- tss1  %>% dplyr::filter(tag_sum != 0)
   tss$tag_sum<- NULL
   ##define variable as a NULL value
   chr = strand = start = end = NULL
