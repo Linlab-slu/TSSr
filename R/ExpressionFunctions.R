@@ -89,7 +89,7 @@
 
 ############################################################################
 ##.tagCount updated
-.tagCount <- function(cs, tss.raw, samples, useMultiCore, numCores){
+.tagCount_updated <- function(cs, tss.raw, samples, useMultiCore, numCores){
   cols <- c("chr","pos","strand", samples)
   tss1 <- tss.raw[,.SD, .SDcols = cols]
   #exclude rows with no count
@@ -126,6 +126,40 @@
   return(cs)
 }
 
+##.tagCount is slow
+.tagCount <- function(cs, tss.raw, samples, useMultiCore, numCores){
+  cols <- c("chr","pos","strand", samples)
+  tss <- tss.raw[,.SD, .SDcols = cols]
+  ##define variable as a NULL value
+  chr = strand = start = end = NULL
+
+  if(useMultiCore){
+    if(is.null(numCores)){
+      numCores <- detectCores()
+    }
+    print(paste("process is running on",numCores, "cores..."))
+    tags <- mclapply(seq_len(cs[,.N]),function(r){
+      data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]
+      temp <- sapply(as.list(samples), function(s){
+        sum(data[,.SD,.SDcols = s])
+      })
+      return(temp)
+    }, mc.cores = numCores)
+
+  }else{
+    tags <- lapply(seq_len(cs[,.N]),function(r){
+      data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]
+      temp <- sapply(as.list(samples), function(s){
+        sum(data[,.SD,.SDcols = s])
+      })
+      return(temp)
+    })
+  }
+  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=T),stringsAsFactors=FALSE)
+  colnames(tags) <- samples
+  cs <- cbind(cs,tags)
+  return(cs)
+}
 
 
 
