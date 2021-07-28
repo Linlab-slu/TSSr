@@ -16,7 +16,7 @@
   if(sampleOne%in%names(TAGtables)){
     xCounts<-TAGtables[[which(names(TAGtables)==sampleOne)]]
   } else{
-    xCounts <-.tagCount(cx, tss.raw,samplex,useMultiCore, numCores)
+    xCounts <-.tagCount_updated(cx, tss.raw,samplex,useMultiCore, numCores)
     ## save the tagCount results
     TAGtables[[sampleOne]]<-xCounts
   }
@@ -24,7 +24,7 @@
   if(sampleTwo%in%names(TAGtables)){
     yCounts<-TAGtables[[which(names(TAGtables)==sampleTwo)]]
   } else{
-    yCounts <-.tagCount(cy, tss.raw,sampley,useMultiCore, numCores)
+    yCounts <-.tagCount_updated(cy, tss.raw,sampley,useMultiCore, numCores)
     TAGtables[[sampleTwo]]<-yCounts
   }
   #save TAGtable as temp file
