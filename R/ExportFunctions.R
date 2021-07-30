@@ -1,8 +1,10 @@
 ##########################################################################################################
-.plotCorrelation <- function(TSS.all.samples){
+.plotCorrelation <- function(TSS.all.samples)
+{
   z <- TSS.all.samples[,-c(1:3)]
   # Customize lower panel
-  panel.cor <- function(x, y){
+  panel.cor <- function(x, y)
+  {
     usr <- par("usr"); on.exit(par(usr))
     par(usr = c(0, 1, 0, 1), xlog = FALSE, ylog = FALSE)
     r <- round(cor(x, y), digits=2)
@@ -11,7 +13,8 @@
     text(0.5, 0.5, txt, cex = cex.cor * r)
   }
   # Customize upper panel
-  upper.panel<-function(x, y){
+  upper.panel<-function(x, y)
+  {
     points(x,y, pch = ".",col = "#00AFBB")
   }
   # Create the plots
@@ -22,76 +25,103 @@
 ###################################################################################################################
 ##.plotTSS function plots TSS graph
 ##.plotTSS function takes three input files, tss.tpm, cs, and ref
-##tss.tpm table has at least 4 columns (chr, pos, strand, tpm). tpm value is negative in minus strand
+##tss.tpm table has at least 4 columns (chr, pos, strand, tpm). tpm value is negative in the minus strand
 ##cs table has 11 columns (cluster,chr,start,end,strand,dominant_tss,tpm,tpm.dominant_tss,q_0.1,q_0.9,interquantile_width)
 ##ref table has at least 5 columns (gene,chr, start, end, strand)
 ##run script with the following example command:
 ##.plotTSS(tss.tpm,cs.cl, ref, up.dis = 500, down.dis=100)
-.plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis,yFixed){
+.plotTSS <- function(tss, cs,df, samples, Bidirection, up.dis, down.dis,yFixed)
+{
   setnames(df, colnames(df)[c(1,6)], c("chr","gene"))
 
-  if(df$strand == "+"){
+  if(df$strand == "+")
+  {
     p <- df$start - up.dis
     q <- df$end + down.dis
-  }else{
+  }
+  else
+  {
     p <- df$start - down.dis
     q <- df$end + up.dis
   }
-  ##Genome range track
-  range.gr <- GRanges(seqnames = as.character(df$chr),ranges = IRanges(start = p,end = q),strand = as.character(df$strand))
+  ##Genome range (genomic coordinates) track
+  range.gr <- GRanges(seqnames = as.character(df$chr),
+                      ranges = IRanges(start = p,end = q),
+                      strand = as.character(df$strand))
   gtrack <- GenomeAxisTrack(range = range.gr,fontcolor = "black")
-  ##GeneRegion track
+  ##Gene region track
   gene.gr <- makeGRangesFromDataFrame(df,keep.extra.columns=FALSE,ignore.strand=FALSE,
                                       seqinfo=NULL,seqnames.field=c("chr"),
                                       start.field="start",end.field=c("end"),
                                       strand.field="strand",starts.in.df.are.0based=FALSE)
   atrack.gene <- GeneRegionTrack(gene.gr, name = "gene",col.title="black",
                                  transcriptAnnotation = "gene")
-  ##cluster and Data track
-  if(Bidirection == TRUE){
-    tss_sub <- tss[tss$chr == as.character(df$chr)
-                   & tss$pos >= p & tss$pos <= q,]
+  ##TSS cluster track and TSS Data track
+  if(Bidirection == TRUE)
+  {
+    tss_sub <- tss[tss$chr == as.character(df$chr) & tss$pos >= p & tss$pos <= q,]
     tss_sub[, strand:= df$strand]
-  }else{
-    tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand)
-                   & tss$pos >= p & tss$pos <= q,]
+  }
+  else
+  {
+    tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand) & tss$pos >= p & tss$pos <= q,]
   }
   
   # setup y_range
+  # To hide TSS signals of the opposite strand, change "min(tss_sub1)" to "0" for positive strand and change "max(tss_sub1)" to "0" for negative strand
   tss_sub1 <- tss_sub[,.SD, .SDcols = c(samples)]
-  if(yFixed==TRUE){
-    if(tss_sub$strand == "+"){
-    y_range=c(0,max(tss_sub1))
-    } else {
-      y_range=c(min(tss_sub1),0)
-           }
-  } else {
+  if(yFixed==TRUE)
+  {
+    if(tss_sub$strand == "+")
+    {
+    y_range=c(min(tss_sub1),max(tss_sub1))
+    } 
+    else 
+    {
+      y_range=c(min(tss_sub1),max(tss_sub1))
+     }
+  } 
+  else 
+  {
     y_range=NULL  
   }
   
   data_tss_track <- list()
   dtrack <- list()
   s <- c()
-  for (my.sample in seq(samples)){
-    ##clusters track
+  for (my.sample in seq(samples))
+  {
+    ##TSS cluster track
     cs.temp <- cs[[samples[my.sample]]]
     cs_sub <- cs.temp[cs.temp$chr == as.character(df$chr) & cs.temp$strand == as.character(df$strand) & cs.temp$q_0.1 >= p & cs.temp$q_0.9 <= q,]
-    cs.gr <- makeGRangesFromDataFrame(cs_sub,keep.extra.columns=FALSE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
-                                            start.field="q_0.1",end.field=c("q_0.9"),strand.field="strand",starts.in.df.are.0based=FALSE)
+    cs.gr <- makeGRangesFromDataFrame(cs_sub,keep.extra.columns=FALSE,
+                                      ignore.strand=FALSE,seqinfo=NULL,
+                                      seqnames.field=c("chr"),
+                                      start.field="q_0.1",end.field=c("q_0.9"),
+                                      strand.field="strand",
+                                      starts.in.df.are.0based=FALSE)
     # atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),col.title="black")
     atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),
                                  id = cs_sub$cluster, col.title="black")
-    ##tss track
+    ##TSS track
     temp <- tss_sub[,.SD, .SDcols = c("chr","pos","strand",samples[my.sample])]
-    data_tss_track <- makeGRangesFromDataFrame(temp,keep.extra.columns=TRUE,ignore.strand=FALSE,seqinfo=NULL,seqnames.field=c("chr"),
-                                                               start.field="pos",end.field=c("pos"),strand.field="strand",starts.in.df.are.0based=FALSE)
-    dtrack <- DataTrack(data_tss_track, name = paste(samples[my.sample],"TSS", sep = " "),type = "h",col = rainbow(length(samples))[my.sample],baseline = 0,
-                                        col.baseline = "grey",col.title="black",col.axis = "black",ylim = y_range)
+    data_tss_track <- makeGRangesFromDataFrame(temp,keep.extra.columns=TRUE,
+                                               ignore.strand=FALSE,seqinfo=NULL,
+                                               seqnames.field=c("chr"),
+                                               start.field="pos",end.field=c("pos"),
+                                               strand.field="strand",starts.in.df.are.0based=FALSE)
+    dtrack <- DataTrack(data_tss_track, name = paste(samples[my.sample],"TSS (TPM)", sep = "\n"),
+                        type = "h",col = rainbow(length(samples))[my.sample],
+                        baseline = 0,col.baseline = "grey",
+                        col.title="black",col.axis = "black",ylim = y_range)
     s <- c(s, atrack.cs, dtrack)
   }
   ##plot Genome range track, gene track, clusters track, TSS track
-  plotTracks(c(list(gtrack, atrack.gene),s),main = df$gene,
-             featureAnnotation="id",fontcolor.feature="black", cex.feature=0.7, shape = "arrow")
+  plotTracks(c(list(gtrack, atrack.gene),s),
+             main = df$gene,
+             featureAnnotation="id",
+             fontcolor.feature="black", 
+             cex.feature=0.7, shape = "arrow")
 }
 ###################################################################################################################
 .getBed <- function(p){
