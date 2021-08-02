@@ -23,18 +23,18 @@ TSSr package provides a comprehensive workflow on TSS data starts from identific
 
   * install by using the following R commands:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("Rsamtools")
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("Rsamtools")
   
 
 - GenomicRanges
 
   * install by using the following R commands:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("GenomicRanges")
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("GenomicRanges")
 
 - GenomicFeature package
 
@@ -48,52 +48,52 @@ TSSr package provides a comprehensive workflow on TSS data starts from identific
 
   * install by using the following R commands:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("Gviz")  
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("Gviz")  
 
 - rtracklayer package
 
   * install by using the following R commands:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("rtracklayer")
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("rtracklayer")
 
 - DESeq2 package:
 
   * install by using the following R command:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("DESeq2")
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("DESeq2")
 
 - BSgenome package
 
   * install by using the following R command:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
-        > install.packages("BiocManager")
-        > BiocManager::install("BSgenome")
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install("BSgenome")
 
 - data.table package
 
   * install by using the following R command:
 
-        > install.packages("data.table")  
+        install.packages("data.table")  
 
 - stringr package:
 
   * install by using the following R command:
 
-        > install.packages("stringr")
+        install.packages("stringr")
 
 ## 3. Installing TSSr Package:
 
 To install the TSSr package all the prerequisites above need to be installed.
 After confirming those packages are installed, you can install the development version directly from GitHub using devtools:
 
-        > devtools::install_github("Linlab-slu/TSSr")
+        devtools::install_github("Linlab-slu/TSSr")
 
 ## 4. Input data for TSSr
 
@@ -118,19 +118,19 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
 * Launch TSSr
 
-        > library(TSSr)
+        library(TSSr)
       
 * An example TSSr object "exampleTSSr" was provided with the package. Users may use the example TSSr object to explore the fucntions of TSSr. 
 
-        > myTSSr <- exampleTSSr
+        myTSSr <- exampleTSSr
         
 * To creat a new TSSr object, users will need to generate a new input files "inputFiles" that contains the path and file names of input files. We provided for example bam files. The four example bam files (S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam) can be downloaded from http://zlinlab.org/TSSr.html.
 
-        > inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam")
+        inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam")
 
 * The TSSr object is created with the constructer function new, which requires information on reference genome name, input file path, input file type, samples labels, sampleLabelsMerged (if samples are to be merged), annotation file path (if annotateCluster is to be called), organism name (if annotateCluster is to be called).
 
-        > myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
+        myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 	              ,inputFiles = inputFiles
 	              ,inputFilesType= "bam"
 	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
@@ -141,7 +141,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 	
 	To display the available slots in the created TSSr object:
 	
-	     > myTSSr
+	     myTSSr
 	      
 	      # An object of class "TSSr"
         # Slot "genomeName":
@@ -210,9 +210,9 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
 	To read input files into the TSSr object, we use getTSS function, which retrieves TSS coordinates and tag counts from multiple samples into one data table.
 	
-        > getTSS(myTSSr)
+        getTSS(myTSSr)
         
-        > myTSSr@TSSrawMatrix
+        myTSSr@TSSrawMatrix
         
         # chr    pos strand SL01 SL02 SL03 SL04
         # 1:  chrI   1561      +    0    0    0    1
@@ -229,21 +229,21 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
 	To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”.
 	
-        > plotCorrelation(myTSSr, samples = "all")
+        plotCorrelation(myTSSr, samples = "all")
         
 ![01_TSS_correlation_plot_of_all_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples.png){width=50%}
 
   To further explore the variation present in the TSS dataset and identify which samples are similar to each other and which samples are very different, we can apply plotPCA function to plot principle component analysis among all samples. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of PC1 and PC2 and simultaneously show how each variable contributes to each principal component.
   
-    > plotTssPCA(myTSSr, TSS.threshold=10)
+    plotTssPCA(myTSSr, TSS.threshold=10)
 
 ![02_PCA_plot](https://raw.githubusercontent.com/Linlab-slu/TSSr/master/vignettes/figures/02_PCA_plot.png){width=50%}
 
   Based on the calculated correlations, two replicates are highly correlated. To facilitate the downstream analysis and comparisons between different growth condition, we merge the two replicates for each growth condition together with mergeSamples function. mergeIndex argument directs which samples will be merged and how the final dataset will be ordered accordingly.
   
-        > mergeSamples(myTSSr)
+        mergeSamples(myTSSr)
         
-        > myTSSr@TSSprocessedMatrix
+        myTSSr@TSSprocessedMatrix
         
         # chr    pos strand control treat
         # 1:  chrI   1561      +       0     1
@@ -260,18 +260,18 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
   To return library sizes (number of total sequenced tags) of each sample in TSSr object in the specified order (note: order is specified in mergeSample function):
 
-        > myTSSr@librarySizes
+        myTSSr@librarySizes
         # [1] 3353873 5563702
 
   Library sizes among different samples are different. To make samples comparable, we use normalizeTSS function to scale TSS raw counts by tags per million (TPM).
 
-        > normalizeTSS(myTSSr)
+        normalizeTSS(myTSSr)
         
   There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: “poisson” or “TPM”. 
 
-        > filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
+        filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
     
-        > myTSSr@TSSprocessedMatrix
+        myTSSr@TSSprocessedMatrix
         
         # chr    pos strand  control    treat
         # 1:  chrI   1561      + 0.000000 0.179736
@@ -288,9 +288,9 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 
   The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).    
 
-        > exportTSStable(myTSSr, data = "raw", merged = "TRUE")
-        > exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
-        > exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
+        exportTSStable(myTSSr, data = "raw", merged = "TRUE")
+        exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
+        exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
         
 * TSS clustering
 
@@ -298,11 +298,11 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
 We will perform peak-based clustering with clusterTSS function using 100bp as the minimal range within which there is at most one peaks and use an extension distance 30bp to join neighboring TSSs into the peak defined clusters. We implement another layer of local filtering which rules out weak TSS signals downstream of peaks that are potentially brought out from recapping and are always considered as noise. After clustering, clusters below cluster Threshold will be filtered out. clusterTSS function generates a set of clusters for each sample separately. In each cluster, clusterTSS function returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths.
 This clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
 
-        > clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
+        clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02,clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
 	           
-        > myTSSr@tagClusters
+        myTSSr@tagClusters
         
         # $`control`
         # cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width
@@ -332,26 +332,26 @@ This clustering step might be slow especially when the number of TSSs is in mill
         # 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255
         # # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9
 
-		    > exportClustersTable(myTSSr, data = "assigned")
+		    exportClustersTable(myTSSr, data = "assigned")
 		    
-		    > exportClustersToBed(myTSSr, data = "tagClusters")
+		    exportClustersToBed(myTSSr, data = "tagClusters")
 
 * Aggregating consensus clusters
 
   TSSs are clustered into tag clusters for each sample individually and they are often sample-specific. To make clusters comparable between samples, we will use consensusCluster function to generate a single set of consensus clusters. Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
   
-        > consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
+        consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 		    
   Tag clusters and consensus cluster with quantile positions can be exported to either text tables or BED tracks which can be visualized in the UCSC Genome Browser and IGV. 
 
-		    > exportClustersToBed(myTSSr, data = "consensusClusters")
+		    exportClustersToBed(myTSSr, data = "consensusClusters")
 
 
 * Core promoter shape
 
   According to the distribution of TSSs within a core promoter (cluster), termed as core promoter shape, core promoters were generally classified into sharp core promoters and broad core promoters. TSSr implements three methods to characterize core promoter shape. The simplest way is to use interquantile width representing core promoter shape. plotInterQuantile function plots interquantile width of each sample.
 
-        > plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
+        plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
     
 ![03_Interquantile_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples.png){width=50%}
 
@@ -359,9 +359,9 @@ This clustering step might be slow especially when the number of TSSs is in mill
 
   By integrating both inter quantile width and the observed probabilities of tags at every TSSs within a cluster, we developed a new metric called promoter shape score (PSS) to describe core promoter shape (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.
   
-        > shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
+        shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
 
-        > myTSSr@clusterShape
+        myTSSr@clusterShape
         
         # $`control`
         # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score
@@ -391,22 +391,22 @@ This clustering step might be slow especially when the number of TSSs is in mill
         # 3383: 2531 chrI 226791 226810  -  226805 1.437890   0.359473 226791 226810     20 -0.5000000
         # 3384: 2532 chrI 227249 227300  -  227270 6.290774   1.977101 227258 227276     19 -0.2658030
 
-        > plotShape(myTSSr)
+        plotShape(myTSSr)
     
 ![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples.png){width=50%}
 
-		    > exportShapeTable(myTSSr)
+		    exportShapeTable(myTSSr)
 
 * Annotation
 
   TSSr identifies TSSs and therefore detect core promoters. However, the current databases are mainly on gene levels instead of TSS or core promoter levels. annorateCluster function is used to associate core promoters to genes. Since annotated genes in Saccharomyces cerevisiae GFF annotation file don’t contain 5’ untranslated region (UTR), that is, the first genomic position of each gene in annotations is start position of translation. Therefore, in order to associate clusters to genes, we specify the upstream distance as 1000 and downstream distance as 0. The 1000 bp region is defined as core promoter region. In case of overlapping with upstream genes, we specify upstreamOverlap argument as 500 representing only considering the first 500 bp regions as core promoter region if it is overlapped with upstream genes.
 To reduce transcriptional or technical noise of small clusters downstream a strong cluster, we apply filterCluster argument and set filterClusterThreshold as 0.02, representing clusters in which total tags lower than the strong cluster*0.02 will be filtered out.
 
-        > annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
+        annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
 	                filterClusterThreshold = 0.02, annotationType = "genes"
 	                ,upstream=1000, upstreamOverlap = 500, downstream = 0)
 	                
-        > myTSSr@assignedClusters
+        myTSSr@assignedClusters
         
         # $`control`
         # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene
@@ -440,22 +440,22 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
                   
   A function of exportClustersTable is provided to export cluster tables with associated gene information.
         
-        > exportClustersTable(myTSSr, data = "assigned")
+        exportClustersTable(myTSSr, data = "assigned")
 
 * Differential expression analysis
 
   The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis. 
         
-        > deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+        deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
         
   Differential expression analysis results can be visualized by plotDE function which generates a volcano plots. Names of genes differential expressed between the compared pairs are displayed on the dots when the withGeneName argument is set as TRUE.  
 
-        > plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))
+        plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))
 
 
   Differential expression analysis results can also be exported to a text file with exportDETable function. 
 
-        > exportDETable(myTSSr, data = "sig")
+        exportDETable(myTSSr, data = "sig")
 
 ![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot.png){width=50%}
 
@@ -463,9 +463,9 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
   One gene might have multiple core promoters which can be used differently in different samples. TSSr implements degree of shift (Ds) algorithm (Lu and Lin 2019) to quantify the degree of promoter shift across different samples.
 
-        > shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+        shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
                 
-        > myTSSr@PromoterShift
+        myTSSr@PromoterShift
         
         # $`control_VS_treat`
         # gene                  Ds                  pval          padj
@@ -514,13 +514,13 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 
   Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
 
-        > plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
+        plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
           
 ![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs.png){width=50%}
 
   Results of core promoter shift analysis can also be exported to a text file with exportShiftTable function.
         
-        > exportShiftTable(myTSSr)
+        exportShiftTable(myTSSr)
     
 
 ## 7. Contact:

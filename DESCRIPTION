@@ -1,7 +1,7 @@
 Package: TSSr
 Type: Package
 Title: TSS sequencing data analysis
-Version: 0.1.0
+Version: 0.99.0
 biocViews: Software, Transcription, Coverage, GeneExpression,
         GeneRegulation, PeakDetection, DataImport, DataRepresentation,
         Transcriptomics, Sequencing, Annotation, GenomeBrowsers,
