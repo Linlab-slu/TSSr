@@ -23,7 +23,7 @@ TSSr package provides a comprehensive workflow on TSS data starts from identific
 
   * install by using the following R commands:
 
-        > if (!requireNamespace("BiocManager", quietly = TRUE))
+        if (!requireNamespace("BiocManager", quietly = TRUE))
         > install.packages("BiocManager")
         > BiocManager::install("Rsamtools")
   
