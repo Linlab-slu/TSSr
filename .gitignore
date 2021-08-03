@@ -4,8 +4,5 @@
 .Rhistory
 .Rproj.user
 .Rbuildignore
-Meta
-doc
-docs
-/doc/
-/Meta/
+
+
