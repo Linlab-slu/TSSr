@@ -8,16 +8,12 @@
 An object of class TSSr
 \describe{
   \item{exampleTSSr}{RangedSummarizedExperiment:TSSr}}
-
-An object of class \code{TSSr} of length 1.
 }
 \source{
 \url{https://genome.cshlp.org/content/29/7/1198.short}
 }
 \usage{
 data(exampleTSSr)
-
-exampleTSSr
 }
 \description{
 Subset of the CAGE dataset from the paper
@@ -25,5 +21,6 @@ Lu and Lin, Genome Research 2019 Jul;29(7):1198-1210.
 }
 \examples{
 data(exampleTSSr)
+exampleTSSr
 }
 \keyword{datasets}

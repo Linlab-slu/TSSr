@@ -16,4 +16,4 @@
 #' exampleTSSr
 
 #' @rdname exampleTSSr
-#' @export
+"exampleTSSr"

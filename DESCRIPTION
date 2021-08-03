@@ -1,24 +1,51 @@
-Package: TSSr
 Type: Package
-Title: TSS sequencing data analysis
+Package: TSSr
 Version: 0.99.0
-biocViews: Software, Transcription, Coverage, GeneExpression,
-        GeneRegulation, PeakDetection, DataImport, DataRepresentation,
-        Transcriptomics, Sequencing, Annotation, GenomeBrowsers,
-        Normalization, Preprocessing, Visualization
+Date: 2021-08-02
+Title: TSS sequencing data analysis
+Description: TSSr package provides a comprehensive workflow on TSS data starts from 
+        identification of accurate TSS locations, clustering TSSs within small genomic 
+        regions corresponding to core promoters, and transcriptional activity quantifications, 
+        as well as specialized downstream analyses including core promoter shape, cluster 
+        annotation, gene differential expression, core promoter shift. TSSr can take 
+        multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) 
+        files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig 
+        files, ctss files or tss tables. TSSr also generates various types of TSS or core 
+        promoter track files which can be visualized in the UCSC Genome Browser or Integrative 
+        Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. 
+        Multiple cores are supported on Linux or Mac platforms.
+Authors@R: c(person("Zhaolian","Lu",email="luzhaolian@gmail.com",role=c("aut","com")),
+             person("Keenan","Berry",email="keenan.berry@slu.edu",role=c("aut","com")),
+             person("Zhenbin","Hu",email="zhenbin.hu@slu.edu",role=c("aut","ctb")),
+             person("Yu","Zhan",email="yu.zhan@slu.edu",role=c("aut","ctb")),
+             person("Tae-Hyuk (Ted)","Ahn",email="ted.ahn@slu.edu",role=c("aut","cph")),
+	     person("Zhenguo","Lu",email="zhenguo.lin@slu.edu",role=c("aut","cre","cph"),
+	     comment = c(ORCID = "0000-0002-8400-9138")))
+Author: Zhaolian Lu [aut, cre], Keenan Berry [aut, com], 
+        Zhenbin Hu [aut, ctb], Yu Zhan [aut, ctb],
+        Tae-Hyuk (Ted) Ahn [aut, cph], Zhenguo Lin [aut, cre, cph]
+Maintainer: Zhenguo Lin <zhenguo.lin@slu.edu>
+License: UTF-8
+LazyData: TRUE
 Depends: R (>= 3.4)
 Imports: stringr, rtracklayer,ggplot2, GenomicFeatures, Gviz, DESeq2,
         BSgenome.Scerevisiae.UCSC.sacCer3, calibrate,ggfortify, IRanges,
         GenomicRanges, Rsamtools, GenomicAlignments, GenomeInfoDb,
         BiocGenerics, data.table, parallel, methods, grDevices, graphics, stats, utils
-Author: Zhaolian Lu <zhaolian.lu@slu.edu>, Keenan Berry <keenan.berry@slu.edu>, 
-        Tae-Hyuk (Ted) Ahn <ted.ahn@slu.edu>, Zhenguo Lin <zhenguo.lin@slu.edu>
-Maintainer: Zhaolian Lu <zhaolian.lu@slu.edu>
-Description: Identification of transcription start sites, normalization, filtering,
-              TSS clustering and downstream analysis of TSSs and core promoters.
-License: file LICENSE
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
 Suggests: knitr, rmarkdown
+Enhances: parallel
+biocViews: Software, Transcription, Coverage, GeneExpression,
+        GeneRegulation, PeakDetection, DataImport, DataRepresentation,
+        Transcriptomics, Sequencing, Annotation, GenomeBrowsers,
+        Normalization, Preprocessing, Visualization
+URL: https://github.com/Linlab-slu/TSSr
+BugReports: https://github.com/Linlab-slu/TSSr/issues
 VignetteBuilder: knitr
+RoxygenNote: 7.1.1
+NeedsCompilation: no
+git_url: https://github.com/Linlab-slu/TSSr
+git_branch: RELEASE_1
+git_last_commit: a5016e4
+git_last_commit_date: 2021-08-02
+Date/Publication: 2021-08-02
+Packaged: 2021-08-02 23:03:16 UTC; biocbuild
