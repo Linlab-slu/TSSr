@@ -6,3 +6,6 @@
 .Rbuildignore
 .git
 
+/doc/
+/Meta/
+docs
