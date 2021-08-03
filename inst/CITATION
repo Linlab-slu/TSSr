@@ -1,0 +1,19 @@
+citHeader("To cite package 'TSSr' in publications use:")
+
+citEntry(entry = "manual",
+  title        = "{TSSr}: TSS sequencing data analysis",
+  author       = personList(as.person("Zhaolian Lu"),
+                   as.person("Keenan Berry"),
+                   as.person("Zhenbin Hu"),
+                   as.person("Yu Zhan"),
+                   as.person("Tae-Hyuk (Ted) Ahn"),
+                   as.person("Zhenguo Lin")),
+  year         = "2021",
+  version      = "0.99.0",
+  url          = "https://github.com/Linlab-slu/TSSr",
+
+  textVersion  =
+  paste("Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk (Ted) Ahn and Zhenguo Lu (2021)",
+        "TSS sequencing data analysis. R package version 0.99.0.",
+        "URL https://github.com/Linlab-slu/TSSr")
+)

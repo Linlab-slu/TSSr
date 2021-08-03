@@ -12,8 +12,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="TSS sequencing data analysis">
-<meta property="og:description" content="Identification of transcription start sites, normalization, filtering,
-              TSS clustering and downstream analysis of TSSs and core promoters.">
+<meta property="og:description" content="TSSr package provides a comprehensive workflow on TSS data starts from 
+    identification of accurate TSS locations, clustering TSSs within small genomic 
+    regions corresponding to core promoters, and transcriptional activity quantifications, 
+    as well as specialized downstream analyses including core promoter shape, cluster 
+    annotation, gene differential expression, core promoter shift. TSSr can take 
+    multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) 
+    files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig 
+    files, ctss files or tss tables. TSSr also generates various types of TSS or core 
+    promoter track files which can be visualized in the UCSC Genome Browser or Integrative 
+    Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. 
+    Multiple cores are supported on Linux or Mac platforms.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -60,7 +69,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Linlab-slu/TSSr/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -621,7 +637,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/Linlab-slu/TSSr/">https://​github.com/​Linlab-slu/​TSSr/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/Linlab-slu/TSSr/issues">https://​github.com/​Linlab-slu/​TSSr/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>file <a href="LICENSE-text.html">LICENSE</a>
@@ -631,7 +656,12 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Zhaolian Lu <br><small class="roles"> Maintainer </small>  </li>
+<li>Zhaolian Lu <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Keenan Berry <br><small class="roles"> Author, compiler </small>  </li>
+<li>Zhenbin Hu <br><small class="roles"> Author, contributor </small>  </li>
+<li>Yu Zhan <br><small class="roles"> Author, contributor </small>  </li>
+<li>Tae-Hyuk (Ted) Ahn <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>Zhenguo Lu <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-8400-9138" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -640,7 +670,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Zhaolian Lu.</p>
+  <p>Developed by Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk (Ted) Ahn, Zhenguo Lu.</p>
 </div>
 
 <div class="pkgdown">

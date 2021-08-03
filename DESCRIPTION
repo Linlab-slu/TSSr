@@ -14,12 +14,13 @@ Description: TSSr package provides a comprehensive workflow on TSS data starts f
     promoter track files which can be visualized in the UCSC Genome Browser or Integrative 
     Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. 
     Multiple cores are supported on Linux or Mac platforms.
-Authors@R: c(person("Zhaolian","Lu",email="luzhaolian@gmail.com",role=c("aut","com")),
+Authors@R: c(person("Zhaolian","Lu",email="luzhaolian@gmail.com",role=c("aut","cre",
+                    comment = c(ORCID = "0000-0001-5002-7007"))),
              person("Keenan","Berry",email="keenan.berry@slu.edu",role=c("aut","com")),
              person("Zhenbin","Hu",email="zhenbin.hu@slu.edu",role=c("aut","ctb")),
              person("Yu","Zhan",email="yu.zhan@slu.edu",role=c("aut","ctb")),
              person("Tae-Hyuk (Ted)","Ahn",email="ted.ahn@slu.edu",role=c("aut","cph")),
-             person("Zhenguo","Lu",email="zhenguo.lin@slu.edu",role=c("aut","cre","cph"),
+             person("Zhenguo","Lin",email="zhenguo.lin@slu.edu",role=c("aut","cre","cph"),
                     comment = c(ORCID = "0000-0002-8400-9138")))
 Author: Zhaolian Lu [aut, cre], Keenan Berry [aut, com], 
     Zhenbin Hu [aut, ctb], Yu Zhan [aut, ctb],
@@ -27,7 +28,7 @@ Author: Zhaolian Lu [aut, cre], Keenan Berry [aut, com],
 Maintainer: Zhenguo Lin <zhenguo.lin@slu.edu>
 License: file LICENSE
 Encoding: UTF-8
-LazyData: true
+LazyData: FALSE
 Depends: R (>= 3.4)
 Imports: stringr, rtracklayer,ggplot2, GenomicFeatures, Gviz, DESeq2,
     BSgenome.Scerevisiae.UCSC.sacCer3, calibrate,ggfortify, IRanges,
