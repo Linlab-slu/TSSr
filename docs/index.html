@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">TSSr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -75,13 +75,9 @@
 <div id="tssr-an-rbioconductor-package-for-comprehensive-analyses-of-transcription-start-sit-tss-data" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#tssr-an-rbioconductor-package-for-comprehensive-analyses-of-transcription-start-sit-tss-data" class="anchor"></a>TSSr: an R/Bioconductor package for comprehensive analyses of transcription start sit (TSS) data</h1></div>
-<div id="zhaolian-lu-keenan-berry-tae-hyuk-ahn-zhenguo-lin" class="section level5">
+<div id="zhaolian-lu-keenan-berry-zhenbin-hu-yu-zhan-tae-hyuk-ahn-zhenguo-lin" class="section level5">
 <h5 class="hasAnchor">
-<a href="#zhaolian-lu-keenan-berry-tae-hyuk-ahn-zhenguo-lin" class="anchor"></a>Zhaolian Lu, Keenan Berry, Tae-Hyuk Ahn, Zhenguo Lin</h5>
-</div>
-<div id="28-june-2020" class="section level5">
-<h5 class="hasAnchor">
-<a href="#28-june-2020" class="anchor"></a>28 June 2020</h5>
+<a href="#zhaolian-lu-keenan-berry-zhenbin-hu-yu-zhan-tae-hyuk-ahn-zhenguo-lin" class="anchor"></a>Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk Ahn, Zhenguo Lin</h5>
 </div>
 <div id="1-intruduction" class="section level2">
 <h2 class="hasAnchor">
@@ -114,9 +110,11 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Rsamtools"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Rsamtools"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Rsamtools"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -125,9 +123,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicRanges"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicRanges"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -136,9 +134,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;</span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;</span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicFeatures"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"GenomicFeatures"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -147,9 +145,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Gviz"</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Gviz"</span>)  </span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -158,9 +156,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"rtracklayer"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"rtracklayer"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -169,9 +167,9 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"DESeq2"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"DESeq2"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -180,9 +178,9 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;</span><span class="st"> </span>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"BSgenome"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"BSgenome"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -191,7 +189,7 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"data.table"</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">install.packages</span>(<span class="st">"data.table"</span>)  </span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -200,7 +198,7 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"stringr"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">install.packages</span>(<span class="st">"stringr"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -210,7 +208,7 @@
 <h2 class="hasAnchor">
 <a href="#3-installing-tssr-package" class="anchor"></a>3. Installing TSSr Package:</h2>
 <p>To install the TSSr package all the prerequisites above need to be installed. After confirming those packages are installed, you can install the development version directly from GitHub using devtools:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>    <span class="op">&gt;</span><span class="st"> </span>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"Linlab-slu/TSSr"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>    devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"Linlab-slu/TSSr"</span>)</span></code></pre></div>
 </div>
 <div id="4-input-data-for-tssr" class="section level2">
 <h2 class="hasAnchor">
@@ -222,7 +220,7 @@
 </li>
 <li>
 <p>Reference genome</p>
-<p>In this tutorial, we will be using TSS data from Saccharomyces cerevisiae. Therefore, the corresponding genome package is BSgenome.Scerevisiae.UCSC.sacCer3. library(BSgenome.Scerevisiae.UCSC.sacCer3) In case the reference genome is not available in BSgenome package (not in the list returned by BSgenome::available.genomes() function), a custom genome has to be built and installed before run through this package. (See the vignette “How to forge a BSgenome data package” within the BSgenome package for instructions). Annotation file (GTF or GFF file) is required if annotateCluster function is called. We will use the annotation file of Saccharomyces cerevisiae which can be downloaded from SGD database (<a href="https://downloads.yeastgenome.org/curation/chromosomal_feature/saccharomyces_cerevisiae.gff" class="uri">https://downloads.yeastgenome.org/curation/chromosomal_feature/saccharomyces_cerevisiae.gff</a>).</p>
+<p>In this tutorial, we will be using TSS data from Saccharomyces cerevisiae. Therefore, the corresponding genome package is BSgenome.Scerevisiae.UCSC.sacCer3. library(BSgenome.Scerevisiae.UCSC.sacCer3) In case the reference genome is not available in BSgenome package (not in the list returned by BSgenome::available.genomes() function), a custom genome has to be built and installed before run through this package. (See the vignette “How to forge a BSgenome data package” within the BSgenome package for instructions). Annotation file (GTF or GFF file) is required if annotateCluster function is called. We will use the annotation file of Saccharomyces cerevisiae which can be downloaded from SGD database (<a href="http://sgd-archive.yeastgenome.org/curation/chromosomal_feature/saccharomyces_cerevisiae.gff.gz" class="uri">http://sgd-archive.yeastgenome.org/curation/chromosomal_feature/saccharomyces_cerevisiae.gff.gz</a>).</p>
 </li>
 <li>
 <p>S4 object</p>
@@ -236,370 +234,374 @@
 <ul>
 <li>
 <p>Launch TSSr</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(TSSr)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>  <span class="kw">library</span>(TSSr)</span></code></pre></div>
 </li>
 <li>
-<p>Creating a TSSr object with system data</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr &lt;-<span class="st"> </span>exampleTSSr</span></code></pre></div>
+<p>An example TSSr object “exampleTSSr” was provided with the package. Users may use the example TSSr object to explore the fucntions of TSSr.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>  myTSSr &lt;-<span class="st"> </span>exampleTSSr</span></code></pre></div>
 </li>
 <li>
-<p>Creating a TSSr object with self-defined input files. The TSSr object is created with the constructer function new, which requires information on reference genome name, input file path, input file type, samples labels, sampleLabelsMerged (if samples are to be merged), annotation file path (if annotateCluster is to be called), organism name (if annotateCluster is to be called).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"TSSr"</span>, <span class="dt">genomeName =</span> <span class="st">"BSgenome.Scerevisiae.UCSC.sacCer3"</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>            ,<span class="dt">inputFiles =</span> inputFiles</span>
-<span id="cb13-3"><a href="#cb13-3"></a>            ,<span class="dt">inputFilesType=</span> <span class="st">"bam"</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>            ,<span class="dt">sampleLabels =</span> <span class="kw">c</span>(<span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5"></a>            ,<span class="dt">sampleLabelsMerged =</span> <span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6"></a>            ,<span class="dt">mergeIndex =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>            ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>            ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</span></code></pre></div>
+<p>To creat a new TSSr object, users will need to generate a new input files “inputFiles” that contains the path and file names of input files. We provided for example bam files. The four example bam files (S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam) can be downloaded from <a href="http://zlinlab.org/TSSr.html" class="uri">http://zlinlab.org/TSSr.html</a>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>  inputFiles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"S01.sorted.bam"</span>, <span class="st">"S02.sorted.bam"</span>, <span class="st">"S03.sorted.bam"</span>, <span class="st">"S04.sorted.bam"</span>)</span></code></pre></div>
+</li>
+<li>
+<p>The TSSr object is created with the constructer function new, which requires information on reference genome name, input file path, input file type, samples labels, sampleLabelsMerged (if samples are to be merged), annotation file path (if annotateCluster is to be called), organism name (if annotateCluster is to be called).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>  myTSSr &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"TSSr"</span>, <span class="dt">genomeName =</span> <span class="st">"BSgenome.Scerevisiae.UCSC.sacCer3"</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>            ,<span class="dt">inputFiles =</span> inputFiles</span>
+<span id="cb14-3"><a href="#cb14-3"></a>            ,<span class="dt">inputFilesType=</span> <span class="st">"bam"</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>            ,<span class="dt">sampleLabels =</span> <span class="kw">c</span>(<span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>            ,<span class="dt">sampleLabelsMerged =</span> <span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>            ,<span class="dt">mergeIndex =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>            ,<span class="dt">refSource =</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a>            ,<span class="dt">organismName =</span> <span class="st">"saccharomyces cerevisiae"</span>)</span></code></pre></div>
 <p>To display the available slots in the created TSSr object:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>   <span class="op">&gt;</span><span class="st"> </span>myTSSr</span>
-<span id="cb14-2"><a href="#cb14-2"></a></span>
-<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># An object of class "TSSr"</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="co"># Slot "genomeName":</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="co">#   [1] "BSgenome.Scerevisiae.UCSC.sacCer3"</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>  <span class="co"># </span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>  <span class="co"># Slot "inputFiles":</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a>  <span class="co">#   [1] "S01.sorted.bam" "S02.sorted.bam" "S03.sorted.bam" "S04.sorted.bam"</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a>  <span class="co"># </span></span>
-<span id="cb14-10"><a href="#cb14-10"></a>  <span class="co"># Slot "inputFilesType":</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a>  <span class="co">#   [1] "bam"</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a>  <span class="co"># </span></span>
-<span id="cb14-13"><a href="#cb14-13"></a>  <span class="co"># Slot "sampleLabels":</span></span>
-<span id="cb14-14"><a href="#cb14-14"></a>  <span class="co">#   [1] "SL01" "SL02" "SL03" "SL04"</span></span>
-<span id="cb14-15"><a href="#cb14-15"></a>  <span class="co"># </span></span>
-<span id="cb14-16"><a href="#cb14-16"></a>  <span class="co"># Slot "sampleLabelsMerged":</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a>  <span class="co">#   [1] "control" "treat"  </span></span>
-<span id="cb14-18"><a href="#cb14-18"></a>  <span class="co"># </span></span>
-<span id="cb14-19"><a href="#cb14-19"></a>  <span class="co"># Slot "librarySizes":</span></span>
-<span id="cb14-20"><a href="#cb14-20"></a>  <span class="co">#   integer(0)</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a>  <span class="co"># </span></span>
-<span id="cb14-22"><a href="#cb14-22"></a>  <span class="co"># Slot "TSSrawMatrix":</span></span>
-<span id="cb14-23"><a href="#cb14-23"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
-<span id="cb14-24"><a href="#cb14-24"></a>  <span class="co"># </span></span>
-<span id="cb14-25"><a href="#cb14-25"></a>  <span class="co"># Slot "mergeIndex":</span></span>
-<span id="cb14-26"><a href="#cb14-26"></a>  <span class="co">#   numeric(0)</span></span>
-<span id="cb14-27"><a href="#cb14-27"></a>  <span class="co"># </span></span>
-<span id="cb14-28"><a href="#cb14-28"></a>  <span class="co"># Slot "TSSmergedMatrix":</span></span>
-<span id="cb14-29"><a href="#cb14-29"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
-<span id="cb14-30"><a href="#cb14-30"></a>  <span class="co"># </span></span>
-<span id="cb14-31"><a href="#cb14-31"></a>  <span class="co"># Slot "TSSnormalizedMatrix":</span></span>
-<span id="cb14-32"><a href="#cb14-32"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
-<span id="cb14-33"><a href="#cb14-33"></a>  <span class="co"># </span></span>
-<span id="cb14-34"><a href="#cb14-34"></a>  <span class="co"># Slot "TSSfilteredMatrix":</span></span>
-<span id="cb14-35"><a href="#cb14-35"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
-<span id="cb14-36"><a href="#cb14-36"></a>  <span class="co"># </span></span>
-<span id="cb14-37"><a href="#cb14-37"></a>  <span class="co"># Slot "tagClusters":</span></span>
-<span id="cb14-38"><a href="#cb14-38"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-39"><a href="#cb14-39"></a>  <span class="co"># </span></span>
-<span id="cb14-40"><a href="#cb14-40"></a>  <span class="co"># Slot "consensusClusters":</span></span>
-<span id="cb14-41"><a href="#cb14-41"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-42"><a href="#cb14-42"></a>  <span class="co"># </span></span>
-<span id="cb14-43"><a href="#cb14-43"></a>  <span class="co"># Slot "clusterShape":</span></span>
-<span id="cb14-44"><a href="#cb14-44"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-45"><a href="#cb14-45"></a>  <span class="co"># </span></span>
-<span id="cb14-46"><a href="#cb14-46"></a>  <span class="co"># Slot "refSource":</span></span>
-<span id="cb14-47"><a href="#cb14-47"></a>  <span class="co">#   [1] "saccharomyces_cerevisiae.SGD.gff"</span></span>
-<span id="cb14-48"><a href="#cb14-48"></a>  <span class="co"># </span></span>
-<span id="cb14-49"><a href="#cb14-49"></a>  <span class="co"># Slot "organismName":</span></span>
-<span id="cb14-50"><a href="#cb14-50"></a>  <span class="co">#   [1] "saccharomyces cerevisiae"</span></span>
-<span id="cb14-51"><a href="#cb14-51"></a>  <span class="co"># </span></span>
-<span id="cb14-52"><a href="#cb14-52"></a>  <span class="co"># Slot "assignedClusters":</span></span>
-<span id="cb14-53"><a href="#cb14-53"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-54"><a href="#cb14-54"></a>  <span class="co"># </span></span>
-<span id="cb14-55"><a href="#cb14-55"></a>  <span class="co"># Slot "unassignedClusters":</span></span>
-<span id="cb14-56"><a href="#cb14-56"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-57"><a href="#cb14-57"></a>  <span class="co"># </span></span>
-<span id="cb14-58"><a href="#cb14-58"></a>  <span class="co"># Slot "DEtables":</span></span>
-<span id="cb14-59"><a href="#cb14-59"></a>  <span class="co">#   list()</span></span>
-<span id="cb14-60"><a href="#cb14-60"></a>  <span class="co"># </span></span>
-<span id="cb14-61"><a href="#cb14-61"></a>  <span class="co"># Slot "PromoterShift":</span></span>
-<span id="cb14-62"><a href="#cb14-62"></a>  <span class="co">#   list()</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>   myTSSr</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="co"># An object of class "TSSr"</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="co"># Slot "genomeName":</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="co">#   [1] "BSgenome.Scerevisiae.UCSC.sacCer3"</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="co"># </span></span>
+<span id="cb15-7"><a href="#cb15-7"></a>  <span class="co"># Slot "inputFiles":</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>  <span class="co">#   [1] "S01.sorted.bam" "S02.sorted.bam" "S03.sorted.bam" "S04.sorted.bam"</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>  <span class="co"># </span></span>
+<span id="cb15-10"><a href="#cb15-10"></a>  <span class="co"># Slot "inputFilesType":</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a>  <span class="co">#   [1] "bam"</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a>  <span class="co"># </span></span>
+<span id="cb15-13"><a href="#cb15-13"></a>  <span class="co"># Slot "sampleLabels":</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a>  <span class="co">#   [1] "SL01" "SL02" "SL03" "SL04"</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a>  <span class="co"># </span></span>
+<span id="cb15-16"><a href="#cb15-16"></a>  <span class="co"># Slot "sampleLabelsMerged":</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a>  <span class="co">#   [1] "control" "treat"  </span></span>
+<span id="cb15-18"><a href="#cb15-18"></a>  <span class="co"># </span></span>
+<span id="cb15-19"><a href="#cb15-19"></a>  <span class="co"># Slot "librarySizes":</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a>  <span class="co">#   integer(0)</span></span>
+<span id="cb15-21"><a href="#cb15-21"></a>  <span class="co"># </span></span>
+<span id="cb15-22"><a href="#cb15-22"></a>  <span class="co"># Slot "TSSrawMatrix":</span></span>
+<span id="cb15-23"><a href="#cb15-23"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
+<span id="cb15-24"><a href="#cb15-24"></a>  <span class="co"># </span></span>
+<span id="cb15-25"><a href="#cb15-25"></a>  <span class="co"># Slot "mergeIndex":</span></span>
+<span id="cb15-26"><a href="#cb15-26"></a>  <span class="co">#   numeric(0)</span></span>
+<span id="cb15-27"><a href="#cb15-27"></a>  <span class="co"># </span></span>
+<span id="cb15-28"><a href="#cb15-28"></a>  <span class="co"># Slot "TSSmergedMatrix":</span></span>
+<span id="cb15-29"><a href="#cb15-29"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
+<span id="cb15-30"><a href="#cb15-30"></a>  <span class="co"># </span></span>
+<span id="cb15-31"><a href="#cb15-31"></a>  <span class="co"># Slot "TSSnormalizedMatrix":</span></span>
+<span id="cb15-32"><a href="#cb15-32"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
+<span id="cb15-33"><a href="#cb15-33"></a>  <span class="co"># </span></span>
+<span id="cb15-34"><a href="#cb15-34"></a>  <span class="co"># Slot "TSSfilteredMatrix":</span></span>
+<span id="cb15-35"><a href="#cb15-35"></a>  <span class="co">#   data frame with 0 columns and 0 rows</span></span>
+<span id="cb15-36"><a href="#cb15-36"></a>  <span class="co"># </span></span>
+<span id="cb15-37"><a href="#cb15-37"></a>  <span class="co"># Slot "tagClusters":</span></span>
+<span id="cb15-38"><a href="#cb15-38"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-39"><a href="#cb15-39"></a>  <span class="co"># </span></span>
+<span id="cb15-40"><a href="#cb15-40"></a>  <span class="co"># Slot "consensusClusters":</span></span>
+<span id="cb15-41"><a href="#cb15-41"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-42"><a href="#cb15-42"></a>  <span class="co"># </span></span>
+<span id="cb15-43"><a href="#cb15-43"></a>  <span class="co"># Slot "clusterShape":</span></span>
+<span id="cb15-44"><a href="#cb15-44"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-45"><a href="#cb15-45"></a>  <span class="co"># </span></span>
+<span id="cb15-46"><a href="#cb15-46"></a>  <span class="co"># Slot "refSource":</span></span>
+<span id="cb15-47"><a href="#cb15-47"></a>  <span class="co">#   [1] "saccharomyces_cerevisiae.SGD.gff"</span></span>
+<span id="cb15-48"><a href="#cb15-48"></a>  <span class="co"># </span></span>
+<span id="cb15-49"><a href="#cb15-49"></a>  <span class="co"># Slot "organismName":</span></span>
+<span id="cb15-50"><a href="#cb15-50"></a>  <span class="co">#   [1] "saccharomyces cerevisiae"</span></span>
+<span id="cb15-51"><a href="#cb15-51"></a>  <span class="co"># </span></span>
+<span id="cb15-52"><a href="#cb15-52"></a>  <span class="co"># Slot "assignedClusters":</span></span>
+<span id="cb15-53"><a href="#cb15-53"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-54"><a href="#cb15-54"></a>  <span class="co"># </span></span>
+<span id="cb15-55"><a href="#cb15-55"></a>  <span class="co"># Slot "unassignedClusters":</span></span>
+<span id="cb15-56"><a href="#cb15-56"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-57"><a href="#cb15-57"></a>  <span class="co"># </span></span>
+<span id="cb15-58"><a href="#cb15-58"></a>  <span class="co"># Slot "DEtables":</span></span>
+<span id="cb15-59"><a href="#cb15-59"></a>  <span class="co">#   list()</span></span>
+<span id="cb15-60"><a href="#cb15-60"></a>  <span class="co"># </span></span>
+<span id="cb15-61"><a href="#cb15-61"></a>  <span class="co"># Slot "PromoterShift":</span></span>
+<span id="cb15-62"><a href="#cb15-62"></a>  <span class="co">#   list()</span></span></code></pre></div>
 <p>The information that was provided when creating the TSSr object can be seen in myTSSr object, whereas all other slots are empty since no data has been read and no analysis has been conducted.</p>
 </li>
 <li>
 <p>Reading in the data and TSS processing</p>
 <p>To read input files into the TSSr object, we use getTSS function, which retrieves TSS coordinates and tag counts from multiple samples into one data table.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">getTSS</span>(myTSSr)</span>
-<span id="cb15-2"><a href="#cb15-2"></a></span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSrawMatrix</span>
-<span id="cb15-4"><a href="#cb15-4"></a></span>
-<span id="cb15-5"><a href="#cb15-5"></a>  <span class="co"># chr    pos strand SL01 SL02 SL03 SL04</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>  <span class="co"># 1:  chrI   1561      +    0    0    0    1</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a>  <span class="co"># 2:  chrI   1823      +    1    0    0    0</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="co"># 3:  chrI   1828      +    0    0    0    2</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  <span class="co"># 4:  chrI   1830      +    0    0    1    0</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a>  <span class="co"># 5:  chrI   1831      +    0    0    0    1</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a>  <span class="co"># ---                                        </span></span>
-<span id="cb15-12"><a href="#cb15-12"></a>  <span class="co"># 171537: chrII 812483      -    0    0    0    1</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a>  <span class="co"># 171538: chrII 812789      -    0    0    0    2</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a>  <span class="co"># 171539: chrII 812802      -    0    0    0    2</span></span>
-<span id="cb15-15"><a href="#cb15-15"></a>  <span class="co"># 171540: chrII 812805      -    0    0    0    1</span></span>
-<span id="cb15-16"><a href="#cb15-16"></a>  <span class="co"># 171541: chrII 812818      -    0    0    0    1</span></span></code></pre></div>
-<p>To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kedall”, or “spearman”.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotCorrelation</span>(myTSSr, <span class="dt">samples =</span> <span class="st">"all)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>  <span class="kw">getTSS</span>(myTSSr)</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  myTSSr<span class="op">@</span>TSSrawMatrix</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="co"># chr    pos strand SL01 SL02 SL03 SL04</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="co"># 1:  chrI   1561      +    0    0    0    1</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="co"># 2:  chrI   1823      +    1    0    0    0</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>  <span class="co"># 3:  chrI   1828      +    0    0    0    2</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a>  <span class="co"># 4:  chrI   1830      +    0    0    1    0</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a>  <span class="co"># 5:  chrI   1831      +    0    0    0    1</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>  <span class="co"># ---                                        </span></span>
+<span id="cb16-12"><a href="#cb16-12"></a>  <span class="co"># 171537: chrII 812483      -    0    0    0    1</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a>  <span class="co"># 171538: chrII 812789      -    0    0    0    2</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>  <span class="co"># 171539: chrII 812802      -    0    0    0    2</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a>  <span class="co"># 171540: chrII 812805      -    0    0    0    1</span></span>
+<span id="cb16-16"><a href="#cb16-16"></a>  <span class="co"># 171541: chrII 812818      -    0    0    0    1</span></span></code></pre></div>
+<p>To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>  <span class="kw">plotCorrelation</span>(myTSSr, <span class="dt">samples =</span> <span class="st">"all"</span>)</span></code></pre></div>
 </li>
 </ul>
-<p><img src="./vigettes/figures/01_TSS_correlation_plot_of_all_samples.png?raw=true" alt="01_TSS_correlation_plot_of_all_samples">{width=50%}</p>
+<p><img src="https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples.png" alt="01_TSS_correlation_plot_of_all_samples">{width=50%}</p>
 <p>To further explore the variation present in the TSS dataset and identify which samples are similar to each other and which samples are very different, we can apply plotPCA function to plot principle component analysis among all samples. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of PC1 and PC2 and simultaneously show how each variable contributes to each principal component.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTssPCA</span>(myTSSr, <span class="dt">TSS.threshold=</span><span class="dv">10</span>)</span></code></pre></div>
-<p><img src="./vigettes/figures/02_PCA_plot.png" alt="02_PCA_plot">{width=50%}</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">plotTssPCA</span>(myTSSr, <span class="dt">TSS.threshold=</span><span class="dv">10</span>)</span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/Linlab-slu/TSSr/master/vignettes/figures/02_PCA_plot.png" alt="02_PCA_plot">{width=50%}</p>
 <p>Based on the calculated correlations, two replicates are highly correlated. To facilitate the downstream analysis and comparisons between different growth condition, we merge the two replicates for each growth condition together with mergeSamples function. mergeIndex argument directs which samples will be merged and how the final dataset will be ordered accordingly.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">mergeSamples</span>(myTSSr)</span>
-<span id="cb18-2"><a href="#cb18-2"></a>    </span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
-<span id="cb18-4"><a href="#cb18-4"></a>    </span>
-<span id="cb18-5"><a href="#cb18-5"></a>    <span class="co"># chr    pos strand control treat</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a>    <span class="co"># 1:  chrI   1561      +       0     1</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a>    <span class="co"># 2:  chrI   1823      +       1     0</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a>    <span class="co"># 3:  chrI   1828      +       0     2</span></span>
-<span id="cb18-9"><a href="#cb18-9"></a>    <span class="co"># 4:  chrI   1830      +       0     1</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a>    <span class="co"># 5:  chrI   1831      +       0     1</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a>    <span class="co"># ---                                  </span></span>
-<span id="cb18-12"><a href="#cb18-12"></a>    <span class="co"># 171537: chrII 812483      -       0     1</span></span>
-<span id="cb18-13"><a href="#cb18-13"></a>    <span class="co"># 171538: chrII 812789      -       0     2</span></span>
-<span id="cb18-14"><a href="#cb18-14"></a>    <span class="co"># 171539: chrII 812802      -       0     2</span></span>
-<span id="cb18-15"><a href="#cb18-15"></a>    <span class="co"># 171540: chrII 812805      -       0     1</span></span>
-<span id="cb18-16"><a href="#cb18-16"></a>    <span class="co"># 171541: chrII 812818      -       0     1</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>    <span class="kw">mergeSamples</span>(myTSSr)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    </span>
+<span id="cb19-3"><a href="#cb19-3"></a>    myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    </span>
+<span id="cb19-5"><a href="#cb19-5"></a>    <span class="co"># chr    pos strand control treat</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>    <span class="co"># 1:  chrI   1561      +       0     1</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>    <span class="co"># 2:  chrI   1823      +       1     0</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>    <span class="co"># 3:  chrI   1828      +       0     2</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>    <span class="co"># 4:  chrI   1830      +       0     1</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a>    <span class="co"># 5:  chrI   1831      +       0     1</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a>    <span class="co"># ---                                  </span></span>
+<span id="cb19-12"><a href="#cb19-12"></a>    <span class="co"># 171537: chrII 812483      -       0     1</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a>    <span class="co"># 171538: chrII 812789      -       0     2</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a>    <span class="co"># 171539: chrII 812802      -       0     2</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a>    <span class="co"># 171540: chrII 812805      -       0     1</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a>    <span class="co"># 171541: chrII 812818      -       0     1</span></span></code></pre></div>
 <p>To return library sizes (number of total sequenced tags) of each sample in TSSr object in the specified order (note: order is specified in mergeSample function):</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>librarySizes</span>
-<span id="cb19-2"><a href="#cb19-2"></a>    <span class="co"># [1] 3353873 5563702</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>    myTSSr<span class="op">@</span>librarySizes</span>
+<span id="cb20-2"><a href="#cb20-2"></a>    <span class="co"># [1] 3353873 5563702</span></span></code></pre></div>
 <p>Library sizes among different samples are different. To make samples comparable, we use normalizeTSS function to scale TSS raw counts by tags per million (TPM).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">normalizeTSS</span>(myTSSr)</span>
-<span id="cb20-2"><a href="#cb20-2"></a>    </span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>    <span class="kw">normalizeTSS</span>(myTSSr)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>    </span></code></pre></div>
 <p>There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: “poisson” or “TPM”.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">filterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"TPM"</span>,<span class="dt">tpmLow=</span><span class="fl">0.1</span>)</span>
-<span id="cb21-2"><a href="#cb21-2"></a></span>
-<span id="cb21-3"><a href="#cb21-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
-<span id="cb21-4"><a href="#cb21-4"></a>    </span>
-<span id="cb21-5"><a href="#cb21-5"></a>    <span class="co"># chr    pos strand  control    treat</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>    <span class="co"># 1:  chrI   1561      + 0.000000 0.179736</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>    <span class="co"># 2:  chrI   1823      + 0.298163 0.000000</span></span>
-<span id="cb21-8"><a href="#cb21-8"></a>    <span class="co"># 3:  chrI   1828      + 0.000000 0.359473</span></span>
-<span id="cb21-9"><a href="#cb21-9"></a>    <span class="co"># 4:  chrI   1830      + 0.000000 0.179736</span></span>
-<span id="cb21-10"><a href="#cb21-10"></a>    <span class="co"># 5:  chrI   1831      + 0.000000 0.179736</span></span>
-<span id="cb21-11"><a href="#cb21-11"></a>    <span class="co"># ---                                      </span></span>
-<span id="cb21-12"><a href="#cb21-12"></a>    <span class="co"># 171537: chrII 812483      - 0.000000 0.179736</span></span>
-<span id="cb21-13"><a href="#cb21-13"></a>    <span class="co"># 171538: chrII 812789      - 0.000000 0.359473</span></span>
-<span id="cb21-14"><a href="#cb21-14"></a>    <span class="co"># 171539: chrII 812802      - 0.000000 0.359473</span></span>
-<span id="cb21-15"><a href="#cb21-15"></a>    <span class="co"># 171540: chrII 812805      - 0.000000 0.179736</span></span>
-<span id="cb21-16"><a href="#cb21-16"></a>    <span class="co"># 171541: chrII 812818      - 0.000000 0.179736</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>    <span class="kw">filterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"TPM"</span>,<span class="dt">tpmLow=</span><span class="fl">0.1</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a>    myTSSr<span class="op">@</span>TSSprocessedMatrix</span>
+<span id="cb22-4"><a href="#cb22-4"></a>    </span>
+<span id="cb22-5"><a href="#cb22-5"></a>    <span class="co"># chr    pos strand  control    treat</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>    <span class="co"># 1:  chrI   1561      + 0.000000 0.179736</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>    <span class="co"># 2:  chrI   1823      + 0.298163 0.000000</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a>    <span class="co"># 3:  chrI   1828      + 0.000000 0.359473</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a>    <span class="co"># 4:  chrI   1830      + 0.000000 0.179736</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a>    <span class="co"># 5:  chrI   1831      + 0.000000 0.179736</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a>    <span class="co"># ---                                      </span></span>
+<span id="cb22-12"><a href="#cb22-12"></a>    <span class="co"># 171537: chrII 812483      - 0.000000 0.179736</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a>    <span class="co"># 171538: chrII 812789      - 0.000000 0.359473</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a>    <span class="co"># 171539: chrII 812802      - 0.000000 0.359473</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a>    <span class="co"># 171540: chrII 812805      - 0.000000 0.179736</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a>    <span class="co"># 171541: chrII 812818      - 0.000000 0.179736</span></span></code></pre></div>
 <p>The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"raw"</span>, <span class="dt">merged =</span> <span class="st">"TRUE"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"bedGraph"</span>)</span>
-<span id="cb22-3"><a href="#cb22-3"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"BigWig"</span>)</span>
-<span id="cb22-4"><a href="#cb22-4"></a>    </span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>    <span class="kw">exportTSStable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"raw"</span>, <span class="dt">merged =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"bedGraph"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="kw">exportTSStoBedgraph</span>(myTSSr, <span class="dt">data =</span> <span class="st">"processed"</span>, <span class="dt">format =</span> <span class="st">"BigWig"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4"></a>    </span></code></pre></div>
 <ul>
 <li>
 <p>TSS clustering</p>
 <p>TSSs within a small genomic region are likely regulated by the sample regulatory elements, and thus can be clustered together as tag clusters (TCs). The simplest and widely used algorithm is distance-based clustering (disclu) in which neighboring TSSs are grouped together if they are closer than a specified distance (Haberle, Forrest et al. 2015). Since disclu algorithm ignores TSS signal distribution within one cluster, it might potentially generate extra big clusters with more than one peaks if the distance threshold is too big. However, reducing distance threshold might create many small clusters. Thus, we developed a peak-based clustering algorithm in which TSSs are clustered based on strong TSS signals which are identified as peaks. We will perform peak-based clustering with clusterTSS function using 100bp as the minimal range within which there is at most one peaks and use an extension distance 30bp to join neighboring TSSs into the peak defined clusters. We implement another layer of local filtering which rules out weak TSS signals downstream of peaks that are potentially brought out from recapping and are always considered as noise. After clustering, clusters below cluster Threshold will be filtered out. clusterTSS function generates a set of clusters for each sample separately. In each cluster, clusterTSS function returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths. This clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">clusterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"peakclu"</span>,<span class="dt">peakDistance=</span><span class="dv">100</span>,<span class="dt">extensionDistance=</span><span class="dv">30</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>         ,<span class="dt">localThreshold =</span> <span class="fl">0.02</span>,<span class="dt">clusterThreshold =</span> <span class="dv">1</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>         ,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span>
-<span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>tagClusters</span>
-<span id="cb23-6"><a href="#cb23-6"></a></span>
-<span id="cb23-7"><a href="#cb23-7"></a>  <span class="co"># $`control`</span></span>
-<span id="cb23-8"><a href="#cb23-8"></a>  <span class="co"># cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width</span></span>
-<span id="cb23-9"><a href="#cb23-9"></a>  <span class="co"># 1:    1 chrI  6530  6564   +     6548  8.944883     3.577953  6548  6562         15</span></span>
-<span id="cb23-10"><a href="#cb23-10"></a>  <span class="co"># 2:    2 chrI  7166  7189   +     7169  1.192652     0.596326  7166  7189         24</span></span>
-<span id="cb23-11"><a href="#cb23-11"></a>  <span class="co"># 3:    3 chrI  8084  8087   +     8084  1.192652     0.596326  8084  8087          4</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a>  <span class="co"># 4:    4 chrI  9325  9411   +     9327  4.770607     1.192651  9327  9391         65</span></span>
-<span id="cb23-13"><a href="#cb23-13"></a>  <span class="co"># 5:    5 chrI  9442  9479   +     9442  3.279792     1.788977  9442  9468         27</span></span>
-<span id="cb23-14"><a href="#cb23-14"></a>  <span class="co"># ---                                                        </span></span>
-<span id="cb23-15"><a href="#cb23-15"></a>  <span class="co"># 3485:  3485 chrII 810641 810721   -    810641 77.224157     21.765881 810641 810719         79</span></span>
-<span id="cb23-16"><a href="#cb23-16"></a>  <span class="co"># 3486:  3486 chrII 810760 811032   -    810916 46.513400     5.963255 810796 810962         167</span></span>
-<span id="cb23-17"><a href="#cb23-17"></a>  <span class="co"># 3487:  3487 chrII 811067 811170   -    811112 11.330187     8.348557 811111 811131         21</span></span>
-<span id="cb23-18"><a href="#cb23-18"></a>  <span class="co"># 3488:  3488 chrII 811200 811384   -    811291 29.518121     6.559581 811239 811366         128</span></span>
-<span id="cb23-19"><a href="#cb23-19"></a>  <span class="co"># 3489:  3489 chrII 811446 811512   -    811486 607.059367    313.965377 811485 811494         10</span></span>
-<span id="cb23-20"><a href="#cb23-20"></a>  <span class="co"># </span></span>
-<span id="cb23-21"><a href="#cb23-21"></a>  <span class="co"># $treat</span></span>
-<span id="cb23-22"><a href="#cb23-22"></a>  <span class="co"># cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width</span></span>
-<span id="cb23-23"><a href="#cb23-23"></a>  <span class="co"># 1:    1 chrI  1828  1841   +     1828  1.078417     0.359473  1828  1841         14</span></span>
-<span id="cb23-24"><a href="#cb23-24"></a>  <span class="co"># 2:    2 chrI  6521  6564   +     6559  4.673145     1.617628  6530  6559         30</span></span>
-<span id="cb23-25"><a href="#cb23-25"></a>  <span class="co"># 3:    3 chrI  7096  7118   +     7100  1.797363     0.539209  7096  7114         19</span></span>
-<span id="cb23-26"><a href="#cb23-26"></a>  <span class="co"># 4:    4 chrI  8061  8087   +     8061  1.797363     0.539209  8061  8087         27</span></span>
-<span id="cb23-27"><a href="#cb23-27"></a>  <span class="co"># 5:    5 chrI  9327  9476   +     9359 10.604449     1.617628  9327  9452         126</span></span>
-<span id="cb23-28"><a href="#cb23-28"></a>  <span class="co"># ---                                                        </span></span>
-<span id="cb23-29"><a href="#cb23-29"></a>  <span class="co"># 3382:  3382 chrII 809707 809710   -    809707  1.258155     0.898682 809707 809710          4</span></span>
-<span id="cb23-30"><a href="#cb23-30"></a>  <span class="co"># 3383:  3383 chrII 810641 810736   -    810641 121.501831     29.297040 810641 810719         79</span></span>
-<span id="cb23-31"><a href="#cb23-31"></a>  <span class="co"># 3384:  3384 chrII 810773 811031   -    810916 67.401151     14.738388 810794 810963         170</span></span>
-<span id="cb23-32"><a href="#cb23-32"></a>  <span class="co"># 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255</span></span>
-<span id="cb23-33"><a href="#cb23-33"></a>  <span class="co"># # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9</span></span>
-<span id="cb23-34"><a href="#cb23-34"></a></span>
-<span id="cb23-35"><a href="#cb23-35"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"assigned"</span>)</span>
-<span id="cb23-36"><a href="#cb23-36"></a></span>
-<span id="cb23-37"><a href="#cb23-37"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"tagClusters"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>  <span class="kw">clusterTSS</span>(myTSSr, <span class="dt">method =</span> <span class="st">"peakclu"</span>,<span class="dt">peakDistance=</span><span class="dv">100</span>,<span class="dt">extensionDistance=</span><span class="dv">30</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>         ,<span class="dt">localThreshold =</span> <span class="fl">0.02</span>,<span class="dt">clusterThreshold =</span> <span class="dv">1</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>         ,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span>
+<span id="cb24-4"><a href="#cb24-4"></a></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  myTSSr<span class="op">@</span>tagClusters</span>
+<span id="cb24-6"><a href="#cb24-6"></a></span>
+<span id="cb24-7"><a href="#cb24-7"></a>  <span class="co"># $`control`</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a>  <span class="co"># cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a>  <span class="co"># 1:    1 chrI  6530  6564   +     6548  8.944883     3.577953  6548  6562         15</span></span>
+<span id="cb24-10"><a href="#cb24-10"></a>  <span class="co"># 2:    2 chrI  7166  7189   +     7169  1.192652     0.596326  7166  7189         24</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a>  <span class="co"># 3:    3 chrI  8084  8087   +     8084  1.192652     0.596326  8084  8087          4</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a>  <span class="co"># 4:    4 chrI  9325  9411   +     9327  4.770607     1.192651  9327  9391         65</span></span>
+<span id="cb24-13"><a href="#cb24-13"></a>  <span class="co"># 5:    5 chrI  9442  9479   +     9442  3.279792     1.788977  9442  9468         27</span></span>
+<span id="cb24-14"><a href="#cb24-14"></a>  <span class="co"># ---                                                        </span></span>
+<span id="cb24-15"><a href="#cb24-15"></a>  <span class="co"># 3485:  3485 chrII 810641 810721   -    810641 77.224157     21.765881 810641 810719         79</span></span>
+<span id="cb24-16"><a href="#cb24-16"></a>  <span class="co"># 3486:  3486 chrII 810760 811032   -    810916 46.513400     5.963255 810796 810962         167</span></span>
+<span id="cb24-17"><a href="#cb24-17"></a>  <span class="co"># 3487:  3487 chrII 811067 811170   -    811112 11.330187     8.348557 811111 811131         21</span></span>
+<span id="cb24-18"><a href="#cb24-18"></a>  <span class="co"># 3488:  3488 chrII 811200 811384   -    811291 29.518121     6.559581 811239 811366         128</span></span>
+<span id="cb24-19"><a href="#cb24-19"></a>  <span class="co"># 3489:  3489 chrII 811446 811512   -    811486 607.059367    313.965377 811485 811494         10</span></span>
+<span id="cb24-20"><a href="#cb24-20"></a>  <span class="co"># </span></span>
+<span id="cb24-21"><a href="#cb24-21"></a>  <span class="co"># $treat</span></span>
+<span id="cb24-22"><a href="#cb24-22"></a>  <span class="co"># cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width</span></span>
+<span id="cb24-23"><a href="#cb24-23"></a>  <span class="co"># 1:    1 chrI  1828  1841   +     1828  1.078417     0.359473  1828  1841         14</span></span>
+<span id="cb24-24"><a href="#cb24-24"></a>  <span class="co"># 2:    2 chrI  6521  6564   +     6559  4.673145     1.617628  6530  6559         30</span></span>
+<span id="cb24-25"><a href="#cb24-25"></a>  <span class="co"># 3:    3 chrI  7096  7118   +     7100  1.797363     0.539209  7096  7114         19</span></span>
+<span id="cb24-26"><a href="#cb24-26"></a>  <span class="co"># 4:    4 chrI  8061  8087   +     8061  1.797363     0.539209  8061  8087         27</span></span>
+<span id="cb24-27"><a href="#cb24-27"></a>  <span class="co"># 5:    5 chrI  9327  9476   +     9359 10.604449     1.617628  9327  9452         126</span></span>
+<span id="cb24-28"><a href="#cb24-28"></a>  <span class="co"># ---                                                        </span></span>
+<span id="cb24-29"><a href="#cb24-29"></a>  <span class="co"># 3382:  3382 chrII 809707 809710   -    809707  1.258155     0.898682 809707 809710          4</span></span>
+<span id="cb24-30"><a href="#cb24-30"></a>  <span class="co"># 3383:  3383 chrII 810641 810736   -    810641 121.501831     29.297040 810641 810719         79</span></span>
+<span id="cb24-31"><a href="#cb24-31"></a>  <span class="co"># 3384:  3384 chrII 810773 811031   -    810916 67.401151     14.738388 810794 810963         170</span></span>
+<span id="cb24-32"><a href="#cb24-32"></a>  <span class="co"># 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255</span></span>
+<span id="cb24-33"><a href="#cb24-33"></a>  <span class="co"># # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9</span></span>
+<span id="cb24-34"><a href="#cb24-34"></a></span>
+<span id="cb24-35"><a href="#cb24-35"></a>      <span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"assigned"</span>)</span>
+<span id="cb24-36"><a href="#cb24-36"></a></span>
+<span id="cb24-37"><a href="#cb24-37"></a>      <span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"tagClusters"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Aggregating consensus clusters</p>
 <p>TSSs are clustered into tag clusters for each sample individually and they are often sample-specific. To make clusters comparable between samples, we will use consensusCluster function to generate a single set of consensus clusters. Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">consensusCluster</span>(myTSSr, <span class="dt">dis =</span> <span class="dv">50</span>, <span class="dt">useMultiCore =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>  <span class="kw">consensusCluster</span>(myTSSr, <span class="dt">dis =</span> <span class="dv">50</span>, <span class="dt">useMultiCore =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <p>Tag clusters and consensus cluster with quantile positions can be exported to either text tables or BED tracks which can be visualized in the UCSC Genome Browser and IGV.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>      <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"consensusClusters"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>      <span class="kw">exportClustersToBed</span>(myTSSr, <span class="dt">data =</span> <span class="st">"consensusClusters"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Core promoter shape</p>
 <p>According to the distribution of TSSs within a core promoter (cluster), termed as core promoter shape, core promoters were generally classified into sharp core promoters and broad core promoters. TSSr implements three methods to characterize core promoter shape. The simplest way is to use interquantile width representing core promoter shape. plotInterQuantile function plots interquantile width of each sample.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotInterQuantile</span>(myTSSr,<span class="dt">samples =</span> <span class="st">"all"</span>,<span class="dt">tagsThreshold =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>  <span class="kw">plotInterQuantile</span>(myTSSr,<span class="dt">samples =</span> <span class="st">"all"</span>,<span class="dt">tagsThreshold =</span> <span class="dv">1</span>)</span></code></pre></div>
 </li>
 </ul>
-<p><img src="./vigettes/figures/03_Interquantile_plot_of_ALL_samples.png" alt="03_Interquantile_plot_of_ALL_samples">{width=50%}</p>
+<p><img src="https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples.png" alt="03_Interquantile_plot_of_ALL_samples">{width=50%}</p>
 <p>Another way to characterize core promoter shape is shape index (SI) which is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.</p>
 <p>By integrating both inter quantile width and the observed probabilities of tags at every TSSs within a cluster, we developed a new metric called promoter shape score (PSS) to describe core promoter shape (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">shapeCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>, <span class="dt">method =</span> <span class="st">"PSS"</span>,<span class="dt">useMultiCore=</span> <span class="ot">FALSE</span>, <span class="dt">numCores =</span> <span class="ot">NULL</span>)</span>
-<span id="cb27-2"><a href="#cb27-2"></a></span>
-<span id="cb27-3"><a href="#cb27-3"></a>    <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>clusterShape</span>
-<span id="cb27-4"><a href="#cb27-4"></a>    </span>
-<span id="cb27-5"><a href="#cb27-5"></a>    <span class="co"># $`control`</span></span>
-<span id="cb27-6"><a href="#cb27-6"></a>    <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score</span></span>
-<span id="cb27-7"><a href="#cb27-7"></a>    <span class="co"># 1:  432 chrII 127 175  +   150 3.279792   0.894488 145 171     27 -0.41938195</span></span>
-<span id="cb27-8"><a href="#cb27-8"></a>    <span class="co"># 2:  433 chrII 4016 4045  +   4016 2.087141   0.596326 4016 4045     30 -0.23592635</span></span>
-<span id="cb27-9"><a href="#cb27-9"></a>    <span class="co"># 3:  434 chrII 4299 4318  +   4300 1.192652   0.596326 4299 4318     20 0.50000000</span></span>
-<span id="cb27-10"><a href="#cb27-10"></a>    <span class="co"># 4:  435 chrII 5328 5359  +   5328 1.788977   1.192651 5328 5359     32 0.74837083</span></span>
-<span id="cb27-11"><a href="#cb27-11"></a>    <span class="co"># 5:  436 chrII 5577 5577  +   5577 1.788977   1.788977 5577 5577     1 2.00000000</span></span>
-<span id="cb27-12"><a href="#cb27-12"></a>    <span class="co"># ---                                 </span></span>
-<span id="cb27-13"><a href="#cb27-13"></a>    <span class="co"># 3484: 2526 chrI 222756 223117  -  222884 30.114450   2.385302 222847 223076     230 -2.83272807</span></span>
-<span id="cb27-14"><a href="#cb27-14"></a>    <span class="co"># 3485: 2528 chrI 223374 223416  -  223395 2.981629   1.490814 223374 223416     43 0.03903595</span></span>
-<span id="cb27-15"><a href="#cb27-15"></a>    <span class="co"># 3486: 2529 chrI 223656 223696  -  223660 1.490815   0.596326 223656 223696     41 0.07807191</span></span>
-<span id="cb27-16"><a href="#cb27-16"></a>    <span class="co"># 3487: 2530 chrI 225020 225056  -  225056 1.192652   0.596326 225020 225056     37 0.50000000</span></span>
-<span id="cb27-17"><a href="#cb27-17"></a>    <span class="co"># 3488: 2532 chrI 227236 227274  -  227274 2.385303   0.894488 227236 227274     39 -0.15563906</span></span>
-<span id="cb27-18"><a href="#cb27-18"></a>    <span class="co"># </span></span>
-<span id="cb27-19"><a href="#cb27-19"></a>    <span class="co"># $treat</span></span>
-<span id="cb27-20"><a href="#cb27-20"></a>    <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score</span></span>
-<span id="cb27-21"><a href="#cb27-21"></a>    <span class="co"># 1:  436 chrII 5525 5587  +   5577 2.875781   1.977101 5534 5577     44 0.9107699</span></span>
-<span id="cb27-22"><a href="#cb27-22"></a>    <span class="co"># 2:  437 chrII 5895 5955  +   5955 1.797364   0.718946 5920 5955     36 0.1634083</span></span>
-<span id="cb27-23"><a href="#cb27-23"></a>    <span class="co"># 3:  438 chrII 7626 7682  +   7649 7.189456   1.258155 7630 7658     29 -0.8540706</span></span>
-<span id="cb27-24"><a href="#cb27-24"></a>    <span class="co"># 4:  439 chrII 8410 8455  +   8425 4.313673   1.437892 8425 8452     28 -0.4516085</span></span>
-<span id="cb27-25"><a href="#cb27-25"></a>    <span class="co"># 5:  440 chrII 8492 8584  +   8550 12.401807   2.875783 8513 8557     45 -1.0242498</span></span>
-<span id="cb27-26"><a href="#cb27-26"></a>    <span class="co"># ---                                 </span></span>
-<span id="cb27-27"><a href="#cb27-27"></a>    <span class="co"># 3380: 2526 chrI 222797 222969  -  222851 17.614164   4.493411 222851 222961     111 -1.4326016</span></span>
-<span id="cb27-28"><a href="#cb27-28"></a>    <span class="co"># 3381: 2527 chrI 223326 223327  -  223326 1.258155   0.898682 223326 223327     2 1.1368794</span></span>
-<span id="cb27-29"><a href="#cb27-29"></a>    <span class="co"># 3382: 2529 chrI 223659 223697  -  223681 2.156836   0.718946 223659 223696     38 -0.3685225</span></span>
-<span id="cb27-30"><a href="#cb27-30"></a>    <span class="co"># 3383: 2531 chrI 226791 226810  -  226805 1.437890   0.359473 226791 226810     20 -0.5000000</span></span>
-<span id="cb27-31"><a href="#cb27-31"></a>    <span class="co"># 3384: 2532 chrI 227249 227300  -  227270 6.290774   1.977101 227258 227276     19 -0.2658030</span></span>
-<span id="cb27-32"><a href="#cb27-32"></a></span>
-<span id="cb27-33"><a href="#cb27-33"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotShape</span>(myTSSr)</span></code></pre></div>
-<p><img src="./vigettes/figures/04_Shape_plot_of_ALL_samples.png" alt="04_Shape_plot_of_ALL_samples">{width=50%}</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>        <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShapeTable</span>(myTSSr)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>    <span class="kw">shapeCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>, <span class="dt">method =</span> <span class="st">"PSS"</span>,<span class="dt">useMultiCore=</span> <span class="ot">FALSE</span>, <span class="dt">numCores =</span> <span class="ot">NULL</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a>    myTSSr<span class="op">@</span>clusterShape</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    </span>
+<span id="cb28-5"><a href="#cb28-5"></a>    <span class="co"># $`control`</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a>    <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a>    <span class="co"># 1:  432 chrII 127 175  +   150 3.279792   0.894488 145 171     27 -0.41938195</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a>    <span class="co"># 2:  433 chrII 4016 4045  +   4016 2.087141   0.596326 4016 4045     30 -0.23592635</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a>    <span class="co"># 3:  434 chrII 4299 4318  +   4300 1.192652   0.596326 4299 4318     20 0.50000000</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a>    <span class="co"># 4:  435 chrII 5328 5359  +   5328 1.788977   1.192651 5328 5359     32 0.74837083</span></span>
+<span id="cb28-11"><a href="#cb28-11"></a>    <span class="co"># 5:  436 chrII 5577 5577  +   5577 1.788977   1.788977 5577 5577     1 2.00000000</span></span>
+<span id="cb28-12"><a href="#cb28-12"></a>    <span class="co"># ---                                 </span></span>
+<span id="cb28-13"><a href="#cb28-13"></a>    <span class="co"># 3484: 2526 chrI 222756 223117  -  222884 30.114450   2.385302 222847 223076     230 -2.83272807</span></span>
+<span id="cb28-14"><a href="#cb28-14"></a>    <span class="co"># 3485: 2528 chrI 223374 223416  -  223395 2.981629   1.490814 223374 223416     43 0.03903595</span></span>
+<span id="cb28-15"><a href="#cb28-15"></a>    <span class="co"># 3486: 2529 chrI 223656 223696  -  223660 1.490815   0.596326 223656 223696     41 0.07807191</span></span>
+<span id="cb28-16"><a href="#cb28-16"></a>    <span class="co"># 3487: 2530 chrI 225020 225056  -  225056 1.192652   0.596326 225020 225056     37 0.50000000</span></span>
+<span id="cb28-17"><a href="#cb28-17"></a>    <span class="co"># 3488: 2532 chrI 227236 227274  -  227274 2.385303   0.894488 227236 227274     39 -0.15563906</span></span>
+<span id="cb28-18"><a href="#cb28-18"></a>    <span class="co"># </span></span>
+<span id="cb28-19"><a href="#cb28-19"></a>    <span class="co"># $treat</span></span>
+<span id="cb28-20"><a href="#cb28-20"></a>    <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score</span></span>
+<span id="cb28-21"><a href="#cb28-21"></a>    <span class="co"># 1:  436 chrII 5525 5587  +   5577 2.875781   1.977101 5534 5577     44 0.9107699</span></span>
+<span id="cb28-22"><a href="#cb28-22"></a>    <span class="co"># 2:  437 chrII 5895 5955  +   5955 1.797364   0.718946 5920 5955     36 0.1634083</span></span>
+<span id="cb28-23"><a href="#cb28-23"></a>    <span class="co"># 3:  438 chrII 7626 7682  +   7649 7.189456   1.258155 7630 7658     29 -0.8540706</span></span>
+<span id="cb28-24"><a href="#cb28-24"></a>    <span class="co"># 4:  439 chrII 8410 8455  +   8425 4.313673   1.437892 8425 8452     28 -0.4516085</span></span>
+<span id="cb28-25"><a href="#cb28-25"></a>    <span class="co"># 5:  440 chrII 8492 8584  +   8550 12.401807   2.875783 8513 8557     45 -1.0242498</span></span>
+<span id="cb28-26"><a href="#cb28-26"></a>    <span class="co"># ---                                 </span></span>
+<span id="cb28-27"><a href="#cb28-27"></a>    <span class="co"># 3380: 2526 chrI 222797 222969  -  222851 17.614164   4.493411 222851 222961     111 -1.4326016</span></span>
+<span id="cb28-28"><a href="#cb28-28"></a>    <span class="co"># 3381: 2527 chrI 223326 223327  -  223326 1.258155   0.898682 223326 223327     2 1.1368794</span></span>
+<span id="cb28-29"><a href="#cb28-29"></a>    <span class="co"># 3382: 2529 chrI 223659 223697  -  223681 2.156836   0.718946 223659 223696     38 -0.3685225</span></span>
+<span id="cb28-30"><a href="#cb28-30"></a>    <span class="co"># 3383: 2531 chrI 226791 226810  -  226805 1.437890   0.359473 226791 226810     20 -0.5000000</span></span>
+<span id="cb28-31"><a href="#cb28-31"></a>    <span class="co"># 3384: 2532 chrI 227249 227300  -  227270 6.290774   1.977101 227258 227276     19 -0.2658030</span></span>
+<span id="cb28-32"><a href="#cb28-32"></a></span>
+<span id="cb28-33"><a href="#cb28-33"></a>    <span class="kw">plotShape</span>(myTSSr)</span></code></pre></div>
+<p><img src="https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples.png" alt="04_Shape_plot_of_ALL_samples">{width=50%}</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>        <span class="kw">exportShapeTable</span>(myTSSr)</span></code></pre></div>
 <ul>
 <li>
 <p>Annotation</p>
 <p>TSSr identifies TSSs and therefore detect core promoters. However, the current databases are mainly on gene levels instead of TSS or core promoter levels. annorateCluster function is used to associate core promoters to genes. Since annotated genes in Saccharomyces cerevisiae GFF annotation file don’t contain 5’ untranslated region (UTR), that is, the first genomic position of each gene in annotations is start position of translation. Therefore, in order to associate clusters to genes, we specify the upstream distance as 1000 and downstream distance as 0. The 1000 bp region is defined as core promoter region. In case of overlapping with upstream genes, we specify upstreamOverlap argument as 500 representing only considering the first 500 bp regions as core promoter region if it is overlapped with upstream genes. To reduce transcriptional or technical noise of small clusters downstream a strong cluster, we apply filterCluster argument and set filterClusterThreshold as 0.02, representing clusters in which total tags lower than the strong cluster*0.02 will be filtered out.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">annotateCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>,<span class="dt">filterCluster =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb29-2"><a href="#cb29-2"></a>              <span class="dt">filterClusterThreshold =</span> <span class="fl">0.02</span>, <span class="dt">annotationType =</span> <span class="st">"genes"</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>              ,<span class="dt">upstream=</span><span class="dv">1000</span>, <span class="dt">upstreamOverlap =</span> <span class="dv">500</span>, <span class="dt">downstream =</span> <span class="dv">0</span>)</span>
-<span id="cb29-4"><a href="#cb29-4"></a></span>
-<span id="cb29-5"><a href="#cb29-5"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>assignedClusters</span>
-<span id="cb29-6"><a href="#cb29-6"></a></span>
-<span id="cb29-7"><a href="#cb29-7"></a>  <span class="co"># $`control`</span></span>
-<span id="cb29-8"><a href="#cb29-8"></a>  <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene</span></span>
-<span id="cb29-9"><a href="#cb29-9"></a>  <span class="co"># 1:  6 chrI 9325 9411  +   9327 4.770607   1.192651 9327 9391     65 YAL066W</span></span>
-<span id="cb29-10"><a href="#cb29-10"></a>  <span class="co"># 2:  7 chrI 9442 9479  +   9442 3.279792   1.788977 9442 9468     27 YAL066W</span></span>
-<span id="cb29-11"><a href="#cb29-11"></a>  <span class="co"># 3:  8 chrI 11253 11343  +  11329 39.059326   16.995277 11275 11329     55 YAL064W-B</span></span>
-<span id="cb29-12"><a href="#cb29-12"></a>  <span class="co"># 4:  44 chrI 31027 31151  +  31108 46.215232   16.398951 31108 31145     38 YAL062W</span></span>
-<span id="cb29-13"><a href="#cb29-13"></a>  <span class="co"># 5:  45 chrI 31187 31263  +  31242 307.405801  117.774287 31212 31242     31 YAL062W</span></span>
-<span id="cb29-14"><a href="#cb29-14"></a>  <span class="co"># ---                                 </span></span>
-<span id="cb29-15"><a href="#cb29-15"></a>  <span class="co"># 864: 4493 chrII 804562 804593  -  804591 1.490814   0.894488 804562 804593     32 YBR298C</span></span>
-<span id="cb29-16"><a href="#cb29-16"></a>  <span class="co"># 865: 4494 chrII 804855 804975  -  804895 250.456717   68.875595 804868 804899     32 YBR298C</span></span>
-<span id="cb29-17"><a href="#cb29-17"></a>  <span class="co"># 866: 4497 chrII 809353 809377  -  809377 1.788977   1.490814 809353 809377     25 YBR300C</span></span>
-<span id="cb29-18"><a href="#cb29-18"></a>  <span class="co"># 867: 4498 chrII 809707 809748  -  809707 3.876117   2.087139 809707 809724     18 YBR300C</span></span>
-<span id="cb29-19"><a href="#cb29-19"></a>  <span class="co"># 868: 4503 chrII 811446 811512  -  811486 607.059367  313.965377 811485 811494     10 YBR302C</span></span>
-<span id="cb29-20"><a href="#cb29-20"></a>  <span class="co"># </span></span>
-<span id="cb29-21"><a href="#cb29-21"></a>  <span class="co"># $treat</span></span>
-<span id="cb29-22"><a href="#cb29-22"></a>  <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene</span></span>
-<span id="cb29-23"><a href="#cb29-23"></a>  <span class="co"># 1:  1 chrI 1828 1841  +   1828 1.078417   0.359473 1828 1841     14 YAL067W-A</span></span>
-<span id="cb29-24"><a href="#cb29-24"></a>  <span class="co"># 2:  6 chrI 9327 9476  +   9359 10.604449   1.617628 9327 9452     126 YAL066W</span></span>
-<span id="cb29-25"><a href="#cb29-25"></a>  <span class="co"># 3:  8 chrI 11259 11343  +  11329 54.639873   20.130481 11288 11329     42 YAL064W-B</span></span>
-<span id="cb29-26"><a href="#cb29-26"></a>  <span class="co"># 4:  9 chrI 11651 11762  +  11651 1.977099   0.359473 11651 11750     100 YAL064W-B</span></span>
-<span id="cb29-27"><a href="#cb29-27"></a>  <span class="co"># 5:  10 chrI 11861 11934  +  11919 2.875780   0.898682 11889 11923     35 YAL064W-B</span></span>
-<span id="cb29-28"><a href="#cb29-28"></a>  <span class="co"># ---                                 </span></span>
-<span id="cb29-29"><a href="#cb29-29"></a>  <span class="co"># 816: 4488 chrII 801017 801061  -  801023 6.290772   1.797364 801022 801058     37 YBR296C-A</span></span>
-<span id="cb29-30"><a href="#cb29-30"></a>  <span class="co"># 817: 4494 chrII 804851 804952  -  804895 144.867571   50.326204 804872 804901     30 YBR298C</span></span>
-<span id="cb29-31"><a href="#cb29-31"></a>  <span class="co"># 818: 4497 chrII 809377 809389  -  809377 1.078419   0.718946 809377 809389     13 YBR300C</span></span>
-<span id="cb29-32"><a href="#cb29-32"></a>  <span class="co"># 819: 4498 chrII 809707 809710  -  809707 1.258155   0.898682 809707 809710     4 YBR300C</span></span>
-<span id="cb29-33"><a href="#cb29-33"></a>  <span class="co"># 820: 4503 chrII 811472 811503  -  811486 449.700575  234.196583 811486 811494     9 YBR302CThe </span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>  <span class="kw">annotateCluster</span>(myTSSr,<span class="dt">clusters =</span> <span class="st">"consensusClusters"</span>,<span class="dt">filterCluster =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb30-2"><a href="#cb30-2"></a>              <span class="dt">filterClusterThreshold =</span> <span class="fl">0.02</span>, <span class="dt">annotationType =</span> <span class="st">"genes"</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>              ,<span class="dt">upstream=</span><span class="dv">1000</span>, <span class="dt">upstreamOverlap =</span> <span class="dv">500</span>, <span class="dt">downstream =</span> <span class="dv">0</span>)</span>
+<span id="cb30-4"><a href="#cb30-4"></a></span>
+<span id="cb30-5"><a href="#cb30-5"></a>  myTSSr<span class="op">@</span>assignedClusters</span>
+<span id="cb30-6"><a href="#cb30-6"></a></span>
+<span id="cb30-7"><a href="#cb30-7"></a>  <span class="co"># $`control`</span></span>
+<span id="cb30-8"><a href="#cb30-8"></a>  <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a>  <span class="co"># 1:  6 chrI 9325 9411  +   9327 4.770607   1.192651 9327 9391     65 YAL066W</span></span>
+<span id="cb30-10"><a href="#cb30-10"></a>  <span class="co"># 2:  7 chrI 9442 9479  +   9442 3.279792   1.788977 9442 9468     27 YAL066W</span></span>
+<span id="cb30-11"><a href="#cb30-11"></a>  <span class="co"># 3:  8 chrI 11253 11343  +  11329 39.059326   16.995277 11275 11329     55 YAL064W-B</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a>  <span class="co"># 4:  44 chrI 31027 31151  +  31108 46.215232   16.398951 31108 31145     38 YAL062W</span></span>
+<span id="cb30-13"><a href="#cb30-13"></a>  <span class="co"># 5:  45 chrI 31187 31263  +  31242 307.405801  117.774287 31212 31242     31 YAL062W</span></span>
+<span id="cb30-14"><a href="#cb30-14"></a>  <span class="co"># ---                                 </span></span>
+<span id="cb30-15"><a href="#cb30-15"></a>  <span class="co"># 864: 4493 chrII 804562 804593  -  804591 1.490814   0.894488 804562 804593     32 YBR298C</span></span>
+<span id="cb30-16"><a href="#cb30-16"></a>  <span class="co"># 865: 4494 chrII 804855 804975  -  804895 250.456717   68.875595 804868 804899     32 YBR298C</span></span>
+<span id="cb30-17"><a href="#cb30-17"></a>  <span class="co"># 866: 4497 chrII 809353 809377  -  809377 1.788977   1.490814 809353 809377     25 YBR300C</span></span>
+<span id="cb30-18"><a href="#cb30-18"></a>  <span class="co"># 867: 4498 chrII 809707 809748  -  809707 3.876117   2.087139 809707 809724     18 YBR300C</span></span>
+<span id="cb30-19"><a href="#cb30-19"></a>  <span class="co"># 868: 4503 chrII 811446 811512  -  811486 607.059367  313.965377 811485 811494     10 YBR302C</span></span>
+<span id="cb30-20"><a href="#cb30-20"></a>  <span class="co"># </span></span>
+<span id="cb30-21"><a href="#cb30-21"></a>  <span class="co"># $treat</span></span>
+<span id="cb30-22"><a href="#cb30-22"></a>  <span class="co"># cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene</span></span>
+<span id="cb30-23"><a href="#cb30-23"></a>  <span class="co"># 1:  1 chrI 1828 1841  +   1828 1.078417   0.359473 1828 1841     14 YAL067W-A</span></span>
+<span id="cb30-24"><a href="#cb30-24"></a>  <span class="co"># 2:  6 chrI 9327 9476  +   9359 10.604449   1.617628 9327 9452     126 YAL066W</span></span>
+<span id="cb30-25"><a href="#cb30-25"></a>  <span class="co"># 3:  8 chrI 11259 11343  +  11329 54.639873   20.130481 11288 11329     42 YAL064W-B</span></span>
+<span id="cb30-26"><a href="#cb30-26"></a>  <span class="co"># 4:  9 chrI 11651 11762  +  11651 1.977099   0.359473 11651 11750     100 YAL064W-B</span></span>
+<span id="cb30-27"><a href="#cb30-27"></a>  <span class="co"># 5:  10 chrI 11861 11934  +  11919 2.875780   0.898682 11889 11923     35 YAL064W-B</span></span>
+<span id="cb30-28"><a href="#cb30-28"></a>  <span class="co"># ---                                 </span></span>
+<span id="cb30-29"><a href="#cb30-29"></a>  <span class="co"># 816: 4488 chrII 801017 801061  -  801023 6.290772   1.797364 801022 801058     37 YBR296C-A</span></span>
+<span id="cb30-30"><a href="#cb30-30"></a>  <span class="co"># 817: 4494 chrII 804851 804952  -  804895 144.867571   50.326204 804872 804901     30 YBR298C</span></span>
+<span id="cb30-31"><a href="#cb30-31"></a>  <span class="co"># 818: 4497 chrII 809377 809389  -  809377 1.078419   0.718946 809377 809389     13 YBR300C</span></span>
+<span id="cb30-32"><a href="#cb30-32"></a>  <span class="co"># 819: 4498 chrII 809707 809710  -  809707 1.258155   0.898682 809707 809710     4 YBR300C</span></span>
+<span id="cb30-33"><a href="#cb30-33"></a>  <span class="co"># 820: 4503 chrII 811472 811503  -  811486 449.700575  234.196583 811486 811494     9 YBR302CThe </span></span></code></pre></div>
 <p>Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.</p>
-<p>A function of exportTagClustersTable is provided to export cluster tables with associated gene information.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportTagClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"assigned"</span>)</span></code></pre></div>
+<p>A function of exportClustersTable is provided to export cluster tables with associated gene information.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>  <span class="kw">exportClustersTable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"assigned"</span>)</span></code></pre></div>
 </li>
 <li>
 <p>Differential expression analysis</p>
 <p>The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">deGene</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>  <span class="kw">deGene</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>,<span class="dt">useMultiCore=</span><span class="ot">FALSE</span>, <span class="dt">numCores=</span><span class="ot">NULL</span>)</span></code></pre></div>
 <p>Differential expression analysis results can be visualized by plotDE function which generates a volcano plots. Names of genes differential expressed between the compared pairs are displayed on the dots when the withGeneName argument is set as TRUE.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotDE</span>(myTSSr, <span class="dt">withGeneName =</span> <span class="st">"TRUE"</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>),<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>  <span class="kw">plotDE</span>(myTSSr, <span class="dt">withGeneName =</span> <span class="st">"TRUE"</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>),<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>))</span></code></pre></div>
 <p>Differential expression analysis results can also be exported to a text file with exportDETable function.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportDETable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"sig"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>  <span class="kw">exportDETable</span>(myTSSr, <span class="dt">data =</span> <span class="st">"sig"</span>)</span></code></pre></div>
 </li>
 </ul>
-<p><img src="./vigettes/figures/05_Volcano_plot.png" alt="05_Volcano_plot">{width=50%}</p>
+<p><img src="https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot.png" alt="05_Volcano_plot">{width=50%}</p>
 <ul>
 <li>
 <p>Core promoter shifts</p>
 <p>One gene might have multiple core promoters which can be used differently in different samples. TSSr implements degree of shift (Ds) algorithm (Lu and Lin 2019) to quantify the degree of promoter shift across different samples.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">shiftPromoter</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>)</span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="op">&gt;</span><span class="st"> </span>myTSSr<span class="op">@</span>PromoterShift</span>
-<span id="cb34-4"><a href="#cb34-4"></a></span>
-<span id="cb34-5"><a href="#cb34-5"></a>  <span class="co"># $`control_VS_treat`</span></span>
-<span id="cb34-6"><a href="#cb34-6"></a>  <span class="co"># gene                  Ds                  pval          padj</span></span>
-<span id="cb34-7"><a href="#cb34-7"></a>  <span class="co"># 1:   YAR027W    -10.350816320988                     0  0.000000e+00</span></span>
-<span id="cb34-8"><a href="#cb34-8"></a>  <span class="co"># 2:   YBL017C    16.4385383531034                     0  0.000000e+00</span></span>
-<span id="cb34-9"><a href="#cb34-9"></a>  <span class="co"># 3:   YBR006W   -26.1598728383391                     0  0.000000e+00</span></span>
-<span id="cb34-10"><a href="#cb34-10"></a>  <span class="co"># 4:   YBR023C     18.118979599068                     0  0.000000e+00</span></span>
-<span id="cb34-11"><a href="#cb34-11"></a>  <span class="co"># 5:   YBR039W   -27.4865860443054                     0  0.000000e+00</span></span>
-<span id="cb34-12"><a href="#cb34-12"></a>  <span class="co"># 6:   YBR121C    -32.547014080256                     0  0.000000e+00</span></span>
-<span id="cb34-13"><a href="#cb34-13"></a>  <span class="co"># 7:   YBL067C   -25.3869440027767 3.07511136581584e-289 1.273975e-287</span></span>
-<span id="cb34-14"><a href="#cb34-14"></a>  <span class="co"># 8:   YBL061C    23.7545209498577 3.44768363971726e-197 1.249785e-195</span></span>
-<span id="cb34-15"><a href="#cb34-15"></a>  <span class="co"># 9: YBL039W-B    23.4499059050598  4.6945530608788e-166 1.361420e-164</span></span>
-<span id="cb34-16"><a href="#cb34-16"></a>  <span class="co"># 10:   YBR040W    14.5616268341053 4.43031120733306e-147 1.167991e-145</span></span>
-<span id="cb34-17"><a href="#cb34-17"></a>  <span class="co"># 11:   YBR230C    12.4848555795528 7.72945248945236e-108 1.867951e-106</span></span>
-<span id="cb34-18"><a href="#cb34-18"></a>  <span class="co"># 12:   YBL003C    -4.1985604478168   6.7759310150691e-97  1.310013e-95</span></span>
-<span id="cb34-19"><a href="#cb34-19"></a>  <span class="co"># 13:   YBL016W    4.41343932260964  7.82940255472119e-47  1.195014e-45</span></span>
-<span id="cb34-20"><a href="#cb34-20"></a>  <span class="co"># 14:   YBR203W    10.6049068930757  6.08620650498862e-20  6.086207e-19</span></span>
-<span id="cb34-21"><a href="#cb34-21"></a>  <span class="co"># 15:   YBR086C     9.7196265707056  9.60207832249196e-19  9.282009e-18</span></span>
-<span id="cb34-22"><a href="#cb34-22"></a>  <span class="co"># 16:   YBR277C    17.2140839363989  2.44487670373165e-18  2.287143e-17</span></span>
-<span id="cb34-23"><a href="#cb34-23"></a>  <span class="co"># 17:   YBR295W    9.77234308829983   2.9084950406724e-17  2.635824e-16</span></span>
-<span id="cb34-24"><a href="#cb34-24"></a>  <span class="co"># 18:   YBR083W    4.17916131373144    9.606481245865e-16  8.442059e-15</span></span>
-<span id="cb34-25"><a href="#cb34-25"></a>  <span class="co"># 19:   YAL054C   -3.17330325909555  1.30266337135917e-15  1.111095e-14</span></span>
-<span id="cb34-26"><a href="#cb34-26"></a>  <span class="co"># 20:   YBR296C    9.18633075573362  2.50237783136509e-13  2.073399e-12</span></span>
-<span id="cb34-27"><a href="#cb34-27"></a>  <span class="co"># 21:   YBR093C   -3.40836871919578   1.6515719663441e-12  1.330433e-11</span></span>
-<span id="cb34-28"><a href="#cb34-28"></a>  <span class="co"># 22: YBR084C-A    9.00947030426105  1.86567997266701e-12  1.462290e-11</span></span>
-<span id="cb34-29"><a href="#cb34-29"></a>  <span class="co"># 23:   YBL004W   -1.67847881078767  2.07674225051448e-12  1.584882e-11</span></span>
-<span id="cb34-30"><a href="#cb34-30"></a>  <span class="co"># 24:   YBR184W   -15.1239290662261  7.92183774469212e-12  5.890597e-11</span></span>
-<span id="cb34-31"><a href="#cb34-31"></a>  <span class="co"># 25:   YBL105C    2.64342413974809   4.7745199157064e-11  3.461527e-10</span></span>
-<span id="cb34-32"><a href="#cb34-32"></a>  <span class="co"># 26:   YBL102W    -8.9100339041354  1.89050230887831e-10  1.305347e-09</span></span>
-<span id="cb34-33"><a href="#cb34-33"></a>  <span class="co"># 27:   YBL013W    -15.319403967074  3.99191692700095e-10  2.692223e-09</span></span>
-<span id="cb34-34"><a href="#cb34-34"></a>  <span class="co"># 28:   YBR211C    8.77437715012659  5.71127699857609e-10  3.764251e-09</span></span>
-<span id="cb34-35"><a href="#cb34-35"></a>  <span class="co"># 29:   YBR068C    8.67245301942337  6.31376887472524e-10  4.068873e-09</span></span>
-<span id="cb34-36"><a href="#cb34-36"></a>  <span class="co"># 30:   YBR175W    -9.1774269748887   3.3596751940423e-09  2.118056e-08</span></span>
-<span id="cb34-37"><a href="#cb34-37"></a>  <span class="co"># 31:   YBR218C    8.35135511413055  5.41322815151343e-08  3.340077e-07</span></span>
-<span id="cb34-38"><a href="#cb34-38"></a>  <span class="co"># 32:   YBR015C   -1.55009946287707  6.16237577511048e-08  3.723102e-07</span></span>
-<span id="cb34-39"><a href="#cb34-39"></a>  <span class="co"># 33:   YBR035C    2.18654908878179  6.92159737581857e-08  4.096456e-07</span></span>
-<span id="cb34-40"><a href="#cb34-40"></a>  <span class="co"># 34:   YBL054W    2.83357254525628  1.99671083965614e-07  1.158092e-06</span></span>
-<span id="cb34-41"><a href="#cb34-41"></a>  <span class="co"># 35:   YBR168W   -1.51588973572886  3.12105035998543e-07  1.774715e-06</span></span>
-<span id="cb34-42"><a href="#cb34-42"></a>  <span class="co"># 36:   YBR117C   -2.07172815538228  4.13101210450534e-05  2.260365e-04</span></span>
-<span id="cb34-43"><a href="#cb34-43"></a>  <span class="co"># 37:   YBR008C    1.03432937413973  6.72116190177454e-05  3.609513e-04</span></span>
-<span id="cb34-44"><a href="#cb34-44"></a>  <span class="co"># 38:   YBR270C   -1.68431187859011   7.7446526380902e-05  4.083544e-04</span></span>
-<span id="cb34-45"><a href="#cb34-45"></a>  <span class="co"># 39:   YBL083C   0.372760077005376                     1  1.000000e+00</span></span>
-<span id="cb34-46"><a href="#cb34-46"></a>  <span class="co"># 40:   YBR186W -0.0982423034021808                     1  1.000000e+00</span></span>
-<span id="cb34-47"><a href="#cb34-47"></a>  <span class="co"># 41:   YBR300C    0.86895953363737                     1  1.000000e+00</span></span>
-<span id="cb34-48"><a href="#cb34-48"></a>  <span class="co"># gene                  Ds                  pval          padj</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>  <span class="kw">shiftPromoter</span>(myTSSr,<span class="dt">comparePairs=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>)), <span class="dt">pval =</span> <span class="fl">0.01</span>)</span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>  myTSSr<span class="op">@</span>PromoterShift</span>
+<span id="cb35-4"><a href="#cb35-4"></a></span>
+<span id="cb35-5"><a href="#cb35-5"></a>  <span class="co"># $`control_VS_treat`</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a>  <span class="co"># gene                  Ds                  pval          padj</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>  <span class="co"># 1:   YAR027W    -10.350816320988                     0  0.000000e+00</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a>  <span class="co"># 2:   YBL017C    16.4385383531034                     0  0.000000e+00</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a>  <span class="co"># 3:   YBR006W   -26.1598728383391                     0  0.000000e+00</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a>  <span class="co"># 4:   YBR023C     18.118979599068                     0  0.000000e+00</span></span>
+<span id="cb35-11"><a href="#cb35-11"></a>  <span class="co"># 5:   YBR039W   -27.4865860443054                     0  0.000000e+00</span></span>
+<span id="cb35-12"><a href="#cb35-12"></a>  <span class="co"># 6:   YBR121C    -32.547014080256                     0  0.000000e+00</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a>  <span class="co"># 7:   YBL067C   -25.3869440027767 3.07511136581584e-289 1.273975e-287</span></span>
+<span id="cb35-14"><a href="#cb35-14"></a>  <span class="co"># 8:   YBL061C    23.7545209498577 3.44768363971726e-197 1.249785e-195</span></span>
+<span id="cb35-15"><a href="#cb35-15"></a>  <span class="co"># 9: YBL039W-B    23.4499059050598  4.6945530608788e-166 1.361420e-164</span></span>
+<span id="cb35-16"><a href="#cb35-16"></a>  <span class="co"># 10:   YBR040W    14.5616268341053 4.43031120733306e-147 1.167991e-145</span></span>
+<span id="cb35-17"><a href="#cb35-17"></a>  <span class="co"># 11:   YBR230C    12.4848555795528 7.72945248945236e-108 1.867951e-106</span></span>
+<span id="cb35-18"><a href="#cb35-18"></a>  <span class="co"># 12:   YBL003C    -4.1985604478168   6.7759310150691e-97  1.310013e-95</span></span>
+<span id="cb35-19"><a href="#cb35-19"></a>  <span class="co"># 13:   YBL016W    4.41343932260964  7.82940255472119e-47  1.195014e-45</span></span>
+<span id="cb35-20"><a href="#cb35-20"></a>  <span class="co"># 14:   YBR203W    10.6049068930757  6.08620650498862e-20  6.086207e-19</span></span>
+<span id="cb35-21"><a href="#cb35-21"></a>  <span class="co"># 15:   YBR086C     9.7196265707056  9.60207832249196e-19  9.282009e-18</span></span>
+<span id="cb35-22"><a href="#cb35-22"></a>  <span class="co"># 16:   YBR277C    17.2140839363989  2.44487670373165e-18  2.287143e-17</span></span>
+<span id="cb35-23"><a href="#cb35-23"></a>  <span class="co"># 17:   YBR295W    9.77234308829983   2.9084950406724e-17  2.635824e-16</span></span>
+<span id="cb35-24"><a href="#cb35-24"></a>  <span class="co"># 18:   YBR083W    4.17916131373144    9.606481245865e-16  8.442059e-15</span></span>
+<span id="cb35-25"><a href="#cb35-25"></a>  <span class="co"># 19:   YAL054C   -3.17330325909555  1.30266337135917e-15  1.111095e-14</span></span>
+<span id="cb35-26"><a href="#cb35-26"></a>  <span class="co"># 20:   YBR296C    9.18633075573362  2.50237783136509e-13  2.073399e-12</span></span>
+<span id="cb35-27"><a href="#cb35-27"></a>  <span class="co"># 21:   YBR093C   -3.40836871919578   1.6515719663441e-12  1.330433e-11</span></span>
+<span id="cb35-28"><a href="#cb35-28"></a>  <span class="co"># 22: YBR084C-A    9.00947030426105  1.86567997266701e-12  1.462290e-11</span></span>
+<span id="cb35-29"><a href="#cb35-29"></a>  <span class="co"># 23:   YBL004W   -1.67847881078767  2.07674225051448e-12  1.584882e-11</span></span>
+<span id="cb35-30"><a href="#cb35-30"></a>  <span class="co"># 24:   YBR184W   -15.1239290662261  7.92183774469212e-12  5.890597e-11</span></span>
+<span id="cb35-31"><a href="#cb35-31"></a>  <span class="co"># 25:   YBL105C    2.64342413974809   4.7745199157064e-11  3.461527e-10</span></span>
+<span id="cb35-32"><a href="#cb35-32"></a>  <span class="co"># 26:   YBL102W    -8.9100339041354  1.89050230887831e-10  1.305347e-09</span></span>
+<span id="cb35-33"><a href="#cb35-33"></a>  <span class="co"># 27:   YBL013W    -15.319403967074  3.99191692700095e-10  2.692223e-09</span></span>
+<span id="cb35-34"><a href="#cb35-34"></a>  <span class="co"># 28:   YBR211C    8.77437715012659  5.71127699857609e-10  3.764251e-09</span></span>
+<span id="cb35-35"><a href="#cb35-35"></a>  <span class="co"># 29:   YBR068C    8.67245301942337  6.31376887472524e-10  4.068873e-09</span></span>
+<span id="cb35-36"><a href="#cb35-36"></a>  <span class="co"># 30:   YBR175W    -9.1774269748887   3.3596751940423e-09  2.118056e-08</span></span>
+<span id="cb35-37"><a href="#cb35-37"></a>  <span class="co"># 31:   YBR218C    8.35135511413055  5.41322815151343e-08  3.340077e-07</span></span>
+<span id="cb35-38"><a href="#cb35-38"></a>  <span class="co"># 32:   YBR015C   -1.55009946287707  6.16237577511048e-08  3.723102e-07</span></span>
+<span id="cb35-39"><a href="#cb35-39"></a>  <span class="co"># 33:   YBR035C    2.18654908878179  6.92159737581857e-08  4.096456e-07</span></span>
+<span id="cb35-40"><a href="#cb35-40"></a>  <span class="co"># 34:   YBL054W    2.83357254525628  1.99671083965614e-07  1.158092e-06</span></span>
+<span id="cb35-41"><a href="#cb35-41"></a>  <span class="co"># 35:   YBR168W   -1.51588973572886  3.12105035998543e-07  1.774715e-06</span></span>
+<span id="cb35-42"><a href="#cb35-42"></a>  <span class="co"># 36:   YBR117C   -2.07172815538228  4.13101210450534e-05  2.260365e-04</span></span>
+<span id="cb35-43"><a href="#cb35-43"></a>  <span class="co"># 37:   YBR008C    1.03432937413973  6.72116190177454e-05  3.609513e-04</span></span>
+<span id="cb35-44"><a href="#cb35-44"></a>  <span class="co"># 38:   YBR270C   -1.68431187859011   7.7446526380902e-05  4.083544e-04</span></span>
+<span id="cb35-45"><a href="#cb35-45"></a>  <span class="co"># 39:   YBL083C   0.372760077005376                     1  1.000000e+00</span></span>
+<span id="cb35-46"><a href="#cb35-46"></a>  <span class="co"># 40:   YBR186W -0.0982423034021808                     1  1.000000e+00</span></span>
+<span id="cb35-47"><a href="#cb35-47"></a>  <span class="co"># 41:   YBR300C    0.86895953363737                     1  1.000000e+00</span></span>
+<span id="cb35-48"><a href="#cb35-48"></a>  <span class="co"># gene                  Ds                  pval          padj</span></span></code></pre></div>
 <p>Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>  <span class="op">&gt;</span><span class="st"> </span><span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"assigned"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span> ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>  <span class="kw">plotTSS</span>(myTSSr,<span class="dt">samples=</span><span class="kw">c</span>(<span class="st">"control"</span>,<span class="st">"treat"</span>),<span class="dt">tssData =</span> <span class="st">"processed"</span>,<span class="dt">clusters =</span> <span class="st">"assigned"</span>,<span class="dt">clusterThreshold =</span> <span class="fl">0.02</span> ,<span class="dt">genelist=</span><span class="kw">c</span>(<span class="st">"YBL017C"</span>,<span class="st">"YBL067C"</span>),<span class="dt">up.dis =</span><span class="dv">500</span>,<span class="dt">down.dis =</span> <span class="dv">100</span>,<span class="dt">yFixed=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 </li>
 </ul>
-<p><img src="./vigettes/figures/06_TSS_graphs.png" alt="06_TSS_graphs">{width=50%}</p>
+<p><img src="https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs.png" alt="06_TSS_graphs">{width=50%}</p>
 <p>Results of core promoter shift analysis can also be exported to a text file with exportShiftTable function.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>    <span class="op">&gt;</span><span class="st"> </span><span class="kw">exportShiftTable</span>(myTSSr)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>    <span class="kw">exportShiftTable</span>(myTSSr)</span></code></pre></div>
 </div>
-<div id="7-contact-author" class="section level2">
+<div id="7-contact" class="section level2">
 <h2 class="hasAnchor">
-<a href="#7-contact-author" class="anchor"></a>7. Contact Author:</h2>
-<p>Zhaolian Lu</p>
-<p>Affiliation: Lin Lab, Department of Biology, Saint Louis University, MO, USA.</p>
-<p>Email: <a href="mailto:zhaolian.lu@slu.edu" class="email">zhaolian.lu@slu.edu</a></p>
+<a href="#7-contact" class="anchor"></a>7. Contact:</h2>
+<p>Zhenguo Lin, PhD</p>
+<p>Department of Biology, Saint Louis University, USA.</p>
+<p>Email: <a href="mailto:zhenguo.lin@slu.edu" class="email">zhenguo.lin@slu.edu</a></p>
 </div>
 <div id="8-reference" class="section level2">
 <h2 class="hasAnchor">
@@ -642,7 +644,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

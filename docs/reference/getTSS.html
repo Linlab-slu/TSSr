@@ -74,7 +74,7 @@ The files include users' home-made alignment files (bam format) or downloaded fi
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TSSr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ The files include users' home-made alignment files (bam format) or downloaded fi
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -128,10 +128,10 @@ The files include users' home-made alignment files (bam format) or downloaded fi
  See inputFilesType for details on the supported input file formats.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getTSS</span>(<span class='no'>object</span>, <span class='kw'>sequencingQualityThreshold</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>mappingQualityThreshold</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+    <pre class="usage"><span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>object</span>, sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>, mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
-<span class='fu'>getTSS</span>(<span class='no'>object</span>, <span class='kw'>sequencingQualityThreshold</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>mappingQualityThreshold</span> <span class='kw'>=</span> <span class='fl'>20</span>)</pre>
+<span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>object</span>, sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>, mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,9 +153,10 @@ The files include users' home-made alignment files (bam format) or downloaded fi
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>getTSS</span>(<span class='no'>exampleTSSr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+<span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Reading in file: S01.sorted.bam...</span></div><div class='output co'>#&gt; <span class='error'>Error in value[[3L]](cond): failed to open BamFile: file(s) do not exist:</span>
-#&gt; <span class='error'>  'S01.sorted.bam'</span></div><div class='input'># }
+#&gt; <span class='error'>  'S01.sorted.bam'</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -172,7 +173,7 @@ The files include users' home-made alignment files (bam format) or downloaded fi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

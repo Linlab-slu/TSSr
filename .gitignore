@@ -4,5 +4,6 @@
 .Rhistory
 .Rproj.user
 .Rbuildignore
+.git
 
-
+docs

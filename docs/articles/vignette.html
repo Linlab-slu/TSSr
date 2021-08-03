@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TSSr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -69,13 +69,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>TSSr Vignette</h1>
-                        <h4 class="author">Zhaolian Lu, Keenan Berry, Tae-Hyuk Ahn, Zhenguo Lin</h4>
+                        <h4 class="author">Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk Ahn, Zhenguo Lin</h4>
             
-            <h4 class="date">2020-09-07</h4>
+            <h4 class="date">2021-08-03</h4>
       
       
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -88,7 +88,7 @@
 <h2 class="hasAnchor">
 <a href="#tssr" class="anchor"></a>TSSr</h2>
 <p>TSSr is designed to analyze transcription start sites (TSSs) and core promoters with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE) (Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014), a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018), NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015), transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013), transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013), precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016), and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).</p>
-<p>TSSr package provides a comprehensive workflow on TSS data starts from identification of accurate TSS locations, clustering TSSs within small genomic regions corresponding to core promoters, and transcriptional activity quantifications, as well as specialized downstream analyses including core promoter shape, cluster annotation, gene differential expression, core promoter shift. TSSr can take multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates various types of TSS or core promoter track files which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. Multiple cores are supported on Linux or Mac platforms.</p>
+<p>TSSr package provides a comprehensive workflow on TSS data starting from identification of accurate TSS locations, clustering TSSs within small genomic regions corresponding to core promoters, and transcriptional activity quantifications, as well as specialized downstream analyses including core promoter shape, cluster annotation, gene differential expression, core promoter shift. TSSr can take multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates various types of TSS or core promoter track files, which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. Multiple cores are supported on Linux or Mac platforms.</p>
 </div>
 <div id="pre-requisites" class="section level2">
 <h2 class="hasAnchor">
@@ -114,9 +114,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("Rsamtools")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("Rsamtools")</code></pre>
 </li>
 </ul>
 </li>
@@ -125,9 +125,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("GenomicRanges")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("GenomicRanges")</code></pre>
 </li>
 </ul>
 </li>
@@ -136,9 +136,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<pre><code>&gt;if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt;install.packages("BiocManager")
-&gt;BiocManager::install("GenomicFeatures")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("GenomicFeatures")</code></pre>
 </li>
 </ul>
 </li>
@@ -147,9 +147,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("Gviz")  </code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("Gviz")  </code></pre>
 </li>
 </ul>
 </li>
@@ -158,9 +158,9 @@
 <ul>
 <li>
 <p>install by using the following R commands:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("rtracklayer")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("rtracklayer")</code></pre>
 </li>
 </ul>
 </li>
@@ -169,9 +169,9 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("DESeq2")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("DESeq2")</code></pre>
 </li>
 </ul>
 </li>
@@ -180,9 +180,9 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<pre><code>&gt; if (!requireNamespace("BiocManager", quietly = TRUE))
-&gt; install.packages("BiocManager")
-&gt; BiocManager::install("BSgenome")</code></pre>
+<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("BSgenome")</code></pre>
 </li>
 </ul>
 </li>
@@ -191,7 +191,7 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<pre><code>&gt; install.packages("data.table")  </code></pre>
+<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("data.table")  </a></code></pre>
 </li>
 </ul>
 </li>
@@ -200,7 +200,7 @@
 <ul>
 <li>
 <p>install by using the following R command:</p>
-<pre><code>&gt; install.packages("stringr")</code></pre>
+<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("stringr")</a></code></pre>
 </li>
 </ul>
 </li>
@@ -210,7 +210,7 @@
 <h2 class="hasAnchor">
 <a href="#installing-tssr-package" class="anchor"></a>Installing TSSr Package:</h2>
 <p>To install the TSSr package all the prerequisites above need to be installed. After confirming those packages are installed, you can install the development version directly from GitHub using devtools:</p>
-<pre><code>    &gt; devtools::install_github("Linlab-slu/TSSr")</code></pre>
+<pre><code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">    devtools::install_github("Linlab-slu/TSSr")</a></code></pre>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -218,15 +218,15 @@
 <ul>
 <li>
 <p>Launch TSSr</p>
-<pre><code>  &gt; library(TSSr)</code></pre>
+<pre><code><a href="https://rdrr.io/r/base/library.html">  library(TSSr)</a></code></pre>
 </li>
 <li>
 <p>Creating a TSSr object with system example data</p>
-<pre><code>  &gt; myTSSr &lt;- exampleTSSr</code></pre>
+<pre><code>  myTSSr &lt;- exampleTSSr</code></pre>
 </li>
 <li>
 <p>Creating a TSSr object with self-defined data</p>
-<pre><code>  &gt; myTSSr &lt;- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
+<pre><code>  myTSSr &lt;- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
             ,inputFiles = inputFiles
             ,inputFilesType= "bam"
             ,sampleLabels = c("SL01","SL02","SL03","SL04")
@@ -236,65 +236,65 @@
 </li>
 <li>
 <p>Reading in the data and TSS processing</p>
-<pre><code>  &gt; getTSS(myTSSr)
-  &gt; mergeSamples(myTSSr)
-  &gt; normalizeTSS(myTSSr)
-  &gt; filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
-  &gt; plotCorrelation(myTSSr, samples = "all)</code></pre>
+<pre><code>  getTSS(myTSSr)
+  mergeSamples(myTSSr)
+  normalizeTSS(myTSSr)
+  filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
+  plotCorrelation(myTSSr, samples = "all)</code></pre>
 </li>
 </ul>
 <div class="figure">
 <img src="figures/01_TSS_correlation_plot_of_all_samples.png" style="width:50.0%" alt=""><p class="caption">01_TSS_correlation_plot_of_all_samples</p>
 </div>
-<pre><code>    &gt; plotTssPCA(myTSSr, TSS.threshold=10)</code></pre>
+<pre><code><a href="../reference/plotTssPCA.html">    plotTssPCA(myTSSr, TSS.threshold=10)</a></code></pre>
 <div class="figure">
 <img src="figures/02_PCA_plot.png" style="width:50.0%" alt=""><p class="caption">02_PCA_plot</p>
 </div>
-<pre><code>    &gt; exportTSStable(myTSSr, data = "raw", merged = "TRUE")
-    &gt; exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
-    &gt; exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
-    </code></pre>
+<pre><code><a href="../reference/exportTSStable.html">    exportTSStable(myTSSr, data = "raw", merged = "TRUE")
+    exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
+    exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
+    </a></code></pre>
 <ul>
 <li>
 <p>TSS clustering</p>
-<pre><code>  &gt; clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
+<pre><code><a href="../reference/clusterTSS.html">  clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
          ,localThreshold = 0.02,clusterThreshold = 1
          ,useMultiCore=FALSE, numCores=NULL)
-  &gt; exportClustersTable(myTSSr, data = "filtered")
-  &gt; exportClustersToBed(myTSSr, data = "tagClusters")</code></pre>
+      exportClustersTable(myTSSr, data = "filtered")
+      exportClustersToBed(myTSSr, data = "tagClusters")</a></code></pre>
 </li>
 <li>
 <p>Aggregating consensus clusters</p>
-<pre><code>  &gt; consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
-  &gt; exportClustersToBed(myTSSr, data = "consensusClusters")</code></pre>
+<pre><code><a href="../reference/consensusCluster.html">  consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
+      exportClustersToBed(myTSSr, data = "consensusClusters")</a></code></pre>
 </li>
 <li>
 <p>Core promoter shape</p>
-<pre><code>  &gt; shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
-  &gt; plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)</code></pre>
+<pre><code><a href="../reference/shapeCluster.html">  shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
+  plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)</a></code></pre>
 </li>
 </ul>
 <div class="figure">
 <img src="figures/03_Interquantile_plot_of_ALL_samples.png" style="width:75.0%" alt=""><p class="caption">03_Interquantile_plot_of_ALL_samples</p>
 </div>
-<pre><code>    &gt; plotShape(myTSSr)</code></pre>
+<pre><code><a href="../reference/plotShape.html">    plotShape(myTSSr)</a></code></pre>
 <div class="figure">
 <img src="figures/04_Shape_plot_of_ALL_samples.png" style="width:75.0%" alt=""><p class="caption">04_Shape_plot_of_ALL_samples</p>
 </div>
-<pre><code>    &gt; exportShapeTable(myTSSr)</code></pre>
+<pre><code><a href="../reference/exportShapeTable.html">        exportShapeTable(myTSSr)</a></code></pre>
 <ul>
 <li>
 <p>Annotation</p>
-<pre><code>  &gt; annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
+<pre><code><a href="../reference/annotateCluster.html">  annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
               filterClusterThreshold = 0.02, annotationType = "genes"
               ,upstream=1000, upstreamOverlap = 500, downstream = 0)
-  &gt; exportDETable(myTSSr, data = "sig")</code></pre>
+      exportDETable(myTSSr, data = "sig")</a></code></pre>
 </li>
 <li>
 <p>Differential expression analysis</p>
-<pre><code>  &gt; deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
-  &gt; exportShiftTable(myTSSr)
-  &gt; plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))</code></pre>
+<pre><code><a href="../reference/deGene.html">  deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+  exportShiftTable(myTSSr)
+  plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))</a></code></pre>
 </li>
 </ul>
 <div class="figure">
@@ -303,9 +303,9 @@
 <ul>
 <li>
 <p>Core promoter shifts</p>
-<pre><code>  &gt; shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-  &gt; plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "filtered",clusterThreshold = 0.02
-      ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)</code></pre>
+<pre><code><a href="../reference/shiftPromoter.html">  shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+  plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "filtered",clusterThreshold = 0.02
+      ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)</a></code></pre>
 </li>
 </ul>
 <div class="figure">
@@ -343,7 +343,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

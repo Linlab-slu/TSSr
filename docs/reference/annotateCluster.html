@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TSSr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -124,21 +124,21 @@
     <p>Annotates clusters with gene or transcript names from GFF annotation file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>annotateCluster</span>(<span class='no'>object</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"consensusClusters"</span>,<span class='kw'>filterCluster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-, <span class='kw'>filterClusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>, <span class='kw'>annotationType</span> <span class='kw'>=</span> <span class='st'>"genes"</span>,<span class='kw'>upstream</span><span class='kw'>=</span><span class='fl'>1000</span>
-, <span class='kw'>upstreamOverlap</span> <span class='kw'>=</span> <span class='fl'>500</span>,<span class='kw'>downstream</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+    <pre class="usage"><span class='fu'>annotateCluster</span><span class='op'>(</span><span class='va'>object</span>,clusters <span class='op'>=</span> <span class='st'>"consensusClusters"</span>,filterCluster <span class='op'>=</span> <span class='cn'>TRUE</span>
+, filterClusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>, annotationType <span class='op'>=</span> <span class='st'>"genes"</span>,upstream<span class='op'>=</span><span class='fl'>1000</span>
+, upstreamOverlap <span class='op'>=</span> <span class='fl'>500</span>,downstream <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
-<span class='fu'>annotateCluster</span>(
-  <span class='no'>object</span>,
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"consensusClusters"</span>,
-  <span class='kw'>filterCluster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>filterClusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
-  <span class='kw'>annotationType</span> <span class='kw'>=</span> <span class='st'>"genes"</span>,
-  <span class='kw'>upstream</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>upstreamOverlap</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-  <span class='kw'>downstream</span> <span class='kw'>=</span> <span class='fl'>0</span>
-)</pre>
+<span class='fu'>annotateCluster</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  clusters <span class='op'>=</span> <span class='st'>"consensusClusters"</span>,
+  filterCluster <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  filterClusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,
+  annotationType <span class='op'>=</span> <span class='st'>"genes"</span>,
+  upstream <span class='op'>=</span> <span class='fl'>1000</span>,
+  upstreamOverlap <span class='op'>=</span> <span class='fl'>500</span>,
+  downstream <span class='op'>=</span> <span class='fl'>0</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,10 +187,11 @@ Note: if annotationType == "transctipt" or the gene annotations start from trans
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>annotateCluster</span>(<span class='no'>exampleTSSr</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"consensusClusters"</span>, <span class='kw'>filterCluster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-, <span class='kw'>filterClusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>, <span class='kw'>annotationType</span> <span class='kw'>=</span> <span class='st'>"genes"</span>, <span class='kw'>upstream</span><span class='kw'>=</span><span class='fl'>1000</span>
-, <span class='kw'>upstreamOverlap</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>downstream</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Annotating...</span></div><div class='output co'>#&gt; <span class='error'>Error in annotateCluster(exampleTSSr, clusters = "consensusClusters",     filterCluster = TRUE, filterClusterThreshold = 0.02, annotationType = "genes",     upstream = 1000, upstreamOverlap = 500, downstream = 0): Please provide correct refSource file!</span></div><div class='input'># }
+<span class='fu'>annotateCluster</span><span class='op'>(</span><span class='va'>exampleTSSr</span>,clusters <span class='op'>=</span> <span class='st'>"consensusClusters"</span>, filterCluster <span class='op'>=</span> <span class='cn'>TRUE</span>
+, filterClusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>, annotationType <span class='op'>=</span> <span class='st'>"genes"</span>, upstream<span class='op'>=</span><span class='fl'>1000</span>
+, upstreamOverlap <span class='op'>=</span> <span class='fl'>500</span>, downstream <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Annotating...</span></div><div class='output co'>#&gt; <span class='error'>Error in annotateCluster(exampleTSSr, clusters = "consensusClusters",     filterCluster = TRUE, filterClusterThreshold = 0.02, annotationType = "genes",     upstream = 1000, upstreamOverlap = 500, downstream = 0): Please provide correct refSource file!</span></div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>
@@ -208,7 +209,7 @@ Note: if annotationType == "transctipt" or the gene annotations start from trans
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

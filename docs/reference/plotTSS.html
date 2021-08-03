@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TSSr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -124,21 +124,22 @@
     <p>Plots Gviz-track of TSSs, clusters, and genes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotTSS</span>(<span class='no'>object</span>,<span class='no'>samples</span>,<span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,<span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"assigned"</span>,
-<span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,<span class='no'>genelist</span>,<span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>up.dis</span> <span class='kw'>=</span><span class='fl'>500</span>,<span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>)
+    <pre class="usage"><span class='fu'>plotTSS</span><span class='op'>(</span><span class='va'>object</span>,<span class='va'>samples</span>,tssData <span class='op'>=</span> <span class='st'>"processed"</span>,clusters <span class='op'>=</span> <span class='st'>"assigned"</span>,
+clusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,<span class='va'>genelist</span>,Bidirection <span class='op'>=</span> <span class='cn'>TRUE</span>,up.dis <span class='op'>=</span><span class='fl'>500</span>,down.dis <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
-<span class='fu'>plotTSS</span>(
-  <span class='no'>object</span>,
-  <span class='no'>samples</span>,
-  <span class='kw'>tssData</span> <span class='kw'>=</span> <span class='st'>"processed"</span>,
-  <span class='kw'>clusters</span> <span class='kw'>=</span> <span class='st'>"assigned"</span>,
-  <span class='kw'>clusterThreshold</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
-  <span class='no'>genelist</span>,
-  <span class='kw'>Bidirection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>up.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-  <span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>
-)</pre>
+<span class='fu'>plotTSS</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>samples</span>,
+  tssData <span class='op'>=</span> <span class='st'>"processed"</span>,
+  clusters <span class='op'>=</span> <span class='st'>"assigned"</span>,
+  clusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,
+  <span class='va'>genelist</span>,
+  Bidirection <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  up.dis <span class='op'>=</span> <span class='fl'>500</span>,
+  down.dis <span class='op'>=</span> <span class='fl'>500</span>,
+  <span class='va'>yFixed</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,8 +186,9 @@ clusters within the same gene promoter region. Default value = 0.02.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>plotTSS</span>(<span class='no'>exampleTSSr</span>, <span class='kw'>samples</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"control"</span>,<span class='st'>"treat"</span>), <span class='kw'>genelist</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"YBL017C"</span>,<span class='st'>"YBL067C"</span>)
-,<span class='kw'>up.dis</span> <span class='kw'>=</span><span class='fl'>500</span>, <span class='kw'>down.dis</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting TSS graphs...</span></div><div class='output co'>#&gt; <span class='message'>Import genomic features from the file as a GRanges object ... </span></div><div class='output co'>#&gt; <span class='error'>Error in open.connection(con, open): cannot open the connection</span></div><div class='input'># }
+<span class='fu'>plotTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span>, samples<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>,<span class='st'>"treat"</span><span class='op'>)</span>, genelist<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"YBL017C"</span>,<span class='st'>"YBL067C"</span><span class='op'>)</span>
+,up.dis <span class='op'>=</span><span class='fl'>500</span>, down.dis <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Plotting TSS graphs...</span></div><div class='output co'>#&gt; <span class='message'>Import genomic features from the file as a GRanges object ... </span></div><div class='output co'>#&gt; <span class='error'>Error in open.connection(con, open): cannot open the connection</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -203,7 +205,7 @@ clusters within the same gene promoter region. Default value = 0.02.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

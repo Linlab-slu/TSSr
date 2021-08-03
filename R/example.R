@@ -13,7 +13,7 @@
 #' @source \url{https://genome.cshlp.org/content/29/7/1198.short}
 #' @examples
 #' data(exampleTSSr)
-"exampleTSSr"
+#' exampleTSSr
 
 #' @rdname exampleTSSr
-"exampleTSSr"
+#' @export
