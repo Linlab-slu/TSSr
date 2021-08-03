@@ -17,7 +17,8 @@ clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
   genelist,
   Bidirection = TRUE,
   up.dis = 500,
-  down.dis = 500
+  down.dis = 500,
+  yFixed
 )
 }
 \arguments{

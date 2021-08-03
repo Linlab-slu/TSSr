@@ -68,5 +68,7 @@ result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 \item{\code{DEtables}}{list.}
 
 \item{\code{PromoterShift}}{list.}
+
+\item{\code{TAGtables}}{list}
 }}
 
