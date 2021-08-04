@@ -16,6 +16,7 @@ setGeneric("mergeSamples",function(object, mergeIndex = NULL)standardGeneric("me
 #' @rdname mergeSamples
 #' @export
 setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex){
+  objName <- deparse(substitute(object))
   if(is.null(mergeIndex)){
     mergeIndex <- as.integer(object@mergeIndex)
   }else{
@@ -26,7 +27,6 @@ setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex
 
   tss <- object@TSSrawMatrix
 
-  objName <- deparse(substitute(object))
   if(length(mergeIndex) != length(sampleLabels)){
     stop("Length of mergeIndex must match number of samples.")
   }

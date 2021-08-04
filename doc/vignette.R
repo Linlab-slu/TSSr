@@ -16,7 +16,7 @@ myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 getTSS(myTSSr)
 plotCorrelation(myTSSr, samples = "all")
 plotTssPCA(myTSSr, TSS.threshold=10)
-mergeSamples(myTSSr)
+mergeSamples(myTSSr,mergeIndex=c(1,1,2,2))
 normalizeTSS(myTSSr)
 filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
 
