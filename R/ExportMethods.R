@@ -237,6 +237,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' @param Bidirection Specify whether to display bidirectional TSS signals within defined region. Default is TRUE.
 #' @param up.dis Distance upstream of genes to specify plotting range. Default value = 500.
 #' @param down.dis Distance downstream of genes to specify plotting range. Default value = 500.
+#' @param yFixed Logical, specify whether to fix y axis limits.
 #'
 #'
 #' @export
