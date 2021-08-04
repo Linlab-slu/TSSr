@@ -45,6 +45,7 @@
 #' @importFrom GenomicAlignments qwidth
 #' @importFrom GenomicAlignments readGAlignments
 #' @importFrom GenomicAlignments seqnames
+#' @importFrom dplyr filter
 #' @import GenomeInfoDb
 #' @importFrom BiocGenerics union
 #' @import data.table
