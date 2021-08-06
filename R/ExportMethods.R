@@ -225,7 +225,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #'
 #' @description Plots Gviz-track of TSSs, clusters, and genes.
 #' @usage plotTSS(object,samples,tssData = "processed",clusters = "assigned",
-#' clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
+#' clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500,yFixed = TRUE)
 #'
 #' @param object A TSSr object.
 #' @param samples Specify samples to be included for plotting.
@@ -237,7 +237,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' @param Bidirection Specify whether to display bidirectional TSS signals within defined region. Default is TRUE.
 #' @param up.dis Distance upstream of genes to specify plotting range. Default value = 500.
 #' @param down.dis Distance downstream of genes to specify plotting range. Default value = 500.
-#' @param yFixed Logical, specify whether to fix y axis limits.
+#' @param yFixed Logical, specify whether to fix y axis limits. Default is TRUE.
 #'
 #'
 #' @export
@@ -255,7 +255,7 @@ setGeneric("plotTSS",function(object,samples
                               ,Bidirection= TRUE
                               ,up.dis =500
                               ,down.dis = 500
-                              ,yFixed)standardGeneric("plotTSS"))
+                              ,yFixed = TRUE)standardGeneric("plotTSS"))
 #' @rdname plotTSS
 #' @export
 setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssData, clusters, clusterThreshold

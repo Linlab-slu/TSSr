@@ -11,6 +11,9 @@
 ##tss.raw is the raw tss merged tables, before any sums
 ############################################################################
 .deseq2 <- function(object,cx,cy, tss.raw, samplex,sampley, sampleOne,sampleTwo,useMultiCore, numCores){
+  ##define variable as a NULL value
+  TAGtables = NULL
+
   ##get raw count tables
   TAGtables <- object@TAGtables
   if(sampleOne%in%names(TAGtables)){
@@ -20,7 +23,7 @@
     ## save the tagCount results
     TAGtables[[sampleOne]]<-xCounts
   }
-  
+
   if(sampleTwo%in%names(TAGtables)){
     yCounts<-TAGtables[[which(names(TAGtables)==sampleTwo)]]
   } else{
@@ -48,7 +51,7 @@
     })
   }
   one <- data.frame(matrix(unlist(one), nrow=length(one), byrow=T),stringsAsFactors=FALSE)
-  
+
   ##tag counts by gene for sampleTwo
   setkey(yCounts, gene)
   if(useMultiCore){
@@ -59,7 +62,7 @@
       data <- yCounts[list(my.gene)]
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     }, mc.cores = numCores)
-    
+
   }else{
     two <- lapply(as.list(unique(yCounts$gene)), function(my.gene) {
       data <- yCounts[list(my.gene)]
@@ -90,6 +93,10 @@
 ############################################################################
 ##.tagCount updated
 .tagCount_updated <- function(cs, tss.raw, samples, useMultiCore, numCores){
+
+  ##define variable as a NULL value
+  tag_sum = NULL
+
   cols <- c("chr","pos","strand", samples)
   tss1 <- tss.raw[,.SD, .SDcols = cols]
   #exclude rows with no count
@@ -110,7 +117,7 @@
       })
       return(temp)
     }, mc.cores = numCores)
-    
+
   }else{
     tags <- lapply(seq_len(cs[,.N]),function(r){
       data <- tss[tss$chr == cs[r,chr] & tss$strand == cs[r,strand] & tss$pos >= cs[r,start] & tss$pos <= cs[r,end],]

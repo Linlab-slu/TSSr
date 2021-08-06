@@ -6,7 +6,7 @@
 \title{Plot TSSs and clusters}
 \usage{
 plotTSS(object,samples,tssData = "processed",clusters = "assigned",
-clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
+clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500,yFixed = TRUE)
 
 \S4method{plotTSS}{TSSr}(
   object,
@@ -18,7 +18,7 @@ clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500)
   Bidirection = TRUE,
   up.dis = 500,
   down.dis = 500,
-  yFixed
+  yFixed = TRUE
 )
 }
 \arguments{
@@ -40,6 +40,8 @@ clusters within the same gene promoter region. Default value = 0.02.}
 \item{up.dis}{Distance upstream of genes to specify plotting range. Default value = 500.}
 
 \item{down.dis}{Distance downstream of genes to specify plotting range. Default value = 500.}
+
+\item{yFixed}{Logical, specify whether to fix y axis limits. Default is TRUE.}
 }
 \description{
 Plots Gviz-track of TSSs, clusters, and genes.
