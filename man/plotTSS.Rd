@@ -6,7 +6,8 @@
 \title{Plot TSSs and clusters}
 \usage{
 plotTSS(object,samples,tssData = "processed",clusters = "assigned",
-clusterThreshold = 0.02,genelist,Bidirection = TRUE,up.dis =500,down.dis = 500,yFixed = TRUE)
+clusterThreshold = 0.02,genelist,Bidirection = TRUE,
+up.dis =500,down.dis = 500,yFixed = TRUE)
 
 \S4method{plotTSS}{TSSr}(
   object,

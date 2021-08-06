@@ -10,10 +10,10 @@
 #' @format An object of class TSSr
 #' \describe{
 #'   \item{exampleTSSr}{RangedSummarizedExperiment:TSSr}}
+"exampleTSSr"
 #' @source \url{https://genome.cshlp.org/content/29/7/1198.short}
 #' @examples
 #' data(exampleTSSr)
-"exampleTSSr"
 
 #' @rdname exampleTSSr
 #' @export
