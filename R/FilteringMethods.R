@@ -17,8 +17,8 @@
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
-#' filterTSS(exampleTSSr, method = "poisson", pVal = 0.01)
 #' }
 setGeneric("filterTSS",function(object, method = "poisson", normalization = TRUE
                                 , pVal =0.01, tpmLow = 0.1)standardGeneric("filterTSS"))

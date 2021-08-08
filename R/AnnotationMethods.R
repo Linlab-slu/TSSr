@@ -13,8 +13,8 @@
 #'  transcriptional or sequencing noise. Default is TRUE.
 #' @param filterClusterThreshold  Ignore downstream clusters if signal < filterClusterThreshold*the
 #' strongest clusters within the same gene promoter region. Default value = 0.02.
-#' @param annotationType  Specify annotation feature to be associated with: "gene" or "transcript".
-#' Default is "gene".
+#' @param annotationType  Specify annotation feature to be associated with: "genes" or "transcripts".
+#' Default is "genes".
 #' @param upstream  Upstream distance to the start position of annotation feature. Default value = 1000.
 #' @param upstreamOverlap Upstream distance to the start position of annotation feature if overlapped
 #' with the upstream neighboring feature. Default value = 500.
@@ -50,22 +50,27 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   refGFF <- object@refSource
+  refTable <- object@refTable
   organismName <- object@organismName
 
-  ##check whether there is refSource provided
-  if(length(object@refSource) == 0 | !(object@refSource %in% list.files())){
-    stop("Please provide correct refSource file!")
-  }
-
-  ##define variable as a NULL value
-  inCoding = r = f = dominant_tss = NULL
-
-  ##prepare annotation file
-  txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
-  if(annotationType == "genes"){
-    ref <- setDT(as.data.frame(genes(txdb)))
-  }else if(annotationType == "transcripts"){
-    ref <- setDT(as.data.frame(transcripts(txdb)))
+  ##check whether there is refTable provided
+  if(length(refTable) != 0){
+    ref <- refTable
+  }else{
+    ##check whether there is refSource provided
+    if(length(refGFF) == 0 ){
+      stop("Please provide correct refSource file!")
+    }
+    ##define variable as a NULL value
+    inCoding = r = f = dominant_tss = NULL
+    ##prepare annotation file
+    txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
+    if(annotationType == "genes"){
+      ref <- setDT(as.data.frame(genes(txdb)))
+    }else if(annotationType == "transcripts"){
+      ref <- setDT(as.data.frame(transcripts(txdb)))
+    }
+    object@refTable <- ref
   }
 
   ##prepare clusters

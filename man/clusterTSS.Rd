@@ -46,7 +46,9 @@ Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakcl
 }
 \examples{
 \donttest{
-clusterTSS(exampleTSSr, method = "peakclu",clusterThreshold = 1, useMultiCore=TRUE, numCores = NULL)
+data(exampleTSSr)
+clusterTSS(exampleTSSr, method = "peakclu",clusterThreshold = 1,
+useMultiCore=FALSE, numCores = NULL)
 }
 
 }

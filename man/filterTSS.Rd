@@ -33,7 +33,7 @@ Filters transcriptional or sequencing noise.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
-filterTSS(exampleTSSr, method = "poisson", pVal = 0.01)
 }
 }

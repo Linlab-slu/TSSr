@@ -57,6 +57,8 @@ result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 
 \item{\code{refSource}}{character.}
 
+\item{\code{refTable}}{data.frame.}
+
 \item{\code{organismName}}{character.}
 
 \item{\code{assignedClusters}}{list.}

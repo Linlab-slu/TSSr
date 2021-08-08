@@ -21,6 +21,7 @@ Exports TSS tables to text file.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 exportTSStable(exampleTSSr)
 exportTSStable(exampleTSSr, data="raw")
 }

@@ -5,7 +5,7 @@
 #' inter-quantile positions within consensus clusters for each sample.
 #'
 #' @usage consensusCluster(object, dis = 50
-#' , useMultiCore=TRUE, numCores = NULL)
+#' , useMultiCore=FALSE, numCores = NULL)
 #'
 #' @param object A TSSr object.
 #' @param dis Minimum distance between two peaks to be aggregated together into the same consensus cluster.
@@ -16,9 +16,10 @@
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' consensusCluster(exampleTSSr,useMultiCore=FALSE)
 #' }
-setGeneric("consensusCluster",function(object, dis = 50,useMultiCore=TRUE, numCores = NULL)standardGeneric("consensusCluster"))
+setGeneric("consensusCluster",function(object, dis = 50,useMultiCore=FALSE, numCores = NULL)standardGeneric("consensusCluster"))
 #' @rdname consensusCluster
 #' @export
 setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, useMultiCore, numCores

@@ -14,6 +14,7 @@
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' plotCorrelation(exampleTSSr, samples = "all")
 #' }
 #'
@@ -88,6 +89,7 @@ setMethod("plotTssPCA",signature(object = "TSSr"), function(object, TSS.threshol
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' plotInterQuantile(exampleTSSr, samples = "all")
 #' }
 setGeneric("plotInterQuantile",function(object, samples = "all", tagsThreshold = 1)standardGeneric("plotInterQuantile"))
@@ -139,6 +141,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' plotShape(exampleTSSr)
 #' }
 setGeneric("plotShape",function(object, samples = "all")standardGeneric("plotShape"))
@@ -186,6 +189,7 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' plotDE(exampleTSSr, withGeneName = "TRUE")
 #' plotDE(exampleTSSr, withGeneName = "FALSE")
 #' }
@@ -245,6 +249,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
 #' ,up.dis =500, down.dis = 500)
 #' }
@@ -323,6 +328,7 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportTSStable(exampleTSSr)
 #' exportTSStable(exampleTSSr, data="raw")
 #' }
@@ -362,10 +368,11 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #'
 #' @examples
 #' \donttest{
-#' 	exportClustersTable(exampleTSSr, data = "tagClusters")
-#' 	exportClustersTable(exampleTSSr, data = "consensusClusters")
-#' 	exportClustersTable(exampleTSSr, data = "assigned")
-#' 	exportClustersTable(exampleTSSr, data = "unassigned")
+#' data(exampleTSSr)
+#' exportClustersTable(exampleTSSr, data = "tagClusters")
+#' exportClustersTable(exampleTSSr, data = "consensusClusters")
+#' exportClustersTable(exampleTSSr, data = "assigned")
+#' exportClustersTable(exampleTSSr, data = "unassigned")
 #' }
 setGeneric("exportClustersTable",function(object, data = "assigned")standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
@@ -422,6 +429,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportShapeTable(exampleTSSr)
 #' }
 setGeneric("exportShapeTable",function(object)standardGeneric("exportShapeTable"))
@@ -456,6 +464,7 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportDETable(exampleTSSr, data="sig")
 #' }
 setGeneric("exportDETable",function(object, data = "sig")standardGeneric("exportDETable"))
@@ -492,6 +501,7 @@ setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportShiftTable(exampleTSSr)
 #' }
 setGeneric("exportShiftTable",function(object)standardGeneric("exportShiftTable"))
@@ -524,6 +534,7 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
 #' }
 setGeneric("exportTSStoBedgraph",function(object,data = "processed"
@@ -535,20 +546,24 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
   ##define variable as a NULL value
-  score = strand = NULL
+  score = strand = samples = NULL
 
   if(data == "processed"){
     tss.dt <- object@TSSprocessedMatrix
-  }else{tss.dt <- object@TSSrawMatrix}
-  for (i in 1:length(sampleLabelsMerged)){
-    temp <- tss.dt[,.SD, .SDcols = c("chr","pos","strand",sampleLabelsMerged[i])]
+    samples <- object@sampleLabelsMerged
+  }else{
+    tss.dt <- object@TSSrawMatrix
+    samples <- object@sampleLabels
+    }
+  for (i in seq_len(length(samples))){
+    temp <- tss.dt[,.SD, .SDcols = c("chr","pos","strand",samples[i])]
     setnames(temp, colnames(temp)[[4]], "score")
     temp <- temp[score >0,]
     if(oneFile == TRUE){
       message("Exporting TSS to bedgraph...")
       temp[, score := ifelse(strand == "+", score, score*(-1))]
       temp <- makeGRangesFromDataFrame(temp, start.field = "pos", end.field = "pos", keep.extra.columns = TRUE)
-      export(temp,paste(sampleLabelsMerged[i], "TSS", data, "bedGraph", sep = "."), format = "bedGraph")
+      export(temp,paste(samples[i], "TSS", data, "bedGraph", sep = "."), format = "bedGraph")
     }else{
       temp.p <- temp[strand == "+",]
       temp.m <- temp[strand == "-",]
@@ -557,14 +572,14 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
       temp.m <- makeGRangesFromDataFrame(temp.m, start.field = "pos", end.field = "pos", keep.extra.columns = TRUE)
       if(format == "bedGraph"){
         message("Exporting TSS to bedgraph...")
-        export(temp.p,paste(sampleLabelsMerged[i], "TSS", data, "plus.bedGraph", sep = "."), format = "bedGraph")
-        export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.bedGraph", sep = "."), format = "bedGraph")
+        export(temp.p,paste(samples[i], "TSS", data, "plus.bedGraph", sep = "."), format = "bedGraph")
+        export(temp.m,paste(samples[i], "TSS", data, "minus.bedGraph", sep = "."), format = "bedGraph")
       }else if(format == "BigWig"){
         message("Exporting TSS to BigWig...")
         seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.p@seqnames)]
         seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.m@seqnames)]
-        export(temp.p,paste(sampleLabelsMerged[i], "TSS", data, "plus.BigWig", sep = "."), format = "BigWig")
-        export(temp.m,paste(sampleLabelsMerged[i], "TSS", data, "minus.BigWig", sep = "."), format = "BigWig")
+        export(temp.p,paste(samples[i], "TSS", data, "plus.BigWig", sep = "."), format = "BigWig")
+        export(temp.m,paste(samples[i], "TSS", data, "minus.BigWig", sep = "."), format = "BigWig")
       }
     }
   }
@@ -584,8 +599,9 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #'
 #' @examples
 #' \donttest{
+#' data(exampleTSSr)
 #' exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-#' exportTSStoBedgraph(exampleTSSr, dataexampleTSSr = "consensusClusters")
+#' exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
 #' }
 setGeneric("exportClustersToBed",function(object,data = "consensusClusters", assigned = TRUE)
   standardGeneric("exportClustersToBed"))

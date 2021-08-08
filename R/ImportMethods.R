@@ -15,7 +15,8 @@
 #'
 #' @examples
 #' \donttest{
-#' getTSS(exampleTSSr)
+#' data(exampleTSSr)
+#' #getTSS(exampleTSSr)
 #' }
 setGeneric("getTSS",function(object
                              ,sequencingQualityThreshold = 10

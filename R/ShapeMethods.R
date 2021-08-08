@@ -19,6 +19,7 @@
 #'
 #' @examples
 #' \donttest{
+#'  data(exampleTSSr)
 #' 	shapeCluster(exampleTSSr,clusters = "consensusClusters" , method = "PSS")
 #' 	shapeCluster(exampleTSSr,clusters = "tagClusters" , method = "SI")
 #' }

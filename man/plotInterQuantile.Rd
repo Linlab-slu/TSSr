@@ -21,6 +21,7 @@ Plots histograms of the interquantile width of processed clusters.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 plotInterQuantile(exampleTSSr, samples = "all")
 }
 }

@@ -23,6 +23,7 @@ value (Lu et al., 2019), p value and adjusted p value.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 shiftPromoter(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 }
 }

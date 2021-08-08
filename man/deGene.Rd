@@ -32,6 +32,7 @@ Analyzes gene-level differential expression using DESeq2 method (Love et al., 20
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 deGene(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 }
 }

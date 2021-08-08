@@ -21,6 +21,7 @@ creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 plotCorrelation(exampleTSSr, samples = "all")
 }
 

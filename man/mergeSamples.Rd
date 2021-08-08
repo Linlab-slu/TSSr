@@ -19,6 +19,7 @@ Merges individual samples within TSSr object into specified groups.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 mergeSamples(exampleTSSr, mergeIndex = c(1,1,2,2))
 }
 }

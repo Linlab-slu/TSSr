@@ -49,6 +49,7 @@ Plots Gviz-track of TSSs, clusters, and genes.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
 ,up.dis =500, down.dis = 500)
 }

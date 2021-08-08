@@ -6,9 +6,9 @@
 \title{Make consensus clusters across multiple samples.}
 \usage{
 consensusCluster(object, dis = 50
-, useMultiCore=TRUE, numCores = NULL)
+, useMultiCore=FALSE, numCores = NULL)
 
-\S4method{consensusCluster}{TSSr}(object, dis = 50, useMultiCore = TRUE, numCores = NULL)
+\S4method{consensusCluster}{TSSr}(object, dis = 50, useMultiCore = FALSE, numCores = NULL)
 }
 \arguments{
 \item{object}{A TSSr object.}
@@ -25,6 +25,7 @@ inter-quantile positions within consensus clusters for each sample.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 consensusCluster(exampleTSSr,useMultiCore=FALSE)
 }
 }

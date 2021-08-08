@@ -32,8 +32,8 @@ transcriptional or sequencing noise. Default is TRUE.}
 \item{filterClusterThreshold}{Ignore downstream clusters if signal < filterClusterThreshold*the
 strongest clusters within the same gene promoter region. Default value = 0.02.}
 
-\item{annotationType}{Specify annotation feature to be associated with: "gene" or "transcript".
-Default is "gene".}
+\item{annotationType}{Specify annotation feature to be associated with: "genes" or "transcripts".
+Default is "genes".}
 
 \item{upstream}{Upstream distance to the start position of annotation feature. Default value = 1000.}
 

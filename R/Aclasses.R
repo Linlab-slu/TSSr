@@ -31,6 +31,7 @@
 #' @import BSgenome.Scerevisiae.UCSC.sacCer3
 #' @import calibrate
 #' @import ggfortify
+#' @import parallel
 #' @importFrom IRanges IRanges
 #' @importFrom IRanges findOverlaps
 #' @importFrom GenomicRanges GRanges
@@ -69,6 +70,7 @@
 #' @slot consensusClusters list.
 #' @slot clusterShape list.
 #' @slot refSource character.
+#' @slot refTable data.frame.
 #' @slot organismName character.
 #' @slot assignedClusters list.
 #' @slot unassignedClusters list.
@@ -95,6 +97,7 @@ setClass(Class = "TSSr",
                         ,consensusClusters = "list"
                         ,clusterShape = "list"
                         ,refSource = "character"
+                        ,refTable = "data.frame"
                         ,organismName = "character"
                         ,assignedClusters = "list"
                         ,unassignedClusters = "list"
@@ -116,6 +119,7 @@ setClass(Class = "TSSr",
                    ,consensusClusters = list()
                    ,clusterShape = list()
                    ,refSource = character()
+                   ,refTable = data.frame()
                    ,organismName = character()
                    ,assignedClusters = list()
                    ,unassignedClusters = list()

@@ -23,6 +23,7 @@ The files include users' home-made alignment files (bam format) or downloaded fi
 }
 \examples{
 \donttest{
-getTSS(exampleTSSr)
+data(exampleTSSr)
+#getTSS(exampleTSSr)
 }
 }

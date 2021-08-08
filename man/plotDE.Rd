@@ -23,6 +23,7 @@ Vocano plots of gene differential expression (with DESeq2 method) results.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 plotDE(exampleTSSr, withGeneName = "TRUE")
 plotDE(exampleTSSr, withGeneName = "FALSE")
 }

@@ -18,6 +18,7 @@ shapeCluster(object) method.
 }
 \examples{
 \donttest{
+data(exampleTSSr)
 exportShapeTable(exampleTSSr)
 }
 }
