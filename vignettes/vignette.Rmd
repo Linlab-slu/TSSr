@@ -17,16 +17,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Installation
-
-Install the most recent stable version from Bioconductor:
-
-```{r bioconductor, eval=FALSE}
-if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
-BiocManager::install("TSSr")
-```
-
 
 Alternatively, you can install the development version directly from GitHub using `devtools`:
 
@@ -78,7 +68,7 @@ myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 myTSSr
 ```
 
-```{r getTSS, tidy=FALSE}
+```{r getTSS, eval=FALSE}
 # Get TSS
 getTSS(myTSSr)
 ```
@@ -96,7 +86,7 @@ filterTSS(myTSSr, method = "TPM", tpmLow = 0.1)
 
 TSS clustering
 
-```{r TSSclustering, tidy=FALSE}
+```{r TSSclustering, eval=FALSE}
 # TSS clustering 
 clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
          ,localThreshold = 0.02,clusterThreshold = 1
@@ -108,7 +98,7 @@ consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 
 Core promoter shape
 
-```{r shapeCluster, tidy=FALSE}
+```{r shapeCluster, eval=FALSE}
 # Calculating core promoter shape score
 shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",
              useMultiCore= FALSE, numCores = NULL)
