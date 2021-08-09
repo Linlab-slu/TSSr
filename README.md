@@ -122,7 +122,7 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
       
 * An example TSSr object "exampleTSSr" was provided with the package. Users may use the example TSSr object to explore the fucntions of TSSr. 
 
-        myTSSr <- exampleTSSr
+        myTSSr <- exampleTSSr #skip this step if users plan to creat a new TSSr object using bam or TSS table files
         
 * To creat a new TSSr object, users will need to generate a new input files "inputFiles" that contains the path and file names of input files. We provided for example bam files. The four example bam files (S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam) can be downloaded from http://zlinlab.org/TSSr.html.
 
