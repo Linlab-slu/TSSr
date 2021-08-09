@@ -82,7 +82,7 @@
       <h1 data-toc-skip>TSSr Vignette</h1>
                         <h4 class="author">Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk Ahn, Zhenguo Lin</h4>
             
-            <h4 class="date">2021-08-03</h4>
+            <h4 class="date">2021-08-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Linlab-slu/TSSr/blob/master/vignettes/vignette.Rmd"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -91,247 +91,118 @@
 
     
     
-<div id="tssr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tssr" class="anchor"></a>TSSr</h2>
-<p>TSSr is designed to analyze transcription start sites (TSSs) and core promoters with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE) (Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014), a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018), NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015), transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013), transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013), precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016), and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).</p>
-<p>TSSr package provides a comprehensive workflow on TSS data starting from identification of accurate TSS locations, clustering TSSs within small genomic regions corresponding to core promoters, and transcriptional activity quantifications, as well as specialized downstream analyses including core promoter shape, cluster annotation, gene differential expression, core promoter shift. TSSr can take multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates various types of TSS or core promoter track files, which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. Multiple cores are supported on Linux or Mac platforms.</p>
+<p>Alternatively, you can install the development version directly from GitHub using <code>devtools</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"Linlab-slu/TSSr"</span><span class="op">)</span></code></pre></div>
+<p>And load <code>TSSr</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Linlab-slu/TSSr">TSSr</a></span><span class="op">)</span></code></pre></div>
+<div id="citation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#citation" class="anchor"></a>Citation</h1>
+<p>If you use TSSr, please cite the following article:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"TSSr"</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; To cite package 'TSSr' in publications use:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk (Ted) Ahn</span>
+<span class="co">#&gt;   and Zhenguo Lu (2021) TSS sequencing data analysis. R package version</span>
+<span class="co">#&gt;   0.99.0. URL https://github.com/Linlab-slu/TSSr</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   @Manual{,</span>
+<span class="co">#&gt;     title = {{TSSr}: TSS sequencing data analysis},</span>
+<span class="co">#&gt;     author = {Zhaolian Lu and Keenan Berry and Zhenbin Hu and Yu Zhan and Tae-Hyuk Ahn and Zhenguo Lin},</span>
+<span class="co">#&gt;     year = {2021},</span>
+<span class="co">#&gt;     version = {0.99.0},</span>
+<span class="co">#&gt;     url = {https://github.com/Linlab-slu/TSSr},</span>
+<span class="co">#&gt;   }</span></code></pre></div>
 </div>
-<div id="pre-requisites" class="section level2">
-<h2 class="hasAnchor">
-<a href="#pre-requisites" class="anchor"></a>Pre-requisites:</h2>
-<ul>
-<li>
-<p>R version</p>
-<ul>
-<li>Download R (&gt;3.4.0) version from CRAN.
-<ul>
-<li>Windows: <a href="https://cran.r-project.org/bin/windows/base/" class="uri">https://cran.r-project.org/bin/windows/base/</a>
-</li>
-<li>Mac OS X: <a href="https://cran.r-project.org/bin/macosx/" class="uri">https://cran.r-project.org/bin/macosx/</a>
-</li>
-<li>Linux: <a href="https://cran.r-project.org/bin/linux/" class="uri">https://cran.r-project.org/bin/linux/</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>Rsamtools package</p>
-<ul>
-<li>
-<p>install by using the following R commands:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("Rsamtools")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>GenomicRanges</p>
-<ul>
-<li>
-<p>install by using the following R commands:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("GenomicRanges")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>GenomicFeature package</p>
-<ul>
-<li>
-<p>install by using the following R commands:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("GenomicFeatures")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>Gviz package</p>
-<ul>
-<li>
-<p>install by using the following R commands:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("Gviz")  </code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>rtracklayer package</p>
-<ul>
-<li>
-<p>install by using the following R commands:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("rtracklayer")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>DESeq2 package:</p>
-<ul>
-<li>
-<p>install by using the following R command:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("DESeq2")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>BSgenome package</p>
-<ul>
-<li>
-<p>install by using the following R command:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("BSgenome")</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>data.table package</p>
-<ul>
-<li>
-<p>install by using the following R command:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("data.table")  </a></code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p>stringr package:</p>
-<ul>
-<li>
-<p>install by using the following R command:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("stringr")</a></code></pre>
-</li>
-</ul>
-</li>
-</ul>
+<div id="getting-help" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-help" class="anchor"></a>Getting help</h1>
+<p>For general questions about the usage of TSSr, use the <a href="https://support.bioconductor.org">official Bioconductor support forum</a> and tag your question “TSSr”. We strive to answer questions as quickly as possible.</p>
+<p>For technical questions, bug reports and suggestions for new features, we refer to the <a href="https://github.com/Linlab-slu/TSSr/issues">TSSr github page</a>.</p>
 </div>
-<div id="installing-tssr-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing-tssr-package" class="anchor"></a>Installing TSSr Package:</h2>
-<p>To install the TSSr package all the prerequisites above need to be installed. After confirming those packages are installed, you can install the development version directly from GitHub using devtools:</p>
-<pre><code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">    devtools::install_github("Linlab-slu/TSSr")</a></code></pre>
-</div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage:</h2>
-<ul>
-<li>
-<p>Launch TSSr</p>
-<pre><code><a href="https://github.com/Linlab-slu/TSSr">  library(TSSr)</a></code></pre>
-</li>
-<li>
-<p>Creating a TSSr object with system example data</p>
-<pre><code>  myTSSr &lt;- exampleTSSr</code></pre>
-</li>
-<li>
-<p>Creating a TSSr object with self-defined data</p>
-<pre><code>  myTSSr &lt;- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
-            ,inputFiles = inputFiles
-            ,inputFilesType= "bam"
-            ,sampleLabels = c("SL01","SL02","SL03","SL04")
-            ,sampleLabelsMerged = c("control","treat")
-            ,refSource = "saccharomyces_cerevisiae.SGD.gff"
-            ,organismName = "saccharomyces cerevisiae")</code></pre>
-</li>
-<li>
-<p>Reading in the data and TSS processing</p>
-<pre><code>  getTSS(myTSSr)
-  mergeSamples(myTSSr)
-  normalizeTSS(myTSSr)
-  filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
-  plotCorrelation(myTSSr, samples = "all)</code></pre>
-</li>
-</ul>
-<div class="figure">
-<img src="figures/01_TSS_correlation_plot_of_all_samples.png" style="width:50.0%" alt=""><p class="caption">01_TSS_correlation_plot_of_all_samples</p>
-</div>
-<pre><code><a href="../reference/plotTssPCA.html">    plotTssPCA(myTSSr, TSS.threshold=10)</a></code></pre>
-<div class="figure">
-<img src="figures/02_PCA_plot.png" style="width:50.0%" alt=""><p class="caption">02_PCA_plot</p>
-</div>
-<pre><code><a href="../reference/exportTSStable.html">    exportTSStable(myTSSr, data = "raw", merged = "TRUE")
-    exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
-    exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
-    </a></code></pre>
-<ul>
-<li>
+<div id="quick-start" class="section level1">
+<h1 class="hasAnchor">
+<a href="#quick-start" class="anchor"></a>Quick start</h1>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load the example data</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"exampleTSSr"</span><span class="op">)</span>
+<span class="va">myTSSr</span> <span class="op">&lt;-</span> <span class="va">exampleTSSr</span></code></pre></div>
+<p>Or create a new TSSr object</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Provide bam files</span>
+<span class="va">inputFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S01.sorted.bam"</span>, <span class="st">"S02.sorted.bam"</span>, <span class="st">"S03.sorted.bam"</span>, <span class="st">"S04.sorted.bam"</span><span class="op">)</span>
+<span class="va">myTSSr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="st">"TSSr"</span>, genomeName <span class="op">=</span> <span class="st">"BSgenome.Scerevisiae.UCSC.sacCer3"</span>
+          ,inputFiles <span class="op">=</span> <span class="va">inputFiles</span>
+          ,inputFilesType<span class="op">=</span> <span class="st">"bam"</span>
+          ,sampleLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SL01"</span>,<span class="st">"SL02"</span>,<span class="st">"SL03"</span>,<span class="st">"SL04"</span><span class="op">)</span>
+          ,sampleLabelsMerged <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"control"</span>,<span class="st">"treat"</span><span class="op">)</span>
+          ,mergeIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>
+          ,refSource <span class="op">=</span> <span class="st">"saccharomyces_cerevisiae.SGD.gff"</span>
+          ,organismName <span class="op">=</span> <span class="st">"saccharomyces cerevisiae"</span><span class="op">)</span>
+<span class="va">myTSSr</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get TSS</span>
+<span class="fu"><a href="../reference/getTSS.html">getTSS</a></span><span class="op">(</span><span class="va">myTSSr</span><span class="op">)</span></code></pre></div>
+<p>TSS data processing</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Merge replicates</span>
+<span class="fu"><a href="../reference/mergeSamples.html">mergeSamples</a></span><span class="op">(</span><span class="va">myTSSr</span><span class="op">)</span>
+<span class="co"># Normalization</span>
+<span class="fu"><a href="../reference/normalizeTSS.html">normalizeTSS</a></span><span class="op">(</span><span class="va">myTSSr</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Normalizing TSS matrix...</span>
+<span class="co"># TSS filtering</span>
+<span class="fu"><a href="../reference/filterTSS.html">filterTSS</a></span><span class="op">(</span><span class="va">myTSSr</span>, method <span class="op">=</span> <span class="st">"TPM"</span>, tpmLow <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Filtering data with TPM method...</span></code></pre></div>
 <p>TSS clustering</p>
-<pre><code><a href="../reference/clusterTSS.html">  clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
-         ,localThreshold = 0.02,clusterThreshold = 1
-         ,useMultiCore=FALSE, numCores=NULL)
-      exportClustersTable(myTSSr, data = "filtered")
-      exportClustersToBed(myTSSr, data = "tagClusters")</a></code></pre>
-</li>
-<li>
-<p>Aggregating consensus clusters</p>
-<pre><code><a href="../reference/consensusCluster.html">  consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
-      exportClustersToBed(myTSSr, data = "consensusClusters")</a></code></pre>
-</li>
-<li>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># TSS clustering </span>
+<span class="fu"><a href="../reference/clusterTSS.html">clusterTSS</a></span><span class="op">(</span><span class="va">myTSSr</span>, method <span class="op">=</span> <span class="st">"peakclu"</span>,peakDistance<span class="op">=</span><span class="fl">100</span>,extensionDistance<span class="op">=</span><span class="fl">30</span>
+         ,localThreshold <span class="op">=</span> <span class="fl">0.02</span>,clusterThreshold <span class="op">=</span> <span class="fl">1</span>
+         ,useMultiCore<span class="op">=</span><span class="cn">FALSE</span>, numCores<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>
+
+<span class="co"># Aggregating consensus clusters</span>
+<span class="fu"><a href="../reference/consensusCluster.html">consensusCluster</a></span><span class="op">(</span><span class="va">myTSSr</span>, dis <span class="op">=</span> <span class="fl">50</span>, useMultiCore <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>Core promoter shape</p>
-<pre><code><a href="../reference/shapeCluster.html">  shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
-  plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)</a></code></pre>
-</li>
-</ul>
-<div class="figure">
-<img src="figures/03_Interquantile_plot_of_ALL_samples.png" style="width:75.0%" alt=""><p class="caption">03_Interquantile_plot_of_ALL_samples</p>
-</div>
-<pre><code><a href="../reference/plotShape.html">    plotShape(myTSSr)</a></code></pre>
-<div class="figure">
-<img src="figures/04_Shape_plot_of_ALL_samples.png" style="width:75.0%" alt=""><p class="caption">04_Shape_plot_of_ALL_samples</p>
-</div>
-<pre><code><a href="../reference/exportShapeTable.html">        exportShapeTable(myTSSr)</a></code></pre>
-<ul>
-<li>
-<p>Annotation</p>
-<pre><code><a href="../reference/annotateCluster.html">  annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
-              filterClusterThreshold = 0.02, annotationType = "genes"
-              ,upstream=1000, upstreamOverlap = 500, downstream = 0)
-      exportDETable(myTSSr, data = "sig")</a></code></pre>
-</li>
-<li>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Calculating core promoter shape score</span>
+<span class="fu"><a href="../reference/shapeCluster.html">shapeCluster</a></span><span class="op">(</span><span class="va">myTSSr</span>,clusters <span class="op">=</span> <span class="st">"consensusClusters"</span>, method <span class="op">=</span> <span class="st">"PSS"</span>,
+             useMultiCore<span class="op">=</span> <span class="cn">FALSE</span>, numCores <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<p>Annotation core promoters</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Assign clusters to the annotated features</span>
+<span class="fu"><a href="../reference/annotateCluster.html">annotateCluster</a></span><span class="op">(</span><span class="va">myTSSr</span>,clusters <span class="op">=</span> <span class="st">"consensusClusters"</span>,filterCluster <span class="op">=</span> <span class="cn">TRUE</span>,
+              filterClusterThreshold <span class="op">=</span> <span class="fl">0.02</span>, annotationType <span class="op">=</span> <span class="st">"genes"</span>
+              ,upstream<span class="op">=</span><span class="fl">1000</span>, upstreamOverlap <span class="op">=</span> <span class="fl">500</span>, downstream <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Annotating...</span></code></pre></div>
 <p>Differential expression analysis</p>
-<pre><code><a href="../reference/deGene.html">  deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
-  exportShiftTable(myTSSr)
-  plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))</a></code></pre>
-</li>
-</ul>
-<div class="figure">
-<img src="figures/05_Volcano_plot.png" style="width:50.0%" alt=""><p class="caption">05_Volcano_plot</p>
-</div>
-<ul>
-<li>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Assign clusters to the annotated features</span>
+<span class="fu"><a href="../reference/deGene.html">deGene</a></span><span class="op">(</span><span class="va">myTSSr</span>,comparePairs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"control"</span>,<span class="st">"treat"</span><span class="op">)</span><span class="op">)</span>, 
+       pval <span class="op">=</span> <span class="fl">0.01</span>,useMultiCore<span class="op">=</span><span class="cn">FALSE</span>, numCores<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Calculating gene differential expression...</span>
+<span class="co">#&gt; converting counts to integer mode</span>
+<span class="co">#&gt; estimating size factors</span>
+<span class="co">#&gt; estimating dispersions</span>
+<span class="co">#&gt; gene-wise dispersion estimates</span>
+<span class="co">#&gt; mean-dispersion relationship</span>
+<span class="co">#&gt; final dispersion estimates</span>
+<span class="co">#&gt; fitting model and testing</span></code></pre></div>
 <p>Core promoter shifts</p>
-<pre><code><a href="../reference/shiftPromoter.html">  shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-  plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "filtered",clusterThreshold = 0.02
-      ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)</a></code></pre>
-</li>
-</ul>
-<div class="figure">
-<img src="figures/06_TSS_graphs.png" style="width:50.0%" alt=""><p class="caption">06_TSS_graphs</p>
-</div>
-</div>
-<div id="reference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference:</h2>
-<p>Arribere, J. A. and W. V. Gilbert (2013). “Roles for transcript leaders in translation and mRNA decay revealed by transcript leader sequencing.” Genome Res 23(6): 977-987.</p>
-<p>Cumbie, J. S., M. G. Ivanchenko and M. Megraw (2015). “NanoCAGE-XL and CapFilter: an approach to genome wide identification of high confidence transcription start sites.” BMC Genomics 16: 597.</p>
-<p>Cvetesic, N., H. G. Leitch, M. Borkowska, F. Muller, P. Carninci, P. Hajkova and B. Lenhard (2018). “SLIC-CAGE: high-resolution transcription start site mapping using nanogram-levels of total RNA.” Genome Res 28(12): 1943-1956.</p>
-<p>Kruesi, W. S., L. J. Core, C. T. Waters, J. T. Lis and B. J. Meyer (2013). “Condensin controls recruitment of RNA polymerase II to achieve nematode X-chromosome dosage compensation.” Elife 2: e00808.</p>
-<p>Mahat, D. B., H. Kwak, G. T. Booth, I. H. Jonkers, C. G. Danko, R. K. Patel, C. T. Waters, K. Munson, L. J. Core and J. T. Lis (2016). “Base-pair-resolution genome-wide mapping of active RNA polymerases using precision nuclear run-on (PRO-seq).” Nat Protoc 11(8): 1455-1476.</p>
-<p>Mahat, D. B., H. Kwak, G. T. Booth, I. H. Jonkers, C. G. Danko, R. K. Patel, C. T. Waters, K. Munson, L. J. Core and J. T. Lis (2016). “Base-pair-resolution genome-wide mapping of active RNA polymerases using precision nuclear run-on (PRO-seq).” Nat Protoc 11(8): 1455-1476.</p>
-<p>Malabat, C., F. Feuerbach, L. Ma, C. Saveanu and A. Jacquier (2015). “Quality control of transcription start site selection by nonsense-mediated-mRNA decay.” Elife 4.</p>
-<p>Murata, M., H. Nishiyori-Sueki, M. Kojima-Ishiyama, P. Carninci, Y. Hayashizaki and M. Itoh (2014). “Detecting expressed genes using CAGE.” Methods Mol Biol 1164: 67-85.</p>
-<p>Pelechano, V., W. Wei and L. M. Steinmetz (2013). “Extensive transcriptional heterogeneity revealed by isoform profiling.” Nature 497(7447): 127-131.</p>
-<p>Takahashi, H., T. Lassmann, M. Murata and P. Carninci (2012). “5’ end-centered expression profiling using cap-analysis gene expression and next-generation sequencing.” Nat Protoc 7(3): 542-561.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Calcuate core promoter shifts</span>
+<span class="fu"><a href="../reference/shiftPromoter.html">shiftPromoter</a></span><span class="op">(</span><span class="va">myTSSr</span>,comparePairs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"control"</span>,<span class="st">"treat"</span><span class="op">)</span><span class="op">)</span>, pval <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Calculating core promoter shifts...</span></code></pre></div>
 </div>
   </div>
 

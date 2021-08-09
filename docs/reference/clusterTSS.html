@@ -40,9 +40,9 @@
 
 
 <meta property="og:title" content="Cluster TSSs into tag clusters — clusterTSS" />
-<meta property="og:description" content="Clusters TSSs within small genomic regions into tag clusters (TCs) using &quot;peakclu&quot; method.
- &quot;peakclu&quot; method is an implementation of peak-based clustering. The minimum distance of two neighboring
-  peaks can be specified." />
+<meta property="og:description" content="Clusters TSSs within small genomic regions into tag clusters (TCs)
+using &quot;peakclu&quot; method. &quot;peakclu&quot; method is an implementation of peak-based clustering.
+The minimum distance of two neighboring peaks can be specified." />
 
 
 
@@ -128,9 +128,9 @@
     </div>
 
     <div class="ref-description">
-    <p>Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakclu" method.
- "peakclu" method is an implementation of peak-based clustering. The minimum distance of two neighboring
-  peaks can be specified.</p>
+    <p>Clusters TSSs within small genomic regions into tag clusters (TCs)
+using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.
+The minimum distance of two neighboring peaks can be specified.</p>
     </div>
 
     <pre class="usage"><span class='fu'>clusterTSS</span><span class='op'>(</span><span class='va'>object</span>, method <span class='op'>=</span> <span class='st'>"peakclu"</span>, peakDistance<span class='op'>=</span><span class='fl'>100</span>,extensionDistance<span class='op'>=</span><span class='fl'>30</span>
@@ -180,19 +180,27 @@ or sequencing noise. Default value = 0.02.</p></td>
     </tr>
     <tr>
       <th>useMultiCore</th>
-      <td><p>Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.</p></td>
+      <td><p>Logical indicating whether multiple cores are used (TRUE) or not (FALSE).
+Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>numCores</th>
-      <td><p>Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.</p></td>
+      <td><p>Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
+Default is NULL.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Large List of elements - one element for each sample</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>clusterTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span>, method <span class='op'>=</span> <span class='st'>"peakclu"</span>,clusterThreshold <span class='op'>=</span> <span class='fl'>1</span>, useMultiCore<span class='op'>=</span><span class='cn'>TRUE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'clusterTSS': object 'exampleTSSr' not found</span></div><div class='input'><span class='co'># }</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
+<span class='fu'>clusterTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span>, method <span class='op'>=</span> <span class='st'>"peakclu"</span>,clusterThreshold <span class='op'>=</span> <span class='fl'>1</span>,
+useMultiCore<span class='op'>=</span><span class='cn'>FALSE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Clustering TSS data with peakclu method...</span></div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>

@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Make consensus clusters across multiple samples. — consensusCluster" />
-<meta property="og:description" content="Makes consensus clusters from multiple samples in TSSr object and calculates
-inter-quantile positions within consensus clusters for each sample." />
+<meta property="og:description" content="Makes consensus clusters from multiple samples in TSSr object and
+calculates inter-quantile positions within consensus clusters for each sample." />
 
 
 
@@ -127,15 +127,15 @@ inter-quantile positions within consensus clusters for each sample." />
     </div>
 
     <div class="ref-description">
-    <p>Makes consensus clusters from multiple samples in TSSr object and calculates
-inter-quantile positions within consensus clusters for each sample.</p>
+    <p>Makes consensus clusters from multiple samples in TSSr object and
+calculates inter-quantile positions within consensus clusters for each sample.</p>
     </div>
 
     <pre class="usage"><span class='fu'>consensusCluster</span><span class='op'>(</span><span class='va'>object</span>, dis <span class='op'>=</span> <span class='fl'>50</span>
-, useMultiCore<span class='op'>=</span><span class='cn'>TRUE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+, useMultiCore<span class='op'>=</span><span class='cn'>FALSE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
-<span class='fu'>consensusCluster</span><span class='op'>(</span><span class='va'>object</span>, dis <span class='op'>=</span> <span class='fl'>50</span>, useMultiCore <span class='op'>=</span> <span class='cn'>TRUE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+<span class='fu'>consensusCluster</span><span class='op'>(</span><span class='va'>object</span>, dis <span class='op'>=</span> <span class='fl'>50</span>, useMultiCore <span class='op'>=</span> <span class='cn'>FALSE</span>, numCores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,24 +146,30 @@ inter-quantile positions within consensus clusters for each sample.</p>
     </tr>
     <tr>
       <th>dis</th>
-      <td><p>Minimum distance between two peaks to be aggregated together into the same consensus cluster.</p></td>
+      <td><p>Minimum distance between two peaks to be aggregated together into
+the same consensus cluster.</p></td>
     </tr>
     <tr>
       <th>useMultiCore</th>
-      <td><p>Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.</p></td>
+      <td><p>Logical indicating whether multiple cores are used (TRUE)
+or not (FALSE). Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>numCores</th>
-      <td><p>Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.</p></td>
+      <td><p>Number of cores are used in clustering step. Used only if
+useMultiCore = TRUE. Default is NULL.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Large List of elements - one element for each sample</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
 <span class='fu'>consensusCluster</span><span class='op'>(</span><span class='va'>exampleTSSr</span>,useMultiCore<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'consensusCluster': object 'exampleTSSr' not found</span></div><div class='input'><span class='co'># }</span>
-</div></pre>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Creating consensus clusters...</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

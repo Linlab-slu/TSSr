@@ -130,7 +130,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>plotTSS</span><span class='op'>(</span><span class='va'>object</span>,<span class='va'>samples</span>,tssData <span class='op'>=</span> <span class='st'>"processed"</span>,clusters <span class='op'>=</span> <span class='st'>"assigned"</span>,
-clusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,<span class='va'>genelist</span>,Bidirection <span class='op'>=</span> <span class='cn'>TRUE</span>,up.dis <span class='op'>=</span><span class='fl'>500</span>,down.dis <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
+clusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,<span class='va'>genelist</span>,Bidirection <span class='op'>=</span> <span class='cn'>TRUE</span>,
+up.dis <span class='op'>=</span><span class='fl'>500</span>,down.dis <span class='op'>=</span> <span class='fl'>500</span>,yFixed <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
 <span class='fu'>plotTSS</span><span class='op'>(</span>
@@ -143,7 +144,7 @@ clusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>,<span cl
   Bidirection <span class='op'>=</span> <span class='cn'>TRUE</span>,
   up.dis <span class='op'>=</span> <span class='fl'>500</span>,
   down.dis <span class='op'>=</span> <span class='fl'>500</span>,
-  <span class='va'>yFixed</span>
+  yFixed <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -186,14 +187,20 @@ clusters within the same gene promoter region. Default value = 0.02.</p></td>
       <th>down.dis</th>
       <td><p>Distance downstream of genes to specify plotting range. Default value = 500.</p></td>
     </tr>
+    <tr>
+      <th>yFixed</th>
+      <td><p>Logical, specify whether to fix y axis limits. Default is TRUE.</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>TSS and cluster examples visualized in a graph</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>plotTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span>, samples<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>,<span class='st'>"treat"</span><span class='op'>)</span>, genelist<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"YBL017C"</span>,<span class='st'>"YBL067C"</span><span class='op'>)</span>
-,up.dis <span class='op'>=</span><span class='fl'>500</span>, down.dis <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Plotting TSS graphs...</span></div><div class='output co'>#&gt; <span class='message'>Import genomic features from the file as a GRanges object ... </span></div><div class='output co'>#&gt; <span class='error'>Error in open.connection(con, open): cannot open the connection</span></div><div class='input'><span class='co'># }</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
+<span class='co'>#plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")</span>
+<span class='co'>#,up.dis =500, down.dis = 500)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

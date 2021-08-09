@@ -154,13 +154,14 @@
     </tr>
     <tr>
       <th>clusters</th>
-      <td><p>Clusters to be annotated: "consensusClusters" or "tagClusters". Default is "consensusClusters".</p></td>
+      <td><p>Clusters to be annotated: "consensusClusters" or "tagClusters".
+Default is "consensusClusters".</p></td>
     </tr>
     <tr>
       <th>filterCluster</th>
-      <td><p>Logical indicating whether clusters downstream of a highly expressed cluster
-are filtered. Setting filterCluster as "TRUE" would reduce weak clusters brought from recapping,
-transcriptional or sequencing noise. Default is TRUE.</p></td>
+      <td><p>Logical indicating whether clusters downstream of a highly
+expressed cluster are filtered. Setting filterCluster as "TRUE" would reduce weak
+clusters brought from recapping, transcriptional or sequencing noise. Default is TRUE.</p></td>
     </tr>
     <tr>
       <th>filterClusterThreshold</th>
@@ -169,33 +170,38 @@ strongest clusters within the same gene promoter region. Default value = 0.02.</
     </tr>
     <tr>
       <th>annotationType</th>
-      <td><p>Specify annotation feature to be associated with: "gene" or "transcript".
-Default is "gene".</p></td>
+      <td><p>Specify annotation feature to be associated with: "genes"
+or "transcripts". Default is "genes".</p></td>
     </tr>
     <tr>
       <th>upstream</th>
-      <td><p>Upstream distance to the start position of annotation feature. Default value = 1000.</p></td>
+      <td><p>Upstream distance to the start position of annotation feature.
+Default value = 1000.</p></td>
     </tr>
     <tr>
       <th>upstreamOverlap</th>
-      <td><p>Upstream distance to the start position of annotation feature if overlapped
-with the upstream neighboring feature. Default value = 500.</p></td>
+      <td><p>Upstream distance to the start position of annotation
+feature if overlapped with the upstream neighboring feature. Default value = 500.</p></td>
     </tr>
     <tr>
       <th>downstream</th>
-      <td><p>Downstream distance to the start position of annotation feature. Default value = 0.
-Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
- the recommended value = 500.</p></td>
+      <td><p>Downstream distance to the start position of annotation feature.
+Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
+start from transcription start sites (TSSs), the recommended value = 500.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Large List of elements - one element for each sample</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
 <span class='fu'>annotateCluster</span><span class='op'>(</span><span class='va'>exampleTSSr</span>,clusters <span class='op'>=</span> <span class='st'>"consensusClusters"</span>, filterCluster <span class='op'>=</span> <span class='cn'>TRUE</span>
 , filterClusterThreshold <span class='op'>=</span> <span class='fl'>0.02</span>, annotationType <span class='op'>=</span> <span class='st'>"genes"</span>, upstream<span class='op'>=</span><span class='fl'>1000</span>
 , upstreamOverlap <span class='op'>=</span> <span class='fl'>500</span>, downstream <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'annotateCluster': object 'exampleTSSr' not found</span></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Annotating...</span></div><div class='input'>
 
 </div></pre>
   </div>

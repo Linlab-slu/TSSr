@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables. — getTSS • TSSr</title>
+<title>Precisely identify TSSs from bam files, paired end bam files, bed files,
+BigWig files, tss files, or tss tables. — getTSS • TSSr</title>
 
 
 <!-- jquery -->
@@ -39,10 +40,12 @@
 
 
 
-<meta property="og:title" content="Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables. — getTSS" />
-<meta property="og:description" content="getTSS function is used to precisely identify TSSs from multiple input file formats.
-The files include users' home-made alignment files (bam format) or downloaded files from public databases.
- See inputFilesType for details on the supported input file formats." />
+<meta property="og:title" content="Precisely identify TSSs from bam files, paired end bam files, bed files,
+BigWig files, tss files, or tss tables. — getTSS" />
+<meta property="og:description" content="getTSS function is used to precisely identify TSSs from multiple
+input file formats. The files include users' home-made alignment files (bam format)
+or downloaded files from public databases. See inputFilesType for details on
+the supported input file formats." />
 
 
 
@@ -122,15 +125,17 @@ The files include users' home-made alignment files (bam format) or downloaded fi
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables.</h1>
+    <h1>Precisely identify TSSs from bam files, paired end bam files, bed files,
+BigWig files, tss files, or tss tables.</h1>
     <small class="dont-index">Source: <a href='https://github.com/Linlab-slu/TSSr/blob/master/R/ImportMethods.R'><code>R/ImportMethods.R</code></a></small>
     <div class="hidden name"><code>getTSS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>getTSS function is used to precisely identify TSSs from multiple input file formats.
-The files include users' home-made alignment files (bam format) or downloaded files from public databases.
- See inputFilesType for details on the supported input file formats.</p>
+    <p>getTSS function is used to precisely identify TSSs from multiple
+input file formats. The files include users' home-made alignment files (bam format)
+or downloaded files from public databases. See inputFilesType for details on
+the supported input file formats.</p>
     </div>
 
     <pre class="usage"><span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>object</span>, sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>, mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
@@ -147,21 +152,25 @@ The files include users' home-made alignment files (bam format) or downloaded fi
     </tr>
     <tr>
       <th>sequencingQualityThreshold</th>
-      <td><p>Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.</p></td>
+      <td><p>Used only if inputFilesType == "bam" or
+"bamPairedEnd", otherwise ignored.</p></td>
     </tr>
     <tr>
       <th>mappingQualityThreshold</th>
-      <td><p>Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.</p></td>
+      <td><p>Used only if inputFilesType == "bam" or
+"bamPairedEnd", otherwise ignored.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Large List of elements - one element for each sample</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Reading in file: S01.sorted.bam...</span></div><div class='output co'>#&gt; <span class='error'>Error in value[[3L]](cond): failed to open BamFile: file(s) do not exist:</span>
-#&gt; <span class='error'>  'S01.sorted.bam'</span></div><div class='input'><span class='co'># }</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>exampleTSSr</span><span class='op'>)</span>
+<span class='co'>#getTSS(exampleTSSr)</span>
+<span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
