@@ -10,204 +10,136 @@ vignette: >
 
 ---
 
-## TSSr
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
-TSSr is designed to analyze transcription start sites (TSSs) and core promoters with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE) (Takahashi, Lassmann et al. 2012), no-amplification non-tagging CAGE libraries for Illumina next-generation sequencers (nAnT-iCAGE) (Murata, Nishiyori-Sueki et al. 2014), a Super-Low Input Carrier-CAGE (SLIC-CAGE) (Cvetesic, Leitch et al. 2018), NanoCAGE (Cumbie, Ivanchenko et al. 2015), TSS-seq (Malabat, Feuerbach et al. 2015), transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013), transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013), precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016), and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).
+# Installation
 
-TSSr package provides a comprehensive workflow on TSS data starting from identification of accurate TSS locations, clustering TSSs within small genomic regions corresponding to core promoters, and transcriptional activity quantifications, as well as specialized downstream analyses including core promoter shape, cluster annotation, gene differential expression, core promoter shift. TSSr can take multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates various types of TSS or core promoter track files, which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. Multiple cores are supported on Linux or Mac platforms.
+Install the most recent stable version from Bioconductor:
 
-## Pre-requisites:
+```{r bioconductor, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("TSSr")
+```
 
-* R version
-  * Download R (>3.4.0) version from CRAN.
-    * Windows: https://cran.r-project.org/bin/windows/base/
-    * Mac OS X: https://cran.r-project.org/bin/macosx/
-    * Linux: https://cran.r-project.org/bin/linux/
 
-- Rsamtools package
+Alternatively, you can install the development version directly from GitHub using `devtools`:
 
-  * install by using the following R commands:
+```{r github, eval=FALSE}
+devtools::install_github("Linlab-slu/TSSr")
+```
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("Rsamtools")
-  
+And load `TSSr`:
 
-- GenomicRanges
+```{r library, results='hide', message=FALSE}
+library(TSSr)
+```
 
-  * install by using the following R commands:
+# Citation
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("GenomicRanges")
+If you use TSSr, please cite the following article:
 
-- GenomicFeature package
+```{r citation, eval=TRUE}
+citation("TSSr")
+```
 
-  * install by using the following R commands:
+# Getting help
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("GenomicFeatures")
+For general questions about the usage of TSSr, use the [official Bioconductor support forum](https://support.bioconductor.org) and tag your question "TSSr". We strive to answer questions as quickly as possible.
 
-- Gviz package
+For technical questions, bug reports and suggestions for new features, we refer to the [TSSr github page](https://github.com/Linlab-slu/TSSr/issues).
 
-  * install by using the following R commands:
+# Quick start
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("Gviz")  
+```{r exampleTSSr, results="hide", tidy=FALSE}
+# Load the example data
+data("exampleTSSr")
+myTSSr <- exampleTSSr
+```
 
-- rtracklayer package
+Or create a new TSSr object
 
-  * install by using the following R commands:
+```{r newTSSr, eval=FALSE}
+# Provide bam files
+inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam")
+myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
+          ,inputFiles = inputFiles
+          ,inputFilesType= "bam"
+          ,sampleLabels = c("SL01","SL02","SL03","SL04")
+          ,sampleLabelsMerged = c("control","treat")
+          ,mergeIndex = c(1,1,2,2)
+          ,refSource = "saccharomyces_cerevisiae.SGD.gff"
+          ,organismName = "saccharomyces cerevisiae")
+myTSSr
+```
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("rtracklayer")
+```{r getTSS, tidy=FALSE}
+# Get TSS
+getTSS(myTSSr)
+```
 
-- DESeq2 package:
+TSS data processing
 
-  * install by using the following R command:
+```{r TSSprocessing, tidy=FALSE}
+# Merge replicates
+mergeSamples(myTSSr)
+# Normalization
+normalizeTSS(myTSSr)
+# TSS filtering
+filterTSS(myTSSr, method = "TPM", tpmLow = 0.1)
+```
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("DESeq2")
+TSS clustering
 
-- BSgenome package
+```{r TSSclustering, tidy=FALSE}
+# TSS clustering 
+clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
+         ,localThreshold = 0.02,clusterThreshold = 1
+         ,useMultiCore=FALSE, numCores=NULL)
 
-  * install by using the following R command:
+# Aggregating consensus clusters
+consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
+```
 
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-        BiocManager::install("BSgenome")
+Core promoter shape
 
-- data.table package
+```{r shapeCluster, tidy=FALSE}
+# Calculating core promoter shape score
+shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",
+             useMultiCore= FALSE, numCores = NULL)
+```
 
-  * install by using the following R command:
+Annotation core promoters
 
-        install.packages("data.table")  
+```{r annotateCluster, tidy=FALSE}
+# Assign clusters to the annotated features
+annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
+              filterClusterThreshold = 0.02, annotationType = "genes"
+              ,upstream=1000, upstreamOverlap = 500, downstream = 0)
+```
 
-- stringr package:
+Differential expression analysis
 
-  * install by using the following R command:
+```{r deGEne, tidy=FALSE}
+# Assign clusters to the annotated features
+deGene(myTSSr,comparePairs=list(c("control","treat")), 
+       pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+```
 
-        install.packages("stringr")
+Core promoter shifts
 
-## Installing TSSr Package:
+```{r shiftPromoter, tidy=FALSE}
+# Calcuate core promoter shifts
+shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+```
 
-To install the TSSr package all the prerequisites above need to be installed.
-After confirming those packages are installed, you can install the development version directly from GitHub using devtools:
 
-        devtools::install_github("Linlab-slu/TSSr")
 
-## Usage:
 
-* Launch TSSr
 
-        library(TSSr)
-      
-* Creating a TSSr object with system example data
-
-        myTSSr <- exampleTSSr
-
-* Creating a TSSr object with self-defined data
-
-        inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam")
-        myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
-	              ,inputFiles = inputFiles
-	              ,inputFilesType= "bam"
-	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
-	              ,sampleLabelsMerged = c("control","treat")
-	              ,refSource = "saccharomyces_cerevisiae.SGD.gff"
-	              ,organismName = "saccharomyces cerevisiae")
-
-* Reading in the data and TSS processing
-
-        getTSS(myTSSr)
-        mergeSamples(myTSSr,mergeIndex=c(1,1,2,2))
-        normalizeTSS(myTSSr)
-        filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
-        plotCorrelation(myTSSr, samples = "all)
-    
-![01_TSS_correlation_plot_of_all_samples](./figures/01_TSS_correlation_plot_of_all_samples.png){width=50%}
-
-        plotTssPCA(myTSSr, TSS.threshold=10)
-    
-![02_PCA_plot](./figures/02_PCA_plot.png){width=50%}
-
-        exportTSStable(myTSSr, data = "raw", merged = "TRUE")
-        exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
-        exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
-        
-* TSS clustering
-
-        clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
-	           ,localThreshold = 0.02,clusterThreshold = 1
-	           ,useMultiCore=FALSE, numCores=NULL)
-	    	exportClustersTable(myTSSr, data = "filtered")
-	    	exportClustersToBed(myTSSr, data = "tagClusters")
-
-* Aggregating consensus clusters
-
-        consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
-		    exportClustersToBed(myTSSr, data = "consensusClusters")
-
-
-* Core promoter shape
-
-        shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
-        plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
-    
-![03_Interquantile_plot_of_ALL_samples](./figures/03_Interquantile_plot_of_ALL_samples.png){width=75%}
-
-        plotShape(myTSSr)
-    
-![04_Shape_plot_of_ALL_samples](./figures/04_Shape_plot_of_ALL_samples.png){width=75%}
-
-		    exportShapeTable(myTSSr)
-
-* Annotation
-
-        annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
-	                filterClusterThreshold = 0.02, annotationType = "genes"
-	                ,upstream=1000, upstreamOverlap = 500, downstream = 0)
-	    	exportDETable(myTSSr, data = "sig")
-                  
-* Differential expression analysis
-
-        deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
-        exportShiftTable(myTSSr)
-        plotDE(myTSSr, withGeneName = "TRUE",xlim=c(-2.5, 2.5),ylim=c(0,10))
-    
-![05_Volcano_plot](./figures/05_Volcano_plot.png){width=50%}
-
-* Core promoter shifts
-
-        shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-        plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "filtered",clusterThreshold = 0.02
-	        ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100)
-          
-![06_TSS_graphs](./figures/06_TSS_graphs.png){width=50%}
-
-## Reference:
-
-Arribere, J. A. and W. V. Gilbert (2013). "Roles for transcript leaders in translation and mRNA decay revealed by transcript leader sequencing." Genome Res 23(6): 977-987.
-
-Cumbie, J. S., M. G. Ivanchenko and M. Megraw (2015). "NanoCAGE-XL and CapFilter: an approach to genome wide identification of high confidence transcription start sites." BMC Genomics 16: 597.
-
-Cvetesic, N., H. G. Leitch, M. Borkowska, F. Muller, P. Carninci, P. Hajkova and B. Lenhard (2018). "SLIC-CAGE: high-resolution transcription start site mapping using nanogram-levels of total RNA." Genome Res 28(12): 1943-1956.
-
-Kruesi, W. S., L. J. Core, C. T. Waters, J. T. Lis and B. J. Meyer (2013). "Condensin controls recruitment of RNA polymerase II to achieve nematode X-chromosome dosage compensation." Elife 2: e00808.
-
-Mahat, D. B., H. Kwak, G. T. Booth, I. H. Jonkers, C. G. Danko, R. K. Patel, C. T. Waters, K. Munson, L. J. Core and J. T. Lis (2016). "Base-pair-resolution genome-wide mapping of active RNA polymerases using precision nuclear run-on (PRO-seq)." Nat Protoc 11(8): 1455-1476.
-
-Mahat, D. B., H. Kwak, G. T. Booth, I. H. Jonkers, C. G. Danko, R. K. Patel, C. T. Waters, K. Munson, L. J. Core and J. T. Lis (2016). "Base-pair-resolution genome-wide mapping of active RNA polymerases using precision nuclear run-on (PRO-seq)." Nat Protoc 11(8): 1455-1476.
-
-Malabat, C., F. Feuerbach, L. Ma, C. Saveanu and A. Jacquier (2015). "Quality control of transcription start site selection by nonsense-mediated-mRNA decay." Elife 4.
-
-Murata, M., H. Nishiyori-Sueki, M. Kojima-Ishiyama, P. Carninci, Y. Hayashizaki and M. Itoh (2014). "Detecting expressed genes using CAGE." Methods Mol Biol 1164: 67-85.
-
-Pelechano, V., W. Wei and L. M. Steinmetz (2013). "Extensive transcriptional heterogeneity revealed by isoform profiling." Nature 497(7447): 127-131.
-
-Takahashi, H., T. Lassmann, M. Murata and P. Carninci (2012). "5' end-centered expression profiling using cap-analysis gene expression and next-generation sequencing." Nat Protoc 7(3): 542-561.
 
