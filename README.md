@@ -82,14 +82,16 @@ TSSr package provides a comprehensive workflow on TSS data starts from identific
 
         if (!requireNamespace("data.table", quietly = TRUE))
 	install.packages("data.table") 
+	
   		 
 
 - stringr package:
 
   * install by using the following R command:
 
-       if (!requireNamespace("stringr", quietly = TRUE)) 
-	install.packages("stringr")
+       if (!requireNamespace("stringr", quietly = TRUE))
+       install.packages("stringr") 
+	
 
 ## 3. Installing TSSr Package:
 
