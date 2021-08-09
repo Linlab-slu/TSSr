@@ -1,11 +1,11 @@
-###################################################################################################################
+###############################################################################
 ##.Ds function calcuates gene differential expression based on Deseq2 package
 ##.Ds function takes two assigned clusters and library sizes of the two samples
 ##users need to provide which sample they want to compare and
 ##run script with the following example command:
 ##.Ds(cx,cy, librarySizex, librarySizey, useRawCount = TRUE)
 
-############################################################################################################
+###############################################################################
 .Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE, pval){
   ##cx is control
   ##cy is treat
@@ -51,7 +51,7 @@
       pval = NA}
     return(c(my.gene,Ds,pval))
   })
-  Ds <- data.frame(matrix(unlist(cmp), nrow=length(cmp), byrow=T),stringsAsFactors=FALSE)
+  Ds <- data.frame(matrix(unlist(cmp), nrow=length(cmp), byrow= TRUE),stringsAsFactors=FALSE)
   colnames(Ds) <- c("gene","Ds","pval")
   Ds$padj <- p.adjust(Ds[,"pval"],method = "BH")
   setDT(Ds)

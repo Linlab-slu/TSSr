@@ -1,4 +1,4 @@
-###################################################################################################################
+###############################################################################
 ##.deseq2 function calcuates gene differential expression based on Deseq2 package
 ##.deseq2 function takes two assigned clusters and tss.raw table
 ##users need to provide which sample they want to compare and
@@ -50,7 +50,7 @@
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     })
   }
-  one <- data.frame(matrix(unlist(one), nrow=length(one), byrow=T),stringsAsFactors=FALSE)
+  one <- data.frame(matrix(unlist(one), nrow=length(one), byrow=TRUE),stringsAsFactors=FALSE)
 
   ##tag counts by gene for sampleTwo
   setkey(yCounts, gene)
@@ -69,13 +69,13 @@
       return(c(my.gene,colSums(data[,-c(1,2,3)])))
     })
   }
-  two <- data.frame(matrix(unlist(two), nrow=length(two), byrow=T),stringsAsFactors=FALSE)
+  two <- data.frame(matrix(unlist(two), nrow=length(two), byrow=TRUE),stringsAsFactors=FALSE)
   ##merge the two raw count tables together by genes
   one[,2:ncol(one)] <- sapply(one[,2:ncol(one)], as.integer)
   two[,2:ncol(two)] <- sapply(two[,2:ncol(two)], as.integer)
   setnames(one, colnames(one), c("gene",samplex))
   setnames(two, colnames(two), c("gene",sampley))
-  Dtable <- merge(one, two, by = c("gene"), all = T)
+  Dtable <- merge(one, two, by = c("gene"), all = TRUE)
   Dtable[is.na(Dtable)] = 0
   ##
   rownames(Dtable) <- Dtable[,1]
@@ -127,7 +127,7 @@
       return(temp)
     })
   }
-  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=T),stringsAsFactors=FALSE)
+  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=TRUE),stringsAsFactors=FALSE)
   colnames(tags) <- samples
   cs <- cbind(cs,tags)
   return(cs)
@@ -162,7 +162,7 @@
       return(temp)
     })
   }
-  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=T),stringsAsFactors=FALSE)
+  tags <- data.frame(matrix(unlist(tags), nrow=length(tags), byrow=TRUE),stringsAsFactors=FALSE)
   colnames(tags) <- samples
   cs <- cbind(cs,tags)
   return(cs)

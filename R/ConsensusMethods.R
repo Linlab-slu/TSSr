@@ -1,16 +1,19 @@
-################################################################################################
+###############################################################################
 #' Make consensus clusters across multiple samples.
 #'
-#' @description Makes consensus clusters from multiple samples in TSSr object and calculates
-#' inter-quantile positions within consensus clusters for each sample.
+#' @description Makes consensus clusters from multiple samples in TSSr object and
+#' calculates inter-quantile positions within consensus clusters for each sample.
 #'
 #' @usage consensusCluster(object, dis = 50
 #' , useMultiCore=FALSE, numCores = NULL)
 #'
 #' @param object A TSSr object.
-#' @param dis Minimum distance between two peaks to be aggregated together into the same consensus cluster.
-#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
-#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+#' @param dis Minimum distance between two peaks to be aggregated together into
+#' the same consensus cluster.
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE)
+#' or not (FALSE). Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if
+#' useMultiCore = TRUE. Default is NULL.
 #'
 #' @export
 #'
@@ -43,7 +46,7 @@ setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, u
   colnames(cx)[3:4] <- c("start.c","end.c")
   cx[,start := dominant_tss-round(dis/2)]
   cx[,end := dominant_tss + round(dis/2)]
-  gr1 <- makeGRangesFromDataFrame(cx, keep.extra.columns= F)
+  gr1 <- makeGRangesFromDataFrame(cx, keep.extra.columns= FALSE)
   gr <- BiocGenerics::union(gr1,gr1)
   for(i in 2:length(sampleLabelsMerged)){
     gr <- .getConsensus(gr, cs[[sampleLabelsMerged[[i]]]], dis)

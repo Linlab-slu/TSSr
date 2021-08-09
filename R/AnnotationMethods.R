@@ -1,3 +1,4 @@
+###############################################################################
 #' Annotate clusters with GFF annotation file.
 #'
 #' @description Annotates clusters with gene or transcript names from GFF annotation file.
@@ -7,20 +8,22 @@
 #' , upstreamOverlap = 500,downstream = 0)
 #'
 #' @param object  A TSSr object
-#' @param clusters Clusters to be annotated: "consensusClusters" or "tagClusters". Default is "consensusClusters".
-#' @param filterCluster Logical indicating whether clusters downstream of a highly expressed cluster
-#'  are filtered. Setting filterCluster as "TRUE" would reduce weak clusters brought from recapping,
-#'  transcriptional or sequencing noise. Default is TRUE.
+#' @param clusters Clusters to be annotated: "consensusClusters" or "tagClusters".
+#' Default is "consensusClusters".
+#' @param filterCluster Logical indicating whether clusters downstream of a highly
+#' expressed cluster are filtered. Setting filterCluster as "TRUE" would reduce weak
+#' clusters brought from recapping, transcriptional or sequencing noise. Default is TRUE.
 #' @param filterClusterThreshold  Ignore downstream clusters if signal < filterClusterThreshold*the
 #' strongest clusters within the same gene promoter region. Default value = 0.02.
-#' @param annotationType  Specify annotation feature to be associated with: "genes" or "transcripts".
-#' Default is "genes".
-#' @param upstream  Upstream distance to the start position of annotation feature. Default value = 1000.
-#' @param upstreamOverlap Upstream distance to the start position of annotation feature if overlapped
-#' with the upstream neighboring feature. Default value = 500.
-#' @param downstream  Downstream distance to the start position of annotation feature. Default value = 0.
-#' Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
-#'  the recommended value = 500.
+#' @param annotationType  Specify annotation feature to be associated with: "genes"
+#' or "transcripts". Default is "genes".
+#' @param upstream  Upstream distance to the start position of annotation feature.
+#' Default value = 1000.
+#' @param upstreamOverlap Upstream distance to the start position of annotation
+#' feature if overlapped with the upstream neighboring feature. Default value = 500.
+#' @param downstream  Downstream distance to the start position of annotation feature.
+#' Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
+#' start from transcription start sites (TSSs), the recommended value = 500.
 #'
 #' @export
 #'

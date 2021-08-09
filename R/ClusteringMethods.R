@@ -1,9 +1,9 @@
-################################################################################################
+###############################################################################
 #' Cluster TSSs into tag clusters
 #'
-#' @description Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakclu" method.
-#'  "peakclu" method is an implementation of peak-based clustering. The minimum distance of two neighboring
-#'   peaks can be specified.
+#' @description Clusters TSSs within small genomic regions into tag clusters (TCs)
+#' using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.
+#' The minimum distance of two neighboring peaks can be specified.
 #'
 #' @usage clusterTSS(object, method = "peakclu", peakDistance=100,extensionDistance=30
 #' , localThreshold = 0.02,clusterThreshold = 1, useMultiCore=FALSE, numCores=NULL)
@@ -18,8 +18,10 @@
 #' clusters, which is used to filter TSS signals brought from possible recapping events,
 #' or sequencing noise. Default value = 0.02.
 #' @param clusterThreshold  Ignore clusters if signal < clusterThreshold. Default value = 1.
-#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
-#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE).
+#' Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
+#' Default is NULL.
 #'
 #' @export
 #'

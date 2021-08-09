@@ -46,6 +46,6 @@ setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex
 
   #object@mergeIndex <- mergeIndex
   object@TSSprocessedMatrix <- re
-  object@librarySizes <- colSums(re[,4:ncol(re), drop = F], na.rm = T)
+  object@librarySizes <- colSums(re[,4:ncol(re), drop = FALSE], na.rm = TRUE)
   assign(objName, object, envir = parent.frame())
 })

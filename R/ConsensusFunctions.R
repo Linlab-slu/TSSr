@@ -1,4 +1,4 @@
-##############################################################################################################
+###############################################################################
 ##
 .getConsensus <- function(gr1,cy, dis){
 
@@ -8,13 +8,13 @@
   colnames(cy)[3:4] <- c("start.c","end.c")
   cy[,start := dominant_tss-round(dis/2)]
   cy[,end := dominant_tss + round(dis/2)]
-  gr2 <- makeGRangesFromDataFrame(cy, keep.extra.columns= F)
+  gr2 <- makeGRangesFromDataFrame(cy, keep.extra.columns= FALSE)
   hits <- findOverlaps(gr1, gr2)
   new <- c(BiocGenerics::union(gr1[unname(as.data.frame(hits)[,1])], gr2[unname(as.data.frame(hits)[,2])]),gr1[-unname(as.data.frame(hits)[,1])],gr2[-unname(as.data.frame(hits)[,2])])
   return(new)
 }
 
-##############################################################################################################
+###############################################################################
 ##
 .getConsensusQuantile <- function(tc, gr, tss.temp,useMultiCore, numCores){
   ##define variable as a NULL value

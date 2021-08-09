@@ -8,7 +8,8 @@
 #' @param object A TSSr object.
 #' @param method Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
 #' only if the input TSS data in raw number of counts.
-#' @param normalization Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.
+#' @param normalization Define whether normalization data to TPM.
+#' Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
 #'
@@ -32,7 +33,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
   library.size <- object@librarySizes
   # calculate size of genome
   genomeSize <- 0
-  for (chrom in 1:length(Genome)) {
+  for (chrom in seq_len(length(Genome))) {
     genomeSize <- genomeSize + length(Genome[[chrom]])
   }
   tss.dt <- object@TSSprocessedMatrix

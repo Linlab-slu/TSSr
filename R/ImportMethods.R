@@ -1,15 +1,19 @@
-################################################################################################
-#' Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables.
+###############################################################################
+#' Precisely identify TSSs from bam files, paired end bam files, bed files,
+#' BigWig files, tss files, or tss tables.
 #'
-#' @description getTSS function is used to precisely identify TSSs from multiple input file formats.
-#' The files include users' home-made alignment files (bam format) or downloaded files from public databases.
-#'  See inputFilesType for details on the supported input file formats.
+#' @description getTSS function is used to precisely identify TSSs from multiple
+#' input file formats. The files include users' home-made alignment files (bam format)
+#' or downloaded files from public databases. See inputFilesType for details on
+#' the supported input file formats.
 #'
 #' @usage getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 #'
 #' @param object A TSSr object.
-#' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.
-#' @param mappingQualityThreshold Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.
+#' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or
+#' "bamPairedEnd", otherwise ignored.
+#' @param mappingQualityThreshold Used only if inputFilesType == "bam" or
+#' "bamPairedEnd", otherwise ignored.
 #'
 #' @export
 #'
@@ -54,7 +58,7 @@ setMethod("getTSS",signature(object = "TSSr"), function(object
   }
   setorder(tss, "strand","chr","pos")
   # get library sizes
-  object@librarySizes <- colSums(tss[,4:ncol(tss), drop = F], na.rm = T)
+  object@librarySizes <- colSums(tss[,4:ncol(tss), drop = FALSE], na.rm = TRUE)
 
   object@TSSrawMatrix <- tss
   object@TSSprocessedMatrix <- tss

@@ -1,4 +1,4 @@
-#####################################################################################################
+###############################################################################
 ##.assign2gene function assign cs.temp to reference
 .assign2gene <- function(cs.temp,ref,upstream, upstreamOverlap, downstream, filterCluster){
   ##define variable as a NULL value
@@ -11,7 +11,7 @@
     cs <- cs.temp[list(x)]
     cs[,subset:= NULL]
     colnames(cs)[3:4] <- c("start.c","end.c")
-    gr <- makeGRangesFromDataFrame(cs, keep.extra.columns= T, start.field = "dominant_tss", end.field = "dominant_tss")
+    gr <- makeGRangesFromDataFrame(cs, keep.extra.columns= TRUE, start.field = "dominant_tss", end.field = "dominant_tss")
     ref_sub <- ref[list(x)]
     ref_coding <- ref[list(x)]
     if(!(x %in% ref[,unique(subset)])){
@@ -59,7 +59,7 @@
         ref_sub[,end:= start + down + up -1]
       }
       rownames(ref_sub) <- ref_sub$gene_id
-      ref_sub <- makeGRangesFromDataFrame(ref_sub, keep.extra.columns= F)
+      ref_sub <- makeGRangesFromDataFrame(ref_sub, keep.extra.columns= FALSE)
       ##find overlap with promoter region
       hits <- findOverlaps(gr,ref_sub)
       ################fix breakTies issue, Jan09,2020##############
@@ -83,7 +83,7 @@
         ##coding
         rownames(ref_coding) <- ref_coding$gene_id
         setorder(ref_coding,start)
-        ref_coding <- makeGRangesFromDataFrame(ref_coding, keep.extra.columns = F)
+        ref_coding <- makeGRangesFromDataFrame(ref_coding, keep.extra.columns = FALSE)
         hits <- findOverlaps(gr,ref_coding)
         ################fix breakTies issue, Jan09,2020##############
         hits <- as.data.frame(hits)
@@ -111,5 +111,5 @@
   })
   setorder(do.call("rbind",asn), cluster)
 }
-#####################################################################################################
+###############################################################################
 

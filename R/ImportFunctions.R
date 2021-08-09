@@ -27,7 +27,7 @@
                                    , isFirstMateRead = TRUE)}
   chunksize <- 1e6
   first <- TRUE
-  for(i in 1:length(bam.files)) {
+  for(i in seq_len(length(bam.files))) {
     message("\nReading in file: ", bam.files[i], "...")
     bam <- scanBam(bam.files[i], param = param)
     message("\t-> Filtering out low quality reads...")
@@ -134,7 +134,7 @@
   ##define variable as a NULL value
   chr = pos = tag_count = NULL
 
-  for(i in 1:length(bed.files)) {
+  for(i in seq_len(length(bed.files))) {
     message("\nReading in file: ", bed.files[i], "...")
     readsGR <- import(bed.files[i], format = "BED")
     readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
@@ -142,8 +142,8 @@
     readsGR.p <- readsGR[strand(readsGR) == "+"]
     readsGR.m <- readsGR[strand(readsGR) == "-"]
     message("\t-> Making TSS table...")
-    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = F)
-    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = F)
+    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = FALSE)
+    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = FALSE)
     TSS <- rbind(TSS.plus, TSS.minus)
     TSS$tag_count <- 1
     TSS <- data.table(TSS)
@@ -169,7 +169,7 @@
   ##define variable as a NULL value
   chr = pos = NULL
   first <- TRUE
-  for(i in 1:length(BigWig.files)) {
+  for(i in seq_len(length(BigWig.files))) {
     message("\nReading in file: ", BigWig.files[i], "...")
     readsGR <- import(BigWig.files[i], format = "BigWig")
     readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
@@ -177,8 +177,8 @@
     readsGR.p <- readsGR[score(readsGR) > 0]
     readsGR.m <- readsGR[score(readsGR) < 0]
     message("\t-> Making TSS table...")
-    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = F)
-    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = F)
+    TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = FALSE)
+    TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = FALSE)
     TSS <- rbind(TSS.plus, TSS.minus)
 
     setDT(TSS)
@@ -206,9 +206,9 @@
 .getTSS_from_tss <- function(tss.files, sampleLabels){
   first <- TRUE
 
-  for(i in 1:length(tss.files)) {
+  for(i in seq_len(length(tss.files))) {
     message("\nReading in file: ", tss.files[i], "...")
-    TSS <- read.table(file = tss.files[i], header = T, sep = "\t"
+    TSS <- read.table(file = tss.files[i], header = TRUE, sep = "\t"
                       ,colClasses = c("character", "integer", "character", "integer")
                       ,col.names = c("chr", "pos", "strand", sampleLabels[i]))
 
@@ -239,7 +239,7 @@
     stop("Could not locate input file ", TSStable.file)
   }
 
-  TSS.all.samples <- read.table(file = TSStable.file, header = T, stringsAsFactors = FALSE
+  TSS.all.samples <- read.table(file = TSStable.file, header = TRUE, stringsAsFactors = FALSE
                                 ,colClasses = c("character", "integer", "character", rep("integer", length(sampleLabels)))
                                 ,col.names = c("chr", "pos", "strand", sampleLabels))
   if(ncol(TSS.all.samples) != (length(sampleLabels) + 3)){

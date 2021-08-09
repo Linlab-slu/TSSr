@@ -1,4 +1,4 @@
-##########################################################################################################
+###############################################################################
 .plotCorrelation <- function(TSS.all.samples)
 {
   z <- TSS.all.samples[,-c(1:3)]
@@ -21,8 +21,8 @@
   suppressWarnings(pairs(z, lower.panel = upper.panel,upper.panel = panel.cor, log = "xy"))
 }
 
-###################################################################################################################
-###################################################################################################################
+###############################################################################
+###############################################################################
 ##.plotTSS function plots TSS graph
 ##.plotTSS function takes three input files, tss.tpm, cs, and ref
 ##tss.tpm table has at least 4 columns (chr, pos, strand, tpm). tpm value is negative in the minus strand
@@ -66,26 +66,26 @@
   {
     tss_sub <- tss[tss$chr == as.character(df$chr) & tss$strand == as.character(df$strand) & tss$pos >= p & tss$pos <= q,]
   }
-  
+
   # setup y_range
   # To hide TSS signals of the opposite strand, change "min(tss_sub1)" to "0" for positive strand and change "max(tss_sub1)" to "0" for negative strand
   tss_sub1 <- tss_sub[,.SD, .SDcols = c(samples)]
   if(yFixed==TRUE)
   {
-    if(tss_sub$strand == "+")
+    if(tss_sub$strand[1] == "+")
     {
     y_range=c(min(tss_sub1),max(tss_sub1))
-    } 
-    else 
+    }
+    else
     {
       y_range=c(min(tss_sub1),max(tss_sub1))
      }
-  } 
-  else 
-  {
-    y_range=NULL  
   }
-  
+  else
+  {
+    y_range=NULL
+  }
+
   data_tss_track <- list()
   dtrack <- list()
   s <- c()
@@ -120,10 +120,10 @@
   plotTracks(c(list(gtrack, atrack.gene),s),
              main = df$gene,
              featureAnnotation="id",
-             fontcolor.feature="black", 
+             fontcolor.feature="black",
              cex.feature=0.7, shape = "arrow")
 }
-###################################################################################################################
+###############################################################################
 .getBed <- function(p){
   ##define variable as a NULL value
   chr = q_0.1 = q_0.9 = dominant_tss = NULL

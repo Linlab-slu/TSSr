@@ -15,7 +15,7 @@
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' plotCorrelation(exampleTSSr, samples = "all")
+#' #plotCorrelation(exampleTSSr, samples = "all")
 #' }
 #'
 setGeneric("plotCorrelation",function(object, samples = "all")standardGeneric("plotCorrelation"))
@@ -52,7 +52,8 @@ setMethod("plotCorrelation",signature(object = "TSSr"), function(object, samples
 #'
 #' @examples
 #' \donttest{
-#' plotTssPCA(exampleTSSr)
+#' data(exampleTSSr)
+#' #plotTssPCA(exampleTSSr)
 #' }
 setGeneric("plotTssPCA",function(object, TSS.threshold =10)standardGeneric("plotTssPCA"))
 #' @rdname plotTssPCA
@@ -90,7 +91,7 @@ setMethod("plotTssPCA",signature(object = "TSSr"), function(object, TSS.threshol
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' plotInterQuantile(exampleTSSr, samples = "all")
+#' #plotInterQuantile(exampleTSSr, samples = "all")
 #' }
 setGeneric("plotInterQuantile",function(object, samples = "all", tagsThreshold = 1)standardGeneric("plotInterQuantile"))
 #' @rdname plotInterQuantile
@@ -106,7 +107,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
     tc <- TCs
     pdf(file = paste("Interquantile_plot_of_ALL_samples.pdf", sep = "")
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
-    for(i in 1:length(sampleLabels)){
+    for(i in seq_len(length(sampleLabels))){
       temp <- tc[[sampleLabels[i]]]
       temp <- temp[temp$tags >= tagsThreshold & temp$interquantile_width <= 200,]
       hist(temp$interquantile_width, breaks = 40, col = rainbow(length(sampleLabels))[i]
@@ -116,7 +117,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
     tc <- TCs[[samples]]
     pdf(file = paste("Interquantile_plot_of_", paste(samples, collapse = "_"), "_samples.pdf", sep = "")
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       temp <- temp[temp$tags >= tagsThreshold & temp$interquantile_width <= 200,]
       hist(temp$interquantile_width, breaks = 40, col = rainbow(length(samples))[i]
@@ -142,7 +143,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' plotShape(exampleTSSr)
+#' #plotShape(exampleTSSr)
 #' }
 setGeneric("plotShape",function(object, samples = "all")standardGeneric("plotShape"))
 #' @rdname plotShape
@@ -155,7 +156,7 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
     tc <- TCs
     pdf(file = paste("Shape_plot_of_ALL_samples.pdf", sep = "")
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
-    for(i in 1:length(sampleLabels)){
+    for(i in seq_len(length(sampleLabels))){
       temp <- tc[[sampleLabels[i]]]
       hist(temp$shape.score, breaks = 40, col = rainbow(length(sampleLabels))[i]
            , xlab = "shape score", ylab = "Frequency", main = sampleLabels[i])
@@ -164,7 +165,7 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
     tc <- TCs[[samples]]
     pdf(file = paste("Shape_plot_of_", paste(samples, collapse = "_"), "_samples.pdf", sep = "")
         ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       hist(temp$shape.score, breaks = 40, col = rainbow(length(samples))[i]
            , xlab = "shape score", ylab = "Frequency", main = samples[i])
@@ -190,8 +191,8 @@ setMethod("plotShape",signature(object = "TSSr"), function(object ,samples){
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' plotDE(exampleTSSr, withGeneName = "TRUE")
-#' plotDE(exampleTSSr, withGeneName = "FALSE")
+#' #plotDE(exampleTSSr, withGeneName = "TRUE")
+#' #plotDE(exampleTSSr, withGeneName = "FALSE")
 #' }
 setGeneric("plotDE",function(object
                              ,withGeneName = "TRUE"
@@ -207,7 +208,7 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
   ##define variable as a NULL value
   padj = log2FoldChange = NULL
 
-  for(i in 1:length(D.names)){
+  for(i in seq_len(length(D.names))){
     res <- object@DEtables[[D.names[i]]]$DEtable
     plot(res$log2FoldChange,-log10(res$pvalue), pch = 20, xlim = xlim, ylim = ylim
          ,main = D.names[i], xlab = "log2FoldChange", ylab = "-log10(pvalue)")
@@ -250,8 +251,8 @@ setMethod("plotDE",signature(object = "TSSr"), function(object, withGeneName, xl
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
-#' ,up.dis =500, down.dis = 500)
+#' #plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
+#' #,up.dis =500, down.dis = 500)
 #' }
 setGeneric("plotTSS",function(object,samples
                               ,tssData = "processed"
@@ -301,13 +302,12 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
   tss <- rbind(tss.p,tss.m)
 
   ##prepare annotation file
-  txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
-  ref <- setDT(as.data.frame(genes(txdb)))
+  ref <- object@refTable
   ref <- ref[gene_id %in% genelist,]
 
   pdf(file = paste("TSS_graphs.pdf", sep = "")
       ,width = 10, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
-  for (i in 1:nrow(ref)){
+  for (i in seq_len(nrow(ref))){
     df <- ref[i,]
     .plotTSS(tss, cs,df, samples, Bidirection, up.dis, down.dis,yFixed)
   }
@@ -329,8 +329,8 @@ setMethod("plotTSS",signature(object = "TSSr"), function(object, samples, tssDat
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportTSStable(exampleTSSr)
-#' exportTSStable(exampleTSSr, data="raw")
+#' #exportTSStable(exampleTSSr)
+#' #exportTSStable(exampleTSSr, data="raw")
 #' }
 setGeneric("exportTSStable",function(object, data = "raw", merged = "TRUE")standardGeneric("exportTSStable"))
 #' @rdname exportTSStable
@@ -369,10 +369,10 @@ setMethod("exportTSStable",signature(object = "TSSr"), function(object, data, me
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportClustersTable(exampleTSSr, data = "tagClusters")
-#' exportClustersTable(exampleTSSr, data = "consensusClusters")
-#' exportClustersTable(exampleTSSr, data = "assigned")
-#' exportClustersTable(exampleTSSr, data = "unassigned")
+#' #exportClustersTable(exampleTSSr, data = "tagClusters")
+#' #exportClustersTable(exampleTSSr, data = "consensusClusters")
+#' #exportClustersTable(exampleTSSr, data = "assigned")
+#' #exportClustersTable(exampleTSSr, data = "unassigned")
 #' }
 setGeneric("exportClustersTable",function(object, data = "assigned")standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
@@ -382,7 +382,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
     message("Exporting tagClusters table...")
     tc <- object@tagClusters
     samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       write.table(temp, file = paste(samples[i],"tagClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -390,7 +390,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
     message("Exporting consensusClusters table...")
     tc <- object@consensusClusters
     samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       write.table(temp, file = paste(samples[i],"consensusClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -398,7 +398,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
     message("Exporting assignedClusters table...")
     tc <- object@assignedClusters
     samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       write.table(temp, file = paste(samples[i],"assignedClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -406,7 +406,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
     message("Exporting unassignedClusters table...")
     tc <- object@unassignedClusters
     samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- tc[[samples[i]]]
       write.table(temp, file = paste(samples[i],"unassignedClusters","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -430,7 +430,7 @@ setMethod("exportClustersTable",signature(object = "TSSr"), function(object, dat
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportShapeTable(exampleTSSr)
+#' #exportShapeTable(exampleTSSr)
 #' }
 setGeneric("exportShapeTable",function(object)standardGeneric("exportShapeTable"))
 #' @rdname exportShapeTable
@@ -441,7 +441,7 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
   s <- object@clusterShape
   if(!is.null(s)){
     samples <- object@sampleLabelsMerged
-    for(i in 1:length(samples)){
+    for(i in seq_len(length(samples))){
       temp <- s[[samples[i]]]
       write.table(temp, file = paste(samples[i],"promoter.shape","txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -465,7 +465,7 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportDETable(exampleTSSr, data="sig")
+#' #exportDETable(exampleTSSr, data="sig")
 #' }
 setGeneric("exportDETable",function(object, data = "sig")standardGeneric("exportDETable"))
 #' @rdname exportDETable
@@ -474,12 +474,12 @@ setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
   message("Exporting differential expression table...")
   D.names <- names(object@DEtables)
   if(data == "all"){
-    for(i in 1:length(D.names)){
+    for(i in seq_len(length(D.names))){
       temp <- object@DEtables[[D.names[i]]]$DEtable
       write.table(temp, file = paste(D.names[i],"DE.table.aLL.txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
   }else if(data == "sig"){
-    for(i in 1:length(D.names)){
+    for(i in seq_len(length(D.names))){
       temp <- object@DEtables[[D.names[i]]]$DEsig
       write.table(temp, file = paste(D.names[i],"DE.table.sig.txt", sep = "."), sep = "\t", quote = F, row.names = F)
     }
@@ -502,7 +502,7 @@ setMethod("exportDETable",signature(object = "TSSr"), function(object, data){
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportShiftTable(exampleTSSr)
+#' #exportShiftTable(exampleTSSr)
 #' }
 setGeneric("exportShiftTable",function(object)standardGeneric("exportShiftTable"))
 #' @rdname exportShiftTable
@@ -511,7 +511,7 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 ){
   message("Exporting promoter shift table...")
   D.names <- names(object@PromoterShift)
-  for(i in 1:length(D.names)){
+  for(i in seq_len(length(D.names))){
     temp <- object@PromoterShift[[D.names[i]]]
     write.table(temp, file = paste(D.names[i],"promoter.shift.table.txt", sep = "."), sep = "\t", quote = F, row.names = F)
   }
@@ -535,7 +535,7 @@ setMethod("exportShiftTable",signature(object = "TSSr"), function(object
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+#' #exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
 #' }
 setGeneric("exportTSStoBedgraph",function(object,data = "processed"
                                           ,format = "bedGraph"
@@ -600,8 +600,8 @@ setMethod("exportTSStoBedgraph",signature(object = "TSSr"), function(object, dat
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-#' exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
+#' #exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
+#' #exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
 #' }
 setGeneric("exportClustersToBed",function(object,data = "consensusClusters", assigned = TRUE)
   standardGeneric("exportClustersToBed"))
@@ -619,7 +619,7 @@ setMethod("exportClustersToBed",signature(object = "TSSr"), function(object, dat
       cs <- object@consensusClusters
     }
   }
-  for (i in 1:length(sampleLabelsMerged)){
+  for (i in seq_len(length(sampleLabelsMerged))){
     temp <- cs[[sampleLabelsMerged[i]]]
     temp <- .getBed(temp)
     df <- file(paste(sampleLabelsMerged[i],data,"bed", sep = "."), open = "wt")
@@ -629,7 +629,7 @@ setMethod("exportClustersToBed",signature(object = "TSSr"), function(object, dat
                      ,sampleLabelsMerged[i],"(",data
                      ,'(TC) q0.1-q0.9)" '
                      ,'visibility="pack" color=0,255,255', sep = ""), df)
-    write.table(temp, df, sep = "\t", quote = F, row.names = F, col.names = F)
+    write.table(temp, df, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
     close(df)
   }
 })

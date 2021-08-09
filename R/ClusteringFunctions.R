@@ -21,9 +21,9 @@
   # manipulate data.table to collapse clustered rows
   tss.dt[, peak := peakID]
   tss.dt[, ID := .I]
-  #######################################################################################################################
+  ###############################################################################
   ##local filtering
-  #######################################################################################################################
+  ###############################################################################
   if(unique(tss.dt$strand)== "+"){
     localF <- sapply(peakID[peakID >0],function(i){
       temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i]+peakDistance,]
@@ -35,8 +35,8 @@
       temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
     })}
   if(length(unlist(localF)) >0){tss.dt <- tss.dt[-unlist(localF),]}
-  #######################################################################################################################
-  #######################################################################################################################
+  ###############################################################################
+  ###############################################################################
   tss.dt[, forward := ifelse(data.table::shift(pos,1,type="lead") < pos + extensionDistance, 1, 0)] #
   tss.dt[, reverse := ifelse(data.table::shift(pos,1,type="lag") > pos - extensionDistance, 1, 0)]
   tss.dt <- tss.dt[,list(peak=max(peak),start=min(pos),end=max(pos),tags=sum(tags)),by=list(rleid(peak, forward, reverse))]##ZL?
@@ -69,9 +69,9 @@
 
     rowVec <- which(clusters$V2 >= data.table::shift(clusters$V1,1,type="lead"))
     if (length(rowVec)>0) {
-      #######################################################################################################################
-      #######################################################################################################################
-      for(i in 1:length(rowVec)){clusters$V1[rowVec[i]+1] = clusters$V1[rowVec[i]]}
+      ###############################################################################
+      ###############################################################################
+      for(i in seq_len(length(rowVec))){clusters$V1[rowVec[i]+1] = clusters$V1[rowVec[i]]}
       clusters <- clusters[-rowVec,]
     }##
 

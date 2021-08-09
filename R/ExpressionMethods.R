@@ -1,4 +1,4 @@
-################################################################################################
+###############################################################################
 #' Analysis of gene differential expression.
 #'
 #' @description Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
@@ -8,8 +8,10 @@
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison with DESeq2 method.
 #' @param pval Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
-#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
-#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
+#' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or
+#' not (FALSE). Default is FALSE.
+#' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
+#' Default is NULL.
 #'
 #'
 #' @export
