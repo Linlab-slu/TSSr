@@ -19,6 +19,9 @@ getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 \item{mappingQualityThreshold}{Used only if inputFilesType == "bam" or
 "bamPairedEnd", otherwise ignored.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 getTSS function is used to precisely identify TSSs from multiple
 input file formats. The files include users' home-made alignment files (bam format)

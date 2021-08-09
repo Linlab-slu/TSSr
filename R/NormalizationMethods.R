@@ -14,6 +14,7 @@
 #' normalizeTSS(exampleTSSr)
 setGeneric("normalizeTSS",function(object)standardGeneric("normalizeTSS"))
 #' @rdname normalizeTSS
+#' @return Large List of elements - one element for each sample
 #' @export
 setMethod("normalizeTSS",signature(object = "TSSr"), function(object){
   message("\nNormalizing TSS matrix...")

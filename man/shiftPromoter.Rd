@@ -16,6 +16,9 @@ shiftPromoter(object, comparePairs, pval=0.01)
 
 \item{pval}{Genes with adjusted p value >= pval will be returned. Default value = 0.01.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Selects genes which have multiple core promoters and undergo core promoter
 shifting across different experiments. Generates gene list with Ds (degree of shift)

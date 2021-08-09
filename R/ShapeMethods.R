@@ -13,7 +13,7 @@
 #' @param method Method to be used for calculating core promoter shape score: "SI" or "PSS". Default is "PSS".
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
-
+#' @return Large List of elements - one element for each sample
 #'
 #' @export
 #'

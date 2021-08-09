@@ -41,6 +41,9 @@ Default is FALSE.}
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 Default is NULL.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Clusters TSSs within small genomic regions into tag clusters (TCs)
 using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.

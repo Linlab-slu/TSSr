@@ -29,6 +29,9 @@ not (FALSE). Default is FALSE.}
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 Default is NULL.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 }

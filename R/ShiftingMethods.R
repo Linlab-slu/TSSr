@@ -9,6 +9,7 @@
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison.
 #' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
+#' @return Large List of elements - one element for each sample
 #'
 #' @export
 #'

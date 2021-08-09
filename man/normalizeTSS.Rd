@@ -12,6 +12,9 @@ normalizeTSS(object)
 \arguments{
 \item{object}{A TSSr object.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Normalizes raw TSS counts in all samples by tags per million (TPM)
 }

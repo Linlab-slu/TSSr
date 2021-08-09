@@ -12,6 +12,7 @@
 #' Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
+#' @return Large List of elements - one element for each sample
 #'
 #'
 #' @export

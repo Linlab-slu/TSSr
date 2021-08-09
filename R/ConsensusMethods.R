@@ -14,6 +14,7 @@
 #' or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if
 #' useMultiCore = TRUE. Default is NULL.
+#' @return Large List of elements - one element for each sample
 #'
 #' @export
 #'

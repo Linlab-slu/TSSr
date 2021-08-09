@@ -14,6 +14,7 @@
 #' "bamPairedEnd", otherwise ignored.
 #' @param mappingQualityThreshold Used only if inputFilesType == "bam" or
 #' "bamPairedEnd", otherwise ignored.
+#' @return Large List of elements - one element for each sample
 #'
 #' @export
 #'

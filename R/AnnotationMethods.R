@@ -24,6 +24,7 @@
 #' @param downstream  Downstream distance to the start position of annotation feature.
 #' Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
 #' start from transcription start sites (TSSs), the recommended value = 500.
+#' @return Large List of elements - one element for each sample
 #'
 #' @export
 #'

@@ -6,6 +6,7 @@
 #'
 #' @param object A TSSr object
 #' @param mergeIndex Integer vector specifying which samples to be merged
+#' @return Large List of elements - one element for each merged sample
 #' @export
 #'
 #' @examples

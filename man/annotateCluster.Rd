@@ -46,6 +46,9 @@ feature if overlapped with the upstream neighboring feature. Default value = 500
 Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
 start from transcription start sites (TSSs), the recommended value = 500.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Annotates clusters with gene or transcript names from GFF annotation file.
 }

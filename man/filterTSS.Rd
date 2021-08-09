@@ -29,6 +29,9 @@ Used only if method = “poisson”. Default is TRUE.}
 
 \item{tpmLow}{Used only if method = "TPM". Default value is 0.1.}
 }
+\value{
+Large List of elements - one element for each sample
+}
 \description{
 Filters transcriptional or sequencing noise.
 }
