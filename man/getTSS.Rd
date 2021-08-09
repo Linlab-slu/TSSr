@@ -3,7 +3,8 @@
 \name{getTSS}
 \alias{getTSS}
 \alias{getTSS,TSSr-method}
-\title{Precisely identify TSSs from bam files, paired end bam files, bed files, BigWig files, tss files, or tss tables.}
+\title{Precisely identify TSSs from bam files, paired end bam files, bed files,
+BigWig files, tss files, or tss tables.}
 \usage{
 getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 
@@ -12,14 +13,17 @@ getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{sequencingQualityThreshold}{Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.}
+\item{sequencingQualityThreshold}{Used only if inputFilesType == "bam" or
+"bamPairedEnd", otherwise ignored.}
 
-\item{mappingQualityThreshold}{Used only if inputFilesType == "bam" or "bamPairedEnd", otherwise ignored.}
+\item{mappingQualityThreshold}{Used only if inputFilesType == "bam" or
+"bamPairedEnd", otherwise ignored.}
 }
 \description{
-getTSS function is used to precisely identify TSSs from multiple input file formats.
-The files include users' home-made alignment files (bam format) or downloaded files from public databases.
- See inputFilesType for details on the supported input file formats.
+getTSS function is used to precisely identify TSSs from multiple
+input file formats. The files include users' home-made alignment files (bam format)
+or downloaded files from public databases. See inputFilesType for details on
+the supported input file formats.
 }
 \examples{
 \donttest{

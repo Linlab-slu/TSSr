@@ -19,7 +19,6 @@ Calculates principle component analysis (PCA) of all samples and creates a biplo
 which includes the position of each sample in terms of PC1 and PC2.
 }
 \examples{
-\donttest{
-plotTssPCA(exampleTSSr)
-}
+data(exampleTSSr)
+#plotTssPCA(exampleTSSr)
 }

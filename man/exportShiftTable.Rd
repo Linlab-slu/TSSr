@@ -16,8 +16,6 @@ exportShiftTable(object)
 Export core promoter shift tables to text files.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-exportShiftTable(exampleTSSr)
-}
+#exportShiftTable(exampleTSSr)
 }

@@ -13,19 +13,20 @@ consensusCluster(object, dis = 50
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{dis}{Minimum distance between two peaks to be aggregated together into the same consensus cluster.}
+\item{dis}{Minimum distance between two peaks to be aggregated together into
+the same consensus cluster.}
 
-\item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.}
+\item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE)
+or not (FALSE). Default is FALSE.}
 
-\item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
+\item{numCores}{Number of cores are used in clustering step. Used only if
+useMultiCore = TRUE. Default is NULL.}
 }
 \description{
-Makes consensus clusters from multiple samples in TSSr object and calculates
-inter-quantile positions within consensus clusters for each sample.
+Makes consensus clusters from multiple samples in TSSr object and
+calculates inter-quantile positions within consensus clusters for each sample.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 consensusCluster(exampleTSSr,useMultiCore=FALSE)
-}
 }

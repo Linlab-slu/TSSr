@@ -20,9 +20,7 @@ exportClustersToBed(object, data = "consensusClusters", assigned = TRUE)
 Creates bed files of clusters.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
-}
+#exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
+#exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
 }

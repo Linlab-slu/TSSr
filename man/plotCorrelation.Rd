@@ -20,9 +20,7 @@ Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-plotCorrelation(exampleTSSr, samples = "all")
-}
+#plotCorrelation(exampleTSSr, samples = "all")
 
 }

@@ -14,7 +14,7 @@
 
   cx <- cx[,c("cluster","strand","dominant_tss","tags","gene")]
   cy <- cy[,c("cluster","strand","dominant_tss","tags","gene")]
-  clusters <- merge(cx,cy, by = c("cluster","strand"), all = T)
+  clusters <- merge(cx,cy, by = c("cluster","strand"), all = TRUE)
   clusters[,c("dominant_tss.x","dominant_tss.y","tags.x","tags.y")][is.na(clusters[,c("dominant_tss.x","dominant_tss.y","tags.x","tags.y")])]=0
   clusters[,dominant_tss := do.call(pmax,clusters[,c("dominant_tss.x","dominant_tss.y")])]
   clusters <- clusters[!is.na(clusters$gene.x) | !is.na(clusters$gene.y),]

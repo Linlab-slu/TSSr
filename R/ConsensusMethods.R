@@ -18,10 +18,8 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' data(exampleTSSr)
 #' consensusCluster(exampleTSSr,useMultiCore=FALSE)
-#' }
 setGeneric("consensusCluster",function(object, dis = 50,useMultiCore=FALSE, numCores = NULL)standardGeneric("consensusCluster"))
 #' @rdname consensusCluster
 #' @export

@@ -19,11 +19,9 @@ exportClustersTable(object, data = "assigned")
 Export cluster tables to text files.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-exportClustersTable(exampleTSSr, data = "tagClusters")
-exportClustersTable(exampleTSSr, data = "consensusClusters")
-exportClustersTable(exampleTSSr, data = "assigned")
-exportClustersTable(exampleTSSr, data = "unassigned")
-}
+#exportClustersTable(exampleTSSr, data = "tagClusters")
+#exportClustersTable(exampleTSSr, data = "consensusClusters")
+#exportClustersTable(exampleTSSr, data = "assigned")
+#exportClustersTable(exampleTSSr, data = "unassigned")
 }

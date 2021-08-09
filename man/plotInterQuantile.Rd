@@ -20,8 +20,6 @@ plotInterQuantile(object, samples ="all", tagsThreshold = 1)
 Plots histograms of the interquantile width of processed clusters.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-plotInterQuantile(exampleTSSr, samples = "all")
-}
+#plotInterQuantile(exampleTSSr, samples = "all")
 }

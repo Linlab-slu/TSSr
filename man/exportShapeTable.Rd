@@ -17,8 +17,6 @@ Exports core promoter shape score tables to text files. Shape score is calculate
 shapeCluster(object) method.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-exportShapeTable(exampleTSSr)
-}
+#exportShapeTable(exampleTSSr)
 }

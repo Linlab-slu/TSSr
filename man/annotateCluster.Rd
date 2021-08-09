@@ -23,36 +23,37 @@ annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE
 \arguments{
 \item{object}{A TSSr object}
 
-\item{clusters}{Clusters to be annotated: "consensusClusters" or "tagClusters". Default is "consensusClusters".}
+\item{clusters}{Clusters to be annotated: "consensusClusters" or "tagClusters".
+Default is "consensusClusters".}
 
-\item{filterCluster}{Logical indicating whether clusters downstream of a highly expressed cluster
-are filtered. Setting filterCluster as "TRUE" would reduce weak clusters brought from recapping,
-transcriptional or sequencing noise. Default is TRUE.}
+\item{filterCluster}{Logical indicating whether clusters downstream of a highly
+expressed cluster are filtered. Setting filterCluster as "TRUE" would reduce weak
+clusters brought from recapping, transcriptional or sequencing noise. Default is TRUE.}
 
 \item{filterClusterThreshold}{Ignore downstream clusters if signal < filterClusterThreshold*the
 strongest clusters within the same gene promoter region. Default value = 0.02.}
 
-\item{annotationType}{Specify annotation feature to be associated with: "genes" or "transcripts".
-Default is "genes".}
+\item{annotationType}{Specify annotation feature to be associated with: "genes"
+or "transcripts". Default is "genes".}
 
-\item{upstream}{Upstream distance to the start position of annotation feature. Default value = 1000.}
+\item{upstream}{Upstream distance to the start position of annotation feature.
+Default value = 1000.}
 
-\item{upstreamOverlap}{Upstream distance to the start position of annotation feature if overlapped
-with the upstream neighboring feature. Default value = 500.}
+\item{upstreamOverlap}{Upstream distance to the start position of annotation
+feature if overlapped with the upstream neighboring feature. Default value = 500.}
 
-\item{downstream}{Downstream distance to the start position of annotation feature. Default value = 0.
-Note: if annotationType == "transctipt" or the gene annotations start from transcription start sites (TSSs),
- the recommended value = 500.}
+\item{downstream}{Downstream distance to the start position of annotation feature.
+Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
+start from transcription start sites (TSSs), the recommended value = 500.}
 }
 \description{
 Annotates clusters with gene or transcript names from GFF annotation file.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 annotateCluster(exampleTSSr,clusters = "consensusClusters", filterCluster = TRUE
 , filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
 , upstreamOverlap = 500, downstream = 0)
-}
+
 
 }

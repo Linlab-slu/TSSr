@@ -22,7 +22,8 @@ pVal =0.01, tpmLow = 0.1)
 \item{method}{Method to be used for TSS filtering: "poisson" or "TPM". "poisson" can be used
 only if the input TSS data in raw number of counts.}
 
-\item{normalization}{Define whether normalization data to TPM. Used only if method = “poisson”. Default is TRUE.}
+\item{normalization}{Define whether normalization data to TPM.
+Used only if method = “poisson”. Default is TRUE.}
 
 \item{pVal}{Used only if method = "poisson". Default value is 0.01.}
 
@@ -32,8 +33,6 @@ only if the input TSS data in raw number of counts.}
 Filters transcriptional or sequencing noise.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
-}
 }

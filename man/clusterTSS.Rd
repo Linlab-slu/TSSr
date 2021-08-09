@@ -35,14 +35,16 @@ or sequencing noise. Default value = 0.02.}
 
 \item{clusterThreshold}{Ignore clusters if signal < clusterThreshold. Default value = 1.}
 
-\item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.}
+\item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or not (FALSE).
+Default is FALSE.}
 
-\item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
+\item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
+Default is NULL.}
 }
 \description{
-Clusters TSSs within small genomic regions into tag clusters (TCs) using "peakclu" method.
- "peakclu" method is an implementation of peak-based clustering. The minimum distance of two neighboring
-  peaks can be specified.
+Clusters TSSs within small genomic regions into tag clusters (TCs)
+using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.
+The minimum distance of two neighboring peaks can be specified.
 }
 \examples{
 \donttest{
