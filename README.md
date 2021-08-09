@@ -227,6 +227,10 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
         # 171540: chrII 812805      -    0    0    0    1
         # 171541: chrII 812818      -    0    0    0    1
 
+	TSSrawMatrix contains raw read counts of each called TSS. Raw TSS count can be exported to TSS tables can be used as inout for future analysis using TSSr. The output TSS table is saved as "ALL.samples.TSS.raw.txt" in the working directory.    
+
+        exportTSStable(myTSSr, data = "raw", merged = "FALSE")
+	
 	To better acknowledge the TSS data across samples, we can use plotCorrelation function to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS tags. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”.
 	
         plotCorrelation(myTSSr, samples = "all")
@@ -287,8 +291,6 @@ Annotation file (GTF or GFF file) is required if annotateCluster function is cal
         # 171541: chrII 812818      - 0.000000 0.179736
 
   The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).    
-
-        exportTSStable(myTSSr, data = "raw", merged = "TRUE")
         exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
         exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
         
