@@ -18,6 +18,9 @@ plotDE(object, withGeneName = "TRUE",xlim, ylim)
 
 \item{ylim}{Only genes of which -log10(pvalue) within the ylim range are plotted. Default ylim = c(0, 10).}
 }
+\value{
+gene differential expression visualized in a graph
+}
 \description{
 Vocano plots of gene differential expression (with DESeq2 method) results.
 }

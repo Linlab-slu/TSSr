@@ -12,6 +12,9 @@ exportShapeTable(object)
 \arguments{
 \item{object}{A TSSr object.}
 }
+\value{
+core promoter shape score tables
+}
 \description{
 Exports core promoter shape score tables to text files. Shape score is calculated with
 shapeCluster(object) method.

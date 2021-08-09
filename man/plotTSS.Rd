@@ -44,6 +44,9 @@ clusters within the same gene promoter region. Default value = 0.02.}
 
 \item{yFixed}{Logical, specify whether to fix y axis limits. Default is TRUE.}
 }
+\value{
+TSS and cluster examples visualized in a graph
+}
 \description{
 Plots Gviz-track of TSSs, clusters, and genes.
 }

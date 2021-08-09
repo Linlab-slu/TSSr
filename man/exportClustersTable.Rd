@@ -15,6 +15,9 @@ exportClustersTable(object, data = "assigned")
 \item{data}{Specify which cluster data will be exported: "tagClusters", "consensusClusters",
 "assigned", "unassigned". Default is "assigned".}
 }
+\value{
+cluster tables
+}
 \description{
 Export cluster tables to text files.
 }

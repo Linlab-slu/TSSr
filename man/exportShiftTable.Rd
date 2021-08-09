@@ -12,6 +12,9 @@ exportShiftTable(object)
 \arguments{
 \item{object}{A TSSr object.}
 }
+\value{
+core promoter shift tables
+}
 \description{
 Export core promoter shift tables to text files.
 }

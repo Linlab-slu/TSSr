@@ -16,6 +16,9 @@ exportClustersToBed(object, data = "consensusClusters", assigned = TRUE)
 
 \item{assigned}{Specify which consensus clusters will be exported. Used only if data = "consensusClusters. Default is TRUE.}
 }
+\value{
+bed files of clusters
+}
 \description{
 Creates bed files of clusters.
 }
