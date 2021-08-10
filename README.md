@@ -140,7 +140,7 @@ After confirming those packages are installed, you can install the development v
 
         refSource <- "saccharomyces_cerevisiae_R64-2-1.gff" 
 	
-* Creating a new TSSr object using the constructer "new" function. In addition to the input data file and type, BS genome object name, and genome annotaion file, this step also requires users to provide more information about the samples, including "sampleLabels", "sampleLabelsMerged", and "mergeIndex" and "organismName". In the example data, sample lables "SL01, SL02, SL03 and SL04" were used for "S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam", respectively (sampleLabels = c("SL01","SL02","SL03","SL04")). If a TSS table is used as input data, the sample lable of each sample is its column name in the TSS table. "sampleLabelsMerged" will be used if the user need to merge TSS signals from biological replicates into a single dataset. In this case, SL01 and SL02 are two biological replicates obtained from S. cerevisiae cells grown in rich medium (control), while SL03 and SL04 were obtained by treating S. cerevisiae with α factor (treat). Thus, sampleLabelsMerged = c("control","treat") and mergeIndex = c(1,1,2,2), which means SL01 and SL02 will be merged as group 1 "control", and SL03 and SL04 will be merged as group 2 "treat". "organismName" is the species name of the samples, which will be used to annotate TSS clusters by "annotateCluster".
+* Creating a new TSSr object using the constructer "new" function. In addition to the input data file "inputFiles" and file type "inputFilesType", BSgenome object name, and genome annotaion file "refSource", this step also requires users to provide more information about the samples, including "sampleLabels", "sampleLabelsMerged", and "mergeIndex" and "organismName". In the example data, sample lables "SL01, SL02, SL03 and SL04" were used for "S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam", respectively (sampleLabels = c("SL01","SL02","SL03","SL04")). If a TSS table is used as input data, the sample lable of each sample is its column name in the TSS table. "sampleLabelsMerged" will be used if the user need to merge TSS signals from multiple samples (e.g., biological replicates) into a single dataset. In this case, SL01 and SL02 are two biological replicates obtained from S. cerevisiae cells grown in rich medium ("control"), while SL03 and SL04 were obtained by treating S. cerevisiae with α factor ("treat"). Thus, sampleLabelsMerged = c("control","treat") and mergeIndex = c(1,1,2,2), which means SL01 and SL02 will be merged as group 1 "control", and SL03 and SL04 will be merged as group 2 "treat". "organismName" is the species name of the samples, which will be used to annotate TSS clusters by "annotateCluster".
 
         myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 	              ,inputFiles = inputFiles
@@ -218,7 +218,7 @@ After confirming those packages are installed, you can install the development v
 	
 	
 	
-* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and read counts supporting each TSS from each sample and return values to one data table. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these parameters by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function.  
+* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and read counts supporting each TSS from each sample and return values to one data table. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these parameters by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus it will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS positions. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy makes TSSr also suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques.  
 	
         getTSS(myTSSr)
 	
@@ -248,13 +248,13 @@ After confirming those packages are installed, you can install the development v
         
 ![01_TSS_correlation_plot_of_all_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples_v2.png)
 
- * To further explore the variations present in the TSS dataset and identify which samples are similar to each other and which samples are very different, we can apply plotPCA function to plot principle component analysis among all samples. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of PC1 and PC2 and simultaneously show how each variable contributes to each principal component.
+ * TSS includes "plotPCA" function to plot results principle component analysis (PCA) of all samples to obtain an overview of the TSS data in a low-dimensional subspace and for quality assessment. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of the first principal component (PC1) and the second principal component (PC2) and simultaneously show how each variable contributes to each principal component.
   
         plotTssPCA(myTSSr, TSS.threshold=10)
 
 ![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v2.png)
 
-* Merging samples (biological replicates). Users can merge different samples (e.g., biological replicates) into previously defined groups  for each growth condition together with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
+* Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
   
         mergeSamples(myTSSr)
         
@@ -279,11 +279,11 @@ After confirming those packages are installed, you can install the development v
         # control   treat 
         # 3221609 5131202
 
-  Library sizes among different samples are different. To provide between-sample compatibility, the raw read counts should be scaled with normalizeTSS function as tags per million (TPM).
+  Library sizes among different samples are different. To provide between-sample comparability, the raw read counts of each TSS need to be scaled as tags per million mapped reads (TPM) with normalizeTSS function.
 
         normalizeTSS(myTSSr)
         
-  There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: "poisson" or "TPM". For "poisson" method, TSSr calculates the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. For "TPM" filtering, any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1). 
+  Users may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TMP value or p-value inferred by “Poisson distribution”. For "TPM" filtering (method = "TPM"), any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1). For "poisson" method (method = "poisson"), TSSr calculates the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. 
 
         filterTSS(myTSSr, method = "poisson")   
     
@@ -302,16 +302,15 @@ After confirming those packages are installed, you can install the development v
         # 163211: chrII 811370      - 0.310404 0.000000
         # 163212: chrII 812101      - 0.310404 0.000000
 
-  Simialr to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function (e.g., exportTSStable(myTSSr, data = "processed")) or bedGraph/BigWig files with "exportTSStoBedgraph" fucntion. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or YeasTSS.org for yeast species.
-  
+  Simialr to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function or bedGraph/BigWig files with "exportTSStoBedgraph" fucntion. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or Genome Browser at YeasTSS.org for selected yeast species.
+ 
+        exportTSStable(myTSSr, data = "processed") 
         exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph") 
         exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
         
-* Clustering TSS to infer core promoters
+* Clustering TSSs to infer core promoters with “clusterTSS” function. 
 
-  TSSs within a small genomic region are likely regulated by the sample regulatory elements, and thus can be clustered together as TSS clusters (TCs). The simplest and widely used algorithm is distance-based clustering (disclu) in which neighboring TSSs are grouped together if they are closer than a specified distance (Haberle, Forrest et al. 2015). Since disclu algorithm ignores TSS signal distribution within one cluster, it might potentially generate extra big clusters with more than one peaks if the distance threshold is too big. However, reducing distance threshold might create many small clusters. Thus, we developed a peak-based clustering algorithm in which TSSs are clustered based on strong TSS signals which are identified as peaks.
-We will perform peak-based clustering with clusterTSS function using 100bp as the minimal range within which there is at most one peaks and use an extension distance 30bp to join neighboring TSSs into the peak defined clusters. We implement another layer of local filtering which rules out weak TSS signals downstream of peaks that are potentially brought out from recapping and are always considered as noise. After clustering, clusters below cluster Threshold will be filtered out. clusterTSS function generates a set of clusters for each sample separately. In each cluster, clusterTSS function returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths.
-This clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
+  The “clusterTSS” function was designed to group neighboring TSSs into distinct TSS clusters (TCs), representing putative core promoters. It implements a TSS clustering algorithm based on peaking identification, namely “peakclu” (peak clustering) (Lu and Lin, 2021). Briefly, peakclu applies a sliding window approach (default window size = 100 bp with step size = 1) to scan TSS signals from the 5′ end of both strands of each chromosome. In each window, the TSS with the highest TPM value was identified as the peak. The surrounding TSSs are grouped with the peak into a TC. The clustering process of a TC terminates if a TSS is ≥ n bp (default n = 25) away from the nearest upstream TSS. In addition to setting a minimal allowed distance between peaks, TSSr offers another option to set maximal allowed extension distance between neighboring TSSs around peaks, which enables users to define the boundaries between neighboring core promoters. clusterTSS calculates inter-quantile width of a core promoter based on the cumulative distribution of TSS signals within the promoter. The positions of the 10th to 90th quantiles of TSS signals, which include at least 80% transcription initiation signals within a cluster, were defined as the 5’ and 3’ boundaries of the core promoter. The clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
 
         clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02,clusterThreshold = 1
@@ -319,103 +318,105 @@ This clustering step might be slow especially when the number of TSSs is in mill
 	           
         myTSSr@tagClusters
         
-        # $`control`
-        # cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width
-        # 1:    1 chrI  6530  6564   +     6548  8.944883     3.577953  6548  6562         15
-        # 2:    2 chrI  7166  7189   +     7169  1.192652     0.596326  7166  7189         24
-        # 3:    3 chrI  8084  8087   +     8084  1.192652     0.596326  8084  8087          4
-        # 4:    4 chrI  9325  9411   +     9327  4.770607     1.192651  9327  9391         65
-        # 5:    5 chrI  9442  9479   +     9442  3.279792     1.788977  9442  9468         27
-        # ---                                                        
-        # 3485:  3485 chrII 810641 810721   -    810641 77.224157     21.765881 810641 810719         79
-        # 3486:  3486 chrII 810760 811032   -    810916 46.513400     5.963255 810796 810962         167
-        # 3487:  3487 chrII 811067 811170   -    811112 11.330187     8.348557 811111 811131         21
-        # 3488:  3488 chrII 811200 811384   -    811291 29.518121     6.559581 811239 811366         128
-        # 3489:  3489 chrII 811446 811512   -    811486 607.059367    313.965377 811485 811494         10
-        # 
+        # $control
+        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width
+        #    1:       1  chrI   6530   6564      +         6548   9.312118          3.724847   6530   6562                  33
+        #    2:       2  chrI   7166   7189      +         7169   1.241616          0.620808   7166   7189                  24
+        #    3:       3  chrI   8084   8087      +         8084   1.241616          0.620808   8084   8087                   4
+        #    4:       4  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65
+        #    5:       5  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27
+        #   ---                                                                                                               
+        # 3300:    3300 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32
+        # 3301:    3301 chrII 807129 807179      -       807165  16.761812          6.518482 807161 807168                   8
+        # 3302:    3302 chrII 808679 808723      -       808723   1.862424          0.931212 808679 808723                  45
+        # 3303:    3303 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25
+        # 3304:    3304 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18
+
         # $treat
-        # cluster  chr start  end strand dominant_tss    tags tags.dominant_tss q_0.1 q_0.9 interquantile_width
-        # 1:    1 chrI  1828  1841   +     1828  1.078417     0.359473  1828  1841         14
-        # 2:    2 chrI  6521  6564   +     6559  4.673145     1.617628  6530  6559         30
-        # 3:    3 chrI  7096  7118   +     7100  1.797363     0.539209  7096  7114         19
-        # 4:    4 chrI  8061  8087   +     8061  1.797363     0.539209  8061  8087         27
-        # 5:    5 chrI  9327  9476   +     9359 10.604449     1.617628  9327  9452         126
-        # ---                                                        
-        # 3382:  3382 chrII 809707 809710   -    809707  1.258155     0.898682 809707 809710          4
-        # 3383:  3383 chrII 810641 810736   -    810641 121.501831     29.297040 810641 810719         79
-        # 3384:  3384 chrII 810773 811031   -    810916 67.401151     14.738388 810794 810963         170
-        # 3385:  3385 chrII 811108 811377   -    811112 69.557986     14.019442 811112 811366         255
-        # # 3386:  3386 chrII 811472 811503   -    811486 449.700575    234.196583 811486 811494          9
+        #      cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width
+        #   1:       1  chrI   6521   6564      +         6559   5.067037          1.753975   6530   6559                  30
+        #   2:       2  chrI   7096   7118      +         7100   1.948860          0.584658   7096   7114                  19
+        #   3:       3  chrI   8061   8087      +         8061   1.948860          0.584658   8061   8087                  27
+        #   4:       4  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126
+        #   5:       5  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42
+        #  ---                                                                                                               
+        # 3244:    3244 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30
+        # 3245:    3245 chrII 807118 807179      -       807165  13.642026          5.456811 807153 807165                  13
+        # 3246:    3246 chrII 808655 808691      -       808679   1.753974          0.779544 808655 808691                  37
+        # 3247:    3247 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13
+        # 3248:    3248 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4
 
-		    exportClustersTable(myTSSr, data = "assigned")
-		    
-		    exportClustersToBed(myTSSr, data = "tagClusters")
+    The results of TSS clustering can be exported to delimited text file with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion.
+ 
+        exportClustersTable(myTSSr, data = "tagClusters")
+        exportClustersToBed(myTSSr, data = "tagClusters") 
+	
+* Aggregating consensus TSS clusters
 
-* Aggregating consensus clusters
-
-  TSSs are clustered into tag clusters for each sample individually and they are often sample-specific. To make clusters comparable between samples, we will use consensusCluster function to generate a single set of consensus clusters. Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
+  TSSr infers a set of consensus core promoters using the “consensusCluster” function to assign the same ID for TCs belong to the same core promoter, which allows subsequent comparative studies across samples. TCs from different samples are considered to belong to the same consensus core promoter if the distance of their dominant TSSs is smaller than a user-defined distance (default = 50 bp). Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
   
         consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 		    
-  Tag clusters and consensus cluster with quantile positions can be exported to either text tables or BED tracks which can be visualized in the UCSC Genome Browser and IGV. 
+  Similarly, the detailed information of consensus clusters can be exported to delimited text file with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion. 
 
-        exportClustersToBed(myTSSr, data = "consensusClusters")
+        exportClustersTable(myTSSr, data = "consensusClusters")
+        exportClustersToBed(myTSSr, data = "consensusClusters")	
 
+* Quantification of core promoter shape
 
-* Core promoter shape
-
-  According to the distribution of TSSs within a core promoter (cluster), termed as core promoter shape, core promoters were generally classified into sharp core promoters and broad core promoters. TSSr implements three methods to characterize core promoter shape. The simplest way is to use interquantile width representing core promoter shape. plotInterQuantile function plots interquantile width of each sample.
+  Core promoter shape reflects the distribution of TSS signals within a core promoter. TSSr provides three different options, inter-quantile width, shape index (SI), and promoter shape score (PSS), to quantify core promoter shape. Inter-quantile width refers to the distance between the locations of the 10th percentile to the 90th percentile TSS signals within a TSS cluster.  Thus, it measures the width of a core promoter, but lacks the information of distribution patterns of TSS signals within a core promoter. Inter-quantile width could be significantly affected by different clustering methods. plotInterQuantile function plots interquantile width of each sample.
 
         plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
     
-![03_Interquantile_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples.png){width=50%}
+![03_Interquantile_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples_v2.png)
 
-  Another way to characterize core promoter shape is shape index (SI) which is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.
+  SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.
 
-  By integrating both inter quantile width and the observed probabilities of tags at every TSSs within a cluster, we developed a new metric called promoter shape score (PSS) to describe core promoter shape (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.
+        plotShape(myTSSr,samples = "all")
+	
+  Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.
   
         shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
 
         myTSSr@clusterShape
         
-        # $`control`
-        # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score
-        # 1:  432 chrII 127 175  +   150 3.279792   0.894488 145 171     27 -0.41938195
-        # 2:  433 chrII 4016 4045  +   4016 2.087141   0.596326 4016 4045     30 -0.23592635
-        # 3:  434 chrII 4299 4318  +   4300 1.192652   0.596326 4299 4318     20 0.50000000
-        # 4:  435 chrII 5328 5359  +   5328 1.788977   1.192651 5328 5359     32 0.74837083
-        # 5:  436 chrII 5577 5577  +   5577 1.788977   1.788977 5577 5577     1 2.00000000
-        # ---                                 
-        # 3484: 2526 chrI 222756 223117  -  222884 30.114450   2.385302 222847 223076     230 -2.83272807
-        # 3485: 2528 chrI 223374 223416  -  223395 2.981629   1.490814 223374 223416     43 0.03903595
-        # 3486: 2529 chrI 223656 223696  -  223660 1.490815   0.596326 223656 223696     41 0.07807191
-        # 3487: 2530 chrI 225020 225056  -  225056 1.192652   0.596326 225020 225056     37 0.50000000
-        # 3488: 2532 chrI 227236 227274  -  227274 2.385303   0.894488 227236 227274     39 -0.15563906
+        # $control
+        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width shape.score
+        #    1:       1  chrI   6530   6564      +         6548   9.312118          3.724847   6530   6562                  33    9.646916
+        #    2:       3  chrI   7166   7189      +         7169   1.241616          0.620808   7166   7189                  24    6.877444
+        #    3:       4  chrI   8084   8087      +         8084   1.241616          0.620808   8084   8087                   4    2.000000
+        #    4:       5  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65   17.767262
+        #    5:       6  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27    7.469695
+        #   ---                                                                                                                           
+        # 3299:    4286 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32   14.764972
+        # 3300:    4287 chrII 807129 807179      -       807165  16.761812          6.518482 807161 807168                   8    5.251317
+        # 3301:    4288 chrII 808679 808723      -       808723   1.862424          0.931212 808679 808723                  45    9.844044
+        # 3302:    4289 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25    3.018611
+        # 3303:    4290 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18    7.425270
         # 
         # $treat
-        # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width shape.score
-        # 1:  436 chrII 5525 5587  +   5577 2.875781   1.977101 5534 5577     44 0.9107699
-        # 2:  437 chrII 5895 5955  +   5955 1.797364   0.718946 5920 5955     36 0.1634083
-        # 3:  438 chrII 7626 7682  +   7649 7.189456   1.258155 7630 7658     29 -0.8540706
-        # 4:  439 chrII 8410 8455  +   8425 4.313673   1.437892 8425 8452     28 -0.4516085
-        # 5:  440 chrII 8492 8584  +   8550 12.401807   2.875783 8513 8557     45 -1.0242498
-        # ---                                 
-        # 3380: 2526 chrI 222797 222969  -  222851 17.614164   4.493411 222851 222961     111 -1.4326016
-        # 3381: 2527 chrI 223326 223327  -  223326 1.258155   0.898682 223326 223327     2 1.1368794
-        # 3382: 2529 chrI 223659 223697  -  223681 2.156836   0.718946 223659 223696     38 -0.3685225
-        # 3383: 2531 chrI 226791 226810  -  226805 1.437890   0.359473 226791 226810     20 -0.5000000
-        # 3384: 2532 chrI 227249 227300  -  227270 6.290774   1.977101 227258 227276     19 -0.2658030
+        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width shape.score
+        #    1:       1  chrI   6521   6564      +         6559   5.067037          1.753975   6530   6559                  30   13.123285
+        #    2:       2  chrI   7096   7118      +         7100   1.948860          0.584658   7096   7114                  19    9.333375
+        #    3:       4  chrI   8061   8087      +         8061   1.948860          0.584658   8061   8087                  27    9.012708
+        #    4:       5  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126   25.664108
+        #    5:       7  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42   15.020408
+        #   ---                                                                                                                           
+        # 3240:    4286 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30   13.439327
+        # 3241:    4287 chrII 807118 807179      -       807165  13.642026          5.456811 807153 807165                  13    7.308196
+        # 3242:    4288 chrII 808655 808691      -       808679   1.753974          0.779544 808655 808691                  37   10.725295
+        # 3243:    4289 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13    3.398098
+        # 3244:    4290 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4    1.726241
 
         plotShape(myTSSr)
     
-![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples.png){width=50%}
+![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples_v2.png)
 
 		    exportShapeTable(myTSSr)
 
-* Annotation
+* Annotation (Assigning TCs to genes)
 
-  TSSr identifies TSSs and therefore detect core promoters. However, the current databases are mainly on gene levels instead of TSS or core promoter levels. annorateCluster function is used to associate core promoters to genes. Since annotated genes in Saccharomyces cerevisiae GFF annotation file don’t contain 5’ untranslated region (UTR), that is, the first genomic position of each gene in annotations is start position of translation. Therefore, in order to associate clusters to genes, we specify the upstream distance as 1000 and downstream distance as 0. The 1000 bp region is defined as core promoter region. In case of overlapping with upstream genes, we specify upstreamOverlap argument as 500 representing only considering the first 500 bp regions as core promoter region if it is overlapped with upstream genes.
-To reduce transcriptional or technical noise of small clusters downstream a strong cluster, we apply filterCluster argument and set filterClusterThreshold as 0.02, representing clusters in which total tags lower than the strong cluster*0.02 will be filtered out.
+  Assigning TCs to downstream genes as their core promoters is required for annotation of the 5’ boundaries of genomic features. This process is also a prerequisite for further interrogations of regulated transcription initiation at the gene level. TSSr offers the “annotateCluster” function to assign TCs to their downstream genes. The assignment of a TC to a gene is based on the distance between the position of the dominant TSS of a TC and the annotated 5’ends of coding sequences (CDS) or transcripts. The default maximum distance between the dominant TSS and CDS is 1000 bp (“upstream = 1000”). If a TC overlaps with the CDS of an upstream gene, the dominant TSS of the TC must be within 500 bp to the 3’end of the overlapping CDS by default (“upstreamOverlap = 500”) to be eligible to assign to its downstream gene. If the 5’ends of annotated transcripts, instead of CDS, are used for TC assignment, users should set “annotationType” as “transcript,” and the default distance parameter is 500 bp. Because the genomes size and the number of introns vary substantially among organisms, it is necessary to apply customized criteria for TC assignment for different organisms. Users are advised to adjust the assignment criteria for core promoter assignment in TSSr. By default, only TCs with ≥ 0.02 TPM are used for the annotation process. To reduce transcriptional or technical noise of small clusters downstream a strong cluster, the filterCluster argument was set as "filterClusterThreshold = 0.02", indicating that any TC with TPM value < 0.02 TPM will be excluded from assigning to genes. 
 
         annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
 	                filterClusterThreshold = 0.02, annotationType = "genes"
@@ -423,33 +424,33 @@ To reduce transcriptional or technical noise of small clusters downstream a stro
 	                
         myTSSr@assignedClusters
         
-        # $`control`
-        # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene
-        # 1:  6 chrI 9325 9411  +   9327 4.770607   1.192651 9327 9391     65 YAL066W
-        # 2:  7 chrI 9442 9479  +   9442 3.279792   1.788977 9442 9468     27 YAL066W
-        # 3:  8 chrI 11253 11343  +  11329 39.059326   16.995277 11275 11329     55 YAL064W-B
-        # 4:  44 chrI 31027 31151  +  31108 46.215232   16.398951 31108 31145     38 YAL062W
-        # 5:  45 chrI 31187 31263  +  31242 307.405801  117.774287 31212 31242     31 YAL062W
-        # ---                                 
-        # 864: 4493 chrII 804562 804593  -  804591 1.490814   0.894488 804562 804593     32 YBR298C
-        # 865: 4494 chrII 804855 804975  -  804895 250.456717   68.875595 804868 804899     32 YBR298C
-        # 866: 4497 chrII 809353 809377  -  809377 1.788977   1.490814 809353 809377     25 YBR300C
-        # 867: 4498 chrII 809707 809748  -  809707 3.876117   2.087139 809707 809724     18 YBR300C
-        # 868: 4503 chrII 811446 811512  -  811486 607.059367  313.965377 811485 811494     10 YBR302C
+        # $control
+        #      cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width      gene inCoding
+        #   1:       5  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65   YAL066W     <NA>
+        #   2:       6  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27   YAL066W     <NA>
+        #   3:       7  chrI  11253  11343      +        11329  40.662913         17.693022  11275  11329                  55 YAL064W-B     <NA>
+        #   4:      33  chrI  31026  31151      +        31108  48.112608         17.072215  31108  31145                  38   YAL062W     <NA>
+        #   5:      34  chrI  31187  31263      +        31242 320.026426        122.609541  31212  31242                  31   YAL062W     <NA>
+        #  ---                                                                                                                                  
+        # 853:    4280 chrII 801003 801075      -       801023  11.174543          4.656059 801018 801061                  44 YBR296C-A     <NA>
+        # 854:    4285 chrII 804563 804593      -       804592   1.552020          0.931212 804563 804593                  31   YBR298C     <NA>
+        # 855:    4286 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32   YBR298C     <NA>
+        # 856:    4289 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25   YBR300C     <NA>
+        # 857:    4290 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18   YBR300C     <NA>
         # 
         # $treat
-        # cluster chr start end strand dominant_tss  tags tags.dominant_tss q_0.1 q_0.9 interquantile_width  gene
-        # 1:  1 chrI 1828 1841  +   1828 1.078417   0.359473 1828 1841     14 YAL067W-A
-        # 2:  6 chrI 9327 9476  +   9359 10.604449   1.617628 9327 9452     126 YAL066W
-        # 3:  8 chrI 11259 11343  +  11329 54.639873   20.130481 11288 11329     42 YAL064W-B
-        # 4:  9 chrI 11651 11762  +  11651 1.977099   0.359473 11651 11750     100 YAL064W-B
-        # 5:  10 chrI 11861 11934  +  11919 2.875780   0.898682 11889 11923     35 YAL064W-B
-        # ---                                 
-        # 816: 4488 chrII 801017 801061  -  801023 6.290772   1.797364 801022 801058     37 YBR296C-A
-        # 817: 4494 chrII 804851 804952  -  804895 144.867571   50.326204 804872 804901     30 YBR298C
-        # 818: 4497 chrII 809377 809389  -  809377 1.078419   0.718946 809377 809389     13 YBR300C
-        # 819: 4498 chrII 809707 809710  -  809707 1.258155   0.898682 809707 809710     4 YBR300C
-        # 820: 4503 chrII 811472 811503  -  811486 449.700575  234.196583 811486 811494     9 YBR302CThe 
+        #      cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width      gene inCoding
+        #   1:       5  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126   YAL066W     <NA>
+        #   2:       7  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42 YAL064W-B     <NA>
+        #   3:       8  chrI  11907  11934      +        11919   2.338633          0.974431  11916  11922                   7 YAL064W-B     <NA>
+        #   4:      19  chrI  21237  21248      +        21246   1.948861          1.169317  21240  21246                   7   YAL064W     <NA>
+        #   5:      34  chrI  31087  31263      +        31242 117.711208         34.299955  31119  31242                 124   YAL062W     <NA>
+        #  ---                                                                                                                                  
+        # 810:    4272 chrII 799105 799126      -       799126   1.169316          0.584658 799105 799126                  22   YBR296C     <NA>
+        # 811:    4280 chrII 801017 801061      -       801023   6.821011          2.338633 801023 801058                  36 YBR296C-A     <NA>
+        # 812:    4286 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30   YBR298C     <NA>
+        # 813:    4289 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13   YBR300C     <NA>
+        # 814:    4290 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4   YBR300C     <NA>
 
   Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.
                   
