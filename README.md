@@ -357,7 +357,7 @@ After confirming those packages are installed, you can install the development v
   
         consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 		    
-  Similarly, the detailed information of consensus clusters can be exported to delimited text file with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion. 
+  Similarly, the detailed information of consensus clusters can be exported to delimited text files with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion. 
 
         exportClustersTable(myTSSr, data = "consensusClusters")
         exportClustersToBed(myTSSr, data = "consensusClusters")	
@@ -372,8 +372,6 @@ After confirming those packages are installed, you can install the development v
 
   SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.
 
-        plotShape(myTSSr,samples = "all")
-	
   Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.
   
         shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
@@ -412,7 +410,9 @@ After confirming those packages are installed, you can install the development v
     
 ![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples_v2.png)
 
-		    exportShapeTable(myTSSr)
+   The complete list of PSS can be exported to delimited text file with "exportShapeTable" function. 
+
+	exportShapeTable(myTSSr)
 
 * Annotation (Assigning TCs to genes)
 
@@ -454,7 +454,7 @@ After confirming those packages are installed, you can install the development v
 
   Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.
                   
-  A function of exportClustersTable is provided to export cluster tables with associated gene information.
+  The results of TC annotation can be exported to delimited text files with "exportClustersTable" function. 
         
         exportClustersTable(myTSSr, data = "assigned")
 
@@ -473,7 +473,7 @@ After confirming those packages are installed, you can install the development v
 
         exportDETable(myTSSr, data = "sig")
 
-![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot.png){width=50%}
+![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot_v2.png){width=50%}
 
 * Core promoter shifts
 
@@ -483,56 +483,61 @@ After confirming those packages are installed, you can install the development v
                 
         myTSSr@PromoterShift
         
-        # $`control_VS_treat`
-        # gene                  Ds                  pval          padj
-        # 1:   YAR027W    -10.350816320988                     0  0.000000e+00
-        # 2:   YBL017C    16.4385383531034                     0  0.000000e+00
-        # 3:   YBR006W   -26.1598728383391                     0  0.000000e+00
-        # 4:   YBR023C     18.118979599068                     0  0.000000e+00
-        # 5:   YBR039W   -27.4865860443054                     0  0.000000e+00
-        # 6:   YBR121C    -32.547014080256                     0  0.000000e+00
-        # 7:   YBL067C   -25.3869440027767 3.07511136581584e-289 1.273975e-287
-        # 8:   YBL061C    23.7545209498577 3.44768363971726e-197 1.249785e-195
-        # 9: YBL039W-B    23.4499059050598  4.6945530608788e-166 1.361420e-164
-        # 10:   YBR040W    14.5616268341053 4.43031120733306e-147 1.167991e-145
-        # 11:   YBR230C    12.4848555795528 7.72945248945236e-108 1.867951e-106
-        # 12:   YBL003C    -4.1985604478168   6.7759310150691e-97  1.310013e-95
-        # 13:   YBL016W    4.41343932260964  7.82940255472119e-47  1.195014e-45
-        # 14:   YBR203W    10.6049068930757  6.08620650498862e-20  6.086207e-19
-        # 15:   YBR086C     9.7196265707056  9.60207832249196e-19  9.282009e-18
-        # 16:   YBR277C    17.2140839363989  2.44487670373165e-18  2.287143e-17
-        # 17:   YBR295W    9.77234308829983   2.9084950406724e-17  2.635824e-16
-        # 18:   YBR083W    4.17916131373144    9.606481245865e-16  8.442059e-15
-        # 19:   YAL054C   -3.17330325909555  1.30266337135917e-15  1.111095e-14
-        # 20:   YBR296C    9.18633075573362  2.50237783136509e-13  2.073399e-12
-        # 21:   YBR093C   -3.40836871919578   1.6515719663441e-12  1.330433e-11
-        # 22: YBR084C-A    9.00947030426105  1.86567997266701e-12  1.462290e-11
-        # 23:   YBL004W   -1.67847881078767  2.07674225051448e-12  1.584882e-11
-        # 24:   YBR184W   -15.1239290662261  7.92183774469212e-12  5.890597e-11
-        # 25:   YBL105C    2.64342413974809   4.7745199157064e-11  3.461527e-10
-        # 26:   YBL102W    -8.9100339041354  1.89050230887831e-10  1.305347e-09
-        # 27:   YBL013W    -15.319403967074  3.99191692700095e-10  2.692223e-09
-        # 28:   YBR211C    8.77437715012659  5.71127699857609e-10  3.764251e-09
-        # 29:   YBR068C    8.67245301942337  6.31376887472524e-10  4.068873e-09
-        # 30:   YBR175W    -9.1774269748887   3.3596751940423e-09  2.118056e-08
-        # 31:   YBR218C    8.35135511413055  5.41322815151343e-08  3.340077e-07
-        # 32:   YBR015C   -1.55009946287707  6.16237577511048e-08  3.723102e-07
-        # 33:   YBR035C    2.18654908878179  6.92159737581857e-08  4.096456e-07
-        # 34:   YBL054W    2.83357254525628  1.99671083965614e-07  1.158092e-06
-        # 35:   YBR168W   -1.51588973572886  3.12105035998543e-07  1.774715e-06
-        # 36:   YBR117C   -2.07172815538228  4.13101210450534e-05  2.260365e-04
-        # 37:   YBR008C    1.03432937413973  6.72116190177454e-05  3.609513e-04
-        # 38:   YBR270C   -1.68431187859011   7.7446526380902e-05  4.083544e-04
-        # 39:   YBL083C   0.372760077005376                     1  1.000000e+00
-        # 40:   YBR186W -0.0982423034021808                     1  1.000000e+00
-        # 41:   YBR300C    0.86895953363737                     1  1.000000e+00
-        # gene                  Ds                  pval          padj
+        # $control_VS_treat
+        #          gene                Ds                  pval          padj
+        #  1:   YBL017C  16.5567506300711                     0  0.000000e+00
+        #  2:   YBR006W -26.3346456757359                     0  0.000000e+00
+        #  3:   YBR023C  18.2077046044299                     0  0.000000e+00
+        #  4:   YBR039W -27.6613679931366                     0  0.000000e+00
+        #  5:   YBR121C -32.7186775913908                     0  0.000000e+00
+        #  6:   YBL067C -25.5609100771941 4.82850134420976e-307 2.253301e-305
+        #  7:   YBL052C  24.6257478761727 7.26364747717188e-223 2.542277e-221
+        #  8:   YBL061C  23.9226054570548 4.67819852942603e-211 1.455440e-209
+        #  9: YBR162W-A -3.11046343563838 8.57254730119706e-178 2.400313e-176
+        # 10:   YBR161W  13.8279474932153 9.82622800918837e-106 2.292787e-104
+        # 11:   YBL003C -4.19847808240255  5.1964924531945e-103 1.119245e-101
+        # 12:   YBR225W  13.4149548647111  6.4269334028266e-103 1.285387e-101
+        # 13:   YAL002W  11.0783513437554  9.36722953965125e-38  1.248964e-36
+        # 14:   YBL002W  -4.1133471925947  1.79254923091534e-22  1.792549e-21
+        # 15:   YBR203W  10.6629850364627  7.02368199407009e-21  6.781486e-20
+        # 16:   YAL054C  -3.1805025752741  1.80946689382427e-16  1.688836e-15
+        # 17:   YBR295W  9.67791801936358  2.28926136502023e-16  2.067720e-15
+        # 18:   YBR296C  9.30290660727171  2.36023239071828e-14  2.065203e-13
+        # 19:   YBR093C -3.40798742790801  2.00916389468933e-13  1.704745e-12
+        # 20: YBR084C-A  9.11527727298199  2.57854085586531e-13  2.123504e-12
+        # 21:   YBR184W -15.2971031957146  1.90180856743423e-12  1.521447e-11
+        # 22:   YBR156C   -15.10487255485  3.10952877910847e-11  2.418522e-10
+        # 23:   YBL045C  8.74743526840298  2.24860038205826e-10  1.649988e-09
+        # 24:   YBR211C  8.83205164938185  2.29819756625836e-10  1.649988e-09
+        # 25:   YBR175W -9.29322141796793  7.46451552866191e-10  5.225161e-09
+        # 26:   YBR260C  8.59396786414482   6.1189233992215e-09  4.178777e-08
+        # 27:   YBR015C -1.55009599585459   2.5144638411962e-08  1.676309e-07
+        # 28:   YBR218C  8.34981937289533  5.06126915693087e-08  3.287460e-07
+        # 29:   YBR244W  8.30806489068964  5.16600880899288e-08  3.287460e-07
+        # 30:   YBL054W   2.8341173250082  8.07918244515885e-08  5.027047e-07
+        # 31: YAL026C-A -9.04035405768231  1.68525949110593e-07  1.003984e-06
+        # 32:    snR161 -2.50921709668593  4.57553973228071e-07  2.669065e-06
+        # 33:  tQ(UUG)B   8.4166183829428  2.80004547044555e-06  1.600026e-05
+        # 34:   YBL040C  7.85978512550703  5.67754708991627e-06  3.179426e-05
+        # 35:   YBR117C -2.07135794086609  2.15793728644816e-05  1.184750e-04
+        # 36:   YBL103C  7.60938746583251  3.47531850741136e-05  1.845650e-04
+        # 37:   YBR270C  -1.7014289300971   3.4935512199854e-05  1.845650e-04
+        # 38:   YBR008C  1.03566759072034  3.91024884830601e-05  2.027536e-04
+        # 39:   YBL026W  7.50615085133225  5.64749784425959e-05  2.875090e-04
+        # 40:   YBL022C 0.792377149588471  7.40429250345774e-05  3.702146e-04
+        # 41:   YAL062W  7.47110168494036   7.6562991161926e-05  3.760989e-04
+        # 42:   YAL018C -2.96325319131017                     1  1.000000e+00
+        # 43:   YBL083C 0.373945070392578                     1  1.000000e+00
+        # 44: YBR012W-A -2.82952533010526                     1  1.000000e+00
+        # 45:   YBR300C 0.869273808837717                     1  1.000000e+00
+        #          gene                Ds                  pval          padj
+
 
   Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
 
         plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
           
-![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs.png){width=50%}
+![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs_v2.png)
 
   Results of core promoter shift analysis can also be exported to a text file with exportShiftTable function.
         
