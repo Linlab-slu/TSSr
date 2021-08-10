@@ -138,7 +138,7 @@ After confirming those packages are installed, you can install the development v
 	
 * Provide path and file name of genome annotation file. The example genome annotation of S. cerevisiae (R64-2-1) was originally obtained from the Saccharomyces Genome Database. It ban be downlaoded from http://zlinlab.org/TSSr/saccharomyces_cerevisiae_R64-2-1.gff .
 
-        gffFile <- "saccharomyces_cerevisiae_R64-2-1.gff" 
+        refSource <- "saccharomyces_cerevisiae_R64-2-1.gff" 
 	
 * Creating a new TSSr object using the constructer "new" function. In addition to the input data file and type, BS genome object name, and genome annotaion file, this step also requires users to provide more information about the samples, including "sampleLabels", "sampleLabelsMerged", and "mergeIndex" and "organismName". In the example data, sample lables "SL01, SL02, SL03 and SL04" were used for "S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam", respectively (sampleLabels = c("SL01","SL02","SL03","SL04")). If a TSS table is used as input data, the sample lable of each sample is its column name in the TSS table. "sampleLabelsMerged" will be used if the user need to merge TSS signals from biological replicates into a single dataset. In this case, SL01 and SL02 are two biological replicates obtained from S. cerevisiae cells grown in rich medium (control), while SL03 and SL04 were obtained by treating S. cerevisiae with α factor (treat). Thus, sampleLabelsMerged = c("control","treat") and mergeIndex = c(1,1,2,2), which means SL01 and SL02 will be merged as group 1 "control", and SL03 and SL04 will be merged as group 2 "treat". "organismName" is the species name of the samples, which will be used to annotate TSS clusters by "annotateCluster".
 
@@ -148,7 +148,7 @@ After confirming those packages are installed, you can install the development v
 	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
 	              ,sampleLabelsMerged = c("control","treat")
 	              ,mergeIndex = c(1,1,2,2)
-	              ,refSource = gffFile
+	              ,refSource = refSource
 	              ,organismName = "saccharomyces cerevisiae")
 	
 	To display the available slots in the created TSSr object by typing the TSSr object name. Most slots in the newly created TSSr object are empty at this point since no analysis has been conducted.:
@@ -283,32 +283,33 @@ After confirming those packages are installed, you can install the development v
 
         normalizeTSS(myTSSr)
         
-  There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: “poisson” or “TPM”. 
+  There is a great amount of TSSs with low weak transcriptional signals. To filter out low-fidelity TSSs, we use filterTSS function to remove TSSs below the specified threshold. Two filtering methods are supported: "poisson" or "TPM". For "poisson" method, TSSr calculates the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. For "TPM" filtering, any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1). 
 
-        filterTSS(myTSSr, method = "TPM",tpmLow=0.1)
+        filterTSS(myTSSr, method = "poisson")   
     
         myTSSr@TSSprocessedMatrix
         
-        # chr    pos strand  control    treat
-        # 1:  chrI   1561      + 0.000000 0.179736
-        # 2:  chrI   1823      + 0.298163 0.000000
-        # 3:  chrI   1828      + 0.000000 0.359473
-        # 4:  chrI   1830      + 0.000000 0.179736
-        # 5:  chrI   1831      + 0.000000 0.179736
-        # ---                                      
-        # 171537: chrII 812483      - 0.000000 0.179736
-        # 171538: chrII 812789      - 0.000000 0.359473
-        # 171539: chrII 812802      - 0.000000 0.359473
-        # 171540: chrII 812805      - 0.000000 0.179736
-        # 171541: chrII 812818      - 0.000000 0.179736
+        #           chr    pos strand  control    treat
+        #      1:  chrI   1561      + 0.000000 0.194886
+        #      2:  chrI   5759      + 0.310404 0.000000
+        #      3:  chrI   5765      + 0.310404 0.000000
+        #      4:  chrI   5773      + 0.310404 0.000000
+        #      5:  chrI   5925      + 0.310404 0.000000
+        #     ---                                      
+        # 163208: chrII 810860      - 0.000000 0.389772
+        # 163209: chrII 810963      - 0.310404 0.000000
+        # 163210: chrII 811112      - 0.000000 0.194886
+        # 163211: chrII 811370      - 0.310404 0.000000
+        # 163212: chrII 812101      - 0.310404 0.000000
 
-  The processed TSS matrix can be exported to either text tables or bedGraph/BigWig tracks which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV).    
-        exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph")
+  Simialr to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function (e.g., exportTSStable(myTSSr, data = "processed")) or bedGraph/BigWig files with "exportTSStoBedgraph" fucntion. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or YeasTSS.org for yeast species.
+  
+        exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph") 
         exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
         
-* TSS clustering
+* Clustering TSS to infer core promoters
 
-  TSSs within a small genomic region are likely regulated by the sample regulatory elements, and thus can be clustered together as tag clusters (TCs). The simplest and widely used algorithm is distance-based clustering (disclu) in which neighboring TSSs are grouped together if they are closer than a specified distance (Haberle, Forrest et al. 2015). Since disclu algorithm ignores TSS signal distribution within one cluster, it might potentially generate extra big clusters with more than one peaks if the distance threshold is too big. However, reducing distance threshold might create many small clusters. Thus, we developed a peak-based clustering algorithm in which TSSs are clustered based on strong TSS signals which are identified as peaks.
+  TSSs within a small genomic region are likely regulated by the sample regulatory elements, and thus can be clustered together as TSS clusters (TCs). The simplest and widely used algorithm is distance-based clustering (disclu) in which neighboring TSSs are grouped together if they are closer than a specified distance (Haberle, Forrest et al. 2015). Since disclu algorithm ignores TSS signal distribution within one cluster, it might potentially generate extra big clusters with more than one peaks if the distance threshold is too big. However, reducing distance threshold might create many small clusters. Thus, we developed a peak-based clustering algorithm in which TSSs are clustered based on strong TSS signals which are identified as peaks.
 We will perform peak-based clustering with clusterTSS function using 100bp as the minimal range within which there is at most one peaks and use an extension distance 30bp to join neighboring TSSs into the peak defined clusters. We implement another layer of local filtering which rules out weak TSS signals downstream of peaks that are potentially brought out from recapping and are always considered as noise. After clustering, clusters below cluster Threshold will be filtered out. clusterTSS function generates a set of clusters for each sample separately. In each cluster, clusterTSS function returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths.
 This clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
 
@@ -358,7 +359,7 @@ This clustering step might be slow especially when the number of TSSs is in mill
 		    
   Tag clusters and consensus cluster with quantile positions can be exported to either text tables or BED tracks which can be visualized in the UCSC Genome Browser and IGV. 
 
-		    exportClustersToBed(myTSSr, data = "consensusClusters")
+        exportClustersToBed(myTSSr, data = "consensusClusters")
 
 
 * Core promoter shape
