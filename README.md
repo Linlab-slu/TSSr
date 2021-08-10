@@ -155,7 +155,7 @@ After confirming those packages are installed, you can install the development v
 	
 	     myTSSr
 	      
-	      # An object of class "TSSr"
+	# An object of class "TSSr"
         # Slot "genomeName":
         #   [1] "BSgenome.Scerevisiae.UCSC.sacCer3"
         # 
@@ -218,67 +218,68 @@ After confirming those packages are installed, you can install the development v
 	
 	
 	
-* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function retrieves TSS coordinates and tag counts from multiple samples into one data table. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these parameters by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function.  
+* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and read counts supporting each TSS from each sample and return values to one data table. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these parameters by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function.  
 	
         getTSS(myTSSr)
 	
 	TSS calling from bam files or retrieving TSS data from TSS table         
         myTSSr@TSSrawMatrix
         
-        # chr    pos strand SL01 SL02 SL03 SL04
-        # 1:  chrI   1561      +    0    0    0    1
-        # 2:  chrI   1823      +    1    0    0    0
-        # 3:  chrI   1828      +    0    0    0    2
-        # 4:  chrI   1830      +    0    0    1    0
-        # 5:  chrI   1831      +    0    0    0    1
-        # ---                                        
-        # 171537: chrII 812483      -    0    0    0    1
-        # 171538: chrII 812789      -    0    0    0    2
-        # 171539: chrII 812802      -    0    0    0    2
-        # 171540: chrII 812805      -    0    0    0    1
-        # 171541: chrII 812818      -    0    0    0    1
+        #           chr    pos strand SL01 SL02 SL03 SL04
+        #      1:  chrI   1561      +    0    0    0    1
+        #      2:  chrI   5759      +    1    0    0    0
+        #      3:  chrI   5765      +    1    0    0    0
+        #      4:  chrI   5773      +    1    0    0    0
+        #      5:  chrI   5925      +    0    1    0    0
+        #     ---                                        
+        # 163208: chrII 810860      -    0    0    0    2
+        # 163209: chrII 810963      -    0    1    0    0
+        # 163210: chrII 811112      -    0    0    1    0
+        # 163211: chrII 811370      -    1    0    0    0
+        # 163212: chrII 812101      -    1    0    0    0
 
-* TSSrawMatrix contains raw read counts of each called TSS. Raw TSS count can be exported to TSS tables can be used as inout for future analysis using TSSr. The output TSS table is saved as "ALL.samples.TSS.raw.txt" in the working directory.    
+* TSSrawMatrix contains genomic coordinates and read counts of each called TSS. TSSrawMatrix can be exported by "exportTSStable" function to a TSS table "ALL.samples.TSS.raw.txt" in the working directory. The TSS table can be used as input file for future downstram analyses using TSSr or other tools. It is advised to export unmerged TSSrawMatrix to an TSS table to avoid repeated TSS calling step.    
 
         exportTSStable(myTSSr, data = "raw", merged = "FALSE")
 	
-* The "plotCorrelation" function is used to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS counts. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”.
+* The "plotCorrelation" function is used to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS counts. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”. The default setting generates scatter plots for all samples (samples = "all"). For plotting a subset of samples, users may provide a list of sample labels for "sample", e.g., samples = c("SL01","SL02","SL03"). 
 	
         plotCorrelation(myTSSr, samples = "all")
         
-![01_TSS_correlation_plot_of_all_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples.png)
+![01_TSS_correlation_plot_of_all_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/01_TSS_correlation_plot_of_all_samples_v2.png)
 
  * To further explore the variations present in the TSS dataset and identify which samples are similar to each other and which samples are very different, we can apply plotPCA function to plot principle component analysis among all samples. plotPCA will make a biplot which visualizes both how samples relate to each other in terms of PC1 and PC2 and simultaneously show how each variable contributes to each principal component.
   
         plotTssPCA(myTSSr, TSS.threshold=10)
 
-![02_PCA_plot](https://raw.githubusercontent.com/Linlab-slu/TSSr/master/vignettes/figures/02_PCA_plot.png)
+![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v2.png)
 
-* Based on the calculated correlations, two replicates are highly correlated. To facilitate the downstream analysis and comparisons between different growth conditions, we can merge the two biological replicates for each growth condition together with mergeSamples function. mergeIndex argument directs which samples will be merged and how the final dataset will be ordered accordingly.
+* Merging samples (biological replicates). Users can merge different samples (e.g., biological replicates) into previously defined groups  for each growth condition together with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
   
         mergeSamples(myTSSr)
         
         myTSSr@TSSprocessedMatrix
         
-        # chr    pos strand control treat
-        # 1:  chrI   1561      +       0     1
-        # 2:  chrI   1823      +       1     0
-        # 3:  chrI   1828      +       0     2
-        # 4:  chrI   1830      +       0     1
-        # 5:  chrI   1831      +       0     1
-        # ---                                  
-        # 171537: chrII 812483      -       0     1
-        # 171538: chrII 812789      -       0     2
-        # 171539: chrII 812802      -       0     2
-        # 171540: chrII 812805      -       0     1
-        # 171541: chrII 812818      -       0     1
+        #           chr    pos strand control treat
+        #      1:  chrI   1561      +       0     1
+        #      2:  chrI   5759      +       1     0
+        #      3:  chrI   5765      +       1     0
+        #      4:  chrI   5773      +       1     0
+        #      5:  chrI   5925      +       1     0
+        #     ---                                  
+        # 163208: chrII 810860      -       0     2
+        # 163209: chrII 810963      -       1     0
+        # 163210: chrII 811112      -       0     1
+        # 163211: chrII 811370      -       1     0
+        # 163212: chrII 812101      -       1     0
 
-  To return library sizes (number of total sequenced tags) of each sample in TSSr object in the specified order (note: order is specified in mergeSample function):
+  To return library sizes (number of total read counts) of merged samples in TSSr object in the specified order (note: order is specified in mergeSample function):
 
         myTSSr@librarySizes
-        # [1] 3353873 5563702
+        # control   treat 
+        # 3221609 5131202
 
-  Library sizes among different samples are different. To make samples comparable, we use normalizeTSS function to scale TSS raw counts by tags per million (TPM).
+  Library sizes among different samples are different. To provide between-sample compatibility, the raw read counts should be scaled with normalizeTSS function as tags per million (TPM).
 
         normalizeTSS(myTSSr)
         
