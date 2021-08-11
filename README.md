@@ -366,16 +366,14 @@ After confirming those packages are installed, you can install the development v
 
 * Quantification of core promoter shape
 
-  Core promoter shape reflects the distribution of TSS signals within a core promoter. TSSr provides three different options, inter-quantile width, shape index (SI), and promoter shape score (PSS), to quantify core promoter shape. Inter-quantile width refers to the distance between the locations of the 10th percentile to the 90th percentile TSS signals within a TSS cluster.  Thus, it measures the width of a core promoter, but lacks the information of distribution patterns of TSS signals within a core promoter. Inter-quantile width could be significantly affected by different clustering methods. plotInterQuantile function plots interquantile width of each sample.
+  Core promoter shape reflects the distribution of TSS signals within a core promoter. TSSr provides three different options, inter-quantile width, promoter shape score (PSS) and shape index (SI), to quantify core promoter shape. Inter-quantile width refers to the distance between the locations of the 10th percentile to the 90th percentile TSS signals within a TSS cluster.  Thus, it measures the width of a core promoter, but lacks the information of distribution patterns of TSS signals within a core promoter. Inter-quantile width could be significantly affected by different clustering methods. plotInterQuantile function plots interquantile width of each sample.
 
         plotInterQuantile(myTSSr,samples = "all",tagsThreshold = 1)
     
 ![03_Interquantile_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/03_Interquantile_plot_of_ALL_samples_v2.png)
 
-  SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. SI is 2 representing singletons. Genome-wide SI score can be plotted with plotShape function.
-
-  Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. Genome-wide PSS score can be plotted with plotShape function.
-  
+  Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is also calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. The SI = 2 represents singletons. 
+    
         shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
 
         myTSSr@clusterShape
@@ -408,6 +406,8 @@ After confirming those packages are installed, you can install the development v
         # 3243:    4289 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13    3.398098
         # 3244:    4290 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4    1.726241
 
+  The distributions of core promoter shape (PSS or SI) can be illustrated by a histograms with plotShape function. Please be noted that there is only one shapeCluster slot, so either PSS or SI can be saved in the shapeCluster slot depending on which method argument was used for shapeCluster. 
+  
         plotShape(myTSSr)
     
 ![04_Shape_plot_of_ALL_samples](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/04_Shape_plot_of_ALL_samples_v2.png)
@@ -543,7 +543,7 @@ After confirming those packages are installed, you can install the development v
         ,genelist=c("YBR168W","YBL067C")
         ,up.dis =500,down.dis = 100,yFixed=TRUE)
           
-![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs_v2.png)
+![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs_v3.png)
 
   Results of core promoter shift analysis can also be exported to a text file with exportShiftTable function.
         
