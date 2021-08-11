@@ -155,69 +155,71 @@ After confirming those packages are installed, you can install the development v
 	
 	     myTSSr
 	      
-	# An object of class "TSSr"
+        # An object of class "TSSr"
         # Slot "genomeName":
-        #   [1] "BSgenome.Scerevisiae.UCSC.sacCer3"
+        # [1] "BSgenome.Scerevisiae.UCSC.sacCer3"
         # 
         # Slot "inputFiles":
-        #   [1] "S01.sorted.bam" "S02.sorted.bam" "S03.sorted.bam" "S04.sorted.bam"
+        # [1] "S01.sorted.bam" "S02.sorted.bam" "S03.sorted.bam" "S04.sorted.bam"
         # 
         # Slot "inputFilesType":
-        #   [1] "bam"
+        # [1] "bam"
         # 
         # Slot "sampleLabels":
-        #   [1] "SL01" "SL02" "SL03" "SL04"
+        # [1] "SL01" "SL02" "SL03" "SL04"
         # 
         # Slot "sampleLabelsMerged":
-        #   [1] "control" "treat"  
+        # [1] "control" "treat"  
         # 
         # Slot "librarySizes":
-        #   integer(0)
+        # numeric(0)
         # 
         # Slot "TSSrawMatrix":
-        #   data frame with 0 columns and 0 rows
+        # data frame with 0 columns and 0 rows
         # 
         # Slot "mergeIndex":
-        #   numeric(0)
+        # [1] 1 1 2 2
         # 
-        # Slot "TSSmergedMatrix":
-        #   data frame with 0 columns and 0 rows
-        # 
-        # Slot "TSSnormalizedMatrix":
-        #   data frame with 0 columns and 0 rows
-        # 
-        # Slot "TSSfilteredMatrix":
-        #   data frame with 0 columns and 0 rows
+        # Slot "TSSprocessedMatrix":
+        # data frame with 0 columns and 0 rows
         # 
         # Slot "tagClusters":
-        #   list()
+        # list()
         # 
         # Slot "consensusClusters":
-        #   list()
+        # list()
         # 
         # Slot "clusterShape":
-        #   list()
+        # list()
         # 
         # Slot "refSource":
-        #   [1] "saccharomyces_cerevisiae.SGD.gff"
+        # [1] "saccharomyces_cerevisiae_R64-2-1.gff"
+        # 
+        # Slot "refTable":
+        # data frame with 0 columns and 0 rows
         # 
         # Slot "organismName":
-        #   [1] "saccharomyces cerevisiae"
+        # [1] "Saccharomyces cerevisiae"
         # 
         # Slot "assignedClusters":
-        #   list()
+        # list()
         # 
         # Slot "unassignedClusters":
-        #   list()
+        # list()
+        # 
+        # Slot "filteredClusters":
+        # list()
         # 
         # Slot "DEtables":
-        #   list()
+        # list()
+        # 
+        # Slot "TAGtables":
+        # list()
         # 
         # Slot "PromoterShift":
-        #   list()
+        # list()
 	
-	
-	
+		
 * TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and read counts supporting each TSS from each sample and return values to one data table. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these parameters by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus it will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS positions. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy makes TSSr also suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques.  
 	
         getTSS(myTSSr)
@@ -473,7 +475,7 @@ After confirming those packages are installed, you can install the development v
 
         exportDETable(myTSSr, data = "sig")
 
-![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot_v2.png){width=50%}
+![05_Volcano_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/05_Volcano_plot_v2.png)
 
 * Core promoter shifts
 
@@ -535,7 +537,11 @@ After confirming those packages are installed, you can install the development v
 
   Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
 
-        plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed",clusters = "assigned",clusterThreshold = 0.02 ,genelist=c("YBL017C","YBL067C"),up.dis =500,down.dis = 100,yFixed=TRUE)
+        plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed"
+        ,clusters = "assigned"
+        ,clusterThreshold = 0.02 
+        ,genelist=c("YBR168W","YBL067C")
+        ,up.dis =500,down.dis = 100,yFixed=TRUE)
           
 ![06_TSS_graphs](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/06_TSS_graphs_v2.png)
 
