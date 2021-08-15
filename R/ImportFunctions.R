@@ -137,7 +137,7 @@
   for(i in seq_len(length(bed.files))) {
     message("\nReading in file: ", bed.files[i], "...")
     readsGR <- import(bed.files[i], format = "BED")
-    readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
+    readsGR <- readsGR[as.character(seqnames(readsGR)) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     readsGR.p <- readsGR[strand(readsGR) == "+"]
     readsGR.m <- readsGR[strand(readsGR) == "-"]
@@ -172,7 +172,7 @@
   for(i in seq_len(length(BigWig.files))) {
     message("\nReading in file: ", BigWig.files[i], "...")
     readsGR <- import(BigWig.files[i], format = "BigWig")
-    readsGR <- readsGR[seqnames(readsGR) %in% seqnames(Genome)]
+    readsGR <- readsGR[as.character(seqnames(readsGR)) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     readsGR.p <- readsGR[score(readsGR) > 0]
     readsGR.m <- readsGR[score(readsGR) < 0]
