@@ -1,4 +1,4 @@
-################################################################################################
+################################################################################
 .getGenome <- function(genomeName) {
   if (is.null(genomeName)){
     stop("Can not run this function with a NULL genome.")}
@@ -8,7 +8,7 @@
   getExportedValue(genomeName, genomeName)
 }
 
-################################################################################################
+################################################################################
 ##.getTSS_from_bam function calls TSS from bam files
 .getTSS_from_bam <- function(bam.files, Genome, sampleLabels, inputFilesType
                              ,sequencingQualityThreshold
@@ -71,8 +71,10 @@
     readsGR <- readsGR[as.character(readsGR@seqnames) %in% seqnames(Genome)]
     readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
     GenomicRanges::elementMetadata(readsGR)$mapq[is.na(GenomicRanges::elementMetadata(readsGR)$mapq)] <- Inf
-    readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-    readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >= sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
+    readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >= 
+                            sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
+    readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >= 
+                            sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
     # remove G mismatch
     TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
 
@@ -90,34 +92,49 @@
   return(TSS.all.samples)
 }
 
-################################################################################################
+################################################################################
 .removeNewG <- function(readsGR.p, readsGR.m, Genome) {
   ##define variable as a NULL value
-  chr = pos = tag_count = NULL
+  chr = pos = tag_count = Gp = Gm = i = NULL
 
-  message("\t-> Removing the first base of the reads if mismatched 'G'...")
-  G.reads.p <- which(substr(GenomicRanges::elementMetadata(readsGR.p)$seq, start = 1, stop = 1) == "G")
-  G.reads.m <- which(substr(GenomicRanges::elementMetadata(readsGR.m)$seq, start = GenomicRanges::elementMetadata(readsGR.m)$read.length, stop = GenomicRanges::elementMetadata(readsGR.m)$read.length) == "C")
-  if(length(G.reads.p)>0){
-    G.mismatch.p <- G.reads.p[getSeq(Genome, GenomicRanges::resize(readsGR.p[G.reads.p], width = 1, fix = "start"), as.character = TRUE) != "G"]
-    GenomicRanges::elementMetadata(readsGR.p)$removedG <- FALSE
-    GenomicRanges::elementMetadata(readsGR.p)$removedG[G.mismatch.p] <- TRUE
-    start(readsGR.p)[G.mismatch.p] <- start(readsGR.p)[G.mismatch.p] + as.integer(1)
-    TSS.p <- data.table(chr = as.character(seqnames(readsGR.p)), pos = start(readsGR.p), strand = "+", removedG = GenomicRanges::elementMetadata(readsGR.p)$removedG, stringsAsFactors = FALSE)
-  }else{
-    G.mismatch.p <- NULL
-    TSS.p <- data.table()
+  message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
+  #-----------------------------------------------------------------------------
+  ## plus strand
+  #-----------------------------------------------------------------------------
+  Gp <- which(substr(GenomicRanges::elementMetadata(readsGR.p)$seq, 
+                     start = 1, stop = 1) == "G")
+  i=1
+  while(length(Gp) >0){
+    print(length(Gp))
+    G.mismatch <- Gp[getSeq(Genome, GenomicRanges::resize(readsGR.p[Gp], width = 1, fix = "start"), as.character = TRUE) != "G"]
+    start(readsGR.p[G.mismatch]) <- start(readsGR.p[G.mismatch]) + as.integer(1)
+    i = i+1
+    Gp <- G.mismatch[which(substr(GenomicRanges::elementMetadata(readsGR.p[G.mismatch])$seq, 
+                      start = 1, stop = i) == paste(rep("G",i), collapse = ""))]
   }
-  if(length(G.reads.m)>0){
-    G.mismatch.m <- G.reads.m[getSeq(Genome, GenomicRanges::resize(readsGR.m[G.reads.m], width = 1, fix = "start"), as.character = TRUE) != "G"]
-    GenomicRanges::elementMetadata(readsGR.m)$removedG <- FALSE
-    GenomicRanges::elementMetadata(readsGR.m)$removedG[G.mismatch.m] <- TRUE
-    end(readsGR.m)[G.mismatch.m] <- end(readsGR.m)[G.mismatch.m] - as.integer(1)
-    TSS.m <- data.table(chr = as.character(seqnames(readsGR.m)), pos = end(readsGR.m), strand = "-", removedG = GenomicRanges::elementMetadata(readsGR.m)$removedG, stringsAsFactors = FALSE)
-  }else{
-    G.mismatch.m <- NULL
-    TSS.m <- data.table()
+  TSS.p <- data.table(chr = as.character(seqnames(readsGR.p)), 
+                      pos = start(readsGR.p), strand = "+", 
+                      #removedG = GenomicRanges::elementMetadata(readsGR.p)$removedG, 
+                      stringsAsFactors = FALSE)
+  #-----------------------------------------------------------------------------
+  ## minus strand
+  #-----------------------------------------------------------------------------
+  Gm <- which(substr(GenomicRanges::elementMetadata(readsGR.m)$seq, 
+                     start = start = GenomicRanges::elementMetadata(readsGR.m)$read.length,
+                     stop = GenomicRanges::elementMetadata(readsGR.m)$read.length) == "C")
+  i=1
+  while(length(Gm) >0){
+    G.mismatch <- Gm[getSeq(Genome, GenomicRanges::resize(readsGR.m[Gm], width = 1, fix = "start"), as.character = TRUE) != "G"]
+    end(readsGR.m[G.mismatch]) <- end(readsGR.m[G.mismatch]) - as.integer(1)
+    i = i+1
+    Gm <- G.mismatch[which(substr(GenomicRanges::elementMetadata(readsGR.m[G.mismatch])$seq, 
+                                  start = 1, stop = i) == paste(rep("C",i), collapse = ""))]
   }
+  TSS.p <- data.table(chr = as.character(seqnames(readsGR.m)), 
+                      pos = end(readsGR.m), strand = "-", 
+                      #removedG = GenomicRanges::elementMetadata(readsGR.m)$removedG, 
+                      stringsAsFactors = FALSE)
+  #-----------------------------------------------------------------------------
   TSS <- rbind(TSS.p, TSS.m)
   TSS <- TSS[,c("chr", "pos", "strand")]
   TSS$tag_count <- 1
@@ -127,7 +144,7 @@
   return(TSS)
 }
 
-################################################################################################
+################################################################################
 ##.getTSS_from_bed function calls TSS from bed files
 .getTSS_from_bed <- function(bed.files, Genome, sampleLabels){
   first <- TRUE
@@ -161,7 +178,7 @@
   TSS.all.samples[,4:ncol(TSS.all.samples)][is.na(TSS.all.samples[,4:ncol(TSS.all.samples)])] =0
   return(TSS.all.samples)
 }
-################################################################################################
+################################################################################
 ##.getTSS_from_BigWig function calls TSS from BigWig files
 
 .getTSS_from_BigWig <- function(BigWig.files, Genome, sampleLabels){
@@ -200,7 +217,7 @@
 }
 
 
-################################################################################################
+################################################################################
 ##.getTSS_from_tss function calls TSS from tss files
 
 .getTSS_from_tss <- function(tss.files, sampleLabels){
