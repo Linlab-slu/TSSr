@@ -105,7 +105,6 @@
                      start = 1, stop = 1) == "G")
   i=1
   while(length(Gp) >0){
-    print(length(Gp))
     G.mismatch <- Gp[getSeq(Genome, GenomicRanges::resize(readsGR.p[Gp], width = 1, fix = "start"), as.character = TRUE) != "G"]
     start(readsGR.p[G.mismatch]) <- start(readsGR.p[G.mismatch]) + as.integer(1)
     i = i+1
@@ -130,7 +129,7 @@
     Gm <- G.mismatch[which(substr(GenomicRanges::elementMetadata(readsGR.m[G.mismatch])$seq, 
                                   start = 1, stop = i) == paste(rep("C",i), collapse = ""))]
   }
-  TSS.p <- data.table(chr = as.character(seqnames(readsGR.m)), 
+  TSS.m <- data.table(chr = as.character(seqnames(readsGR.m)), 
                       pos = end(readsGR.m), strand = "-", 
                       #removedG = GenomicRanges::elementMetadata(readsGR.m)$removedG, 
                       stringsAsFactors = FALSE)
