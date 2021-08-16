@@ -120,7 +120,7 @@
   ## minus strand
   #-----------------------------------------------------------------------------
   Gm <- which(substr(GenomicRanges::elementMetadata(readsGR.m)$seq, 
-                     start = start = GenomicRanges::elementMetadata(readsGR.m)$read.length,
+                     start = GenomicRanges::elementMetadata(readsGR.m)$read.length,
                      stop = GenomicRanges::elementMetadata(readsGR.m)$read.length) == "C")
   i=1
   while(length(Gm) >0){
