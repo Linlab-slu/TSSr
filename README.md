@@ -221,7 +221,9 @@ After confirming those packages are installed, you can install the development v
         # list()
 	
 		
-* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and calculates read counts supporting each TSS from bam file and return values to the slot of TSSrawMatrix. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these arguments by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus the uncoded G will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy also makes TSSr suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques.  
+* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and calculates read counts supporting each TSS from bam file and return values to the slot of TSSrawMatrix. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these arguments by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus the uncoded G will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy also makes TSSr suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques. 
+
+Considering that soft-clipping during mapping of sequencing reads to reference genome could also exclude non-matching 5’end bases other than unmatched Gs, which introduces false positive TSSs. Therefore, we’d recommend not to use soft-clipping for sequencing data. In the case that soft-clipped bam files are used, the users should set "softclippingAllowed = TRUE" for getTSS function.  
 	
         getTSS(myTSSr)
 	
@@ -537,7 +539,8 @@ After confirming those packages are installed, you can install the development v
         #          gene                Ds                  pval          padj
 
 
-  Below is an example of core promoter shift in gene YBL017C. The two major core promoters are differently used in control and treat samples.
+
+  Below is an example of core promoter shift in genes YBR168W and YBL067C. The two major core promoters are differently used in control and treat samples.
 
         plotTSS(myTSSr,samples=c("control","treat"),tssData = "processed"
         ,clusters = "assigned"
