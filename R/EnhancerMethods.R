@@ -22,10 +22,10 @@ setGeneric("callEnhancer",function(object, flanking = 400)standardGeneric("callE
 #' @export
 setMethod("callEnhancer",signature(object = "TSSr"), 
           function(object, flanking){
-  message("\nCalculating ", clusters," shape with ",method," method...")
+  message("\nCalculating enhancers...")
   ##define variable as a NULL value
-  pos = interquantile_width = chr= NULL
-  
+  inCoding = dominant_tss = strand.m = strand.p = cluster = D = chr= NULL
+  dominant_tss.m = dominant_tss.p = tags.p = tags.m = NULL
   ##initialize data
   cs.dt <- object@unassignedClusters
   
