@@ -12,7 +12,8 @@
 ##.getTSS_from_bam function calls TSS from bam files
 .getTSS_from_bam <- function(bam.files, Genome, sampleLabels, inputFilesType
                              ,sequencingQualityThreshold
-                             ,mappingQualityThreshold){
+                             ,mappingQualityThreshold
+                             ,softclippingAllowed){
   ##define variable as a NULL value
   chr = pos = NULL
 
@@ -58,7 +59,14 @@
       } else {
         end <- length(cigar)
       }
-      mapped.length <- c(mapped.length, as.integer(sum(as(str_extract_all(bam[[1]]$cigar[start:end], "([0-9]+)"),"IntegerList"))))
+      if(softclippingAllowed){
+        mapped.length <- c(mapped.length, 
+                           as.integer(sum(as(str_extract_all(bam[[1]]$cigar[start:end], "([0-9]+)"),"IntegerList")))-
+                             ifelse(is.na(sub("S","",str_extract(bam[[1]]$cigar[start:end], 
+                                                                 "[0-9]+S"))),0,sub("S","",str_extract(bam[[1]]$cigar[start:end], "[0-9]+S"))))
+      }else{
+        mapped.length <- c(mapped.length, as.integer(sum(as(str_extract_all(bam[[1]]$cigar[start:end], "([0-9]+)"),"IntegerList"))))
+      }
       if (end == length(cigar)) {
         break
       } else {
@@ -75,8 +83,26 @@
                             sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
     readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >= 
                             sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-    # remove G mismatch
-    TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
+    if(softclippingAllowed){
+      ##------------------------------------------------------------------------
+      TSS.p <- data.table(chr = as.character(seqnames(readsGR.p)), 
+                          pos = start(readsGR.p), strand = "+", 
+                          stringsAsFactors = FALSE)
+      ##------------------------------------------------------------------------
+      TSS.m <- data.table(chr = as.character(seqnames(readsGR.m)), 
+                          pos = end(readsGR.m), strand = "-", 
+                          stringsAsFactors = FALSE)
+      #-------------------------------------------------------------------------
+      TSS <- rbind(TSS.p, TSS.m)
+      TSS <- TSS[,c("chr", "pos", "strand")]
+      TSS$tag_count <- 1
+      setDT(TSS)
+      TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
+      
+    }else{
+      # remove G mismatch
+      TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
+    }
 
     setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
     setkey(TSS, chr, pos, strand)

@@ -14,6 +14,8 @@
 #' "bamPairedEnd", otherwise ignored.
 #' @param mappingQualityThreshold Used only if inputFilesType == "bam" or
 #' "bamPairedEnd", otherwise ignored.
+#' @param softclippingAllowed Used only if inputFilesType == "bam" or
+#' "bamPairedEnd". Default is FALSE.
 #' @return Large List of elements - one element for each sample
 #'
 #' @export
@@ -25,13 +27,14 @@
 #' }
 setGeneric("getTSS",function(object
                              ,sequencingQualityThreshold = 10
-                             ,mappingQualityThreshold = 20)standardGeneric("getTSS"))
+                             ,mappingQualityThreshold = 20
+                             ,softclippingAllowed = FALSE)standardGeneric("getTSS"))
 #' @rdname getTSS
 #' @export
 setMethod("getTSS",signature(object = "TSSr"), function(object
                                     ,sequencingQualityThreshold
                                     ,mappingQualityThreshold
-                                    ){
+                                    ,softclippingAllowed){
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabels <- object@sampleLabels
@@ -47,7 +50,7 @@ setMethod("getTSS",signature(object = "TSSr"), function(object
                      ,inputFilesType
                      ,sequencingQualityThreshold
                      ,mappingQualityThreshold
-                     )
+                     ,softclippingAllowed)
   }else if(inputFilesType == "bed"){
     tss <- .getTSS_from_bed(object@inputFiles, Genome, sampleLabels)
   }else if(inputFilesType == "BigWig"){

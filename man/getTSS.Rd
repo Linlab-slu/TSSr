@@ -8,7 +8,12 @@ BigWig files, tss files, or tss tables.}
 \usage{
 getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 
-\S4method{getTSS}{TSSr}(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
+\S4method{getTSS}{TSSr}(
+  object,
+  sequencingQualityThreshold = 10,
+  mappingQualityThreshold = 20,
+  softclippingAllowed = FALSE
+)
 }
 \arguments{
 \item{object}{A TSSr object.}
@@ -18,6 +23,9 @@ getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
 
 \item{mappingQualityThreshold}{Used only if inputFilesType == "bam" or
 "bamPairedEnd", otherwise ignored.}
+
+\item{softclippingAllowed}{Used only if inputFilesType == "bam" or
+"bamPairedEnd". Default is FALSE.}
 }
 \value{
 Large List of elements - one element for each sample
