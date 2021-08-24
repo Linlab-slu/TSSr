@@ -141,7 +141,12 @@ the supported input file formats.</p>
     <pre class="usage"><span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>object</span>, sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>, mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TSSr</span>
-<span class='fu'>getTSS</span><span class='op'>(</span><span class='va'>object</span>, sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>, mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></pre>
+<span class='fu'>getTSS</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  sequencingQualityThreshold <span class='op'>=</span> <span class='fl'>10</span>,
+  mappingQualityThreshold <span class='op'>=</span> <span class='fl'>20</span>,
+  softclippingAllowed <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,6 +164,11 @@ the supported input file formats.</p>
       <th>mappingQualityThreshold</th>
       <td><p>Used only if inputFilesType == "bam" or
 "bamPairedEnd", otherwise ignored.</p></td>
+    </tr>
+    <tr>
+      <th>softclippingAllowed</th>
+      <td><p>Used only if inputFilesType == "bam" or
+"bamPairedEnd". Default is FALSE.</p></td>
     </tr>
     </table>
 

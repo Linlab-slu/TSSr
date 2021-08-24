@@ -6,7 +6,8 @@
 \title{Precisely identify TSSs from bam files, paired end bam files, bed files,
 BigWig files, tss files, or tss tables.}
 \usage{
-getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
+getTSS(object, sequencingQualityThreshold = 10, 
+mappingQualityThreshold = 20, softclippingAllowed = FALSE)
 
 \S4method{getTSS}{TSSr}(
   object,

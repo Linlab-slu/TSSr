@@ -15,7 +15,7 @@
                              ,mappingQualityThreshold
                              ,softclippingAllowed){
   ##define variable as a NULL value
-  chr = pos = NULL
+  chr = pos = tag_count = strand = NULL
 
   what <- c("rname", "strand", "pos", "seq", "qual", "mapq","flag","cigar")
   param <- ScanBamParam( what = what
