@@ -30,7 +30,7 @@ setMethod("plotCorrelation",signature(object = "TSSr"), function(object, samples
     tss <- tss.raw[,.SD, .SDcols = cols]
   }
   pdf(file = paste("TSS_correlation_plot_of_", paste(samples, collapse = "_"), "_samples.pdf", sep = "")
-      ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
+      ,width = 8, height = 8, onefile = TRUE, bg = "transparent", family = "Helvetica", fonts = NULL)
   .plotCorrelation(tss)
   dev.off()
 })
@@ -103,7 +103,7 @@ setMethod("plotInterQuantile",signature(object = "TSSr"), function(object, sampl
   if(samples == "all"){
     tc <- TCs
     pdf(file = paste("Interquantile_plot_of_ALL_samples.pdf", sep = "")
-        ,width = 8, height = 8, onefile = T, bg = "transparent", family = "Helvetica", fonts = NULL)
+        ,width = 8, height = 8, onefile = TRUE, bg = "transparent", family = "Helvetica", fonts = NULL)
     for(i in seq_len(length(sampleLabels))){
       temp <- tc[[sampleLabels[i]]]
       temp <- temp[temp$tags >= tagsThreshold & temp$interquantile_width <= 200,]
@@ -438,6 +438,40 @@ setMethod("exportShapeTable",signature(object = "TSSr"), function(object
     }
   }else{
     stop("No data for the promoter shape!")
+  }
+})
+
+################################################################################
+#' Export enhancer tables
+#'
+#' @description Exports enhancer tables to text files. 
+#' @usage exportEnhancerTable(object)
+#' @return enhancer candidate tables
+#'
+#' @param object A TSSr object.
+#'
+#'
+#' @export
+#'
+#' @examples
+#' data(exampleTSSr)
+#' #exportEnhancerTable(exampleTSSr)
+setGeneric("exportEnhancerTable",function(object)standardGeneric("exportEnhancerTable"))
+#' @rdname exportEnhancerTable
+#' @export
+setMethod("exportEnhancerTable",signature(object = "TSSr"), function(object
+){
+  message("Exporting enhancer table...")
+  s <- object@enhancers
+  if(!is.null(s)){
+    samples <- object@sampleLabelsMerged
+    for(i in seq_len(length(samples))){
+      temp <- s[[samples[i]]]
+      write.table(temp, file = paste(samples[i],"enhancers","txt", sep = "."), 
+                  sep = "\t", quote = FALSE, row.names = FALSE)
+    }
+  }else{
+    stop("No data for the enhancer candidates!")
   }
 })
 
