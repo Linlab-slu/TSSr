@@ -67,6 +67,8 @@ result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 
 \item{\code{filteredClusters}}{list.}
 
+\item{\code{enhancers}}{list.}
+
 \item{\code{DEtables}}{list.}
 
 \item{\code{TAGtables}}{list}

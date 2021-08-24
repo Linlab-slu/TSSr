@@ -27,7 +27,7 @@ Encoding: UTF-8
 LazyData: FALSE
 Depends: R (>= 4.0)
 Imports: stringr(>= 1.4.0), rtracklayer(>= 1.50.0),ggplot2(>= 3.3.5), GenomicFeatures(>= 1.42.3), Gviz(>= 1.34.1), DESeq2(>= 1.30.1),
-    BSgenome.Scerevisiae.UCSC.sacCer3(>= 1.4.0), calibrate(>= 1.7.7),ggfortify(>= 0.4.12), IRanges(>= 2.24.2),
+    BSgenome.Scerevisiae.UCSC.sacCer3(>= 1.4.0), calibrate(>= 1.7.7),ggfortify(>= 0.4.12), IRanges(>= 2.24.1),
     GenomicRanges(>= 1.42.0), Rsamtools(>= 2.6.0), GenomicAlignments(>= 1.26.0), GenomeInfoDb(>= 1.26.7),dplyr(>= 1.0.7),
     BiocGenerics(>= 0.36.1), data.table(>= 1.14.0), methods(>= 4.0.3), grDevices(>= 4.0.3), graphics(>= 4.0.3), stats(>= 4.0.3), utils(>= 4.0.3),parallel(>= 4.0.3)
 Suggests: knitr, rmarkdown, pkgdown

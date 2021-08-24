@@ -75,6 +75,7 @@
 #' @slot assignedClusters list.
 #' @slot unassignedClusters list.
 #' @slot filteredClusters list.
+#' @slot enhancers list.
 #' @slot DEtables list.
 #' @slot TAGtables list
 #' @slot PromoterShift list.
@@ -102,6 +103,7 @@ setClass(Class = "TSSr",
                         ,assignedClusters = "list"
                         ,unassignedClusters = "list"
                         ,filteredClusters = "list"
+                        ,enhancers = "list"
                         ,DEtables = "list"
                         ,TAGtables = "list"
                         ,PromoterShift = "list"
@@ -124,6 +126,7 @@ setClass(Class = "TSSr",
                    ,assignedClusters = list()
                    ,unassignedClusters = list()
                    ,filteredClusters = list()
+                   ,enhancers = list()
                    ,DEtables = list()
                    ,TAGtables = list()
                    ,PromoterShift = list()
