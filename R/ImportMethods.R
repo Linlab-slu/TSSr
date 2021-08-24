@@ -7,7 +7,8 @@
 #' or downloaded files from public databases. See inputFilesType for details on
 #' the supported input file formats.
 #'
-#' @usage getTSS(object, sequencingQualityThreshold = 10, mappingQualityThreshold = 20)
+#' @usage getTSS(object, sequencingQualityThreshold = 10, 
+#' mappingQualityThreshold = 20, softclippingAllowed = FALSE)
 #'
 #' @param object A TSSr object.
 #' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or
