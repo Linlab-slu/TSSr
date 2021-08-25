@@ -464,6 +464,16 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
         
         exportClustersTable(myTSSr, data = "assigned")
 
+* Analysis of enhancers
+
+  TSS data allow for the robust identification of enhancers by transcription of enhancer RNAs (eRNAs). Active enhancers produce bidirectional transcription of capped eRNAs, resulting in two diverging tag clusters by at most 400 bp. TSSr can identify this bidirectional cluster pairs and calculate a sample-set wide directionality score D for each locus (Andersson et al., 2014). D = (F-R)/(F+R), where F is the aggregated normalized tag counts in forward strandm and R is the aggregated normalized tag counts in reverse strand. Putative enhancers were then filtered with |D| < 0.8. 
+
+        callEnhancer(myTSSr, flanking = 400)
+	
+  The results of putative enhancers can be exported to delimited text files with "exportEnhancerTable" function. 
+
+        exportEnhancerTable(myTSSr)
+
 * Differential expression analysis
 
   The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis. 
@@ -564,6 +574,8 @@ Department of Biology, Saint Louis University, USA.
 Email: zhenguo.lin@slu.edu
 
 ## 8. Reference:
+
+Andersson, R., Gebhard, C., Miguel-Escalada, I., Hoof, I., Bornholdt, J., Boyd, M., Chen, Y., Zhao, X., Schmidl, C., Suzuki, T., Ntini, E., Arner, E., Valen, E., Li, K., Schwarzfischer, L., Glatz, D., Raithel, J., Lilje, B., Rapin, N., Bagger, F. O., … Sandelin, A. (2014). "An atlas of active enhancers across human cell types and tissues". Nature 507(7493), 455–461.
 
 Arribere, J. A. and W. V. Gilbert (2013). "Roles for transcript leaders in translation and mRNA decay revealed by transcript leader sequencing." Genome Res 23(6): 977-987.
 
