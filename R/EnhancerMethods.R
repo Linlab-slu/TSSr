@@ -1,4 +1,4 @@
-#' Identification of enhancer clusters
+#' Identification of enhancers
 #'
 #' @description Calculates enhancer candidates, which are caracterized by 
 #' bidirectional clusters as described in Andersson et al. 2014.
