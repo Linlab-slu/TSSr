@@ -6,7 +6,7 @@
 ##.Ds(cx,cy, librarySizex, librarySizey, useRawCount = TRUE)
 
 ###############################################################################
-.Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE, pval){
+.Ds <- function(cx,cy, librarySizex, librarySizey, useRawCount = TRUE, pVal){
   ##cx is control
   ##cy is treat
   ##define variable as a NULL value
@@ -56,7 +56,7 @@
   Ds$padj <- p.adjust(Ds[,"pval"],method = "BH")
   setDT(Ds)
   Ds <- Ds[!is.na(padj),]
-  Ds <- Ds[padj <= pval,]
+  Ds <- Ds[padj <= pVal,]
   setorder(Ds, "padj")
   return(Ds)
 }
