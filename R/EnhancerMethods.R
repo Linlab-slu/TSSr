@@ -82,5 +82,4 @@ setMethod("callEnhancer",signature(object = "TSSr"),
   object@enhancers <- cs.en
   assign(objName, object, envir = parent.frame())
 })
-
 ##------------------------------------------------------------------------------
