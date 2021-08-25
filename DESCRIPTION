@@ -1,7 +1,7 @@
 Type: Package
 Package: TSSr
-Version: 0.99.0
-Date: 2021-08-02
+Version: 0.99.1
+Date: 2021-08-25
 Title: TSS sequencing data analysis
 Description: TSSr package provides a comprehensive workflow on TSS data starts from 
     identification of accurate TSS locations, clustering TSSs within small genomic 
@@ -42,8 +42,3 @@ VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 NeedsCompilation: no
 git_url: https://github.com/Linlab-slu/TSSr
-git_branch: RELEASE_1
-git_last_commit: a5016e4
-git_last_commit_date: 2021-08-16
-Date/Publication: 2021-08-16
-Packaged: 2021-08-16; biocbuild
