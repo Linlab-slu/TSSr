@@ -227,7 +227,7 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
 	
         getTSS(myTSSr)
 	
-    TSS calling from bam files or retrieving TSS data from TSS table         
+TSS calling from bam files or retrieving TSS data from TSS table         
         
         myTSSr@TSSrawMatrix
 	
@@ -258,7 +258,7 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
   
         plotTssPCA(myTSSr, TSS.threshold=10)
 
-![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v2.png)
+![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v3.png)
 
 * Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
   
