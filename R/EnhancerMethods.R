@@ -14,8 +14,8 @@
 #'
 #' @examples
 #' \donttest{
-#'  data(exampleTSSr)
-#' 	#callEnhancer(exampleTSSr,flanking = 400)
+#' data(exampleTSSr)
+#' #callEnhancer(exampleTSSr,flanking = 400)
 #' }
 setGeneric("callEnhancer",function(object, flanking = 400)standardGeneric("callEnhancer"))
 #' @rdname callEnhancer

@@ -45,8 +45,8 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
     DE.sig <- subset(DE.dt, padj < pval)
     DE.dt$gene <- row.names(DE.dt)
     DE.sig$gene <- row.names(DE.sig)
-    DE.dt <- DE.dt[,c(ncol(DE.dt), 1:(ncol(DE.dt)-1))]
-    DE.sig <- DE.sig[,c(ncol(DE.sig), 1:(ncol(DE.sig)-1))]
+    DE.dt <- DE.dt[,c(ncol(DE.dt), seq(ncol(DE.dt)-1))]
+    DE.sig <- DE.sig[,c(ncol(DE.sig), seq(ncol(DE.sig)-1))]
     setDT(DE.dt)
     setDT(DE.sig)
     DE <- list("DEtable" = DE.dt, "DEsig" = DE.sig)

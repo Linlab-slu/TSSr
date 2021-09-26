@@ -3,7 +3,7 @@
 \name{callEnhancer}
 \alias{callEnhancer}
 \alias{callEnhancer,TSSr-method}
-\title{Identification of enhancer clusters}
+\title{Identification of enhancers}
 \usage{
 callEnhancer(object, flanking = 400)
 
@@ -24,7 +24,7 @@ bidirectional clusters as described in Andersson et al. 2014.
 }
 \examples{
 \donttest{
- data(exampleTSSr)
-	#callEnhancer(exampleTSSr,flanking = 400)
+data(exampleTSSr)
+#callEnhancer(exampleTSSr,flanking = 400)
 }
 }

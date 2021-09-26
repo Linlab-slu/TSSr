@@ -125,7 +125,7 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
       })
       new <- rbindlist(new)
       new <- new[f==1,]
-      cs <- rbind(m[,1:12],new[,1:12])
+      cs <- rbind(m[,seq(12)],new[,seq(12)])
       return(cs)
     })
   }
