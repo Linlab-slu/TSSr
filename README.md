@@ -265,19 +265,19 @@ TSS calling from bam files or retrieving TSS data from TSS table
         mergeSamples(myTSSr)
         
         myTSSr@TSSprocessedMatrix
-        
-        #           chr    pos strand control treat
-        #      1:  chrI   1561      + 0.000000 0.194886
-        #      2:  chrI   5759      + 0.310404 0.000000
-        #      3:  chrI   5765      + 0.310404 0.000000
-        #      4:  chrI   5773      + 0.310404 0.000000
-        #      5:  chrI   5925      + 0.310404 0.000000
-        #     ---                                      
-        # 163199: chrII 810860      - 0.000000 0.389772
-        # 163200: chrII 810963      - 0.310404 0.000000
-        # 163201: chrII 811112      - 0.000000 0.194886
-        # 163202: chrII 811370      - 0.310404 0.000000
-        # 163203: chrII 812101      - 0.310404 0.000000
+	
+        #          chr    pos strand control treat
+        #     1:  chrI   1561      +       0     1
+        #     2:  chrI   5759      +       1     0
+        #     3:  chrI   5765      +       1     0
+        #     4:  chrI   5773      +       1     0
+        #     5:  chrI   5925      +       1     0
+        #    ---                                  
+        #163199: chrII 810860      -       0     2
+        #163200: chrII 810963      -       1     0
+        #163201: chrII 811112      -       0     1
+        #163202: chrII 811370      -       1     0
+        #163203: chrII 812101      -       1     0
 
   To return library sizes (number of total read counts) of merged samples in TSSr object in the specified order (note: order is specified in mergeSample function):
 
