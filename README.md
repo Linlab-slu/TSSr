@@ -285,13 +285,13 @@ TSS calling from bam files or retrieving TSS data from TSS table
         # control   treat 
         # 3221609 5131202
 
-  Library sizes among different samples are different. To provide between-sample comparability, the raw read counts of each TSS need to be scaled as tags per million mapped reads (TPM) with normalizeTSS function.
+  Library sizes among different samples are different. To provide between-sample comparability, the raw read counts of each TSS need to be scaled as tags per million mapped reads (TPM) with normalizeTSS function. If you intend to remove TSSs with low support using the “poisson” option of filterTSS "filterTSS(myTSSr, method = "poisson"), you should skip the "normalizeTSS" because the "poisson" method (method = "poisson") use the raw read count data to calculate the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. TSSr will normalize the raw read counts as TPM after filtering by the "poisson" method.  
 
         normalizeTSS(myTSSr)
-        
-  Users may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TMP value or p-value inferred by “Poisson distribution”. For "TPM" filtering (method = "TPM"), any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1). For "poisson" method (method = "poisson"), TSSr calculates the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. 
+     
+  If you uses the "normalizeTSS" function, you may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TMP value (method = "TPM"), and any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1).  
 
-        filterTSS(myTSSr, method = "poisson")   
+        filterTSS(myTSSr, method = "TPM")   
     
         myTSSr@TSSprocessedMatrix
         
