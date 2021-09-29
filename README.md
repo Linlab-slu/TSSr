@@ -96,7 +96,7 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
 To install the TSSr package all the prerequisites above need to be installed.
 After confirming those packages are installed, you can install the development version directly from GitHub using devtools:
 
-        devtools::install_github("Linlab-slu/TSSr")
+        devtools::install_github("Linlab-slu/TSSr", build_vignettes = TRUE)
 
 ## 4. Input data for TSSr
 
