@@ -34,7 +34,7 @@ Imports: stringr(>= 1.4.0), rtracklayer(>= 1.50.0),ggplot2(>= 3.3.5),
     GenomeInfoDb(>= 1.26.7),dplyr(>= 1.0.7), BiocGenerics(>= 0.36.1), 
     data.table(>= 1.14.0), methods(>= 4.0.3), grDevices(>= 4.0.3), 
     graphics(>= 4.0.3), stats(>= 4.0.3), utils(>= 4.0.3),parallel(>= 4.0.3),
-    rmarkdown(>=2.11)
+    rmarkdown
 Suggests: knitr, pkgdown
 biocViews: Software, Transcription, Coverage, GeneExpression,
     GeneRegulation, PeakDetection, DataImport, DataRepresentation,
