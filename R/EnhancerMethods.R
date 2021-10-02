@@ -1,13 +1,15 @@
 #' Identification of enhancers
 #'
-#' @description Calculates enhancer candidates, which are caracterized by 
+#' @description Calculates enhancer candidates, which are characterized by 
 #' bidirectional clusters as described in Andersson et al. 2014.
 #'
-#' @usage callEnhancer(object, flanking = 400)
+#' @usage callEnhancer(object, flanking = 400, dis2gene = 2000)
 #'
 #' @param object A TSSr object.
 #' @param flanking The flanking region range where bidirectional clusters 
 #' composing a enhancer candidate. Default is 400.
+#' @param dis2gene The minimum distance to the main annotated core promoter of genes.
+#' Default is 2000.
 #' @return Large List of elements - one element for each sample
 #'
 #' @export
@@ -15,19 +17,21 @@
 #' @examples
 #' \donttest{
 #' data(exampleTSSr)
-#' #callEnhancer(exampleTSSr,flanking = 400)
+#' #callEnhancer(exampleTSSr,flanking = 400,dis2gene=2000)
 #' }
-setGeneric("callEnhancer",function(object, flanking = 400)standardGeneric("callEnhancer"))
+setGeneric("callEnhancer",function(object, flanking = 400, 
+                                   dis2gene=2000)standardGeneric("callEnhancer"))
 #' @rdname callEnhancer
 #' @export
 setMethod("callEnhancer",signature(object = "TSSr"), 
-          function(object, flanking){
+          function(object, flanking, dis2gene){
   message("\nCalculating enhancers...")
   ##define variable as a NULL value
   inCoding = dominant_tss = strand.m = strand.p = cluster = D = chr= NULL
   dominant_tss.m = dominant_tss.p = tags.p = tags.m = NULL
   ##initialize data
   cs.dt <- object@unassignedClusters
+  asn.dt <- object@assignedClusters
   
   if(length(cs.dt) == 0){
     stop("Warning! Clusters must be annotated before calling enhancers.")
@@ -38,13 +42,16 @@ setMethod("callEnhancer",signature(object = "TSSr"),
   
   cs.en <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
     cs <- cs.dt[[sampleLabelsMerged[i]]]
-    cs <- cs[is.na(inCoding)]
+    asn <- asn.dt[[sampleLabelsMerged[i]]]
+    #cs <- cs[is.na(inCoding)]
     if(nrow(cs) >0){
       cs[,gene:= NULL]
       cs[,inCoding:= NULL]
       setkey(cs,chr)
+      setkey(asn,chr)
       ce <- lapply(as.list(as.character(cs[,unique(chr)])), function(x) {
         data <- cs[x]
+        asn_sub <- asn[x]
         # data[, strand_no := ifelse(strand == "+",1,0)]
         setorder(data, dominant_tss)
         ##
@@ -71,7 +78,17 @@ setMethod("callEnhancer",signature(object = "TSSr"),
           })
           en <- rbindlist(en)
           en <- en[, D:= (tags.p-tags.m)/(tags.p+tags.m)]
-          en[D > -0.8 & D < 0.8]
+          en <- en[D > -0.8 & D < 0.8]
+          if(nrow(asn_sub)>0){
+            setkey(asn_sub,gene)
+            res <- sapply(as.list(asn_sub[,unique(gene)]),function(g){
+              temp <- asn_sub[g]
+              (temp[which.max(tags)]$dominant_tss-dis2gene):(temp[which.max(tags)]$dominant_tss+dis2gene)
+            })
+            res <- unlist(res)
+            en <- en[!(dominant_tss.m %in% res) & !(dominant_tss.p %in% res)]
+          }
+          return(en)
         }
       })
       ce <- rbindlist(ce)

@@ -44,6 +44,6 @@ biocViews: Software, Transcription, Coverage, GeneExpression,
 URL: https://github.com/Linlab-slu/TSSr
 BugReports: https://github.com/Linlab-slu/TSSr/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 NeedsCompilation: no
 git_url: https://github.com/Linlab-slu/TSSr
