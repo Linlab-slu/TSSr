@@ -11,6 +11,8 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
  
  The main fucntions of TSSr include identifications of TSSs, normalization and filtration of TSS signals, clustering of TSS to infer core promoters, quantifications of core promoter activities and shape, assigning TSS cluster to genes, gene differential expression, core promoter shift. TSSr uses multiple formats of files as input, such as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig files, or TSS tables. TSSr generates various types of TSS or core promoter track files which can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports various raw and processed result tables and visualization plots. Multiple cores are supported on Linux or Mac OS platforms.
  
+ ![TSSr flowchart](https://github.com/Linlab-slu/TSSr/blob/master/vignettes/figures/TSSr_flowchart.png)
+
 ## 2. Pre-requisites:
 
 * R version
