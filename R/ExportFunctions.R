@@ -18,7 +18,7 @@
     points(x,y, pch = ".",col = "#00AFBB")
   }
   # Create the plots
-  suppressWarnings(pairs(z, lower.panel = upper.panel,upper.panel = panel.cor, log = "xy"))
+  pairs(z, lower.panel = upper.panel,upper.panel = panel.cor, log = "xy")
 }
 
 ###############################################################################

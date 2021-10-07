@@ -67,7 +67,7 @@ setMethod("annotateCluster",signature(object = "TSSr"), function(object, cluster
     ##define variable as a NULL value
     inCoding = r = f = dominant_tss = NULL
     ##prepare annotation file
-    txdb <- suppressWarnings(makeTxDbFromGFF(refGFF, organismName, format = "auto"))
+    txdb <- makeTxDbFromGFF(refGFF, organismName, format = "auto")
     if(annotationType == "genes"){
       ref <- setDT(as.data.frame(genes(txdb)))
     }else if(annotationType == "transcripts"){
