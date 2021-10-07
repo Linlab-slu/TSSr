@@ -128,8 +128,11 @@ Core promoter shifts
 shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 ```
 
+Session info
 
-
+```{r sessionInfo, tidy=FALSE}
+sessionInfo()
+```
 
 
 

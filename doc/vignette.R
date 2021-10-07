@@ -72,3 +72,6 @@ deGene(myTSSr,comparePairs=list(c("control","treat")),
 # Calcuate core promoter shifts
 shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
 
+## ----sessionInfo, tidy=FALSE--------------------------------------------------
+sessionInfo()
+

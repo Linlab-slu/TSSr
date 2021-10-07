@@ -58,7 +58,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-    re <- cbind(tss.dt[,seq_len(3)],re)
+    re <- cbind(tss.dt[,c(1,2,3)],re)
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")
@@ -78,7 +78,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-    re <- cbind(tss.dt[,seq_len(3)],re)
+    re <- cbind(tss.dt[,c(1,2,3)],re)
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")

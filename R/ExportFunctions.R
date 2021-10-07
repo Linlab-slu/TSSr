@@ -1,7 +1,7 @@
 ###############################################################################
 .plotCorrelation <- function(TSS.all.samples)
 {
-  z <- TSS.all.samples[,-seq_len(3)]
+  z <- TSS.all.samples[,-c(1,2,3)]
   # Customize lower panel
   panel.cor <- function(x, y)
   {

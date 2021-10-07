@@ -41,7 +41,7 @@ setMethod("mergeSamples",signature(object = "TSSr"), function(object, mergeIndex
   })
   re <- NULL
   for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-  re <- cbind(tss[,seq_len(3)],re)
+  re <- cbind(tss[,c(1,2,3)],re)
 
   #object@mergeIndex <- mergeIndex
   object@TSSprocessedMatrix <- re
