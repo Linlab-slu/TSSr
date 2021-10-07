@@ -38,7 +38,7 @@ setMethod("consensusCluster",signature(object = "TSSr"), function(object, dis, u
   objName <- deparse(substitute(object))
   cs <- object@tagClusters
   if(length(cs) == 0){
-    stop("Error: You must have tagClusters data in order to proceed.")
+    stop("You must have tagClusters data in order to proceed.")
   }
   ##get consensus peak range
   cx <- cs[[sampleLabelsMerged[1]]]

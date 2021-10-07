@@ -34,7 +34,7 @@ setMethod("callEnhancer",signature(object = "TSSr"),
   asn.dt <- object@assignedClusters
   
   if(length(cs.dt) == 0){
-    stop("Warning! Clusters must be annotated before calling enhancers.")
+    stop("Clusters must be annotated before calling enhancers.")
   }
   
   sampleLabelsMerged <- object@sampleLabelsMerged

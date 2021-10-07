@@ -43,7 +43,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
   if(method  == "poisson"){
     message("\nFiltering data with ", method," method...")
     if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1)){
-      stop("Warning! Raw count data required for poisson method.")
+      stop("Raw count data required for poisson method.")
     }
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
       temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
@@ -58,7 +58,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-    re <- cbind(tss.dt[,1:3],re)
+    re <- cbind(tss.dt[,seq_len(3)],re)
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")
@@ -67,7 +67,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
   }else if(method  == "TPM"){
     message("\nFiltering data with ", method," method...")
     if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1) == FALSE){
-      stop("Warning! Data must be normalized.")
+      stop("Data must be normalized.")
     }
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
       temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
@@ -78,7 +78,7 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
-    re <- cbind(tss.dt[,1:3],re)
+    re <- cbind(tss.dt[,seq_len(3)],re)
     ##removes filtered rows
     re <- re[rowSums(re[,4:ncol(re)]) >0,]
     setorder(re, "strand","chr","pos")

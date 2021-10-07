@@ -50,6 +50,7 @@
 #' @import GenomeInfoDb
 #' @importFrom BiocGenerics union
 #' @import data.table
+#' @import rmarkdown
 #' @import parallel
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics hist pairs par plot points strwidth text
