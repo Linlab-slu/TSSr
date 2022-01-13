@@ -75,7 +75,8 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
 conda creare -n tssr
 conda activate tssr
 conda install r-base=4.1.0
-conda install -c bioconda -c conda-forge bioconductor-rsamtools bioconductor-gviz\ bioconductor-genomicranges bioconductor-genomicfeatures bioconductor-rtracklayer\
+conda install -c bioconda -c conda-forge bioconductor-rsamtools bioconductor-gviz\
+bioconductor-genomicranges bioconductor-genomicfeatures bioconductor-rtracklayer\
 bioconductor-deseq2 bioconductor-bsgenome r-data.table r-stringr  r-devtools pandoc
 ```
 
