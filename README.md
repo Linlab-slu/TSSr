@@ -23,7 +23,7 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
 
 ### R version 
 
-* Download R (>3.4.0) version from CRAN.
+* Download R (>4.1.0) version from CRAN.
   * Windows: https://cran.r-project.org/bin/windows/base/
   * Mac OS X: https://cran.r-project.org/bin/macosx/
   * Linux: https://cran.r-project.org/bin/linux/
@@ -79,6 +79,7 @@ conda install -c bioconda -c conda-forge bioconductor-rsamtools bioconductor-gvi
 bioconductor-genomicranges bioconductor-genomicfeatures bioconductor-rtracklayer\
 bioconductor-deseq2 bioconductor-bsgenome r-data.table r-stringr  r-devtools pandoc
 ```
+If you running into some errors when trying install all the packages in one line, please install the packages one by one manually.
 
 ## 3. Installing TSSr Package:
 
