@@ -24,38 +24,45 @@ setGeneric("filterTSS",function(object, method = "poisson", normalization = TRUE
                                 , pVal =0.01, tpmLow = 0.1)standardGeneric("filterTSS"))
 #' @rdname filterTSS
 #' @export
-setMethod("filterTSS",signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow){
+setMethod("filterTSS",signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow)
+{
   ##initialize values
   Genome <- .getGenome(object@genomeName)
   sampleLabelsMerged <- object@sampleLabelsMerged
   objName <- deparse(substitute(object))
   library.size <- object@librarySizes
-  # calculate size of genome
-  genomeSize <- 0
-  for (chrom in seq_len(length(Genome))) {
-    genomeSize <- genomeSize + length(Genome[[chrom]])
-  }
+
   tss.dt <- object@TSSprocessedMatrix
   ##define variable as a NULL value
   tags = NULL
 
   ##filter tss data
-  if(method  == "poisson"){
-    message("\nFiltering data with ", method," method...")
-    if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1)){
-      stop("Raw count data required for poisson method.")
-    }
-    tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
-      temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
-      setnames(temp, colnames(temp)[[1]], "tags")
-      temp <- .filterWithPoisson(temp, library.size[i], genomeSize, pVal)
-      if(normalization == "TRUE"){
-        sizePerMillion <- library.size[i] / 1e6
-        temp[, tags := round(tags / sizePerMillion, 6)]
+  if(method  == "poisson")
+  {
+      #calculate size of genome
+      genomeSize <- 0
+      for (chrom in seq_len(length(Genome))) 
+      {
+        genomeSize <- genomeSize + length(Genome[[chrom]])
       }
-      setnames(temp, colnames(temp)[[1]], sampleLabelsMerged[i])
-      return(temp)
-    })
+      message("\nFiltering data with ", method," method...")
+      if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1))
+      {
+        stop("Raw count data required for poisson method.")
+      }
+      tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i)
+      {
+        temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
+        setnames(temp, colnames(temp)[[1]], "tags")
+        temp <- .filterWithPoisson(temp, library.size[i], genomeSize, pVal)
+        if(normalization == "TRUE")
+          {
+          sizePerMillion <- library.size[i] / 1e6
+          temp[, tags := round(tags / sizePerMillion, 6)]
+          }
+        setnames(temp, colnames(temp)[[1]], sampleLabelsMerged[i])
+        return(temp)
+      })
     re <- NULL
     for(i in seq(sampleLabelsMerged)){re <- cbind(re, tss.new[[i]])}
     re <- cbind(tss.dt[,c(1,2,3)],re)
@@ -64,9 +71,12 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     setorder(re, "strand","chr","pos")
     object@TSSprocessedMatrix <- re
     assign(objName, object, envir = parent.frame())
-  }else if(method  == "TPM"){
+  }
+  else if(method  == "TPM")
+  {
     message("\nFiltering data with ", method," method...")
-    if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1) == FALSE){
+    if(any(tss.dt[,4] > 0 & tss.dt[,4] < 1) == FALSE)
+    {
       stop("Data must be normalized.")
     }
     tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
@@ -84,14 +94,17 @@ setMethod("filterTSS",signature(object = "TSSr"), function(object, method, norma
     setorder(re, "strand","chr","pos")
     object@TSSprocessedMatrix <- re
     assign(objName, object, envir = parent.frame())
-  }else{
-    message("\tNo filtering method is defined...")
   }
+    else
+    {
+      message("\tNo filtering method is defined...")
+    }
 })
 
 ################################################################################################
-.filterWithPoisson <- function(data, coverageDepth, genomeSize, pVal) {
-  # calculate lambda value (average)
+.filterWithPoisson <- function(data, coverageDepth, genomeSize, pVal) 
+{
+  # calculate lambda value (average number of reads per site on each strand of DNA)
   lambda <- coverageDepth / (genomeSize * 2)
   # get cutoff value
   cutoff <- qpois(pVal, lambda, lower.tail=FALSE, log.p=FALSE)
