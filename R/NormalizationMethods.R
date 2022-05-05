@@ -32,10 +32,10 @@ setMethod("normalizeTSS",signature(object = "TSSr"), function(object){
   library.size <- object@librarySizes
   # if library size is empty, get library size
   # calculate size of genome
-  genomeSize <- 0
-  for (chrom in seq(Genome)) {
-    genomeSize <- genomeSize + length(Genome[[chrom]])
-  }
+  # genomeSize <- 0
+  # for (chrom in seq(Genome)) {
+  #  genomeSize <- genomeSize + length(Genome[[chrom]])
+  # }
   ##normalize tss data
   tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i){
     temp <- tss.dt[,.SD, .SDcols = sampleLabelsMerged[i]]
