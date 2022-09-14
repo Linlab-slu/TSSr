@@ -70,7 +70,7 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
     ```
 
 ### Or you can install this packages by conda easily:
-
+#### build the conda environment manually
 ``` bash
 conda create -n tssr
 conda activate tssr
@@ -80,6 +80,12 @@ bioconductor-genomicranges bioconductor-genomicfeatures bioconductor-rtracklayer
 bioconductor-deseq2 bioconductor-bsgenome r-data.table r-stringr  r-devtools pandoc
 ```
 If you running into some errors when trying install all the packages in one line, please install the packages one by one manually.
+#### build the conda environment from .yml file
+You can also install the dependency packages from yml file
+```
+wget -c https://raw.githubusercontent.com/Linlab-slu/TSSr/master/tssr.yml
+conda create -n tssr -f tssr.yml
+```
 
 ## 3. Installing TSSr Package:
 
