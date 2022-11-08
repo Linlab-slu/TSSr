@@ -316,7 +316,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
   The “clusterTSS” function was designed to group neighboring TSSs into distinct TSS clusters (TCs), representing putative core promoters. It implements a TSS clustering algorithm based on peaking identification, namely “peakclu” (peak clustering) (Lu and Lin, 2021). Briefly, peakclu applies a sliding window approach (default window size = 100 bp with step size = 1) to scan TSS signals from the 5′ end of both strands of each chromosome. In each window, the TSS with the highest TPM value was identified as the peak. The surrounding TSSs are grouped with the peak into a TC. The clustering process of a TC terminates if a TSS is ≥ n bp (default n = 25) away from the nearest upstream TSS. In addition to setting a minimal allowed distance between peaks, TSSr offers another option to set maximal allowed extension distance between neighboring TSSs around peaks, which enables users to define the boundaries between neighboring core promoters. clusterTSS calculates inter-quantile width of a core promoter based on the cumulative distribution of TSS signals within the promoter. The positions of the 10th to 90th quantiles of TSS signals, which include at least 80% transcription initiation signals within a cluster, were defined as the 5’ and 3’ boundaries of the core promoter. The clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
 
         clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
-	           ,localThreshold = 0.02,clusterThreshold = 1
+	           ,localThreshold = 0.02, clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
 	           
         myTSSr@tagClusters
@@ -358,7 +358,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
   TSSr infers a set of consensus core promoters using the “consensusCluster” function to assign the same ID for TCs belong to the same core promoter, which allows subsequent comparative studies across samples. TCs from different samples are considered to belong to the same consensus core promoter if the distance of their dominant TSSs is smaller than a user-defined distance (default = 50 bp). Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
   
-        consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
+        consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE, numCores = NULL)
 	
   Similarly, the detailed information of consensus clusters can be exported to delimited text files with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion. 
 
