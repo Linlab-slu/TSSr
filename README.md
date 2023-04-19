@@ -67,6 +67,7 @@ Documentation is also available on GitHub Pages: https://github.com/Linlab-slu/T
     ```R
     install.packages("data.table")
     install.packages("stringr")
+    install.packages("devtools")
     ```
 
 ### Or you can install this packages by conda easily:
