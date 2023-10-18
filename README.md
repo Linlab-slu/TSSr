@@ -146,7 +146,7 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
 	              ,sampleLabelsMerged = c("control","treat")
 	              ,mergeIndex = c(1,1,2,2)
 	              ,refSource = refSource
-	              ,organismName = "saccharomyces cerevisiae")
+	              ,organismName = "Saccharomyces cerevisiae")
 	
 	To display the available slots in the created TSSr object by typing the TSSr object name. Most slots in the newly created TSSr object are empty at this point since no analysis has been conducted.:
 	
