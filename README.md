@@ -222,6 +222,8 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
 	
         getTSS(myTSSr)
 
+> **Note:**  If you ran STAR with the default alignment parameters (without using `--alignEndsType Extend5pOfRead1`), please ensure that you set `softclippingAllowed = TRUE` when running TSSr.
+
 TSS calling from bam files or retrieving TSS data from TSS table         
         
         myTSSr@TSSrawMatrix
