@@ -317,6 +317,14 @@ TSS calling from bam files or retrieving TSS data from TSS table
 * Clustering TSSs to infer core promoters with “clusterTSS” function. 
 
   The “clusterTSS” function was designed to group neighboring TSSs into distinct TSS clusters (TCs), representing putative core promoters. It implements a TSS clustering algorithm based on peaking identification, namely “peakclu” (peak clustering) (Lu and Lin, 2021). Briefly, peakclu applies a sliding window approach (default window size = 100 bp with step size = 1) to scan TSS signals from the 5′ end of both strands of each chromosome. In each window, the TSS with the highest TPM value was identified as the peak. The surrounding TSSs are grouped with the peak into a TC. The clustering process of a TC terminates if a TSS is ≥ n bp (default n = 25) away from the nearest upstream TSS. In addition to setting a minimal allowed distance between peaks, TSSr offers another option to set maximal allowed extension distance between neighboring TSSs around peaks, which enables users to define the boundaries between neighboring core promoters. clusterTSS calculates inter-quantile width of a core promoter based on the cumulative distribution of TSS signals within the promoter. The positions of the 10th to 90th quantiles of TSS signals, which include at least 80% transcription initiation signals within a cluster, were defined as the 5’ and 3’ boundaries of the core promoter. The clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
+> Note: The variable `localThreshold = 0.02` means that only signals with a minimum TSS intensity greater than 2% of the dominant TSS will be included in the cluster; otherwise, they will be filtered out. Meanwhile, `clusterThreshold = 1` means that a cluster will only be retained if the total TPM (Transcripts Per Million) value exceeds 1.
+
+
+
+
+
+
+
 
         clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02, clusterThreshold = 1
