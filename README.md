@@ -325,13 +325,15 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
 
 
-
+```
         clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02, clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
 	           
         myTSSr@tagClusters
-        
+```
+
+```
         # $control
         #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width
         #    1:       1  chrI   6530   6564      +         6548   9.312118          3.724847   6530   6562                  33
@@ -359,12 +361,15 @@ TSS calling from bam files or retrieving TSS data from TSS table
         # 3246:    3246 chrII 808655 808691      -       808679   1.753974          0.779544 808655 808691                  37
         # 3247:    3247 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13
         # 3248:    3248 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4
+```
 
-    The results of TSS clustering can be exported to delimited text file with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion.
-
-        exportClustersTable(myTSSr, data = "tagClusters")
-        exportClustersToBed(myTSSr, data = "tagClusters") 
-	
+    
+    
+- The results of TSS clustering can be exported to delimited text file with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion.
+```
+exportClustersTable(myTSSr, data = "tagClusters")
+exportClustersToBed(myTSSr, data = "tagClusters") 
+```
 * Aggregating consensus TSS clusters
 
   TSSr infers a set of consensus core promoters using the “consensusCluster” function to assign the same ID for TCs belong to the same core promoter, which allows subsequent comparative studies across samples. TCs from different samples are considered to belong to the same consensus core promoter if the distance of their dominant TSSs is smaller than a user-defined distance (default = 50 bp). Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
