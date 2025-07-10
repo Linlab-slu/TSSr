@@ -478,6 +478,7 @@ exportClustersToBed(myTSSr, data = "tagClusters")
         
 
         exportClustersTable(myTSSr, data = "assigned")
+  	exportClustersTable(myTSSr, data = "unassigned")
 
 * Analysis of enhancers
 
