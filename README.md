@@ -92,9 +92,9 @@ conda create -n tssr -f tssr.yml
 
 To install the TSSr package all the prerequisites above need to be installed.
 After confirming those packages are installed, you can install the development version directly from GitHub using devtools:
-
-        devtools::install_github("Linlab-slu/TSSr", build_vignettes = TRUE)
-
+```
+devtools::install_github("Linlab-slu/TSSr", build_vignettes = TRUE)
+```
 ## 4. Input data for TSSr
 
 ### Input data files
@@ -309,11 +309,11 @@ TSS calling from bam files or retrieving TSS data from TSS table
         # 163203: chrII 812101      - 0.310404 0.000000
 
   Simialr to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function or bedGraph/BigWig files with "exportTSStoBedgraph" fucntion. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or Genome Browser at YeasTSS.org for selected yeast species.
-
-        exportTSStable(myTSSr, data = "processed") 
-        exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph") 
-        exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
-  
+```
+exportTSStable(myTSSr, data = "processed") 
+exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph") 
+exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
+```
 * Clustering TSSs to infer core promoters with “clusterTSS” function. 
 
   The “clusterTSS” function was designed to group neighboring TSSs into distinct TSS clusters (TCs), representing putative core promoters. It implements a TSS clustering algorithm based on peaking identification, namely “peakclu” (peak clustering) (Lu and Lin, 2021). Briefly, peakclu applies a sliding window approach (default window size = 100 bp with step size = 1) to scan TSS signals from the 5′ end of both strands of each chromosome. In each window, the TSS with the highest TPM value was identified as the peak. The surrounding TSSs are grouped with the peak into a TC. The clustering process of a TC terminates if a TSS is ≥ n bp (default n = 25) away from the nearest upstream TSS. In addition to setting a minimal allowed distance between peaks, TSSr offers another option to set maximal allowed extension distance between neighboring TSSs around peaks, which enables users to define the boundaries between neighboring core promoters. clusterTSS calculates inter-quantile width of a core promoter based on the cumulative distribution of TSS signals within the promoter. The positions of the 10th to 90th quantiles of TSS signals, which include at least 80% transcription initiation signals within a cluster, were defined as the 5’ and 3’ boundaries of the core promoter. The clustering step might be slow especially when the number of TSSs is in millions. Using multicores is highly recommended.
@@ -377,10 +377,10 @@ exportClustersToBed(myTSSr, data = "tagClusters")
         consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE, numCores = NULL)
 	
   Similarly, the detailed information of consensus clusters can be exported to delimited text files with "exportClustersTable" function or bedGraph files with "exportClustersToBed" fucntion. 
-
-        exportClustersTable(myTSSr, data = "consensusClusters")
-        exportClustersToBed(myTSSr, data = "consensusClusters")	
-
+```
+exportClustersTable(myTSSr, data = "consensusClusters")
+exportClustersToBed(myTSSr, data = "consensusClusters")	
+```
 * Quantification of core promoter shape
 
   Core promoter shape reflects the distribution of TSS signals within a core promoter. TSSr provides three different options, inter-quantile width, promoter shape score (PSS) and shape index (SI), to quantify core promoter shape. Inter-quantile width refers to the distance between the locations of the 10th percentile to the 90th percentile TSS signals within a TSS cluster.  Thus, it measures the width of a core promoter, but lacks the information of distribution patterns of TSS signals within a core promoter. Inter-quantile width could be significantly affected by different clustering methods. plotInterQuantile function plots interquantile width of each sample.
@@ -476,10 +476,10 @@ exportClustersToBed(myTSSr, data = "tagClusters")
                   
   The results of TC annotation can be exported to delimited text files with "exportClustersTable" function. 
         
-
-        exportClustersTable(myTSSr, data = "assigned")
-  	exportClustersTable(myTSSr, data = "unassigned")
-
+```
+exportClustersTable(myTSSr, data = "assigned")
+exportClustersTable(myTSSr, data = "unassigned")
+```
 * Analysis of enhancers
 
   TSS data allow for the robust identification of enhancers by transcription of enhancer RNAs (eRNAs). Active enhancers produce bidirectional transcription of capped eRNAs, resulting in two diverging tag clusters by at most 400 bp. TSSr can identify this bidirectional cluster pairs and calculate a sample-set wide directionality score D for each locus (Andersson et al., 2014). D = (F-R)/(F+R), where F is the aggregated normalized tag counts in forward strandm and R is the aggregated normalized tag counts in reverse strand. Putative enhancers were then filtered with |D| < 0.8. 
