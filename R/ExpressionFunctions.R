@@ -31,7 +31,7 @@
     TAGtables[[sampleTwo]]<-yCounts
   }
   #save TAGtable as temp file
-  save(TAGtables, file="TAGtable_temp.RData")
+  save(TAGtables, file=file.path(tempdir(), "TAGtable_temp.RData"))
   xCounts <- xCounts[,-c(2:11)]
   yCounts <- yCounts[,-c(2:11)]
   ##tag counts by gene for sampleOne

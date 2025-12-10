@@ -16,7 +16,7 @@
 #' to core promoters, and transcriptional activity quantifications, as well as specialized
 #' downstream analyses including core promoter shape, cluster annotation, gene differential
 #' expression, core promoter shift. TSSr can take multiple formats of files as input, such
-#' as Binary Sequence Alignment Mao (BAM) files (single-ended or paired-ended), Browser
+#' as Binary Sequence Alignment Map (BAM) files (single-ended or paired-ended), Browser
 #' Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also generates
 #' various types of TSS or core promoter track files which can be visualized in the UCSC
 #' Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses

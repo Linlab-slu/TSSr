@@ -59,9 +59,9 @@ setMethod("deGene",signature(object = "TSSr"), function(object, comparePairs, pv
   object@DEtables <- D
   ##define variable as a NULL value
   TAGtables = NULL
-  load("TAGtable_temp.RData")
+  load(file.path(tempdir(), "TAGtable_temp.RData"))
   object@TAGtables <- TAGtables
-  file.remove("TAGtable_temp.RData")
+  file.remove(file.path(tempdir(), "TAGtable_temp.RData"))
   assign(objName, object, envir = parent.frame())
 
 })
