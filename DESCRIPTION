@@ -1,6 +1,6 @@
 Type: Package
 Package: TSSr
-Version: 0.99.7
+Version: 0.99.8
 Date: 2021-09-26
 Title: TSS sequencing data analysis
 Description: TSSr package provides a comprehensive workflow on TSS data starts from 
@@ -22,13 +22,6 @@ Authors@R: c(person("Zhaolian","Lu",email="luzhaolian@gmail.com",role=c("aut","c
              person("Tae-Hyuk (Ted)","Ahn",email="ted.ahn@slu.edu",role=c("aut","cph")),
              person("Zhenguo","Lin",email="zhenguo.lin@slu.edu",role=c("aut","cre","cph"),
                     comment = c(ORCID = "0000-0002-8400-9138")))
-Author: Zhaolian Lu [aut, com] (<https://orcid.org/0000-0001-5002-7007>),
-    Keenan Berry [aut, com],
-    Zhenbin Hu [aut, ctb],
-    Yu Zhan [aut, ctb],
-    Tae-Hyuk (Ted) Ahn [aut, cph],
-    Zhenguo Lin [aut, cre, cph] (<https://orcid.org/0000-0002-8400-9138>)
-Maintainer: Zhenguo Lin <zhenguo.lin@slu.edu>
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: FALSE
