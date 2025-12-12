@@ -1,6 +1,6 @@
 Type: Package
 Package: TSSr
-Version: 0.99.6
+Version: 1.0.1
 Date: 2021-09-26
 Title: TSS sequencing data analysis
 Description: TSSr package provides a comprehensive workflow on TSS data starts from 
