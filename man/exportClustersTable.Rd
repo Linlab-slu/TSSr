@@ -23,8 +23,8 @@ Export cluster tables to text files.
 }
 \examples{
 data(exampleTSSr)
-#exportClustersTable(exampleTSSr, data = "tagClusters")
-#exportClustersTable(exampleTSSr, data = "consensusClusters")
-#exportClustersTable(exampleTSSr, data = "assigned")
-#exportClustersTable(exampleTSSr, data = "unassigned")
+# exportClustersTable(exampleTSSr, data = "tagClusters")
+# exportClustersTable(exampleTSSr, data = "consensusClusters")
+# exportClustersTable(exampleTSSr, data = "assigned")
+# exportClustersTable(exampleTSSr, data = "unassigned")
 }

@@ -20,5 +20,5 @@ Export core promoter shift tables to text files.
 }
 \examples{
 data(exampleTSSr)
-#exportShiftTable(exampleTSSr)
+# exportShiftTable(exampleTSSr)
 }

@@ -6,7 +6,7 @@
 \title{Precisely identify TSSs from bam files, paired end bam files, bed files,
 BigWig files, tss files, or tss tables.}
 \usage{
-getTSS(object, sequencingQualityThreshold = 10, 
+getTSS(object, sequencingQualityThreshold = 10,
 mappingQualityThreshold = 20, softclippingAllowed = FALSE)
 
 \S4method{getTSS}{TSSr}(
@@ -40,6 +40,6 @@ the supported input file formats.
 \examples{
 \donttest{
 data(exampleTSSr)
-#getTSS(exampleTSSr)
+# getTSS(exampleTSSr)
 }
 }

@@ -24,6 +24,6 @@ creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
 data(exampleTSSr)
-#plotCorrelation(exampleTSSr, samples = "all")
+# plotCorrelation(exampleTSSr, samples = "all")
 
 }

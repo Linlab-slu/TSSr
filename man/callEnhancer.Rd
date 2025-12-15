@@ -12,7 +12,7 @@ callEnhancer(object, flanking = 400, dis2gene = 2000)
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{flanking}{The flanking region range where bidirectional clusters 
+\item{flanking}{The flanking region range where bidirectional clusters
 composing a enhancer candidate. Default is 400.}
 
 \item{dis2gene}{The minimum distance to the main annotated core promoter of genes.
@@ -22,12 +22,12 @@ Default is 2000.}
 Large List of elements - one element for each sample
 }
 \description{
-Calculates enhancer candidates, which are characterized by 
+Calculates enhancer candidates, which are characterized by
 bidirectional clusters as described in Andersson et al. 2014.
 }
 \examples{
 \donttest{
 data(exampleTSSr)
-#callEnhancer(exampleTSSr,flanking = 400,dis2gene=2000)
+# callEnhancer(exampleTSSr,flanking = 400,dis2gene=2000)
 }
 }

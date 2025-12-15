@@ -2,6 +2,7 @@
 % Please edit documentation in R/TSSr.R
 \docType{package}
 \name{TSSr-package}
+\alias{TSSr}
 \alias{TSSr-package}
 \title{TSSr: A package for transcription start site sequencing data analyses.}
 \description{
@@ -27,4 +28,30 @@ Extension Data (bed) files, BigWig files, ctss files or tss tables. TSSr also ge
 various types of TSS or core promoter track files which can be visualized in the UCSC
 Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses
 result tables and plots. Multiple cores are supported on Linux or Mac platforms.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/Linlab-slu/TSSr}
+  \item Report bugs at \url{https://github.com/Linlab-slu/TSSr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Zhenguo Lin \email{zhenguo.lin@slu.edu} (\href{https://orcid.org/0000-0002-8400-9138}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item Zhaolian Lu \email{luzhaolian@gmail.com} (\href{https://orcid.org/0000-0001-5002-7007}{ORCID}) [compiler]
+  \item Keenan Berry \email{keenan.berry@slu.edu} [compiler]
+  \item Zhenbin Hu \email{zhenbin.hu@slu.edu} [contributor]
+  \item Yu Zhan \email{yu.zhan@slu.edu} [contributor]
+  \item Tae-Hyuk (Ted) Ahn \email{ted.ahn@slu.edu} [copyright holder]
+}
+
+Other contributors:
+\itemize{
+  \item National Science Foundation (NSF 1951332) [funder]
+}
+
 }

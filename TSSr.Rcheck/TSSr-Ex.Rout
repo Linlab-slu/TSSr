@@ -1,0 +1,489 @@
+
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-conda-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "TSSr"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('TSSr')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("annotateCluster")
+> ### * annotateCluster
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: annotateCluster
+> ### Title: Annotate clusters with GFF annotation file.
+> ### Aliases: annotateCluster annotateCluster,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> annotateCluster(exampleTSSr,clusters = "consensusClusters", filterCluster = TRUE
++ , filterClusterThreshold = 0.02, annotationType = "genes", upstream=1000
++ , upstreamOverlap = 500, downstream = 0)
+
+Annotating...
+Loading required namespace: BSgenome.Scerevisiae.UCSC.sacCer3
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("callEnhancer")
+> ### * callEnhancer
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: callEnhancer
+> ### Title: Identification of enhancers
+> ### Aliases: callEnhancer callEnhancer,TSSr-method
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("clusterTSS")
+> ### * clusterTSS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: clusterTSS
+> ### Title: Cluster TSSs into tag clusters
+> ### Aliases: clusterTSS clusterTSS,TSSr-method
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("consensusCluster")
+> ### * consensusCluster
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: consensusCluster
+> ### Title: Make consensus clusters across multiple samples.
+> ### Aliases: consensusCluster consensusCluster,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> consensusCluster(exampleTSSr,useMultiCore=FALSE)
+
+Creating consensus clusters...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("deGene")
+> ### * deGene
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: deGene
+> ### Title: Analysis of gene differential expression.
+> ### Aliases: deGene deGene,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> deGene(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+
+Calculating gene differential expression...
+converting counts to integer mode
+estimating size factors
+estimating dispersions
+gene-wise dispersion estimates
+mean-dispersion relationship
+final dispersion estimates
+fitting model and testing
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportClustersTable")
+> ### * exportClustersTable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportClustersTable
+> ### Title: Export cluster tables
+> ### Aliases: exportClustersTable exportClustersTable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportClustersTable(exampleTSSr, data = "tagClusters")
+> #exportClustersTable(exampleTSSr, data = "consensusClusters")
+> #exportClustersTable(exampleTSSr, data = "assigned")
+> #exportClustersTable(exampleTSSr, data = "unassigned")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportClustersToBed")
+> ### * exportClustersToBed
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportClustersToBed
+> ### Title: Creating bed files of clusters
+> ### Aliases: exportClustersToBed exportClustersToBed,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
+> #exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportDETable")
+> ### * exportDETable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportDETable
+> ### Title: Export gene differential expression results table
+> ### Aliases: exportDETable exportDETable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportDETable(exampleTSSr, data="sig")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportEnhancerTable")
+> ### * exportEnhancerTable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportEnhancerTable
+> ### Title: Export enhancer tables
+> ### Aliases: exportEnhancerTable exportEnhancerTable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportEnhancerTable(exampleTSSr)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportShapeTable")
+> ### * exportShapeTable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportShapeTable
+> ### Title: Export core promoter shape score tables
+> ### Aliases: exportShapeTable exportShapeTable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportShapeTable(exampleTSSr)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportShiftTable")
+> ### * exportShiftTable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportShiftTable
+> ### Title: Export core promoter shift table
+> ### Aliases: exportShiftTable exportShiftTable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportShiftTable(exampleTSSr)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportTSStable")
+> ### * exportTSStable
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportTSStable
+> ### Title: Export TSS tables
+> ### Aliases: exportTSStable exportTSStable,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportTSStable(exampleTSSr)
+> #exportTSStable(exampleTSSr, data="raw")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportTSStoBedgraph")
+> ### * exportTSStoBedgraph
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportTSStoBedgraph
+> ### Title: Creating Bedgraph/BigWig tracks of TSSs
+> ### Aliases: exportTSStoBedgraph exportTSStoBedgraph,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("filterTSS")
+> ### * filterTSS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: filterTSS
+> ### Title: Filter raw TSS counts or normalized TSS
+> ### Aliases: filterTSS filterTSS,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
+
+Filtering data with TPM method...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("getTSS")
+> ### * getTSS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getTSS
+> ### Title: Precisely identify TSSs from bam files, paired end bam files,
+> ###   bed files, BigWig files, tss files, or tss tables.
+> ### Aliases: getTSS getTSS,TSSr-method
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mergeSamples")
+> ### * mergeSamples
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mergeSamples
+> ### Title: Merge TSS samples
+> ### Aliases: mergeSamples mergeSamples,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> mergeSamples(exampleTSSr, mergeIndex = c(1,1,2,2))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("normalizeTSS")
+> ### * normalizeTSS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: normalizeTSS
+> ### Title: Normalize raw TSS counts
+> ### Aliases: normalizeTSS normalizeTSS,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> normalizeTSS(exampleTSSr)
+
+Normalizing TSS matrix...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotCorrelation")
+> ### * plotCorrelation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotCorrelation
+> ### Title: Pairwise scatter plots and correlations of TSS signal
+> ### Aliases: plotCorrelation plotCorrelation,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotCorrelation(exampleTSSr, samples = "all")
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotDE")
+> ### * plotDE
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotDE
+> ### Title: Plot gene differential expressions
+> ### Aliases: plotDE plotDE,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotDE(exampleTSSr, withGeneName = "TRUE")
+> #plotDE(exampleTSSr, withGeneName = "FALSE")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotInterQuantile")
+> ### * plotInterQuantile
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotInterQuantile
+> ### Title: Plot core promoter interquantile width
+> ### Aliases: plotInterQuantile plotInterQuantile,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotInterQuantile(exampleTSSr, samples = "all")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotShape")
+> ### * plotShape
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotShape
+> ### Title: Plot core promoter shape
+> ### Aliases: plotShape plotShape,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotShape(exampleTSSr)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotTSS")
+> ### * plotTSS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotTSS
+> ### Title: Plot TSSs and clusters
+> ### Aliases: plotTSS plotTSS,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
+> #,up.dis =500, down.dis = 500)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotTssPCA")
+> ### * plotTssPCA
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotTssPCA
+> ### Title: Plotting principle component analysis (PCA)
+> ### Aliases: plotTssPCA plotTssPCA,TSSr-method
+> 
+> ### ** Examples
+> 
+> data(exampleTSSr)
+> #plotTssPCA(exampleTSSr)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("shapeCluster")
+> ### * shapeCluster
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: shapeCluster
+> ### Title: Analysis of core promoter shape
+> ### Aliases: shapeCluster shapeCluster,TSSr-method
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("shiftPromoter")
+> ### * shiftPromoter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: shiftPromoter
+> ### Title: Select genes which have core promoter shift across different
+> ###   experiments.
+> ### Aliases: shiftPromoter shiftPromoter,TSSr-method
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  102.247 1.821 103.179 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

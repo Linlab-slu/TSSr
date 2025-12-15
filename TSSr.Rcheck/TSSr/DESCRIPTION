@@ -1,0 +1,67 @@
+Type: Package
+Package: TSSr
+Version: 0.99.8
+Date: 2021-09-26
+Title: TSS sequencing data analysis
+Description: TSSr package provides a comprehensive workflow on TSS data starts from 
+    identification of accurate TSS locations, clustering TSSs within small genomic 
+    regions corresponding to core promoters, and transcriptional activity quantifications, 
+    as well as specialized downstream analyses including core promoter shape, cluster 
+    annotation, gene differential expression, core promoter shift. TSSr can take 
+    multiple formats of files as input, such as Binary Sequence Alignment Map (BAM) 
+    files (single-ended or paired-ended), Browser Extension Data (bed) files, BigWig 
+    files, ctss files or tss tables. TSSr also generates various types of TSS or core 
+    promoter track files which can be visualized in the UCSC Genome Browser or Integrative 
+    Genomics Viewer (IGV). TSSr also exports downstream analyses result tables and plots. 
+    Multiple cores are supported on Linux or Mac platforms.
+Authors@R: c(person("Zhaolian", "Lu", email = "luzhaolian@gmail.com",
+                    role = c("aut", "com"),
+                    comment = c(ORCID = "0000-0001-5002-7007")),
+             person("Keenan", "Berry", email = "keenan.berry@slu.edu",
+                    role = c("aut", "com")),
+             person("Zhenbin", "Hu", email = "zhenbin.hu@slu.edu",
+                    role = c("aut", "ctb")),
+             person("Yu", "Zhan", email = "yu.zhan@slu.edu",
+                    role = c("aut", "ctb")),
+             person("Tae-Hyuk (Ted)", "Ahn", email = "ted.ahn@slu.edu",
+                    role = c("aut", "cph")),
+             person("Zhenguo", "Lin", email = "zhenguo.lin@slu.edu",
+                    role = c("aut", "cre", "cph"),
+                    comment = c(ORCID = "0000-0002-8400-9138")),
+             person("National Science Foundation", role = "fnd",
+                    comment = "NSF 1951332"))
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: FALSE
+Depends: R (>= 4.1.0)
+Imports: stringr(>= 1.4.0), rtracklayer(>= 1.50.0),ggplot2(>= 3.3.5),
+        GenomicFeatures(>= 1.42.3), Gviz(>= 1.34.1), DESeq2(>= 1.30.1),
+        calibrate(>= 1.7.7), ggfortify(>= 0.4.12), IRanges(>= 2.24.1),
+        GenomicRanges(>= 1.42.0), Rsamtools(>= 2.6.0),
+        GenomicAlignments(>= 1.26.0), GenomeInfoDb(>= 1.26.7),dplyr(>=
+        1.0.7), BiocGenerics(>= 0.36.1), data.table(>= 1.14.0),
+        methods(>= 4.0.3), grDevices(>= 4.0.3), graphics(>= 4.0.3),
+        stats(>= 4.0.3), utils(>= 4.0.3),parallel(>= 4.0.3), rmarkdown
+Suggests: knitr, pkgdown, testthat (>= 3.0.0),
+        BSgenome.Scerevisiae.UCSC.sacCer3
+Config/testthat/edition: 3
+biocViews: Software, Transcription, Coverage, GeneExpression,
+        GeneRegulation, PeakDetection, DataImport, DataRepresentation,
+        Transcriptomics, Sequencing, Annotation, GenomeBrowsers,
+        Normalization, Preprocessing,
+        Visualization,DifferentialExpression, Alignment,Clustering
+URL: https://github.com/Linlab-slu/TSSr
+BugReports: https://github.com/Linlab-slu/TSSr/issues
+VignetteBuilder: knitr
+RoxygenNote: 7.1.2
+NeedsCompilation: no
+Packaged: 2025-12-15 20:26:16 UTC; junhaochen
+Author: Zhaolian Lu [aut, com] (<https://orcid.org/0000-0001-5002-7007>),
+  Keenan Berry [aut, com],
+  Zhenbin Hu [aut, ctb],
+  Yu Zhan [aut, ctb],
+  Tae-Hyuk (Ted) Ahn [aut, cph],
+  Zhenguo Lin [aut, cre, cph] (<https://orcid.org/0000-0002-8400-9138>),
+  National Science Foundation [fnd] (NSF 1951332)
+Maintainer: Zhenguo Lin <zhenguo.lin@slu.edu>
+Built: R 4.2.1; ; 2025-12-15 20:29:14 UTC; unix

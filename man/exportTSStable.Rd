@@ -24,6 +24,6 @@ Exports TSS tables to text file.
 }
 \examples{
 data(exampleTSSr)
-#exportTSStable(exampleTSSr)
-#exportTSStable(exampleTSSr, data="raw")
+# exportTSStable(exampleTSSr)
+# exportTSStable(exampleTSSr, data="raw")
 }

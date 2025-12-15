@@ -1,0 +1,36 @@
+TSSr-class              TSSr: A package for transcription start site
+                        sequencing data analyses.
+TSSr-package            TSSr: A package for transcription start site
+                        sequencing data analyses.
+annotateCluster         Annotate clusters with GFF annotation file.
+callEnhancer            Identification of enhancers
+clusterTSS              Cluster TSSs into tag clusters
+consensusCluster        Make consensus clusters across multiple
+                        samples.
+deGene                  Analysis of gene differential expression.
+exampleTSSr             TSSr example data
+exportClustersTable     Export cluster tables
+exportClustersToBed     Creating bed files of clusters
+exportDETable           Export gene differential expression results
+                        table
+exportEnhancerTable     Export enhancer tables
+exportShapeTable        Export core promoter shape score tables
+exportShiftTable        Export core promoter shift table
+exportTSStable          Export TSS tables
+exportTSStoBedgraph     Creating Bedgraph/BigWig tracks of TSSs
+filterTSS               Filter raw TSS counts or normalized TSS
+getTSS                  Precisely identify TSSs from bam files, paired
+                        end bam files, bed files, BigWig files, tss
+                        files, or tss tables.
+mergeSamples            Merge TSS samples
+normalizeTSS            Normalize raw TSS counts
+plotCorrelation         Pairwise scatter plots and correlations of TSS
+                        signal
+plotDE                  Plot gene differential expressions
+plotInterQuantile       Plot core promoter interquantile width
+plotShape               Plot core promoter shape
+plotTSS                 Plot TSSs and clusters
+plotTssPCA              Plotting principle component analysis (PCA)
+shapeCluster            Analysis of core promoter shape
+shiftPromoter           Select genes which have core promoter shift
+                        across different experiments.

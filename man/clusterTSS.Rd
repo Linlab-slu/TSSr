@@ -52,8 +52,10 @@ The minimum distance of two neighboring peaks can be specified.
 \examples{
 \donttest{
 data(exampleTSSr)
-clusterTSS(exampleTSSr, method = "peakclu",clusterThreshold = 1,
-useMultiCore=FALSE, numCores = NULL)
+clusterTSS(exampleTSSr,
+    method = "peakclu", clusterThreshold = 1,
+    useMultiCore = FALSE, numCores = NULL
+)
 }
 
 }

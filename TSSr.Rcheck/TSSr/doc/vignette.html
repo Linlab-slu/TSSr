@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan, Tae-Hyuk Ahn, Zhenguo Lin" />
+
+<meta name="date" content="2025-12-15" />
+
+<title>TSSr Vignette</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">TSSr Vignette</h1>
+<h4 class="author">Zhaolian Lu, Keenan Berry, Zhenbin Hu, Yu Zhan,
+Tae-Hyuk Ahn, Zhenguo Lin</h4>
+<h4 class="date">2025-12-15</h4>
+
+
+
+<p>Alternatively, you can install the development version directly from
+GitHub using <code>devtools</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Linlab-slu/TSSr&quot;</span>)</span></code></pre></div>
+<p>And load <code>TSSr</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(TSSr)</span></code></pre></div>
+<div id="citation" class="section level1">
+<h1>Citation</h1>
+<p>If you use TSSr, please cite the following article:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">&quot;TSSr&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; To cite package &#39;TSSr&#39; in publications use:</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;   Lu Z, Berry K, Hu Z, Zhan Y, Ahn T, Lin Z (2021). &quot;TSSr: an R package</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;   for comprehensive analyses of TSS sequencing data.&quot; _NAR Genomics and</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   Bioinformatics_, *3*(4), lqab108. doi:10.1093/nargab/lqab108</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   &lt;https://doi.org/10.1093/nargab/lqab108&gt;.</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;   @Article{,</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;     title = {TSSr: an R package for comprehensive analyses of TSS sequencing data},</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;     author = {Zhaolian Lu and Keenan Berry and Zhenbin Hu and Yu Zhan and Tae-Hyuk Ahn and Zhenguo Lin},</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;     journal = {NAR Genomics and Bioinformatics},</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;     year = {2021},</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;     volume = {3},</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;     number = {4},</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;     pages = {lqab108},</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;     doi = {10.1093/nargab/lqab108},</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;   }</span></span></code></pre></div>
+</div>
+<div id="getting-help" class="section level1">
+<h1>Getting help</h1>
+<p>For general questions about the usage of TSSr, use the <a href="https://support.bioconductor.org">official Bioconductor support
+forum</a> and tag your question “TSSr”. We strive to answer questions as
+quickly as possible.</p>
+<p>For technical questions, bug reports and suggestions for new
+features, we refer to the <a href="https://github.com/Linlab-slu/TSSr/issues">TSSr github
+page</a>.</p>
+</div>
+<div id="quick-start" class="section level1">
+<h1>Quick start</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Load the example data</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;exampleTSSr&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>myTSSr <span class="ot">&lt;-</span> exampleTSSr</span></code></pre></div>
+<p>Or create a new TSSr object</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Provide bam files</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>inputFiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S01.sorted.bam&quot;</span>, <span class="st">&quot;S02.sorted.bam&quot;</span>, <span class="st">&quot;S03.sorted.bam&quot;</span>, <span class="st">&quot;S04.sorted.bam&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>myTSSr <span class="ot">&lt;-</span> <span class="fu">new</span>(<span class="st">&quot;TSSr&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">genomeName =</span> <span class="st">&quot;BSgenome.Scerevisiae.UCSC.sacCer3&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">inputFiles =</span> inputFiles,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">inputFilesType =</span> <span class="st">&quot;bam&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="at">sampleLabels =</span> <span class="fu">c</span>(<span class="st">&quot;SL01&quot;</span>, <span class="st">&quot;SL02&quot;</span>, <span class="st">&quot;SL03&quot;</span>, <span class="st">&quot;SL04&quot;</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">sampleLabelsMerged =</span> <span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;treat&quot;</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="at">mergeIndex =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="at">refSource =</span> <span class="st">&quot;saccharomyces_cerevisiae.SGD.gff&quot;</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="at">organismName =</span> <span class="st">&quot;saccharomyces cerevisiae&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>myTSSr</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Get TSS</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">getTSS</span>(myTSSr)</span></code></pre></div>
+<p>TSS data processing</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Merge replicates</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">mergeSamples</span>(myTSSr)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># Normalization</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">normalizeTSS</span>(myTSSr)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Normalizing TSS matrix...</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Loading required namespace: BSgenome.Scerevisiae.UCSC.sacCer3</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># TSS filtering</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">filterTSS</span>(myTSSr, <span class="at">method =</span> <span class="st">&quot;TPM&quot;</span>, <span class="at">tpmLow =</span> <span class="fl">0.1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; Filtering data with TPM method...</span></span></code></pre></div>
+<p>TSS clustering</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># TSS clustering</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">clusterTSS</span>(myTSSr,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;peakclu&quot;</span>, <span class="at">peakDistance =</span> <span class="dv">100</span>, <span class="at">extensionDistance =</span> <span class="dv">30</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="at">localThreshold =</span> <span class="fl">0.02</span>, <span class="at">clusterThreshold =</span> <span class="dv">1</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="at">useMultiCore =</span> <span class="cn">FALSE</span>, <span class="at">numCores =</span> <span class="cn">NULL</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co"># Aggregating consensus clusters</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">consensusCluster</span>(myTSSr, <span class="at">dis =</span> <span class="dv">50</span>, <span class="at">useMultiCore =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Core promoter shape</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Calculating core promoter shape score</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">shapeCluster</span>(myTSSr,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="at">clusters =</span> <span class="st">&quot;consensusClusters&quot;</span>, <span class="at">method =</span> <span class="st">&quot;PSS&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="at">useMultiCore =</span> <span class="cn">FALSE</span>, <span class="at">numCores =</span> <span class="cn">NULL</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>Annotation core promoters</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Assign clusters to the annotated features</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">annotateCluster</span>(myTSSr,<span class="at">clusters =</span> <span class="st">&quot;consensusClusters&quot;</span>,<span class="at">filterCluster =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>              <span class="at">filterClusterThreshold =</span> <span class="fl">0.02</span>, <span class="at">annotationType =</span> <span class="st">&quot;genes&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>              ,<span class="at">upstream=</span><span class="dv">1000</span>, <span class="at">upstreamOverlap =</span> <span class="dv">500</span>, <span class="at">downstream =</span> <span class="dv">0</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; Annotating...</span></span></code></pre></div>
+<p>Differential expression analysis</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Assign clusters to the annotated features</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">deGene</span>(myTSSr,<span class="at">comparePairs=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>,<span class="st">&quot;treat&quot;</span>)), </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>       <span class="at">pval =</span> <span class="fl">0.01</span>,<span class="at">useMultiCore=</span><span class="cn">FALSE</span>, <span class="at">numCores=</span><span class="cn">NULL</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; Calculating gene differential expression...</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; converting counts to integer mode</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; estimating size factors</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; estimating dispersions</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; gene-wise dispersion estimates</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; mean-dispersion relationship</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; final dispersion estimates</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; fitting model and testing</span></span></code></pre></div>
+<p>Core promoter shifts</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Calcuate core promoter shifts</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">shiftPromoter</span>(myTSSr,<span class="at">comparePairs=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>,<span class="st">&quot;treat&quot;</span>)), <span class="at">pval =</span> <span class="fl">0.01</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; Calculating core promoter shifts...</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-133"><a href="#cb13-133" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-134"><a href="#cb13-134" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-135"><a href="#cb13-135" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-136"><a href="#cb13-136" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-137"><a href="#cb13-137" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-138"><a href="#cb13-138" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-139"><a href="#cb13-139" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-140"><a href="#cb13-140" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-141"><a href="#cb13-141" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-142"><a href="#cb13-142" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-143"><a href="#cb13-143" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-144"><a href="#cb13-144" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-145"><a href="#cb13-145" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-146"><a href="#cb13-146" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-147"><a href="#cb13-147" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-148"><a href="#cb13-148" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-149"><a href="#cb13-149" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-150"><a href="#cb13-150" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-151"><a href="#cb13-151" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-152"><a href="#cb13-152" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-153"><a href="#cb13-153" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-154"><a href="#cb13-154" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-155"><a href="#cb13-155" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-156"><a href="#cb13-156" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-157"><a href="#cb13-157" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-158"><a href="#cb13-158" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-159"><a href="#cb13-159" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-160"><a href="#cb13-160" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-161"><a href="#cb13-161" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-162"><a href="#cb13-162" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-163"><a href="#cb13-163" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-164"><a href="#cb13-164" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-165"><a href="#cb13-165" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-166"><a href="#cb13-166" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-167"><a href="#cb13-167" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-168"><a href="#cb13-168" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-169"><a href="#cb13-169" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-170"><a href="#cb13-170" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-171"><a href="#cb13-171" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-172"><a href="#cb13-172" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-173"><a href="#cb13-173" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-174"><a href="#cb13-174" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-175"><a href="#cb13-175" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-176"><a href="#cb13-176" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-177"><a href="#cb13-177" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-178"><a href="#cb13-178" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-179"><a href="#cb13-179" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-180"><a href="#cb13-180" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-181"><a href="#cb13-181" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-182"><a href="#cb13-182" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-183"><a href="#cb13-183" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-184"><a href="#cb13-184" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-185"><a href="#cb13-185" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-186"><a href="#cb13-186" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-187"><a href="#cb13-187" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-188"><a href="#cb13-188" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-189"><a href="#cb13-189" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-190"><a href="#cb13-190" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-191"><a href="#cb13-191" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-192"><a href="#cb13-192" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-193"><a href="#cb13-193" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-194"><a href="#cb13-194" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-195"><a href="#cb13-195" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-196"><a href="#cb13-196" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-197"><a href="#cb13-197" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-198"><a href="#cb13-198" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-199"><a href="#cb13-199" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-200"><a href="#cb13-200" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-201"><a href="#cb13-201" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-202"><a href="#cb13-202" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-203"><a href="#cb13-203" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-204"><a href="#cb13-204" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-205"><a href="#cb13-205" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-206"><a href="#cb13-206" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-207"><a href="#cb13-207" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-208"><a href="#cb13-208" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-209"><a href="#cb13-209" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-210"><a href="#cb13-210" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-211"><a href="#cb13-211" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-212"><a href="#cb13-212" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-213"><a href="#cb13-213" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-214"><a href="#cb13-214" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-215"><a href="#cb13-215" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-216"><a href="#cb13-216" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-217"><a href="#cb13-217" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-218"><a href="#cb13-218" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-219"><a href="#cb13-219" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-220"><a href="#cb13-220" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-221"><a href="#cb13-221" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-222"><a href="#cb13-222" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-223"><a href="#cb13-223" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-224"><a href="#cb13-224" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-225"><a href="#cb13-225" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-226"><a href="#cb13-226" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-227"><a href="#cb13-227" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-228"><a href="#cb13-228" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-229"><a href="#cb13-229" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-230"><a href="#cb13-230" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-231"><a href="#cb13-231" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-232"><a href="#cb13-232" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-233"><a href="#cb13-233" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-234"><a href="#cb13-234" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-235"><a href="#cb13-235" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-236"><a href="#cb13-236" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-237"><a href="#cb13-237" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-238"><a href="#cb13-238" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-239"><a href="#cb13-239" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-240"><a href="#cb13-240" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-241"><a href="#cb13-241" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-242"><a href="#cb13-242" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-243"><a href="#cb13-243" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-244"><a href="#cb13-244" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-245"><a href="#cb13-245" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-246"><a href="#cb13-246" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-247"><a href="#cb13-247" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-248"><a href="#cb13-248" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-249"><a href="#cb13-249" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-250"><a href="#cb13-250" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-251"><a href="#cb13-251" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-252"><a href="#cb13-252" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-253"><a href="#cb13-253" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-254"><a href="#cb13-254" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-255"><a href="#cb13-255" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-256"><a href="#cb13-256" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-257"><a href="#cb13-257" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-258"><a href="#cb13-258" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-259"><a href="#cb13-259" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-260"><a href="#cb13-260" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-261"><a href="#cb13-261" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-262"><a href="#cb13-262" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-263"><a href="#cb13-263" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-264"><a href="#cb13-264" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-265"><a href="#cb13-265" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-266"><a href="#cb13-266" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-267"><a href="#cb13-267" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-268"><a href="#cb13-268" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-269"><a href="#cb13-269" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-270"><a href="#cb13-270" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-271"><a href="#cb13-271" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-272"><a href="#cb13-272" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-273"><a href="#cb13-273" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-274"><a href="#cb13-274" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-275"><a href="#cb13-275" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-276"><a href="#cb13-276" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-277"><a href="#cb13-277" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-278"><a href="#cb13-278" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-279"><a href="#cb13-279" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-280"><a href="#cb13-280" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-281"><a href="#cb13-281" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-282"><a href="#cb13-282" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-283"><a href="#cb13-283" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-284"><a href="#cb13-284" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-285"><a href="#cb13-285" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-286"><a href="#cb13-286" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-287"><a href="#cb13-287" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-288"><a href="#cb13-288" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-289"><a href="#cb13-289" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-290"><a href="#cb13-290" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-291"><a href="#cb13-291" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-292"><a href="#cb13-292" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-293"><a href="#cb13-293" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-294"><a href="#cb13-294" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-295"><a href="#cb13-295" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-296"><a href="#cb13-296" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-297"><a href="#cb13-297" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-298"><a href="#cb13-298" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-299"><a href="#cb13-299" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-300"><a href="#cb13-300" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-301"><a href="#cb13-301" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-302"><a href="#cb13-302" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-303"><a href="#cb13-303" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-304"><a href="#cb13-304" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-305"><a href="#cb13-305" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-306"><a href="#cb13-306" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-307"><a href="#cb13-307" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-308"><a href="#cb13-308" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-309"><a href="#cb13-309" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-310"><a href="#cb13-310" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-311"><a href="#cb13-311" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-312"><a href="#cb13-312" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-313"><a href="#cb13-313" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-314"><a href="#cb13-314" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-315"><a href="#cb13-315" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-316"><a href="#cb13-316" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-317"><a href="#cb13-317" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-318"><a href="#cb13-318" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-319"><a href="#cb13-319" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-320"><a href="#cb13-320" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-321"><a href="#cb13-321" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-322"><a href="#cb13-322" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-323"><a href="#cb13-323" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-324"><a href="#cb13-324" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-325"><a href="#cb13-325" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-326"><a href="#cb13-326" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-327"><a href="#cb13-327" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-328"><a href="#cb13-328" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-329"><a href="#cb13-329" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-330"><a href="#cb13-330" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-331"><a href="#cb13-331" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-332"><a href="#cb13-332" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span>
+<span id="cb13-333"><a href="#cb13-333" tabindex="-1"></a><span class="co">#&gt; Warning in chisq.test(data[, c(&quot;tags.x&quot;, &quot;tags.y&quot;)]): Chi-squared approximation</span></span>
+<span id="cb13-334"><a href="#cb13-334" tabindex="-1"></a><span class="co">#&gt; may be incorrect</span></span></code></pre></div>
+<p>Session info</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; R version 4.2.1 (2022-06-23)</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; Platform: x86_64-conda-linux-gnu (64-bit)</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; Running under: Ubuntu 22.04.5 LTS</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; Matrix products: default</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; BLAS/LAPACK: /home/junhaochen/miniforge3/envs/daily/lib/libopenblasp-r0.3.27.so</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; locale:</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=C              </span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; attached base packages:</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt; other attached packages:</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; [1] TSSr_0.99.8</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt;   [1] colorspace_2.1-0                       </span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt;   [2] deldir_2.0-4                           </span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt;   [3] rjson_0.2.21                           </span></span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a><span class="co">#&gt;   [4] biovizBase_1.46.0                      </span></span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co">#&gt;   [5] htmlTable_2.4.3                        </span></span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a><span class="co">#&gt;   [6] XVector_0.38.0                         </span></span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt;   [7] GenomicRanges_1.50.0                   </span></span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt;   [8] base64enc_0.1-3                        </span></span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="co">#&gt;   [9] dichromat_2.0-0.1                      </span></span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a><span class="co">#&gt;  [10] rstudioapi_0.16.0                      </span></span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a><span class="co">#&gt;  [11] farver_2.1.2                           </span></span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a><span class="co">#&gt;  [12] bit64_4.0.5                            </span></span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="co">#&gt;  [13] AnnotationDbi_1.60.0                   </span></span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt;  [14] fansi_1.0.6                            </span></span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt;  [15] xml2_1.3.3                             </span></span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt;  [16] BSgenome.Scerevisiae.UCSC.sacCer3_1.4.0</span></span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt;  [17] codetools_0.2-20                       </span></span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt;  [18] splines_4.2.1                          </span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt;  [19] cachem_1.1.0                           </span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt;  [20] geneplotter_1.76.0                     </span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt;  [21] knitr_1.47                             </span></span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a><span class="co">#&gt;  [22] Formula_1.2-5                          </span></span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co">#&gt;  [23] jsonlite_1.8.8                         </span></span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="co">#&gt;  [24] Rsamtools_2.14.0                       </span></span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt;  [25] annotate_1.76.0                        </span></span>
+<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a><span class="co">#&gt;  [26] cluster_2.1.6                          </span></span>
+<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a><span class="co">#&gt;  [27] dbplyr_2.5.0                           </span></span>
+<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a><span class="co">#&gt;  [28] png_0.1-8                              </span></span>
+<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a><span class="co">#&gt;  [29] compiler_4.2.1                         </span></span>
+<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a><span class="co">#&gt;  [30] httr_1.4.7                             </span></span>
+<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="co">#&gt;  [31] backports_1.5.0                        </span></span>
+<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a><span class="co">#&gt;  [32] lazyeval_0.2.2                         </span></span>
+<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a><span class="co">#&gt;  [33] Matrix_1.6-5                           </span></span>
+<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a><span class="co">#&gt;  [34] fastmap_1.2.0                          </span></span>
+<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a><span class="co">#&gt;  [35] cli_3.6.3                              </span></span>
+<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a><span class="co">#&gt;  [36] htmltools_0.5.8.1                      </span></span>
+<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a><span class="co">#&gt;  [37] prettyunits_1.2.0                      </span></span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt;  [38] tools_4.2.1                            </span></span>
+<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="co">#&gt;  [39] gtable_0.3.6                           </span></span>
+<span id="cb14-63"><a href="#cb14-63" tabindex="-1"></a><span class="co">#&gt;  [40] glue_1.7.0                             </span></span>
+<span id="cb14-64"><a href="#cb14-64" tabindex="-1"></a><span class="co">#&gt;  [41] GenomeInfoDbData_1.2.9                 </span></span>
+<span id="cb14-65"><a href="#cb14-65" tabindex="-1"></a><span class="co">#&gt;  [42] dplyr_1.1.4                            </span></span>
+<span id="cb14-66"><a href="#cb14-66" tabindex="-1"></a><span class="co">#&gt;  [43] rappdirs_0.3.3                         </span></span>
+<span id="cb14-67"><a href="#cb14-67" tabindex="-1"></a><span class="co">#&gt;  [44] Rcpp_1.0.12                            </span></span>
+<span id="cb14-68"><a href="#cb14-68" tabindex="-1"></a><span class="co">#&gt;  [45] Biobase_2.58.0                         </span></span>
+<span id="cb14-69"><a href="#cb14-69" tabindex="-1"></a><span class="co">#&gt;  [46] jquerylib_0.1.4                        </span></span>
+<span id="cb14-70"><a href="#cb14-70" tabindex="-1"></a><span class="co">#&gt;  [47] vctrs_0.6.5                            </span></span>
+<span id="cb14-71"><a href="#cb14-71" tabindex="-1"></a><span class="co">#&gt;  [48] Biostrings_2.66.0                      </span></span>
+<span id="cb14-72"><a href="#cb14-72" tabindex="-1"></a><span class="co">#&gt;  [49] rtracklayer_1.58.0                     </span></span>
+<span id="cb14-73"><a href="#cb14-73" tabindex="-1"></a><span class="co">#&gt;  [50] xfun_0.45                              </span></span>
+<span id="cb14-74"><a href="#cb14-74" tabindex="-1"></a><span class="co">#&gt;  [51] stringr_1.5.1                          </span></span>
+<span id="cb14-75"><a href="#cb14-75" tabindex="-1"></a><span class="co">#&gt;  [52] lifecycle_1.0.4                        </span></span>
+<span id="cb14-76"><a href="#cb14-76" tabindex="-1"></a><span class="co">#&gt;  [53] ensembldb_2.22.0                       </span></span>
+<span id="cb14-77"><a href="#cb14-77" tabindex="-1"></a><span class="co">#&gt;  [54] restfulr_0.0.15                        </span></span>
+<span id="cb14-78"><a href="#cb14-78" tabindex="-1"></a><span class="co">#&gt;  [55] XML_3.99-0.11                          </span></span>
+<span id="cb14-79"><a href="#cb14-79" tabindex="-1"></a><span class="co">#&gt;  [56] MASS_7.3-60.0.1                        </span></span>
+<span id="cb14-80"><a href="#cb14-80" tabindex="-1"></a><span class="co">#&gt;  [57] zlibbioc_1.44.0                        </span></span>
+<span id="cb14-81"><a href="#cb14-81" tabindex="-1"></a><span class="co">#&gt;  [58] scales_1.4.0                           </span></span>
+<span id="cb14-82"><a href="#cb14-82" tabindex="-1"></a><span class="co">#&gt;  [59] BSgenome_1.66.3                        </span></span>
+<span id="cb14-83"><a href="#cb14-83" tabindex="-1"></a><span class="co">#&gt;  [60] VariantAnnotation_1.44.1               </span></span>
+<span id="cb14-84"><a href="#cb14-84" tabindex="-1"></a><span class="co">#&gt;  [61] ProtGenerics_1.30.0                    </span></span>
+<span id="cb14-85"><a href="#cb14-85" tabindex="-1"></a><span class="co">#&gt;  [62] hms_1.1.3                              </span></span>
+<span id="cb14-86"><a href="#cb14-86" tabindex="-1"></a><span class="co">#&gt;  [63] MatrixGenerics_1.10.0                  </span></span>
+<span id="cb14-87"><a href="#cb14-87" tabindex="-1"></a><span class="co">#&gt;  [64] parallel_4.2.1                         </span></span>
+<span id="cb14-88"><a href="#cb14-88" tabindex="-1"></a><span class="co">#&gt;  [65] SummarizedExperiment_1.28.0            </span></span>
+<span id="cb14-89"><a href="#cb14-89" tabindex="-1"></a><span class="co">#&gt;  [66] AnnotationFilter_1.22.0                </span></span>
+<span id="cb14-90"><a href="#cb14-90" tabindex="-1"></a><span class="co">#&gt;  [67] RColorBrewer_1.1-3                     </span></span>
+<span id="cb14-91"><a href="#cb14-91" tabindex="-1"></a><span class="co">#&gt;  [68] yaml_2.3.8                             </span></span>
+<span id="cb14-92"><a href="#cb14-92" tabindex="-1"></a><span class="co">#&gt;  [69] curl_6.1.0                             </span></span>
+<span id="cb14-93"><a href="#cb14-93" tabindex="-1"></a><span class="co">#&gt;  [70] memoise_2.0.1                          </span></span>
+<span id="cb14-94"><a href="#cb14-94" tabindex="-1"></a><span class="co">#&gt;  [71] gridExtra_2.3                          </span></span>
+<span id="cb14-95"><a href="#cb14-95" tabindex="-1"></a><span class="co">#&gt;  [72] ggplot2_4.0.0                          </span></span>
+<span id="cb14-96"><a href="#cb14-96" tabindex="-1"></a><span class="co">#&gt;  [73] sass_0.4.9                             </span></span>
+<span id="cb14-97"><a href="#cb14-97" tabindex="-1"></a><span class="co">#&gt;  [74] biomaRt_2.54.0                         </span></span>
+<span id="cb14-98"><a href="#cb14-98" tabindex="-1"></a><span class="co">#&gt;  [75] rpart_4.1.24                           </span></span>
+<span id="cb14-99"><a href="#cb14-99" tabindex="-1"></a><span class="co">#&gt;  [76] calibrate_1.7.7                        </span></span>
+<span id="cb14-100"><a href="#cb14-100" tabindex="-1"></a><span class="co">#&gt;  [77] latticeExtra_0.6-30                    </span></span>
+<span id="cb14-101"><a href="#cb14-101" tabindex="-1"></a><span class="co">#&gt;  [78] stringi_1.7.12                         </span></span>
+<span id="cb14-102"><a href="#cb14-102" tabindex="-1"></a><span class="co">#&gt;  [79] RSQLite_2.3.4                          </span></span>
+<span id="cb14-103"><a href="#cb14-103" tabindex="-1"></a><span class="co">#&gt;  [80] genefilter_1.80.0                      </span></span>
+<span id="cb14-104"><a href="#cb14-104" tabindex="-1"></a><span class="co">#&gt;  [81] S4Vectors_0.36.0                       </span></span>
+<span id="cb14-105"><a href="#cb14-105" tabindex="-1"></a><span class="co">#&gt;  [82] BiocIO_1.8.0                           </span></span>
+<span id="cb14-106"><a href="#cb14-106" tabindex="-1"></a><span class="co">#&gt;  [83] checkmate_2.3.2                        </span></span>
+<span id="cb14-107"><a href="#cb14-107" tabindex="-1"></a><span class="co">#&gt;  [84] GenomicFeatures_1.50.2                 </span></span>
+<span id="cb14-108"><a href="#cb14-108" tabindex="-1"></a><span class="co">#&gt;  [85] BiocGenerics_0.44.0                    </span></span>
+<span id="cb14-109"><a href="#cb14-109" tabindex="-1"></a><span class="co">#&gt;  [86] filelock_1.0.3                         </span></span>
+<span id="cb14-110"><a href="#cb14-110" tabindex="-1"></a><span class="co">#&gt;  [87] BiocParallel_1.32.5                    </span></span>
+<span id="cb14-111"><a href="#cb14-111" tabindex="-1"></a><span class="co">#&gt;  [88] GenomeInfoDb_1.34.9                    </span></span>
+<span id="cb14-112"><a href="#cb14-112" tabindex="-1"></a><span class="co">#&gt;  [89] rlang_1.1.4                            </span></span>
+<span id="cb14-113"><a href="#cb14-113" tabindex="-1"></a><span class="co">#&gt;  [90] pkgconfig_2.0.3                        </span></span>
+<span id="cb14-114"><a href="#cb14-114" tabindex="-1"></a><span class="co">#&gt;  [91] matrixStats_1.3.0                      </span></span>
+<span id="cb14-115"><a href="#cb14-115" tabindex="-1"></a><span class="co">#&gt;  [92] bitops_1.0-7                           </span></span>
+<span id="cb14-116"><a href="#cb14-116" tabindex="-1"></a><span class="co">#&gt;  [93] evaluate_1.0.3                         </span></span>
+<span id="cb14-117"><a href="#cb14-117" tabindex="-1"></a><span class="co">#&gt;  [94] lattice_0.22-6                         </span></span>
+<span id="cb14-118"><a href="#cb14-118" tabindex="-1"></a><span class="co">#&gt;  [95] purrr_1.0.2                            </span></span>
+<span id="cb14-119"><a href="#cb14-119" tabindex="-1"></a><span class="co">#&gt;  [96] GenomicAlignments_1.34.0               </span></span>
+<span id="cb14-120"><a href="#cb14-120" tabindex="-1"></a><span class="co">#&gt;  [97] htmlwidgets_1.6.4                      </span></span>
+<span id="cb14-121"><a href="#cb14-121" tabindex="-1"></a><span class="co">#&gt;  [98] bit_4.0.5                              </span></span>
+<span id="cb14-122"><a href="#cb14-122" tabindex="-1"></a><span class="co">#&gt;  [99] tidyselect_1.2.1                       </span></span>
+<span id="cb14-123"><a href="#cb14-123" tabindex="-1"></a><span class="co">#&gt; [100] magrittr_2.0.3                         </span></span>
+<span id="cb14-124"><a href="#cb14-124" tabindex="-1"></a><span class="co">#&gt; [101] DESeq2_1.38.0                          </span></span>
+<span id="cb14-125"><a href="#cb14-125" tabindex="-1"></a><span class="co">#&gt; [102] R6_2.5.1                               </span></span>
+<span id="cb14-126"><a href="#cb14-126" tabindex="-1"></a><span class="co">#&gt; [103] IRanges_2.32.0                         </span></span>
+<span id="cb14-127"><a href="#cb14-127" tabindex="-1"></a><span class="co">#&gt; [104] generics_0.1.3                         </span></span>
+<span id="cb14-128"><a href="#cb14-128" tabindex="-1"></a><span class="co">#&gt; [105] Hmisc_5.2-2                            </span></span>
+<span id="cb14-129"><a href="#cb14-129" tabindex="-1"></a><span class="co">#&gt; [106] DelayedArray_0.24.0                    </span></span>
+<span id="cb14-130"><a href="#cb14-130" tabindex="-1"></a><span class="co">#&gt; [107] DBI_1.2.3                              </span></span>
+<span id="cb14-131"><a href="#cb14-131" tabindex="-1"></a><span class="co">#&gt; [108] pillar_1.9.0                           </span></span>
+<span id="cb14-132"><a href="#cb14-132" tabindex="-1"></a><span class="co">#&gt; [109] foreign_0.8-88                         </span></span>
+<span id="cb14-133"><a href="#cb14-133" tabindex="-1"></a><span class="co">#&gt; [110] survival_3.7-0                         </span></span>
+<span id="cb14-134"><a href="#cb14-134" tabindex="-1"></a><span class="co">#&gt; [111] KEGGREST_1.38.0                        </span></span>
+<span id="cb14-135"><a href="#cb14-135" tabindex="-1"></a><span class="co">#&gt; [112] RCurl_1.98-1.12                        </span></span>
+<span id="cb14-136"><a href="#cb14-136" tabindex="-1"></a><span class="co">#&gt; [113] nnet_7.3-20                            </span></span>
+<span id="cb14-137"><a href="#cb14-137" tabindex="-1"></a><span class="co">#&gt; [114] ggfortify_0.4.17                       </span></span>
+<span id="cb14-138"><a href="#cb14-138" tabindex="-1"></a><span class="co">#&gt; [115] tibble_3.2.1                           </span></span>
+<span id="cb14-139"><a href="#cb14-139" tabindex="-1"></a><span class="co">#&gt; [116] crayon_1.5.3                           </span></span>
+<span id="cb14-140"><a href="#cb14-140" tabindex="-1"></a><span class="co">#&gt; [117] interp_1.1-6                           </span></span>
+<span id="cb14-141"><a href="#cb14-141" tabindex="-1"></a><span class="co">#&gt; [118] utf8_1.2.4                             </span></span>
+<span id="cb14-142"><a href="#cb14-142" tabindex="-1"></a><span class="co">#&gt; [119] BiocFileCache_2.6.0                    </span></span>
+<span id="cb14-143"><a href="#cb14-143" tabindex="-1"></a><span class="co">#&gt; [120] rmarkdown_2.27                         </span></span>
+<span id="cb14-144"><a href="#cb14-144" tabindex="-1"></a><span class="co">#&gt; [121] jpeg_0.1-10                            </span></span>
+<span id="cb14-145"><a href="#cb14-145" tabindex="-1"></a><span class="co">#&gt; [122] progress_1.2.3                         </span></span>
+<span id="cb14-146"><a href="#cb14-146" tabindex="-1"></a><span class="co">#&gt; [123] locfit_1.5-9.9                         </span></span>
+<span id="cb14-147"><a href="#cb14-147" tabindex="-1"></a><span class="co">#&gt; [124] grid_4.2.1                             </span></span>
+<span id="cb14-148"><a href="#cb14-148" tabindex="-1"></a><span class="co">#&gt; [125] data.table_1.15.2                      </span></span>
+<span id="cb14-149"><a href="#cb14-149" tabindex="-1"></a><span class="co">#&gt; [126] blob_1.2.4                             </span></span>
+<span id="cb14-150"><a href="#cb14-150" tabindex="-1"></a><span class="co">#&gt; [127] S7_0.2.0                               </span></span>
+<span id="cb14-151"><a href="#cb14-151" tabindex="-1"></a><span class="co">#&gt; [128] digest_0.6.36                          </span></span>
+<span id="cb14-152"><a href="#cb14-152" tabindex="-1"></a><span class="co">#&gt; [129] xtable_1.8-4                           </span></span>
+<span id="cb14-153"><a href="#cb14-153" tabindex="-1"></a><span class="co">#&gt; [130] tidyr_1.3.1                            </span></span>
+<span id="cb14-154"><a href="#cb14-154" tabindex="-1"></a><span class="co">#&gt; [131] stats4_4.2.1                           </span></span>
+<span id="cb14-155"><a href="#cb14-155" tabindex="-1"></a><span class="co">#&gt; [132] Gviz_1.42.1                            </span></span>
+<span id="cb14-156"><a href="#cb14-156" tabindex="-1"></a><span class="co">#&gt; [133] bslib_0.7.0</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

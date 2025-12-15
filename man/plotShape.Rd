@@ -22,5 +22,5 @@ Plots histograms of core promoter shape scores.
 }
 \examples{
 data(exampleTSSr)
-#plotShape(exampleTSSr)
+# plotShape(exampleTSSr)
 }

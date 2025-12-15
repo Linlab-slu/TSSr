@@ -23,5 +23,5 @@ which includes the position of each sample in terms of PC1 and PC2.
 }
 \examples{
 data(exampleTSSr)
-#plotTssPCA(exampleTSSr)
+# plotTssPCA(exampleTSSr)
 }

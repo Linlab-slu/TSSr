@@ -21,5 +21,5 @@ shapeCluster(object) method.
 }
 \examples{
 data(exampleTSSr)
-#exportShapeTable(exampleTSSr)
+# exportShapeTable(exampleTSSr)
 }

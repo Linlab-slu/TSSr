@@ -24,6 +24,6 @@ Creates bed files of clusters.
 }
 \examples{
 data(exampleTSSr)
-#exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-#exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
+# exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
+# exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
 }

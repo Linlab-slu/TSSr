@@ -1,0 +1,18 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "TSSr: an R package for comprehensive analyses of TSS sequencing data",
+  author   = c(
+    person("Zhaolian", "Lu"),
+    person("Keenan", "Berry"),
+    person("Zhenbin", "Hu"),
+    person("Yu", "Zhan"),
+    person("Tae-Hyuk", "Ahn"),
+    person("Zhenguo", "Lin")
+  ),
+  journal  = "NAR Genomics and Bioinformatics",
+  year     = "2021",
+  volume   = "3",
+  number   = "4",
+  pages    = "lqab108",
+  doi      = "10.1093/nargab/lqab108"
+)

@@ -33,5 +33,5 @@ Creates bedGraph/BigWig files of TSSs that can be visualized in the UCSC Genome 
 }
 \examples{
 data(exampleTSSr)
-#exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+# exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
 }

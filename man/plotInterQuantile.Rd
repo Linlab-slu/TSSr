@@ -24,5 +24,5 @@ Plots histograms of the interquantile width of processed clusters.
 }
 \examples{
 data(exampleTSSr)
-#plotInterQuantile(exampleTSSr, samples = "all")
+# plotInterQuantile(exampleTSSr, samples = "all")
 }

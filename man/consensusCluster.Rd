@@ -31,5 +31,5 @@ calculates inter-quantile positions within consensus clusters for each sample.
 }
 \examples{
 data(exampleTSSr)
-consensusCluster(exampleTSSr,useMultiCore=FALSE)
+consensusCluster(exampleTSSr, useMultiCore = FALSE)
 }

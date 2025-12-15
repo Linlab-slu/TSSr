@@ -20,5 +20,5 @@ Exports enhancer tables to text files.
 }
 \examples{
 data(exampleTSSr)
-#exportEnhancerTable(exampleTSSr)
+# exportEnhancerTable(exampleTSSr)
 }

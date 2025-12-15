@@ -37,5 +37,5 @@ Filters transcriptional or sequencing noise.
 }
 \examples{
 data(exampleTSSr)
-filterTSS(exampleTSSr, method = "TPM", tpmLow=0.1)
+filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
 }

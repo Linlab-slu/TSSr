@@ -1,0 +1,305 @@
+Bioconductor Single Package Builder - Build History
+Snapshot Date: 
+URL:  https://git.bioconductor.org/packages/TSSr
+Last Changed Rev:  / Revision: 
+Last Changed Date: 
+
+Hostname	OS /Arch	BUILD	CHECK	BUILD BIN	POST-PROCESSING
+nebbiolo1	Linux (Ubuntu 24.04.3 LTS)/x86_64	  OK  	  WARNINGS  	  skipped  	  OK  
+nebbiolo1 Summary
+[top]
+
+Package: TSSr
+Version: 0.99.8
+RVersion: 4.6
+BiocVersion: 3.23
+BuildCommand: /home/biocbuild/bbs-3.23-bioc/R/bin/R CMD build --keep-empty-dirs --no-resave-data TSSr
+BuildTime: 1 minutes 19.75 seconds
+CheckCommand: BiocCheckGitClone('TSSr') && /home/biocbuild/bbs-3.23-bioc/R/bin/R CMD check --no-vignettes --timings --library=/home/pkgbuild/packagebuilder/workers/jobs/2222/R-libs --install=check:/home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr.install-out.txt TSSr_0.99.8.tar.gz && BiocCheck('TSSr_0.99.8.tar.gz', `new-package`=TRUE)
+CheckTime: 7 minutes 50.45 seconds
+BuildBinCommand:
+BuildBinTime:
+PackageFileSize: 1478.69 KiB
+BuildID:: TSSr_20251213165139
+PreProcessing: Starting Git clone. Installing dependencies. Checking Git Clone. Installing package: TSSr. Starting Build package. Starting Check package.
+PostProcessing: Finished Git clone. Package type: Software. Installing dependency status: 0. Checking git clone status: 0. Installing package status: 0. Build Package status: 0. Adding Build Product Information to Database.Checking Package status: 0.
+nebbiolo1 BUILD SRC output
+[top]
+
+===============================
+
+ R CMD BUILD
+
+===============================
+
+* checking for file TSSr/DESCRIPTION ... OK
+* preparing TSSr:
+* checking DESCRIPTION meta-information ... OK
+* installing the package (it is needed to build vignettes)
+* creating vignettes ... OK
+* checking for LF line-endings in source and make files and shell scripts
+* checking for empty or unneeded directories
+* looking to see if a data/datalist file should be added
+* building TSSr_0.99.8.tar.gz
+
+nebbiolo1 CHECK output
+[top]
+
+===============================
+
+ BiocCheckGitClone('TSSr')
+
+===============================
+
+ sourceDir: /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr
+ BiocVersion: 3.23
+ Package: TSSr
+ PackageVersion: 0.99.8
+ BiocCheckDir: /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr.BiocCheck
+ BiocCheckVersion: 1.47.7
+ sourceDir: /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr
+ installDir: NULL
+ isTarBall: FALSE
+ platform: unix
+* Checking valid files...
+* Checking individual file sizes...
+* Checking for stray BiocCheck output folders...
+* Checking for inst/doc folders...
+* Checking if DESCRIPTION is well formatted...
+* Checking NAMESPACE...
+* Checking for valid maintainer...
+* Checking CITATION...
+* Checking that provided CITATION file is correctly formatted...
+ BiocCheck v1.47.7 results 
+ 0 ERRORS |  0 WARNINGS | i 0 NOTES
+i For more details, run
+  browseVignettes(package = 'BiocCheck')
+
+
+
+
+===============================
+
+ R CMD CHECK
+
+===============================
+
+* using log directory /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr.Rcheck
+* using R Under development (unstable) (2025-10-20 r88955)
+* using platform: x86_64-pc-linux-gnu
+* R was compiled by
+    gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+    GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+* running under: Ubuntu 24.04.3 LTS
+* using session charset: UTF-8
+* using option --no-vignettes
+* checking for file TSSr/DESCRIPTION ... OK
+* checking extension type ... Package
+* this is package TSSr version 0.99.8
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package TSSr can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking build directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... [14s/14s] OK
+* checking whether the package can be loaded with stated dependencies ... [14s/14s] OK
+* checking whether the package can be unloaded cleanly ... [14s/14s] OK
+* checking whether the namespace can be loaded with stated dependencies ... [14s/14s] OK
+* checking whether the namespace can be unloaded cleanly ... [14s/14s] OK
+* checking loading without being on the library search path ... [14s/14s] OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [47s/47s] NOTE
+annotateCluster,TSSr: no visible global function definition for
+  'makeTxDbFromGFF'
+Undefined global functions or variables:
+  makeTxDbFromGFF
+* checking Rd files ... [0s/0s] OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of data directory ... OK
+* checking data for non-ASCII characters ... [15s/15s] OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking files in vignettes ... OK
+* checking examples ... [127s/127s] OK
+Examples with CPU (user + system) or elapsed time > 5s
+                   user system elapsed
+consensusCluster 74.351  0.254  74.572
+annotateCluster   5.964  0.297   6.163
+* checking for unstated dependencies in tests ... OK
+* checking tests ...
+  Running testthat.R [22s/22s]
+ [22s/22s] OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes ... OK
+* checking running R code from vignettes ... SKIPPED
+* checking re-building of vignette outputs ... SKIPPED
+* checking PDF version of manual ... [3s/3s] OK
+* DONE
+
+Status: 1 NOTE
+See
+  /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr.Rcheck/00check.log
+for details.
+
+
+
+
+
+===============================
+
+ BiocCheck('TSSr_0.99.8.tar.gz')
+
+===============================
+
+ Installing TSSr 
+ Package installed successfully
+ TSSr session metadata 
+ sourceDir: /tmp/RtmpaL1Xxi/file1bffd42f68fa2c/TSSr
+ BiocVersion: 3.23
+ Package: TSSr
+ PackageVersion: 0.99.8
+ BiocCheckDir: /home/pkgbuild/packagebuilder/workers/jobs/2222/49e9c7a2ddad24ec45b3bfae4cd7f220c6cef72a/TSSr.BiocCheck
+ BiocCheckVersion: 1.47.7
+ sourceDir: /tmp/RtmpaL1Xxi/file1bffd42f68fa2c/TSSr
+ installDir: /tmp/RtmpaL1Xxi/file1bffd4459cb28f
+ isTarBall: TRUE
+ platform: unix
+ Running BiocCheck on TSSr 
+* Checking for deprecated package usage...
+
+* Checking for remote package usage...
+* Checking for 'LazyData: true' usage...
+* Checking version number...
+* Checking for version number mismatch...
+* Checking new package version number...
+* Checking R version dependency...
+i NOTE: Update R version dependency from 4.1.0 to 4.6.0
+* Checking package size...
+* Checking individual file sizes...
+* Checking biocViews...
+* Checking that biocViews are present...
+* Checking package type based on biocViews...
+ Software
+* Checking for non-trivial biocViews...
+* Checking that biocViews come from the same category...
+* Checking biocViews validity...
+* Checking for recommended biocViews...
+* Checking build system compatibility...
+* Checking for proper Description: field...
+* Checking if DESCRIPTION is well formatted...
+* Checking for whitespace in DESCRIPTION field names...
+* Checking that Package field matches directory/tarball name...
+* Checking for Version: field...
+* Checking License: for restrictive use...
+* Checking for recommended DESCRIPTION fields...
+* Checking for Bioconductor software dependencies...
+! WARNING: No Bioconductor dependencies detected. Note that some infrastructure
+packages may not have Bioconductor dependencies. For more information, reach
+out to the Bioconductor community and/or consider a CRAN submission.
+* Checking for pinned package versions in DESCRIPTION...
+* Checking for 'fnd' role in Authors@R...
+i NOTE: No 'fnd' role found in Authors@R. If the work is supported by a grant,
+consider adding the 'fnd' role to the list of authors.
+* Checking NAMESPACE...
+* Checking .Rbuildignore...
+* Checking for stray BiocCheck output folders...
+* Checking vignette directory...
+* Checking whether vignette is built with 'R CMD build'...
+* Checking package installation calls in R code...
+* Checking for library/require of TSSr...
+* Checking coding practice...
+i NOTE: Avoid sapply(); use vapply()
+Found in files:
+ R/ClusteringFunctions.R (line 28, column 15)
+ ...
+ R/ShiftingMethods.R (line 45, column 14)
+i NOTE: Avoid 'cat' and 'print' outside of 'show' methods
+Found in files:
+ print() in R/ConsensusFunctions.R (line 28, column 5)
+ ...
+ print() in R/ExpressionFunctions.R (line 147, column 5)
+i NOTE: Avoid using '=' for assignment and use '<-' instead
+Found in files:
+ R/AnnotationFunctions.R (line 5, column 7)
+ ...
+ R/ShiftingFunctions.R (line 51, column 12)
+* Checking parsed R code in R directory, examples, vignettes...
+* Checking function lengths...
+i NOTE: The recommended function length is 50 lines or less. There are 14
+functions greater than 50 lines.
+The longest 5 functions are:
+ .assign2gene() (R/AnnotationFunctions.R): 112 lines
+ ...
+ _anonymous_.47() (R/AnnotationMethods.R): 94 lines
+* Checking man page documentation...
+i NOTE: Consider adding runnable examples to man pages that document exported
+objects.
+ callEnhancer.Rd
+ ...
+ shiftPromoter.Rd
+i NOTE: Usage of dontrun / donttest tags found in man page examples. 18% of man
+pages use at least one of these tags.
+Found in files:
+ callEnhancer.Rd
+ ...
+ shiftPromoter.Rd
+* Checking package NEWS...
+* Checking unit tests...
+* Checking skip_on_bioc() in tests...
+* Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source, and
+vignette source...
+i NOTE: Consider shorter lines; 353 lines (12%) are > 80 characters long.
+First few lines:
+ R/Aclasses.R#L3 #' TSSr is designed to analyze transcrip ...
+ ...
+ vignettes/vignette.Rmd#L59 inputFiles <- c("S01.sorted.bam", "S02.s ...
+i NOTE: Consider multiples of 4 spaces for line indents; 1154 lines (38%) are
+not.
+First few lines:
+ R/Aclasses.R#L88 representation(genomeName = "ch ...
+ ...
+ vignettes/vignette.Rmd#L121 pval = 0.01,useMultiCore=FALSE, n ...
+i See https://contributions.bioconductor.org/r-code.html
+i See styler package: https://cran.r-project.org/package=styler as described in
+the BiocCheck vignette.
+* Checking if package already exists in CRAN...
+* Checking if new package already exists in Bioconductor...
+* Checking for bioc-devel mailing list subscription...
+i Maintainer is subscribed to bioc-devel.
+* Checking for support site registration...
+i Maintainer is registered at support site.
+i Package is in the Support Site Watched Tags.
+ BiocCheck v1.47.7 results 
+ 0 ERRORS |  1 WARNINGS | i 10 NOTES
+i See the TSSr.BiocCheck folder and run
+  browseVignettes(package = 'BiocCheck')
+  for details.
+nebbiolo1 BUILD BIN output
+[top]
+
+
