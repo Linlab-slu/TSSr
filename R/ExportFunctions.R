@@ -146,7 +146,7 @@
                 block.starts <- paste(0, p[i, q_0.1] - p[i, start], sep = ",")
             } else {
                 message("\nWhat is the additional condition which has two blocks...")
-                message(paste(capture.output(print(p[i, ])), collapse = "\n"))
+                message(paste(utils::capture.output(print(p[i, ])), collapse = "\n"))
             }
         } else {
             block.sizes <- paste(p[i, end] - p[i, start])
