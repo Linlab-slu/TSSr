@@ -12,3 +12,16 @@ man/.Rapp.history
 
 /doc/
 docs
+
+# R CMD check / BiocCheck artifacts
+*.Rcheck/
+*.BiocCheck/
+..Rcheck/
+
+# Build products
+*.tar.gz
+
+# SPB / scratch reports
+biocondictor_report.txt
+bioconductor_report.txt
+tssr.yml
