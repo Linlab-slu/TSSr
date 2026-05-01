@@ -12,7 +12,8 @@
 #' not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 #' Default is NULL.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{DEtables} and
+#'   \code{TAGtables} slots.
 #'
 #'
 #' @export
@@ -52,9 +53,9 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
         DE <- list("DEtable" = DE.dt, "DEsig" = DE.sig)
         return(DE)
     })
-    D.names <- sapply(as.list(seq(comparePairs)), function(i) {
+    D.names <- vapply(as.list(seq(comparePairs)), function(i) {
         paste0(comparePairs[[i]][1], "_VS_", comparePairs[[i]][2], sep = "")
-    })
+    }, character(1))
     names(D) <- D.names
     object@DEtables <- D
     ## define variable as a NULL value

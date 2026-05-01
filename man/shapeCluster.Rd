@@ -29,7 +29,7 @@ Default is "consensusClusters".}
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{clusterShape} slot.
 }
 \description{
 Calculates core promoter shape based on the distributions of TSSs within core
@@ -37,9 +37,8 @@ Calculates core promoter shape based on the distributions of TSSs within core
   algorithm (Lu et al. 2019).
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-# shapeCluster(exampleTSSr,clusters = "consensusClusters" , method = "PSS")
-# shapeCluster(exampleTSSr,clusters = "tagClusters" , method = "SI")
-}
+# First create consensus clusters
+consensusCluster(exampleTSSr, useMultiCore = FALSE)
+shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS")
 }

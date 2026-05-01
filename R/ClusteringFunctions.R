@@ -27,12 +27,12 @@
     ## local filtering
     ###############################################################################
     if (unique(tss.dt$strand) == "+") {
-        localF <- sapply(peakID[peakID > 0], function(i) {
+        localF <- lapply(peakID[peakID > 0], function(i) {
             temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i] + peakDistance, ]
             temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
         })
     } else {
-        localF <- sapply(peakID[peakID > 0], function(i) {
+        localF <- lapply(peakID[peakID > 0], function(i) {
             temp <- tss.dt[pos >= tss.dt$pos[i] - peakDistance & pos <= tss.dt$pos[i], ]
             temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
         })

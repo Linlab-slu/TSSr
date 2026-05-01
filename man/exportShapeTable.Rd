@@ -21,5 +21,7 @@ shapeCluster(object) method.
 }
 \examples{
 data(exampleTSSr)
-# exportShapeTable(exampleTSSr)
+oldwd <- setwd(tempdir())
+exportShapeTable(exampleTSSr)
+setwd(oldwd)
 }

@@ -3,7 +3,46 @@
 \docType{class}
 \name{TSSr-class}
 \alias{TSSr-class}
+\alias{TSSr}
 \title{TSSr: A package for transcription start site sequencing data analyses.}
+\usage{
+TSSr(
+  genomeName = character(),
+  inputFiles = character(),
+  inputFilesType = character(),
+  sampleLabels = character(),
+  sampleLabelsMerged = character(),
+  mergeIndex = numeric(),
+  refSource = character(),
+  organismName = character()
+)
+}
+\arguments{
+\item{genomeName}{A character string specifying the BSgenome object name
+(e.g., "BSgenome.Scerevisiae.UCSC.sacCer3").}
+
+\item{inputFiles}{A character vector of input file paths.}
+
+\item{inputFilesType}{A character string specifying the type of input files.
+Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".}
+
+\item{sampleLabels}{A character vector of sample labels corresponding to
+inputFiles.}
+
+\item{sampleLabelsMerged}{A character vector of merged sample labels for
+biological replicates.}
+
+\item{mergeIndex}{A numeric vector indicating which samples to merge
+together.}
+
+\item{refSource}{A character string specifying the path to GFF annotation
+file.}
+
+\item{organismName}{A character string specifying the organism name.}
+}
+\value{
+A TSSr object.
+}
 \description{
 TSSr is designed to analyze transcription start sites (TSSs) and core promoters
 with most types of 5’end sequencing data, such as cap analysis of gene expression (CAGE)
@@ -15,6 +54,8 @@ transcript isoform sequencing (TIF-seq) (Pelechano, Wei et al. 2013),
 transcript-leaders sequencing (TL-seq) (Arribere and Gilbert 2013),
 precision nuclear run-on sequencing (PRO-Cap) (Mahat, Kwak et al. 2016),
 and GRO-Cap/5’GRO-seq (Kruesi, Core et al. 2013).
+
+Creates a new TSSr object for TSS sequencing data analysis.
 }
 \details{
 TSSr package provides a comprehensive workflow on TSS data starts from identification
@@ -76,3 +117,15 @@ result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 \item{\code{PromoterShift}}{list.}
 }}
 
+\examples{
+# Create a TSSr object (files do not need to exist for object creation)
+myTSSr <- TSSr(
+    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+    inputFiles = c("sample1.bam", "sample2.bam"),
+    inputFilesType = "bam",
+    sampleLabels = c("S1", "S2"),
+    sampleLabelsMerged = c("merged"),
+    mergeIndex = c(1, 1)
+)
+
+}

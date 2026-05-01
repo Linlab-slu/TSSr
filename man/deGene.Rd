@@ -30,7 +30,8 @@ not (FALSE). Default is FALSE.}
 Default is NULL.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{DEtables} and
+  \code{TAGtables} slots.
 }
 \description{
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).

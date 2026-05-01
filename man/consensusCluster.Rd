@@ -23,7 +23,8 @@ or not (FALSE). Default is FALSE.}
 useMultiCore = TRUE. Default is NULL.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{consensusClusters}
+  slot.
 }
 \description{
 Makes consensus clusters from multiple samples in TSSr object and

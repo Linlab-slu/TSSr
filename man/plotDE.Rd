@@ -5,14 +5,14 @@
 \alias{plotDE,TSSr-method}
 \title{Plot gene differential expressions}
 \usage{
-plotDE(object, withGeneName = "TRUE",xlim, ylim)
+plotDE(object, withGeneName = TRUE, xlim, ylim)
 
-\S4method{plotDE}{TSSr}(object, withGeneName = "TRUE", xlim = c(-2.5, 2.5), ylim = c(0, 10))
+\S4method{plotDE}{TSSr}(object, withGeneName = TRUE, xlim = c(-2.5, 2.5), ylim = c(0, 10))
 }
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{withGeneName}{Specify whether to display names for genes which are differentially expressed. Default is "TRUE".}
+\item{withGeneName}{Logical indicating whether to display names for genes which are differentially expressed. Default is TRUE.}
 
 \item{xlim}{Only enes of which log2FoldChange value within the xlim range are plotted. Default xlim = c(-2.5, 2.5).}
 
@@ -26,6 +26,7 @@ Vocano plots of gene differential expression (with DESeq2 method) results.
 }
 \examples{
 data(exampleTSSr)
-# plotDE(exampleTSSr, withGeneName = "TRUE")
-# plotDE(exampleTSSr, withGeneName = "FALSE")
+oldwd <- setwd(tempdir())
+plotDE(exampleTSSr, withGeneName = TRUE)
+setwd(oldwd)
 }

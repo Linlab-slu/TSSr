@@ -53,7 +53,7 @@
             } else {
                 end <- length(qual)
             }
-            qa.avg <- c(qa.avg, as.integer(sapply(as(qual[start:end], "IntegerList"), mean)))
+            qa.avg <- c(qa.avg, as.integer(vapply(as(qual[start:end], "IntegerList"), mean, numeric(1))))
             if (end == length(qual)) {
                 break
             } else {
@@ -93,7 +93,7 @@
             strand = bam[[1]]$strand, qual = qa.avg, mapq = bam[[1]]$mapq, seq = bam[[1]]$seq, read.length = width(bam[[1]]$seq),
             flag = bam[[1]]$flag
         )
-        readsGR <- readsGR[as.character(readsGR@seqnames) %in% seqnames(Genome)]
+        readsGR <- readsGR[as.character(seqnames(readsGR)) %in% seqnames(Genome)]
         readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
         GenomicRanges::elementMetadata(readsGR)$mapq[is.na(GenomicRanges::elementMetadata(readsGR)$mapq)] <- Inf
         readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >=
@@ -104,14 +104,12 @@
             ## ------------------------------------------------------------------------
             TSS.p <- data.table(
                 chr = as.character(seqnames(readsGR.p)),
-                pos = start(readsGR.p), strand = "+",
-                stringsAsFactors = FALSE
+                pos = start(readsGR.p), strand = "+"
             )
             ## ------------------------------------------------------------------------
             TSS.m <- data.table(
                 chr = as.character(seqnames(readsGR.m)),
-                pos = end(readsGR.m), strand = "-",
-                stringsAsFactors = FALSE
+                pos = end(readsGR.m), strand = "-"
             )
             #-------------------------------------------------------------------------
             TSS <- rbind(TSS.p, TSS.m)
@@ -161,9 +159,7 @@
     }
     TSS.p <- data.table(
         chr = as.character(seqnames(readsGR.p)),
-        pos = start(readsGR.p), strand = "+",
-        # removedG = GenomicRanges::elementMetadata(readsGR.p)$removedG,
-        stringsAsFactors = FALSE
+        pos = start(readsGR.p), strand = "+"
     )
     #-----------------------------------------------------------------------------
     ## minus strand
@@ -183,9 +179,7 @@
     }
     TSS.m <- data.table(
         chr = as.character(seqnames(readsGR.m)),
-        pos = end(readsGR.m), strand = "-",
-        # removedG = GenomicRanges::elementMetadata(readsGR.m)$removedG,
-        stringsAsFactors = FALSE
+        pos = end(readsGR.m), strand = "-"
     )
     #-----------------------------------------------------------------------------
     TSS <- rbind(TSS.p, TSS.m)
@@ -212,11 +206,10 @@
         readsGR.p <- readsGR[strand(readsGR) == "+"]
         readsGR.m <- readsGR[strand(readsGR) == "-"]
         message("\t-> Making TSS table...")
-        TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), stringsAsFactors = FALSE)
-        TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), stringsAsFactors = FALSE)
+        TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)))
+        TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)))
         TSS <- rbind(TSS.plus, TSS.minus)
         TSS$tag_count <- 1
-        TSS <- data.table(TSS)
         TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
         setkey(TSS, chr, pos, strand)
@@ -247,8 +240,8 @@
         readsGR.p <- readsGR[score(readsGR) > 0]
         readsGR.m <- readsGR[score(readsGR) < 0]
         message("\t-> Making TSS table...")
-        TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)), stringsAsFactors = FALSE)
-        TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)), stringsAsFactors = FALSE)
+        TSS.plus <- data.table(chr = as.character(seqnames(readsGR.p)), pos = as.integer(start(readsGR.p)), strand = rep("+", times = length(readsGR.p)), score = as.numeric(abs(readsGR.p$score)))
+        TSS.minus <- data.table(chr = as.character(seqnames(readsGR.m)), pos = as.integer(end(readsGR.m)), strand = rep("-", times = length(readsGR.m)), score = as.numeric(abs(readsGR.m$score)))
         TSS <- rbind(TSS.plus, TSS.minus)
 
         setDT(TSS)

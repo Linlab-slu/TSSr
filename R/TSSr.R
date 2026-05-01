@@ -22,13 +22,5 @@
 #' Genome Browser or Integrative Genomics Viewer (IGV). TSSr also exports downstream analyses
 #' result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 #'
-#' @docType package
-#' @name TSSr-package
-NULL
-#> NULL
-#'
-#' TSSr object
-#'
-#' @aliases TSSr-package
-#' @exportClass TSSr-package
-#'
+#' @keywords internal
+"_PACKAGE"

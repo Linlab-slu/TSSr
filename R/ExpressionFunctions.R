@@ -70,8 +70,8 @@
     }
     two <- data.frame(matrix(unlist(two), nrow = length(two), byrow = TRUE), stringsAsFactors = FALSE)
     ## merge the two raw count tables together by genes
-    one[, 2:ncol(one)] <- sapply(one[, 2:ncol(one)], as.integer)
-    two[, 2:ncol(two)] <- sapply(two[, 2:ncol(two)], as.integer)
+    one[, 2:ncol(one)] <- lapply(one[, 2:ncol(one), drop = FALSE], as.integer)
+    two[, 2:ncol(two)] <- lapply(two[, 2:ncol(two), drop = FALSE], as.integer)
     setnames(one, colnames(one), c("gene", samplex))
     setnames(two, colnames(two), c("gene", sampley))
     Dtable <- merge(one, two, by = c("gene"), all = TRUE)
@@ -110,17 +110,17 @@
         message("process is running on ", numCores, " cores...")
         tags <- mclapply(seq_len(cs[, .N]), function(r) {
             data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- sapply(as.list(samples), function(s) {
+            temp <- vapply(as.list(samples), function(s) {
                 sum(data[, .SD, .SDcols = s])
-            })
+            }, numeric(1))
             return(temp)
         }, mc.cores = numCores)
     } else {
         tags <- lapply(seq_len(cs[, .N]), function(r) {
             data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- sapply(as.list(samples), function(s) {
+            temp <- vapply(as.list(samples), function(s) {
                 sum(data[, .SD, .SDcols = s])
-            })
+            }, numeric(1))
             return(temp)
         })
     }
@@ -144,17 +144,17 @@
         message("process is running on ", numCores, " cores...")
         tags <- mclapply(seq_len(cs[, .N]), function(r) {
             data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- sapply(as.list(samples), function(s) {
+            temp <- vapply(as.list(samples), function(s) {
                 sum(data[, .SD, .SDcols = s])
-            })
+            }, numeric(1))
             return(temp)
         }, mc.cores = numCores)
     } else {
         tags <- lapply(seq_len(cs[, .N]), function(r) {
             data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- sapply(as.list(samples), function(s) {
+            temp <- vapply(as.list(samples), function(s) {
                 sum(data[, .SD, .SDcols = s])
-            })
+            }, numeric(1))
             return(temp)
         })
     }

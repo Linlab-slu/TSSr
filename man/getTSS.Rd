@@ -29,7 +29,8 @@ mappingQualityThreshold = 20, softclippingAllowed = FALSE)
 "bamPairedEnd". Default is FALSE.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{TSSrawMatrix},
+  \code{TSSprocessedMatrix}, and \code{librarySizes} slots.
 }
 \description{
 getTSS function is used to precisely identify TSSs from multiple
@@ -38,8 +39,8 @@ or downloaded files from public databases. See inputFilesType for details on
 the supported input file formats.
 }
 \examples{
-\donttest{
+# getTSS requires input files to exist.
+# The exampleTSSr object has pre-loaded TSS data.
 data(exampleTSSr)
-# getTSS(exampleTSSr)
-}
+head(slot(exampleTSSr, "TSSrawMatrix"))
 }

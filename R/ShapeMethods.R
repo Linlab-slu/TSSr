@@ -13,16 +13,15 @@
 #' @param method Method to be used for calculating core promoter shape score: "SI" or "PSS". Default is "PSS".
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{clusterShape} slot.
 #'
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' data(exampleTSSr)
-#' # shapeCluster(exampleTSSr,clusters = "consensusClusters" , method = "PSS")
-#' # shapeCluster(exampleTSSr,clusters = "tagClusters" , method = "SI")
-#' }
+#' # First create consensus clusters
+#' consensusCluster(exampleTSSr, useMultiCore = FALSE)
+#' shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS")
 setGeneric("shapeCluster", function(
   object, clusters = "consensusClusters",
   method = "PSS", useMultiCore = FALSE, numCores = NULL
@@ -64,13 +63,13 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
                 tss.sub <- tss[chr == data$chr & strand == data$strand & pos >= data$q_0.1 & pos <= data$q_0.9, ]
                 temp <- sum(tss.sub[, tags])
                 if (method == "PSS") {
-                    data$shape.score <- -sum(sapply(tss.sub[, tags], function(y) {
+                    data$shape.score <- -sum(vapply(tss.sub[, tags], function(y) {
                         y / temp * log(y / temp, 2)
-                    })) * log(data[, interquantile_width], 2)
+                    }, numeric(1))) * log(data[, interquantile_width], 2)
                 } else if (method == "SI") {
-                    data$shape.score <- 2 + sum(sapply(tss.sub[, tags], function(y) {
+                    data$shape.score <- 2 + sum(vapply(tss.sub[, tags], function(y) {
                         y / temp * log(y / temp, 2)
-                    }))
+                    }, numeric(1)))
                 } else {
                     message("\nNo shape method is provided...")
                 }
@@ -89,13 +88,13 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
                 tss.sub <- tss[chr == data$chr & strand == data$strand & pos >= data$q_0.1 & pos <= data$q_0.9, ]
                 temp <- sum(tss.sub[, tags])
                 if (method == "PSS") {
-                    data$shape.score <- -sum(sapply(tss.sub[, tags], function(y) {
+                    data$shape.score <- -sum(vapply(tss.sub[, tags], function(y) {
                         y / temp * log(y / temp, 2)
-                    })) * log(data[, interquantile_width], 2)
+                    }, numeric(1))) * log(data[, interquantile_width], 2)
                 } else if (method == "SI") {
-                    data$shape.score <- 2 + sum(sapply(tss.sub[, tags], function(y) {
+                    data$shape.score <- 2 + sum(vapply(tss.sub[, tags], function(y) {
                         y / temp * log(y / temp, 2)
-                    }))
+                    }, numeric(1)))
                 } else {
                     message("\nNo shape method is provided...")
                 }

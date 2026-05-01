@@ -10,15 +10,15 @@
 #' composing a enhancer candidate. Default is 400.
 #' @param dis2gene The minimum distance to the main annotated core promoter of genes.
 #' Default is 2000.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{enhancers} slot.
 #'
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' data(exampleTSSr)
-#' # callEnhancer(exampleTSSr,flanking = 400,dis2gene=2000)
-#' }
+#' # callEnhancer requires annotated clusters
+#' # The exampleTSSr object has pre-annotated clusters
+#' callEnhancer(exampleTSSr, flanking = 400, dis2gene = 2000)
 setGeneric("callEnhancer", function(object, flanking = 400,
                                     dis2gene = 2000) {
     standardGeneric("callEnhancer")
@@ -88,7 +88,7 @@ setMethod(
                         en <- en[D > -0.8 & D < 0.8]
                         if (nrow(asn_sub) > 0) {
                             setkey(asn_sub, gene)
-                            res <- sapply(as.list(asn_sub[, unique(gene)]), function(g) {
+                            res <- lapply(as.list(asn_sub[, unique(gene)]), function(g) {
                                 temp <- asn_sub[g]
                                 (temp[which.max(tags)]$dominant_tss - dis2gene):(temp[which.max(tags)]$dominant_tss + dis2gene)
                             })

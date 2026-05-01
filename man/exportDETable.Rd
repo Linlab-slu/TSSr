@@ -22,5 +22,7 @@ Exports gene differential expression results table to text files.
 }
 \examples{
 data(exampleTSSr)
-# exportDETable(exampleTSSr, data="sig")
+oldwd <- setwd(tempdir())
+exportDETable(exampleTSSr, data = "sig")
+setwd(oldwd)
 }

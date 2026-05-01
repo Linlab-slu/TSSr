@@ -2,7 +2,6 @@
 % Please edit documentation in R/TSSr.R
 \docType{package}
 \name{TSSr-package}
-\alias{TSSr}
 \alias{TSSr-package}
 \title{TSSr: A package for transcription start site sequencing data analyses.}
 \description{
@@ -55,3 +54,4 @@ Other contributors:
 }
 
 }
+\keyword{internal}

@@ -15,7 +15,8 @@ mergeSamples(object, mergeIndex)
 \item{mergeIndex}{Integer vector specifying which samples to be merged}
 }
 \value{
-Large List of elements - one element for each merged sample
+A modified TSSr object with updated \code{TSSprocessedMatrix}
+  and \code{librarySizes} slots after merging samples.
 }
 \description{
 Merges individual samples within TSSr object into specified groups.

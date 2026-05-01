@@ -1,26 +1,23 @@
 # Test annotation functionality
 
 test_that("assignedClusters have gene annotations", {
-  data(exampleTSSr)
+    data(exampleTSSr)
 
-  if (length(exampleTSSr@assignedClusters) > 0) {
     expect_type(exampleTSSr@assignedClusters, "list")
+    expect_true(length(exampleTSSr@assignedClusters) > 0)
 
-    # Check first assigned cluster
     first_assigned <- exampleTSSr@assignedClusters[[1]]
+    expect_true(is.data.frame(first_assigned))
+    expect_true(nrow(first_assigned) > 0)
 
-    if (is.data.frame(first_assigned) && nrow(first_assigned) > 0) {
-      col_names <- names(first_assigned)
-      # Should have gene-related column
-      has_gene_col <- any(grepl("gene", col_names, ignore.case = TRUE))
-      expect_true(has_gene_col || ncol(first_assigned) >= 4)
-    }
-  }
+    col_names <- names(first_assigned)
+    has_gene_col <- any(grepl("gene", col_names, ignore.case = TRUE))
+    expect_true(has_gene_col)
 })
 
-test_that("unassignedClusters slot exists", {
-  data(exampleTSSr)
+test_that("unassignedClusters slot is populated", {
+    data(exampleTSSr)
 
-  # unassignedClusters should be a list (even if empty)
-  expect_type(exampleTSSr@unassignedClusters, "list")
+    expect_type(exampleTSSr@unassignedClusters, "list")
+    expect_true(length(exampleTSSr@unassignedClusters) > 0)
 })

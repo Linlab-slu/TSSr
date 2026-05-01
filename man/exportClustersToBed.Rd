@@ -24,6 +24,7 @@ Creates bed files of clusters.
 }
 \examples{
 data(exampleTSSr)
-# exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-# exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
+oldwd <- setwd(tempdir())
+exportClustersToBed(exampleTSSr, data = "tagClusters")
+setwd(oldwd)
 }

@@ -5,16 +5,16 @@
 \alias{exportTSStable,TSSr-method}
 \title{Export TSS tables}
 \usage{
-exportTSStable(object, data = "raw", merged = "TRUE")
+exportTSStable(object, data = "raw", merged = TRUE)
 
-\S4method{exportTSStable}{TSSr}(object, data = "raw", merged = "TRUE")
+\S4method{exportTSStable}{TSSr}(object, data = "raw", merged = TRUE)
 }
 \arguments{
 \item{object}{A TSSr object.}
 
 \item{data}{Specify which data will be exported: "raw" or "processed". Default is "raw".}
 
-\item{merged}{Specify whether to export merged TSS table. Used only if data = "raw".}
+\item{merged}{Logical indicating whether to export merged TSS table. Used only if data = "raw".}
 }
 \value{
 TSS tables
@@ -24,6 +24,7 @@ Exports TSS tables to text file.
 }
 \examples{
 data(exampleTSSr)
-# exportTSStable(exampleTSSr)
-# exportTSStable(exampleTSSr, data="raw")
+oldwd <- setwd(tempdir())
+exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
+setwd(oldwd)
 }

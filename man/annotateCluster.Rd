@@ -47,7 +47,8 @@ Default value = 0. Note: if annotationType == "transctipt" or the gene annotatio
 start from transcription start sites (TSSs), the recommended value = 500.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{assignedClusters},
+  \code{unassignedClusters}, and optionally \code{filteredClusters} slots.
 }
 \description{
 Annotates clusters with gene or transcript names from GFF annotation file.

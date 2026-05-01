@@ -17,8 +17,17 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
 
-Alternatively, you can install the development version directly from GitHub using `devtools`:
+TSSr is a comprehensive R/Bioconductor package for analyzing transcription
+start site (TSS) sequencing data. It supports multiple input formats including
+BAM, BED, BigWig, and TSS tables, and provides a complete workflow from TSS
+identification through downstream analyses such as core promoter shape analysis,
+gene annotation, differential expression, and promoter shifting.
+
+## Installation
+
+You can install the development version directly from GitHub using `devtools`:
 
 ```{r github, eval=FALSE}
 devtools::install_github("Linlab-slu/TSSr")
@@ -52,14 +61,15 @@ data("exampleTSSr")
 myTSSr <- exampleTSSr
 ```
 
-Or create a new TSSr object
+Or create a new TSSr object using the constructor function. Note that the
+input files do not need to exist at object creation time:
 
-```{r newTSSr, eval=FALSE}
-# Provide bam files
-inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam")
-myTSSr <- new("TSSr",
+```{r newTSSr, tidy=FALSE}
+# Create a TSSr object using the constructor (files do not need to exist)
+newObj <- TSSr(
     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-    inputFiles = inputFiles,
+    inputFiles = c("S01.sorted.bam", "S02.sorted.bam",
+                    "S03.sorted.bam", "S04.sorted.bam"),
     inputFilesType = "bam",
     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
     sampleLabelsMerged = c("control", "treat"),
@@ -67,15 +77,17 @@ myTSSr <- new("TSSr",
     refSource = "saccharomyces_cerevisiae.SGD.gff",
     organismName = "saccharomyces cerevisiae"
 )
-myTSSr
+newObj
 ```
 
+Then read in TSS data from the input files (requires actual files):
+
 ```{r getTSS, eval=FALSE}
-# Get TSS
+# Get TSS (requires input files to exist)
 getTSS(myTSSr)
 ```
 
-TSS data processing
+# TSS data processing
 
 ```{r TSSprocessing, tidy=FALSE}
 # Merge replicates
@@ -86,9 +98,9 @@ normalizeTSS(myTSSr)
 filterTSS(myTSSr, method = "TPM", tpmLow = 0.1)
 ```
 
-TSS clustering
+# TSS clustering
 
-```{r TSSclustering, eval=FALSE}
+```{r TSSclustering, tidy=FALSE}
 # TSS clustering
 clusterTSS(myTSSr,
     method = "peakclu", peakDistance = 100, extensionDistance = 30,
@@ -100,9 +112,9 @@ clusterTSS(myTSSr,
 consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 ```
 
-Core promoter shape
+# Core promoter shape
 
-```{r shapeCluster, eval=FALSE}
+```{r shapeCluster, tidy=FALSE}
 # Calculating core promoter shape score
 shapeCluster(myTSSr,
     clusters = "consensusClusters", method = "PSS",
@@ -110,35 +122,52 @@ shapeCluster(myTSSr,
 )
 ```
 
-Annotation core promoters
+# Annotation of core promoters
 
 ```{r annotateCluster, tidy=FALSE}
 # Assign clusters to the annotated features
-annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
-              filterClusterThreshold = 0.02, annotationType = "genes"
-              ,upstream=1000, upstreamOverlap = 500, downstream = 0)
+annotateCluster(myTSSr, clusters = "consensusClusters",
+    filterCluster = TRUE, filterClusterThreshold = 0.02,
+    annotationType = "genes", upstream = 1000,
+    upstreamOverlap = 500, downstream = 0)
 ```
 
-Differential expression analysis
+# Differential expression analysis
 
-```{r deGEne, tidy=FALSE}
-# Assign clusters to the annotated features
-deGene(myTSSr,comparePairs=list(c("control","treat")), 
-       pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+```{r deGene, tidy=FALSE}
+# Gene-level differential expression using DESeq2
+deGene(myTSSr, comparePairs = list(c("control", "treat")),
+    pval = 0.01, useMultiCore = FALSE, numCores = NULL)
 ```
 
-Core promoter shifts
+# Core promoter shifts
 
 ```{r shiftPromoter, tidy=FALSE}
-# Calcuate core promoter shifts
-shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+# Calculate core promoter shifts
+shiftPromoter(myTSSr, comparePairs = list(c("control", "treat")),
+    pval = 0.01)
 ```
 
-Session info
+# Exporting results
+
+TSSr provides several export functions for saving results:
+
+```{r export, eval=FALSE}
+# Export TSS tables
+exportTSStable(myTSSr, data = "processed")
+
+# Export cluster tables
+exportClustersTable(myTSSr, data = "assigned")
+
+# Export to BED format for genome browsers
+exportClustersToBed(myTSSr, data = "consensusClusters")
+
+# Export TSS to bedGraph
+exportTSStoBedgraph(myTSSr, data = "processed")
+```
+
+# Session info
 
 ```{r sessionInfo, tidy=FALSE}
 sessionInfo()
 ```
-
-
-

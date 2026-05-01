@@ -9,15 +9,13 @@
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison.
 #' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{PromoterShift} slot.
 #'
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' data(exampleTSSr)
-#' # shiftPromoter(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-#' }
+#' shiftPromoter(exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01)
 setGeneric("shiftPromoter", function(object, comparePairs,
                                      pval = 0.01) {
     standardGeneric("shiftPromoter")
@@ -45,9 +43,9 @@ setMethod("shiftPromoter", signature(object = "TSSr"), function(
         DS <- .Ds(cx, cy, librarySizex, librarySizey, useRawCount = TRUE, pval)
         return(DS)
     })
-    D.names <- sapply(as.list(seq(comparePairs)), function(i) {
+    D.names <- vapply(as.list(seq(comparePairs)), function(i) {
         paste0(comparePairs[[i]][1], "_VS_", comparePairs[[i]][2], sep = "")
-    })
+    }, character(1))
     names(D) <- D.names
     object@PromoterShift <- D
     assign(objName, object, envir = parent.frame())

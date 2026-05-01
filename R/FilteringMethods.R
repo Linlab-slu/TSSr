@@ -12,7 +12,8 @@
 #' Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
 #' @param tpmLow Used only if method = "TPM". Default value is 0.1.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
+#'   slot after filtering.
 #'
 #'
 #' @export
@@ -55,7 +56,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
             temp <- tss.dt[, .SD, .SDcols = sampleLabelsMerged[i]]
             setnames(temp, colnames(temp)[[1]], "tags")
             temp <- .filterWithPoisson(temp, library.size[i], genomeSize, pVal)
-            if (normalization == "TRUE") {
+            if (isTRUE(normalization)) {
                 sizePerMillion <- library.size[i] / 1e6
                 temp[, tags := round(tags / sizePerMillion, 6)]
             }
@@ -98,14 +99,3 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
         message("\tNo filtering method is defined...")
     }
 })
-
-################################################################################################
-.filterWithPoisson <- function(data, coverageDepth, genomeSize, pVal) {
-    # calculate lambda value (average number of reads per site on each strand of DNA)
-    lambda <- coverageDepth / (genomeSize * 2)
-    # get cutoff value
-    cutoff <- qpois(pVal, lambda, lower.tail = FALSE, log.p = FALSE)
-    # fiter tss table
-    data[data < cutoff, ] <- 0
-    return(data)
-}

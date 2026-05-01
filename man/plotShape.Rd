@@ -22,5 +22,7 @@ Plots histograms of core promoter shape scores.
 }
 \examples{
 data(exampleTSSr)
-# plotShape(exampleTSSr)
+oldwd <- setwd(tempdir())
+plotShape(exampleTSSr, samples = "all")
+setwd(oldwd)
 }

@@ -20,5 +20,7 @@ Export core promoter shift tables to text files.
 }
 \examples{
 data(exampleTSSr)
-# exportShiftTable(exampleTSSr)
+oldwd <- setwd(tempdir())
+exportShiftTable(exampleTSSr)
+setwd(oldwd)
 }

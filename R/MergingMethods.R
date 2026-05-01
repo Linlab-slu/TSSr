@@ -6,7 +6,8 @@
 #'
 #' @param object A TSSr object
 #' @param mergeIndex Integer vector specifying which samples to be merged
-#' @return Large List of elements - one element for each merged sample
+#' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
+#'   and \code{librarySizes} slots after merging samples.
 #' @export
 #'
 #' @examples

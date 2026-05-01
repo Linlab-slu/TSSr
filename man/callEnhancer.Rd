@@ -19,15 +19,15 @@ composing a enhancer candidate. Default is 400.}
 Default is 2000.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{enhancers} slot.
 }
 \description{
 Calculates enhancer candidates, which are characterized by
 bidirectional clusters as described in Andersson et al. 2014.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-# callEnhancer(exampleTSSr,flanking = 400,dis2gene=2000)
-}
+# callEnhancer requires annotated clusters
+# The exampleTSSr object has pre-annotated clusters
+callEnhancer(exampleTSSr, flanking = 400, dis2gene = 2000)
 }

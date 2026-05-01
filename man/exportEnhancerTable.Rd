@@ -20,5 +20,7 @@ Exports enhancer tables to text files.
 }
 \examples{
 data(exampleTSSr)
-# exportEnhancerTable(exampleTSSr)
+oldwd <- setwd(tempdir())
+exportEnhancerTable(exampleTSSr)
+setwd(oldwd)
 }

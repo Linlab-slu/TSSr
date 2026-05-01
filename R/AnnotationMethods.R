@@ -24,7 +24,8 @@
 #' @param downstream  Downstream distance to the start position of annotation feature.
 #' Default value = 0. Note: if annotationType == "transctipt" or the gene annotations
 #' start from transcription start sites (TSSs), the recommended value = 500.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{assignedClusters},
+#'   \code{unassignedClusters}, and optionally \code{filteredClusters} slots.
 #'
 #' @export
 #'
@@ -73,7 +74,7 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         ## define variable as a NULL value
         inCoding <- r <- f <- dominant_tss <- NULL
         ## prepare annotation file
-        txdb <- GenomicFeatures::makeTxDbFromGFF(refGFF, organismName, format = "auto")
+        txdb <- makeTxDbFromGFF(refGFF, organism = organismName, format = "auto")
         if (annotationType == "genes") {
             ref <- setDT(as.data.frame(genes(txdb)))
         } else if (annotationType == "transcripts") {
@@ -111,7 +112,7 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         return(cs)
     })
     ## filter clusters
-    if (filterCluster == "TRUE") {
+    if (isTRUE(filterCluster)) {
         asn.filtered <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
             cs <- asn[[sampleLabelsMerged[i]]]
             m <- cs[is.na(gene) & is.na(inCoding), ]

@@ -24,6 +24,8 @@ creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
 data(exampleTSSr)
-# plotCorrelation(exampleTSSr, samples = "all")
+oldwd <- setwd(tempdir())
+plotCorrelation(exampleTSSr, samples = "all")
+setwd(oldwd)
 
 }

@@ -24,5 +24,7 @@ Plots histograms of the interquantile width of processed clusters.
 }
 \examples{
 data(exampleTSSr)
-# plotInterQuantile(exampleTSSr, samples = "all")
+oldwd <- setwd(tempdir())
+plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
+setwd(oldwd)
 }

@@ -13,7 +13,8 @@ normalizeTSS(object)
 \item{object}{A TSSr object.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{TSSprocessedMatrix}
+  slot containing normalized TPM values.
 }
 \description{
 Normalizes raw TSS counts in all samples by tags per million (TPM)

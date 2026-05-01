@@ -42,7 +42,7 @@ Default is FALSE.}
 Default is NULL.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{tagClusters} slot.
 }
 \description{
 Clusters TSSs within small genomic regions into tag clusters (TCs)
@@ -50,12 +50,10 @@ using "peakclu" method. "peakclu" method is an implementation of peak-based clus
 The minimum distance of two neighboring peaks can be specified.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 clusterTSS(exampleTSSr,
     method = "peakclu", clusterThreshold = 1,
     useMultiCore = FALSE, numCores = NULL
 )
-}
 
 }

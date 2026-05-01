@@ -14,7 +14,8 @@
 #' or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if
 #' useMultiCore = TRUE. Default is NULL.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{consensusClusters}
+#'   slot.
 #'
 #' @export
 #'
@@ -46,11 +47,13 @@ setMethod("consensusCluster", signature(object = "TSSr"), function(object, dis, 
     cx[, end := dominant_tss + round(dis / 2)]
     gr1 <- makeGRangesFromDataFrame(cx, keep.extra.columns = FALSE)
     gr <- BiocGenerics::union(gr1, gr1)
-    for (i in 2:length(sampleLabelsMerged)) {
-        gr <- .getConsensus(gr, cs[[sampleLabelsMerged[[i]]]], dis)
+    if (length(sampleLabelsMerged) >= 2) {
+        for (i in seq(2, length(sampleLabelsMerged))) {
+            gr <- .getConsensus(gr, cs[[sampleLabelsMerged[[i]]]], dis)
+        }
     }
     gr <- as.data.frame(gr)
-    gr[, c(1, 5)] <- sapply(gr[, c(1, 5)], as.character)
+    gr[, c(1, 5)] <- lapply(gr[, c(1, 5)], as.character)
     setDT(gr)
     setnames(gr, colnames(gr)[[1]], "chr")
     setorder(gr, "strand", "chr", "start")

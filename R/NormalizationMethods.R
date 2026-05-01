@@ -14,12 +14,12 @@
 #' normalizeTSS(exampleTSSr)
 setGeneric("normalizeTSS", function(object) standardGeneric("normalizeTSS"))
 #' @rdname normalizeTSS
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
+#'   slot containing normalized TPM values.
 #' @export
 setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
     message("\nNormalizing TSS matrix...")
     ## initialize values
-    Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
     objName <- deparse(substitute(object))
 

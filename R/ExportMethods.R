@@ -15,7 +15,9 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotCorrelation(exampleTSSr, samples = "all")
+#' oldwd <- setwd(tempdir())
+#' plotCorrelation(exampleTSSr, samples = "all")
+#' setwd(oldwd)
 #'
 setGeneric("plotCorrelation", function(object, samples = "all") standardGeneric("plotCorrelation"))
 #' @rdname plotCorrelation
@@ -54,7 +56,9 @@ setMethod("plotCorrelation", signature(object = "TSSr"), function(object, sample
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotTssPCA(exampleTSSr)
+#' oldwd <- setwd(tempdir())
+#' plotTssPCA(exampleTSSr, TSS.threshold = 10)
+#' setwd(oldwd)
 setGeneric("plotTssPCA", function(object, TSS.threshold = 10) standardGeneric("plotTssPCA"))
 #' @rdname plotTssPCA
 #' @export
@@ -72,10 +76,11 @@ setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.thresho
         file = "PCA_plot.pdf",
         width = 8, height = 8, onefile = TRUE, bg = "transparent", family = "Helvetica", fonts = NULL
     )
-    print(autoplot(prcomp(y),
+    p <- autoplot(prcomp(y),
         data = data.frame(sample = s),
         colour = "sample", size = 3
-    ) + theme_minimal() + theme(text = element_text(size = 12)))
+    ) + theme_minimal() + theme(text = element_text(size = 12))
+    plot(p)
     dev.off()
 })
 
@@ -95,7 +100,9 @@ setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.thresho
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotInterQuantile(exampleTSSr, samples = "all")
+#' oldwd <- setwd(tempdir())
+#' plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
+#' setwd(oldwd)
 setGeneric("plotInterQuantile", function(object, samples = "all", tagsThreshold = 1) standardGeneric("plotInterQuantile"))
 #' @rdname plotInterQuantile
 #' @export
@@ -154,7 +161,9 @@ setMethod("plotInterQuantile", signature(object = "TSSr"), function(object, samp
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotShape(exampleTSSr)
+#' oldwd <- setwd(tempdir())
+#' plotShape(exampleTSSr, samples = "all")
+#' setwd(oldwd)
 setGeneric("plotShape", function(object, samples = "all") standardGeneric("plotShape"))
 #' @rdname plotShape
 #' @export
@@ -197,10 +206,10 @@ setMethod("plotShape", signature(object = "TSSr"), function(object, samples) {
 #'
 #' @description Vocano plots of gene differential expression (with DESeq2 method) results.
 #'
-#' @usage plotDE(object, withGeneName = "TRUE",xlim, ylim)
+#' @usage plotDE(object, withGeneName = TRUE, xlim, ylim)
 #'
 #' @param object A TSSr object.
-#' @param withGeneName Specify whether to display names for genes which are differentially expressed. Default is "TRUE".
+#' @param withGeneName Logical indicating whether to display names for genes which are differentially expressed. Default is TRUE.
 #' @param xlim Only enes of which log2FoldChange value within the xlim range are plotted. Default xlim = c(-2.5, 2.5).
 #' @param ylim Only genes of which -log10(pvalue) within the ylim range are plotted. Default ylim = c(0, 10).
 #' @return gene differential expression visualized in a graph
@@ -209,11 +218,12 @@ setMethod("plotShape", signature(object = "TSSr"), function(object, samples) {
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotDE(exampleTSSr, withGeneName = "TRUE")
-#' # plotDE(exampleTSSr, withGeneName = "FALSE")
+#' oldwd <- setwd(tempdir())
+#' plotDE(exampleTSSr, withGeneName = TRUE)
+#' setwd(oldwd)
 setGeneric("plotDE", function(
   object,
-  withGeneName = "TRUE",
+  withGeneName = TRUE,
   xlim = c(-2.5, 2.5),
   ylim = c(0, 10)
 ) {
@@ -241,7 +251,7 @@ setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, x
         with(subset(res, padj < .05), points(log2FoldChange, -log10(pvalue), pch = 20, col = "red"))
         with(subset(res, abs(log2FoldChange) > 1), points(log2FoldChange, -log10(pvalue), pch = 20, col = "orange"))
         with(subset(res, padj < .05 & abs(log2FoldChange) > 1), points(log2FoldChange, -log10(pvalue), pch = 20, col = "green"))
-        if (withGeneName == "TRUE") {
+        if (isTRUE(withGeneName)) {
             with(subset(res, padj < .05 & abs(log2FoldChange) > 1), textxy(log2FoldChange, -log10(pvalue), labs = gene, cex = .8))
         }
     }
@@ -275,8 +285,10 @@ setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, x
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # plotTSS(exampleTSSr, samples=c("control","treat"), genelist=c("YBL017C","YBL067C")
-#' # ,up.dis =500, down.dis = 500)
+#' oldwd <- setwd(tempdir())
+#' plotTSS(exampleTSSr, samples = c("control", "treat"),
+#'     genelist = c("YBL017C", "YBL067C"), up.dis = 500, down.dis = 500)
+#' setwd(oldwd)
 setGeneric("plotTSS", function(
   object, samples,
   tssData = "processed",
@@ -349,26 +361,27 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
 #' Export TSS tables
 #'
 #' @description Exports TSS tables to text file.
-#' @usage exportTSStable(object, data = "raw", merged = "TRUE")
+#' @usage exportTSStable(object, data = "raw", merged = TRUE)
 #'
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "raw" or "processed". Default is "raw".
-#' @param merged Specify whether to export merged TSS table. Used only if data = "raw".
+#' @param merged Logical indicating whether to export merged TSS table. Used only if data = "raw".
 #' @return TSS tables
 #'
 #' @export
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportTSStable(exampleTSSr)
-#' # exportTSStable(exampleTSSr, data="raw")
-setGeneric("exportTSStable", function(object, data = "raw", merged = "TRUE") standardGeneric("exportTSStable"))
+#' oldwd <- setwd(tempdir())
+#' exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
+#' setwd(oldwd)
+setGeneric("exportTSStable", function(object, data = "raw", merged = TRUE) standardGeneric("exportTSStable"))
 #' @rdname exportTSStable
 #' @export
 setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, merged) {
     message("Exporting TSS table...")
     if (data == "raw") {
-        if (merged == "TRUE") {
+        if (isTRUE(merged)) {
             tss <- object@TSSprocessedMatrix
             write.table(tss, file = paste("ALL.samples.TSS", data, "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         } else {
@@ -399,10 +412,9 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportClustersTable(exampleTSSr, data = "tagClusters")
-#' # exportClustersTable(exampleTSSr, data = "consensusClusters")
-#' # exportClustersTable(exampleTSSr, data = "assigned")
-#' # exportClustersTable(exampleTSSr, data = "unassigned")
+#' oldwd <- setwd(tempdir())
+#' exportClustersTable(exampleTSSr, data = "tagClusters")
+#' setwd(oldwd)
 setGeneric("exportClustersTable", function(object, data = "assigned") standardGeneric("exportClustersTable"))
 #' @rdname exportClustersTable
 #' @export
@@ -459,7 +471,9 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportShapeTable(exampleTSSr)
+#' oldwd <- setwd(tempdir())
+#' exportShapeTable(exampleTSSr)
+#' setwd(oldwd)
 setGeneric("exportShapeTable", function(object) standardGeneric("exportShapeTable"))
 #' @rdname exportShapeTable
 #' @export
@@ -491,7 +505,9 @@ setMethod("exportShapeTable", signature(object = "TSSr"), function(object) {
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportEnhancerTable(exampleTSSr)
+#' oldwd <- setwd(tempdir())
+#' exportEnhancerTable(exampleTSSr)
+#' setwd(oldwd)
 setGeneric("exportEnhancerTable", function(object) standardGeneric("exportEnhancerTable"))
 #' @rdname exportEnhancerTable
 #' @export
@@ -527,7 +543,9 @@ setMethod("exportEnhancerTable", signature(object = "TSSr"), function(object) {
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportDETable(exampleTSSr, data="sig")
+#' oldwd <- setwd(tempdir())
+#' exportDETable(exampleTSSr, data = "sig")
+#' setwd(oldwd)
 setGeneric("exportDETable", function(object, data = "sig") standardGeneric("exportDETable"))
 #' @rdname exportDETable
 #' @export
@@ -563,7 +581,9 @@ setMethod("exportDETable", signature(object = "TSSr"), function(object, data) {
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportShiftTable(exampleTSSr)
+#' oldwd <- setwd(tempdir())
+#' exportShiftTable(exampleTSSr)
+#' setwd(oldwd)
 setGeneric("exportShiftTable", function(object) standardGeneric("exportShiftTable"))
 #' @rdname exportShiftTable
 #' @export
@@ -594,7 +614,9 @@ setMethod("exportShiftTable", signature(object = "TSSr"), function(object) {
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+#' oldwd <- setwd(tempdir())
+#' exportTSStoBedgraph(exampleTSSr, data = "processed", format = "bedGraph")
+#' setwd(oldwd)
 setGeneric("exportTSStoBedgraph", function(
   object, data = "processed",
   format = "bedGraph",
@@ -638,8 +660,8 @@ setMethod("exportTSStoBedgraph", signature(object = "TSSr"), function(object, da
                 export(temp.m, paste(samples[i], "TSS", data, "minus.bedGraph", sep = "."), format = "bedGraph")
             } else if (format == "BigWig") {
                 message("Exporting TSS to BigWig...")
-                seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.p@seqnames)]
-                seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(temp.m@seqnames)]
+                seqlengths(temp.p) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(seqnames(temp.p))]
+                seqlengths(temp.m) <- seqlengths(Genome)[seqnames(Genome) %in% as.character(seqnames(temp.m))]
                 export(temp.p, paste(samples[i], "TSS", data, "plus.BigWig", sep = "."), format = "BigWig")
                 export(temp.m, paste(samples[i], "TSS", data, "minus.BigWig", sep = "."), format = "BigWig")
             }
@@ -662,8 +684,9 @@ setMethod("exportTSStoBedgraph", signature(object = "TSSr"), function(object, da
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # exportTSStoBedgraph(exampleTSSr, data = "tagClusters")
-#' # exportTSStoBedgraph(exampleTSSr, data = "consensusClusters")
+#' oldwd <- setwd(tempdir())
+#' exportClustersToBed(exampleTSSr, data = "tagClusters")
+#' setwd(oldwd)
 setGeneric("exportClustersToBed", function(object, data = "consensusClusters", assigned = TRUE) {
     standardGeneric("exportClustersToBed")
 })

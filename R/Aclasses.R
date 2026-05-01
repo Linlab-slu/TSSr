@@ -25,7 +25,8 @@
 #' @import stringr
 #' @import rtracklayer
 #' @import ggplot2
-#' @import GenomicFeatures
+#' @importFrom GenomicFeatures genes transcripts
+#' @importFrom txdbmaker makeTxDbFromGFF
 #' @import Gviz
 #' @import DESeq2
 #' @import calibrate
@@ -42,14 +43,11 @@
 #' @importFrom Rsamtools ScanBamParam
 #' @importFrom Rsamtools bamFlag
 #' @importFrom Rsamtools scanBamFlag
-#' @importFrom GenomicAlignments qwidth
-#' @importFrom GenomicAlignments readGAlignments
-#' @importFrom GenomicAlignments seqnames
+#' @importFrom GenomeInfoDb seqnames
 #' @importFrom dplyr filter
 #' @import GenomeInfoDb
 #' @importFrom BiocGenerics union
 #' @import data.table
-#' @import rmarkdown
 #' @import parallel
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics hist pairs par plot points strwidth text
@@ -86,7 +84,7 @@
 #'
 setClass(
     Class = "TSSr",
-    representation(
+    slots = list(
         genomeName = "character",
         inputFiles = "character",
         inputFilesType = "character",
@@ -110,7 +108,7 @@ setClass(
         TAGtables = "list",
         PromoterShift = "list"
     ),
-    prototype(
+    prototype = list(
         genomeName = character(),
         inputFiles = character(),
         inputFilesType = character(),
@@ -136,11 +134,107 @@ setClass(
     ),
     validity = function(object) {
         supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
-        if (!(object@inputFilesType %in% supportedTypes)) {
+        if (length(object@inputFilesType) > 0 &&
+            !(object@inputFilesType %in% supportedTypes)) {
             return(paste(
                 sQuote("inputFilesType"), "must be one of supported input file types:",
                 paste(sQuote(supportedTypes), collapse = ", "), "."
             ))
         }
+        if (length(object@inputFiles) > 0 && length(object@sampleLabels) > 0) {
+            if (length(object@inputFiles) != length(object@sampleLabels)) {
+                return("Length of 'inputFiles' must equal length of 'sampleLabels'.")
+            }
+        }
+        if (length(object@sampleLabelsMerged) > 0 && length(object@mergeIndex) > 0) {
+            if (length(unique(object@mergeIndex)) != length(object@sampleLabelsMerged)) {
+                return("Number of unique values in 'mergeIndex' must equal length of 'sampleLabelsMerged'.")
+            }
+        }
+        TRUE
     }
 )
+
+#' TSSr Constructor Function
+#'
+#' @description Creates a new TSSr object for TSS sequencing data analysis.
+#'
+#' @param genomeName A character string specifying the BSgenome object name
+#'   (e.g., "BSgenome.Scerevisiae.UCSC.sacCer3").
+#' @param inputFiles A character vector of input file paths.
+#' @param inputFilesType A character string specifying the type of input files.
+#'   Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".
+#' @param sampleLabels A character vector of sample labels corresponding to
+#'   inputFiles.
+#' @param sampleLabelsMerged A character vector of merged sample labels for
+#'   biological replicates.
+#' @param mergeIndex A numeric vector indicating which samples to merge
+#'   together.
+#' @param refSource A character string specifying the path to GFF annotation
+#'   file.
+#' @param organismName A character string specifying the organism name.
+#'
+#' @return A TSSr object.
+#'
+#' @export
+#' @rdname TSSr-class
+#'
+#' @examples
+#' # Create a TSSr object (files do not need to exist for object creation)
+#' myTSSr <- TSSr(
+#'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+#'     inputFiles = c("sample1.bam", "sample2.bam"),
+#'     inputFilesType = "bam",
+#'     sampleLabels = c("S1", "S2"),
+#'     sampleLabelsMerged = c("merged"),
+#'     mergeIndex = c(1, 1)
+#' )
+#'
+TSSr <- function(genomeName = character(),
+                 inputFiles = character(),
+                 inputFilesType = character(),
+                 sampleLabels = character(),
+                 sampleLabelsMerged = character(),
+                 mergeIndex = numeric(),
+                 refSource = character(),
+                 organismName = character()) {
+    ## Validate inputFilesType
+    supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
+    if (length(inputFilesType) > 0 && !(inputFilesType %in% supportedTypes)) {
+        stop(
+            sQuote("inputFilesType"), " must be one of: ",
+            paste(sQuote(supportedTypes), collapse = ", "), "."
+        )
+    }
+
+    ## Validate inputFiles and sampleLabels correspondence
+    if (length(inputFiles) > 0 && length(sampleLabels) > 0) {
+        if (length(inputFiles) != length(sampleLabels)) {
+            stop("Length of 'inputFiles' (", length(inputFiles),
+                 ") must equal length of 'sampleLabels' (", length(sampleLabels), ").")
+        }
+    }
+
+    ## Validate mergeIndex and sampleLabelsMerged correspondence
+    if (length(sampleLabelsMerged) > 0 && length(mergeIndex) > 0) {
+        if (length(unique(mergeIndex)) != length(sampleLabelsMerged)) {
+            stop("Number of unique values in 'mergeIndex' (",
+                 length(unique(mergeIndex)),
+                 ") must equal length of 'sampleLabelsMerged' (",
+                 length(sampleLabelsMerged), ").")
+        }
+        if (length(mergeIndex) != length(inputFiles) && length(inputFiles) > 0) {
+            stop("Length of 'mergeIndex' must equal length of 'inputFiles'.")
+        }
+    }
+
+    new("TSSr",
+        genomeName = genomeName,
+        inputFiles = inputFiles,
+        inputFilesType = inputFilesType,
+        sampleLabels = sampleLabels,
+        sampleLabelsMerged = sampleLabelsMerged,
+        mergeIndex = mergeIndex,
+        refSource = refSource,
+        organismName = organismName)
+}

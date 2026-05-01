@@ -17,15 +17,16 @@
 #' "bamPairedEnd", otherwise ignored.
 #' @param softclippingAllowed Used only if inputFilesType == "bam" or
 #' "bamPairedEnd". Default is FALSE.
-#' @return Large List of elements - one element for each sample
+#' @return A modified TSSr object with updated \code{TSSrawMatrix},
+#'   \code{TSSprocessedMatrix}, and \code{librarySizes} slots.
 #'
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' # getTSS requires input files to exist.
+#' # The exampleTSSr object has pre-loaded TSS data.
 #' data(exampleTSSr)
-#' # getTSS(exampleTSSr)
-#' }
+#' head(slot(exampleTSSr, "TSSrawMatrix"))
 setGeneric("getTSS", function(
   object,
   sequencingQualityThreshold = 10,
@@ -46,6 +47,17 @@ setMethod("getTSS", signature(object = "TSSr"), function(
     Genome <- .getGenome(object@genomeName)
     sampleLabels <- object@sampleLabels
     inputFilesType <- object@inputFilesType
+    inputFiles <- object@inputFiles
+
+    ## Check if input files exist
+    missingFiles <- inputFiles[!file.exists(inputFiles)]
+    if (length(missingFiles) > 0) {
+        stop("Input file(s) not found: ",
+             paste(sQuote(missingFiles), collapse = ", "),
+             ". Please check the 'inputFiles' slot of your TSSr object ",
+             "and ensure the files exist at the specified paths.")
+    }
+
     if (length(object@sampleLabelsMerged) == 0) {
         object@sampleLabelsMerged <- sampleLabels
     }

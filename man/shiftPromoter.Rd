@@ -17,7 +17,7 @@ shiftPromoter(object, comparePairs, pval=0.01)
 \item{pval}{Genes with adjusted p value >= pval will be returned. Default value = 0.01.}
 }
 \value{
-Large List of elements - one element for each sample
+A modified TSSr object with updated \code{PromoterShift} slot.
 }
 \description{
 Selects genes which have multiple core promoters and undergo core promoter
@@ -25,8 +25,6 @@ shifting across different experiments. Generates gene list with Ds (degree of sh
 value (Lu et al., 2019), p value and adjusted p value.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-# shiftPromoter(exampleTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
-}
+shiftPromoter(exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01)
 }

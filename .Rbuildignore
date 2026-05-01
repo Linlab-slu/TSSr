@@ -7,3 +7,8 @@
 ^Meta$
 ^\.claude$
 ^\.github$
+^TSSr\.BiocCheck$
+^TSSr\.Rcheck$
+^TSSr_.*\.tar\.gz$
+^biocondictor_report\.txt$
+^tssr\.yml$
