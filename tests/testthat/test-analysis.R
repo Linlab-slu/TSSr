@@ -1,7 +1,7 @@
 # Test downstream analysis: shapeCluster, shiftPromoter, callEnhancer
 # Prepare data once at the top to avoid repeating expensive workflow steps
 
-# Top-level workflow setup mirrors skip_on_bioc(): on Bioconductor
+# Top-level workflow setup mirrors .skip_on_bioc_spb(): on Bioconductor
 # build machines we skip the heavy prep so the SPB 15-min budget holds;
 # everywhere else (devtools::test, CI, user installs) it runs normally.
 .on_bioc_spb <- identical(Sys.info()[["user"]], "biocbuild") ||
@@ -22,7 +22,7 @@ if (!.on_bioc_spb) {
 }
 
 test_that("shapeCluster calculates shape scores with PSS method", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS",
         useMultiCore = FALSE)
 
@@ -36,7 +36,7 @@ test_that("shapeCluster calculates shape scores with PSS method", {
 })
 
 test_that("shiftPromoter detects promoter shifts", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     shiftPromoter(exampleTSSr,
         comparePairs = list(c("control", "treat")),
         pval = 0.01
@@ -49,7 +49,7 @@ test_that("shiftPromoter detects promoter shifts", {
 })
 
 test_that("callEnhancer identifies enhancer candidates when data available", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     ## callEnhancer requires annotated clusters; skip if not available
     skip_if(length(exampleTSSr@assignedClusters) == 0,
         "No assignedClusters in exampleTSSr")

@@ -1,7 +1,7 @@
 # Test clustering functionality
 
 test_that("clusterTSS produces tagClusters", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     data(exampleTSSr)
 
     expect_type(exampleTSSr@tagClusters, "list")
@@ -14,7 +14,7 @@ test_that("clusterTSS produces tagClusters", {
 })
 
 test_that("consensusClusters has valid structure", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     data(exampleTSSr)
 
     expect_type(exampleTSSr@consensusClusters, "list")
@@ -26,7 +26,7 @@ test_that("consensusClusters has valid structure", {
 })
 
 test_that("tagClusters contain required columns", {
-    skip_on_bioc()
+    .skip_on_bioc_spb()
     data(exampleTSSr)
 
     tc <- exampleTSSr@tagClusters[[1]]
