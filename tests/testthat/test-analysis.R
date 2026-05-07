@@ -1,15 +1,25 @@
 # Test downstream analysis: shapeCluster, shiftPromoter, callEnhancer
 # Prepare data once at the top to avoid repeating expensive workflow steps
 
+# Top-level workflow setup mirrors skip_on_bioc(): on Bioconductor
+# build machines we skip the heavy prep so the SPB 15-min budget holds;
+# everywhere else (devtools::test, CI, user installs) it runs normally.
+.on_bioc_spb <- identical(Sys.info()[["user"]], "biocbuild") ||
+    grepl("bbs-", R.home(), fixed = TRUE) ||
+    nzchar(Sys.getenv("BBS_HOME")) ||
+    identical(Sys.getenv("IS_BIOC_BUILD_MACHINE"), "true")
+
 data(exampleTSSr)
-mergeSamples(exampleTSSr)
-normalizeTSS(exampleTSSr)
-filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
-clusterTSS(exampleTSSr,
-    method = "peakclu", clusterThreshold = 1,
-    useMultiCore = FALSE
-)
-consensusCluster(exampleTSSr, useMultiCore = FALSE)
+if (!.on_bioc_spb) {
+    mergeSamples(exampleTSSr)
+    normalizeTSS(exampleTSSr)
+    filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+    clusterTSS(exampleTSSr,
+        method = "peakclu", clusterThreshold = 1,
+        useMultiCore = FALSE
+    )
+    consensusCluster(exampleTSSr, useMultiCore = FALSE)
+}
 
 test_that("shapeCluster calculates shape scores with PSS method", {
     skip_on_bioc()

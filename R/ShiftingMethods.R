@@ -15,7 +15,8 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' shiftPromoter(exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01)
+#' # Promoter shift results are pre-computed in the @PromoterShift slot
+#' head(slot(exampleTSSr, "PromoterShift")[["control_VS_treat"]])
 setGeneric("shiftPromoter", function(object, comparePairs,
                                      pval = 0.01) {
     standardGeneric("shiftPromoter")

@@ -37,8 +37,7 @@ A modified TSSr object with updated \code{DEtables} and
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-deGene(exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01)
-}
+# Differential expression results are pre-computed in the @DEtables slot
+head(slot(exampleTSSr, "DEtables")[["control_VS_treat"]])
 }

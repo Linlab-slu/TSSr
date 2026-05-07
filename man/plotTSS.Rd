@@ -51,11 +51,9 @@ TSS and cluster examples visualized in a graph
 Plots Gviz-track of TSSs, clusters, and genes.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotTSS(exampleTSSr, samples = c("control", "treat"),
     genelist = c("YBL017C", "YBL067C"), up.dis = 500, down.dis = 500)
 setwd(oldwd)
-}
 }

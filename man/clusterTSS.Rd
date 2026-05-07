@@ -50,11 +50,7 @@ using "peakclu" method. "peakclu" method is an implementation of peak-based clus
 The minimum distance of two neighboring peaks can be specified.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
-clusterTSS(exampleTSSr,
-    method = "peakclu", clusterThreshold = 1,
-    useMultiCore = FALSE, numCores = NULL
-)
-}
+# Tag clusters are pre-computed in the @tagClusters slot
+head(slot(exampleTSSr, "tagClusters")[["control"]])
 }

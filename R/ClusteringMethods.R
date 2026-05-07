@@ -27,10 +27,8 @@
 #' @export
 #' @examples
 #' data(exampleTSSr)
-#' clusterTSS(exampleTSSr,
-#'     method = "peakclu", clusterThreshold = 1,
-#'     useMultiCore = FALSE, numCores = NULL
-#' )
+#' # Tag clusters are pre-computed in the @tagClusters slot
+#' head(slot(exampleTSSr, "tagClusters")[["control"]])
 #'
 setGeneric("clusterTSS", function(
   object, method = "peakclu",

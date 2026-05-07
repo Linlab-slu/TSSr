@@ -23,10 +23,8 @@ Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotCorrelation(exampleTSSr, samples = "all")
 setwd(oldwd)
-}
 }

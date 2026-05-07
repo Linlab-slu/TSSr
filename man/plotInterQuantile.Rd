@@ -23,10 +23,8 @@ core promoter interquantile width visualized in a graph
 Plots histograms of the interquantile width of processed clusters.
 }
 \examples{
-\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
 setwd(oldwd)
-}
 }

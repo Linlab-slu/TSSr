@@ -16,9 +16,8 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # callEnhancer requires annotated clusters
-#' # The exampleTSSr object has pre-annotated clusters
-#' callEnhancer(exampleTSSr, flanking = 400, dis2gene = 2000)
+#' # Enhancer calls are pre-computed in the @enhancers slot
+#' head(slot(exampleTSSr, "enhancers")[["control"]])
 setGeneric("callEnhancer", function(object, flanking = 400,
                                     dis2gene = 2000) {
     standardGeneric("callEnhancer")

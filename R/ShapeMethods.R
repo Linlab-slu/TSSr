@@ -19,9 +19,8 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # First create consensus clusters
-#' consensusCluster(exampleTSSr, useMultiCore = FALSE)
-#' shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS")
+#' # Shape scores are pre-computed in the @clusterShape slot
+#' head(slot(exampleTSSr, "clusterShape")[["control"]])
 setGeneric("shapeCluster", function(
   object, clusters = "consensusClusters",
   method = "PSS", useMultiCore = FALSE, numCores = NULL

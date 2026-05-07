@@ -20,7 +20,8 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' deGene(exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01)
+#' # Differential expression results are pre-computed in the @DEtables slot
+#' head(slot(exampleTSSr, "DEtables")[["control_VS_treat"]])
 setGeneric("deGene", function(object, comparePairs = list(c("control", "treat")), pval = 0.01, useMultiCore = FALSE, numCores = NULL) standardGeneric("deGene"))
 #' @rdname deGene
 #' @export

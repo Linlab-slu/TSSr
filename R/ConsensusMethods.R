@@ -21,7 +21,8 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' consensusCluster(exampleTSSr, useMultiCore = FALSE)
+#' # Consensus clusters are pre-computed in the @consensusClusters slot
+#' head(slot(exampleTSSr, "consensusClusters")[["control"]])
 setGeneric("consensusCluster", function(object, dis = 50, useMultiCore = FALSE, numCores = NULL) standardGeneric("consensusCluster"))
 #' @rdname consensusCluster
 #' @export
