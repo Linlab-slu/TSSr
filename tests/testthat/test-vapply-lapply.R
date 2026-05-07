@@ -2,6 +2,7 @@
 # These tests exercise the code paths where sapply was replaced.
 
 test_that("clusterTSS works correctly after sapply->lapply in ClusteringFunctions", {
+    skip_on_bioc()
     data(exampleTSSr)
     # clusterTSS calls .clusterTSS which uses lapply (was sapply)
     result <- clusterTSS(exampleTSSr, method = "peakclu", peakDistance = 100,
@@ -16,6 +17,7 @@ test_that("clusterTSS works correctly after sapply->lapply in ClusteringFunction
 })
 
 test_that("consensusCluster works after sapply->lapply in ConsensusMethods", {
+    skip_on_bioc()
     data(exampleTSSr)
     # consensusCluster uses lapply (was sapply) for chr/strand conversion
     result <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
@@ -26,6 +28,7 @@ test_that("consensusCluster works after sapply->lapply in ConsensusMethods", {
 })
 
 test_that("shapeCluster works after sapply->vapply in ShapeMethods", {
+    skip_on_bioc()
     data(exampleTSSr)
     # shapeCluster uses vapply (was sapply) for entropy calculation
     result <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
@@ -40,6 +43,7 @@ test_that("shapeCluster works after sapply->vapply in ShapeMethods", {
 })
 
 test_that("deGene works after sapply->vapply in ExpressionFunctions", {
+    skip_on_bioc()
     data(exampleTSSr)
     # deGene uses vapply (was sapply) for tag counting and D.names
     result <- deGene(exampleTSSr,
@@ -50,6 +54,7 @@ test_that("deGene works after sapply->vapply in ExpressionFunctions", {
 })
 
 test_that("shiftPromoter works after sapply->vapply in ShiftingMethods", {
+    skip_on_bioc()
     data(exampleTSSr)
     # shiftPromoter uses vapply (was sapply) for D.names
     # suppress chisq.test warnings about approximation

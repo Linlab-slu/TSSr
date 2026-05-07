@@ -5,6 +5,7 @@
 data(exampleTSSr)
 
 test_that("mergeSamples merges raw TSS data correctly", {
+    skip_on_bioc()
     mergeSamples(exampleTSSr)
 
     processed <- exampleTSSr@TSSprocessedMatrix
@@ -14,6 +15,7 @@ test_that("mergeSamples merges raw TSS data correctly", {
 })
 
 test_that("normalizeTSS normalizes to TPM", {
+    skip_on_bioc()
     normalizeTSS(exampleTSSr)
 
     processed <- exampleTSSr@TSSprocessedMatrix
@@ -25,6 +27,7 @@ test_that("normalizeTSS normalizes to TPM", {
 })
 
 test_that("filterTSS with TPM method reduces rows", {
+    skip_on_bioc()
     rows_before <- nrow(exampleTSSr@TSSprocessedMatrix)
     filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
     rows_after <- nrow(exampleTSSr@TSSprocessedMatrix)
@@ -34,6 +37,7 @@ test_that("filterTSS with TPM method reduces rows", {
 })
 
 test_that("clusterTSS produces tagClusters", {
+    skip_on_bioc()
     clusterTSS(exampleTSSr,
         method = "peakclu", clusterThreshold = 1,
         useMultiCore = FALSE
@@ -49,6 +53,7 @@ test_that("clusterTSS produces tagClusters", {
 })
 
 test_that("consensusCluster produces consensus clusters", {
+    skip_on_bioc()
     consensusCluster(exampleTSSr, useMultiCore = FALSE)
 
     cc <- exampleTSSr@consensusClusters

@@ -12,6 +12,7 @@ clusterTSS(exampleTSSr,
 consensusCluster(exampleTSSr, useMultiCore = FALSE)
 
 test_that("shapeCluster calculates shape scores with PSS method", {
+    skip_on_bioc()
     shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS",
         useMultiCore = FALSE)
 
@@ -25,6 +26,7 @@ test_that("shapeCluster calculates shape scores with PSS method", {
 })
 
 test_that("shiftPromoter detects promoter shifts", {
+    skip_on_bioc()
     shiftPromoter(exampleTSSr,
         comparePairs = list(c("control", "treat")),
         pval = 0.01
@@ -37,6 +39,7 @@ test_that("shiftPromoter detects promoter shifts", {
 })
 
 test_that("callEnhancer identifies enhancer candidates when data available", {
+    skip_on_bioc()
     ## callEnhancer requires annotated clusters; skip if not available
     skip_if(length(exampleTSSr@assignedClusters) == 0,
         "No assignedClusters in exampleTSSr")

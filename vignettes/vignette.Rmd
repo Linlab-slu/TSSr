@@ -89,7 +89,14 @@ getTSS(myTSSr)
 
 # TSS data processing
 
-```{r TSSprocessing, tidy=FALSE}
+> The `exampleTSSr` object distributed with the package already contains
+> the results of every pipeline step below. Each computational chunk is
+> shown as `eval=FALSE` to keep the vignette build time small on
+> Bioconductor's Single Package Builder; the chunk that follows it
+> displays the corresponding pre-computed result from `exampleTSSr` so
+> the reader can see what each step produces.
+
+```{r TSSprocessing, eval=FALSE, tidy=FALSE}
 # Merge replicates
 mergeSamples(myTSSr)
 # Normalization
@@ -98,9 +105,14 @@ normalizeTSS(myTSSr)
 filterTSS(myTSSr, method = "TPM", tpmLow = 0.1)
 ```
 
+```{r TSSprocessing-show}
+# Result available in the @TSSprocessedMatrix slot
+head(slot(myTSSr, "TSSprocessedMatrix"))
+```
+
 # TSS clustering
 
-```{r TSSclustering, tidy=FALSE}
+```{r TSSclustering, eval=FALSE, tidy=FALSE}
 # TSS clustering
 clusterTSS(myTSSr,
     method = "peakclu", peakDistance = 100, extensionDistance = 30,
@@ -112,9 +124,17 @@ clusterTSS(myTSSr,
 consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 ```
 
+```{r TSSclustering-show}
+# Tag clusters per sample (@tagClusters)
+head(slot(myTSSr, "tagClusters")[["control"]])
+
+# Consensus clusters across samples (@consensusClusters)
+head(slot(myTSSr, "consensusClusters")[["control"]])
+```
+
 # Core promoter shape
 
-```{r shapeCluster, tidy=FALSE}
+```{r shapeCluster, eval=FALSE, tidy=FALSE}
 # Calculating core promoter shape score
 shapeCluster(myTSSr,
     clusters = "consensusClusters", method = "PSS",
@@ -122,9 +142,14 @@ shapeCluster(myTSSr,
 )
 ```
 
+```{r shapeCluster-show}
+# Shape scores per cluster (@clusterShape)
+head(slot(myTSSr, "clusterShape")[["control"]])
+```
+
 # Annotation of core promoters
 
-```{r annotateCluster, tidy=FALSE}
+```{r annotateCluster, eval=FALSE, tidy=FALSE}
 # Assign clusters to the annotated features
 annotateCluster(myTSSr, clusters = "consensusClusters",
     filterCluster = TRUE, filterClusterThreshold = 0.02,
@@ -132,20 +157,35 @@ annotateCluster(myTSSr, clusters = "consensusClusters",
     upstreamOverlap = 500, downstream = 0)
 ```
 
+```{r annotateCluster-show}
+# Clusters assigned to genes (@assignedClusters)
+head(slot(myTSSr, "assignedClusters")[["control"]])
+```
+
 # Differential expression analysis
 
-```{r deGene, tidy=FALSE}
+```{r deGene, eval=FALSE, tidy=FALSE}
 # Gene-level differential expression using DESeq2
 deGene(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01, useMultiCore = FALSE, numCores = NULL)
 ```
 
+```{r deGene-show}
+# Differential expression results (@DEtables)
+head(slot(myTSSr, "DEtables")[["control_VS_treat"]])
+```
+
 # Core promoter shifts
 
-```{r shiftPromoter, tidy=FALSE}
+```{r shiftPromoter, eval=FALSE, tidy=FALSE}
 # Calculate core promoter shifts
 shiftPromoter(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01)
+```
+
+```{r shiftPromoter-show}
+# Promoter shift results (@PromoterShift)
+head(slot(myTSSr, "PromoterShift")[["control_VS_treat"]])
 ```
 
 # Exporting results
