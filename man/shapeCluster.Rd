@@ -37,8 +37,10 @@ Calculates core promoter shape based on the distributions of TSSs within core
   algorithm (Lu et al. 2019).
 }
 \examples{
+\donttest{
 data(exampleTSSr)
 # First create consensus clusters
 consensusCluster(exampleTSSr, useMultiCore = FALSE)
 shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS")
+}
 }

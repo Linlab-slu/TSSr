@@ -21,8 +21,10 @@ core promoter shape score visualized in a graph
 Plots histograms of core promoter shape scores.
 }
 \examples{
+\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotShape(exampleTSSr, samples = "all")
 setwd(oldwd)
+}
 }

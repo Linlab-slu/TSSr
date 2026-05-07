@@ -22,8 +22,10 @@ Calculates principle component analysis (PCA) of all samples and creates a biplo
 which includes the position of each sample in terms of PC1 and PC2.
 }
 \examples{
+\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotTssPCA(exampleTSSr, TSS.threshold = 10)
 setwd(oldwd)
+}
 }

@@ -25,8 +25,10 @@ gene differential expression visualized in a graph
 Vocano plots of gene differential expression (with DESeq2 method) results.
 }
 \examples{
+\donttest{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotDE(exampleTSSr, withGeneName = TRUE)
 setwd(oldwd)
+}
 }

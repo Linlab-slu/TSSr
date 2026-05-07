@@ -31,6 +31,8 @@ Makes consensus clusters from multiple samples in TSSr object and
 calculates inter-quantile positions within consensus clusters for each sample.
 }
 \examples{
+\donttest{
 data(exampleTSSr)
 consensusCluster(exampleTSSr, useMultiCore = FALSE)
+}
 }
