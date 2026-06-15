@@ -12,6 +12,10 @@
 
 ################################################################################
 ## .getTSS_from_bam function calls TSS from bam files
+.cigarReferenceWidth <- function(cigar) {
+    as.integer(cigarillo::cigar_extent_along_ref(cigar, N.regions.removed = FALSE))
+}
+
 .getTSS_from_bam <- function(
   bam.files, Genome, sampleLabels, inputFilesType,
   sequencingQualityThreshold,
@@ -70,18 +74,7 @@
             } else {
                 end <- length(cigar)
             }
-            if (softclippingAllowed) {
-                mapped.length <- c(
-                    mapped.length,
-                    as.integer(sum(as(str_extract_all(bam[[1]]$cigar[start:end], "([0-9]+)"), "IntegerList"))) -
-                        ifelse(is.na(sub("S", "", str_extract(
-                            bam[[1]]$cigar[start:end],
-                            "[0-9]+S"
-                        ))), 0, sub("S", "", str_extract(bam[[1]]$cigar[start:end], "[0-9]+S")))
-                )
-            } else {
-                mapped.length <- c(mapped.length, as.integer(sum(as(str_extract_all(bam[[1]]$cigar[start:end], "([0-9]+)"), "IntegerList"))))
-            }
+            mapped.length <- c(mapped.length, .cigarReferenceWidth(cigar[start:end]))
             if (end == length(cigar)) {
                 break
             } else {

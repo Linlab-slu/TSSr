@@ -43,6 +43,7 @@ Imports:
     IRanges (>= 2.24.1),
     Rsamtools (>= 2.6.0),
     calibrate (>= 1.7.7),
+    cigarillo (>= 0.99.2),
     data.table (>= 1.14.0),
     dplyr (>= 1.0.7),
     ggfortify (>= 0.4.12),

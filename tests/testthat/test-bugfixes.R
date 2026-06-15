@@ -59,6 +59,18 @@ test_that("BUG-5: withr is available for tests", {
     expect_true(requireNamespace("withr", quietly = TRUE))
 })
 
+test_that("BAM CIGAR widths are measured in reference space", {
+    cigar <- c(
+        "100M", "10S90M", "90M10S", "50M10I40M",
+        "50M10D40M", "10S50M10I40M5S", "20M100N30M", "5H95M"
+    )
+    ref_width <- TSSr:::`.cigarReferenceWidth`(cigar)
+
+    expect_equal(ref_width, c(100L, 90L, 90L, 90L, 100L, 90L, 150L, 95L))
+    expect_equal(100L + ref_width[4] - 1L, 189L)
+    expect_equal(100L + ref_width[6] - 1L, 189L)
+})
+
 test_that("representation() replaced with slots = list()", {
     # Verify TSSr class uses slots (not deprecated representation)
     slot_names <- slotNames("TSSr")
