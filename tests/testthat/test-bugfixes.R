@@ -71,6 +71,39 @@ test_that("BAM CIGAR widths are measured in reference space", {
     expect_equal(100L + ref_width[6] - 1L, 189L)
 })
 
+test_that("5' terminal mismatch trimming stops at the first match", {
+    expect_equal(TSSr:::`.leadingMismatchCount`("GTG", "AAG"), 2L)
+    expect_equal(TSSr:::`.leadingMismatchCount`("GTA", "CCC"), 3L)
+    expect_equal(TSSr:::`.leadingMismatchCount`("GTAC", "CCCC"), 3L)
+    expect_equal(TSSr:::`.leadingMismatchCount`("GTA", "GCC"), 0L)
+})
+
+test_that("5' terminal mismatch trimming updates plus starts and minus ends", {
+    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
+    Genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
+
+    plus.read <- GenomicRanges::GRanges(
+        "chrI", IRanges::IRanges(start = 100L, end = 120L), strand = "+"
+    )
+    GenomicRanges::mcols(plus.read)$seq <- "TTCCAACCTGTCTCTCAACTT"
+    plus.trimmed <- TSSr:::`.trimTerminalMismatchesOneStrand`(
+        plus.read, Genome, minusStrand = FALSE
+    )
+
+    minus.read <- GenomicRanges::GRanges(
+        "chrI", IRanges::IRanges(start = 100L, end = 120L), strand = "-"
+    )
+    GenomicRanges::mcols(minus.read)$seq <- "GGCCAACCTGTCTCTCAACAC"
+    minus.trimmed <- TSSr:::`.trimTerminalMismatchesOneStrand`(
+        minus.read, Genome, minusStrand = TRUE
+    )
+
+    expect_equal(start(plus.trimmed), 102L)
+    expect_equal(end(plus.trimmed), 120L)
+    expect_equal(start(minus.trimmed), 100L)
+    expect_equal(end(minus.trimmed), 118L)
+})
+
 test_that("representation() replaced with slots = list()", {
     # Verify TSSr class uses slots (not deprecated representation)
     slot_names <- slotNames("TSSr")

@@ -16,6 +16,115 @@
     as.integer(cigarillo::cigar_extent_along_ref(cigar, N.regions.removed = FALSE))
 }
 
+.reverseComplementText <- function(seq) {
+    seq <- toupper(as.character(seq))
+    vapply(strsplit(seq, ""), function(bases) {
+        paste(rev(chartr("ACGTRYSWKMBDHVN", "TGCAYRSWMKVHDBN", bases)), collapse = "")
+    }, character(1))
+}
+
+.leadingMismatchCount <- function(read.seq, reference.seq, maxMismatches = 3L) {
+    read.seq <- toupper(as.character(read.seq))
+    reference.seq <- toupper(as.character(reference.seq))
+    limit <- min(as.integer(maxMismatches), nchar(read.seq), nchar(reference.seq))
+    mismatches <- 0L
+    if (limit == 0L) {
+        return(mismatches)
+    }
+
+    known.bases <- c("A", "C", "G", "T")
+    for (i in seq_len(limit)) {
+        read.base <- substr(read.seq, i, i)
+        reference.base <- substr(reference.seq, i, i)
+        if (read.base %in% known.bases &&
+            reference.base %in% known.bases &&
+            read.base != reference.base) {
+            mismatches <- mismatches + 1L
+        } else {
+            break
+        }
+    }
+    mismatches
+}
+
+.trimTerminalMismatchesOneStrand <- function(readsGR, Genome, minusStrand = FALSE, maxMismatches = 3L) {
+    if (length(readsGR) == 0L) {
+        return(readsGR)
+    }
+
+    read.seq <- as.character(GenomicRanges::elementMetadata(readsGR)$seq)
+    terminal.width <- pmin(
+        as.integer(maxMismatches),
+        nchar(read.seq),
+        pmax(width(readsGR) - 1L, 0L)
+    )
+    valid <- which(terminal.width > 0L)
+    trim.width <- integer(length(readsGR))
+    if (length(valid) == 0L) {
+        return(readsGR)
+    }
+
+    terminal.ranges <- GenomicRanges::resize(
+        readsGR[valid],
+        width = terminal.width[valid],
+        fix = "start"
+    )
+    reference.seq <- getSeq(Genome, terminal.ranges, as.character = TRUE)
+
+    if (minusStrand) {
+        seq.end <- nchar(read.seq[valid])
+        query.seq <- .reverseComplementText(substr(
+            read.seq[valid],
+            seq.end - terminal.width[valid] + 1L,
+            seq.end
+        ))
+    } else {
+        query.seq <- substr(read.seq[valid], 1L, terminal.width[valid])
+    }
+
+    trim.width[valid] <- vapply(seq_along(query.seq), function(i) {
+        .leadingMismatchCount(query.seq[i], reference.seq[i], maxMismatches)
+    }, integer(1))
+
+    trimmed <- which(trim.width > 0L)
+    if (length(trimmed) > 0L) {
+        if (minusStrand) {
+            end(readsGR)[trimmed] <- end(readsGR)[trimmed] - trim.width[trimmed]
+        } else {
+            start(readsGR)[trimmed] <- start(readsGR)[trimmed] + trim.width[trimmed]
+        }
+    }
+    readsGR
+}
+
+.trimTerminalMismatches <- function(readsGR.p, readsGR.m, Genome, maxMismatches = 3L) {
+    chr <- pos <- tag_count <- NULL
+
+    message("\t-> Removing 5' terminal mismatched bases...")
+    readsGR.p <- .trimTerminalMismatchesOneStrand(
+        readsGR.p, Genome, minusStrand = FALSE, maxMismatches = maxMismatches
+    )
+    readsGR.m <- .trimTerminalMismatchesOneStrand(
+        readsGR.m, Genome, minusStrand = TRUE, maxMismatches = maxMismatches
+    )
+
+    TSS.p <- data.table(
+        chr = as.character(seqnames(readsGR.p)),
+        pos = start(readsGR.p), strand = "+"
+    )
+    TSS.m <- data.table(
+        chr = as.character(seqnames(readsGR.m)),
+        pos = end(readsGR.m), strand = "-"
+    )
+    TSS <- rbind(TSS.p, TSS.m)
+    TSS <- TSS[, c("chr", "pos", "strand")]
+    TSS$tag_count <- 1
+    setDT(TSS)
+    TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
+
+    return(TSS)
+}
+
 .getTSS_from_bam <- function(
   bam.files, Genome, sampleLabels, inputFilesType,
   sequencingQualityThreshold,
@@ -111,8 +220,7 @@
             setDT(TSS)
             TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
         } else {
-            # remove G mismatch
-            TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
+            TSS <- .trimTerminalMismatches(readsGR.p, readsGR.m, Genome)
         }
 
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
@@ -127,61 +235,6 @@
     }
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
     return(TSS.all.samples)
-}
-
-################################################################################
-.removeNewG <- function(readsGR.p, readsGR.m, Genome) {
-    ## define variable as a NULL value
-    chr <- pos <- tag_count <- Gp <- Gm <- i <- NULL
-
-    message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
-    #-----------------------------------------------------------------------------
-    ## plus strand
-    #-----------------------------------------------------------------------------
-    Gp <- which(substr(GenomicRanges::elementMetadata(readsGR.p)$seq,
-        start = 1, stop = 1
-    ) == "G")
-    i <- 1
-    while (length(Gp) > 0) {
-        G.mismatch <- Gp[getSeq(Genome, GenomicRanges::resize(readsGR.p[Gp], width = 1, fix = "start"), as.character = TRUE) != "G"]
-        start(readsGR.p[G.mismatch]) <- start(readsGR.p[G.mismatch]) + as.integer(1)
-        i <- i + 1
-        Gp <- G.mismatch[which(substr(GenomicRanges::elementMetadata(readsGR.p[G.mismatch])$seq,
-            start = 1, stop = i
-        ) == paste(rep("G", i), collapse = ""))]
-    }
-    TSS.p <- data.table(
-        chr = as.character(seqnames(readsGR.p)),
-        pos = start(readsGR.p), strand = "+"
-    )
-    #-----------------------------------------------------------------------------
-    ## minus strand
-    #-----------------------------------------------------------------------------
-    Gm <- which(substr(GenomicRanges::elementMetadata(readsGR.m)$seq,
-        start = GenomicRanges::elementMetadata(readsGR.m)$read.length,
-        stop = GenomicRanges::elementMetadata(readsGR.m)$read.length
-    ) == "C")
-    i <- 1
-    while (length(Gm) > 0) {
-        G.mismatch <- Gm[getSeq(Genome, GenomicRanges::resize(readsGR.m[Gm], width = 1, fix = "start"), as.character = TRUE) != "G"]
-        end(readsGR.m[G.mismatch]) <- end(readsGR.m[G.mismatch]) - as.integer(1)
-        i <- i + 1
-        Gm <- G.mismatch[which(substr(GenomicRanges::elementMetadata(readsGR.m[G.mismatch])$seq,
-            start = 1, stop = i
-        ) == paste(rep("C", i), collapse = ""))]
-    }
-    TSS.m <- data.table(
-        chr = as.character(seqnames(readsGR.m)),
-        pos = end(readsGR.m), strand = "-"
-    )
-    #-----------------------------------------------------------------------------
-    TSS <- rbind(TSS.p, TSS.m)
-    TSS <- TSS[, c("chr", "pos", "strand")]
-    TSS$tag_count <- 1
-    setDT(TSS)
-    TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
-
-    return(TSS)
 }
 
 ################################################################################
