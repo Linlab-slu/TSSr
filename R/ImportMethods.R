@@ -16,7 +16,11 @@
 #' @param mappingQualityThreshold Used only if inputFilesType == "bam" or
 #' "bamPairedEnd", otherwise ignored.
 #' @param softclippingAllowed Used only if inputFilesType == "bam" or
-#' "bamPairedEnd". Default is FALSE.
+#' "bamPairedEnd". Default is FALSE. When FALSE, TSSr applies G-only
+#' uncoded G correction to leading G bases on plus-strand reads and
+#' trailing C bases on minus-strand reads as transcript-sense G bases.
+#' When TRUE, TSSr uses the aligner's aligned 5' boundary directly and
+#' skips uncoded G correction.
 #' @return A modified TSSr object with updated \code{TSSrawMatrix},
 #'   \code{TSSprocessedMatrix}, and \code{librarySizes} slots.
 #'
