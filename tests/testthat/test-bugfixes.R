@@ -71,35 +71,46 @@ test_that("BAM CIGAR widths are measured in reference space", {
     expect_equal(100L + ref_width[6] - 1L, 189L)
 })
 
-test_that("5' terminal mismatch trimming stops at the first match", {
-    expect_equal(TSSr:::`.leadingMismatchCount`("GTG", "AAG"), 2L)
-    expect_equal(TSSr:::`.leadingMismatchCount`("GTA", "CCC"), 3L)
-    expect_equal(TSSr:::`.leadingMismatchCount`("GTAC", "CCCC"), 3L)
-    expect_equal(TSSr:::`.leadingMismatchCount`("GTA", "GCC"), 0L)
+test_that("uncoded G trimming only removes terminal mismatched Gs", {
+    expect_equal(TSSr:::`.uncodedGTrimWidth`("GGG", "AAG"), 2L)
+    expect_equal(TSSr:::`.uncodedGTrimWidth`("GGGG", "AAAA"), 4L)
+    expect_equal(TSSr:::`.uncodedGTrimWidth`("GTA", "AAA"), 1L)
+    expect_equal(TSSr:::`.uncodedGTrimWidth`("TGA", "AAA"), 0L)
+    expect_equal(TSSr:::`.uncodedGTrimWidth`("GGA", "GAA"), 0L)
 })
 
-test_that("5' terminal mismatch trimming updates plus starts and minus ends", {
+test_that("uncoded G trimming updates plus starts and minus ends", {
     skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     Genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
 
     plus.read <- GenomicRanges::GRanges(
-        "chrI", IRanges::IRanges(start = 100L, end = 120L), strand = "+"
+        "chrI", IRanges::IRanges(start = 118L, end = 140L), strand = "+"
     )
-    GenomicRanges::mcols(plus.read)$seq <- "TTCCAACCTGTCTCTCAACTT"
-    plus.trimmed <- TSSr:::`.trimTerminalMismatchesOneStrand`(
+    GenomicRanges::mcols(plus.read)$seq <- "GGGACCCTCCATTACCCTGCCTC"
+    plus.trimmed <- TSSr:::`.trimUncodedGOneStrand`(
         plus.read, Genome, minusStrand = FALSE
+    )
+
+    plus.non.g.read <- GenomicRanges::GRanges(
+        "chrI", IRanges::IRanges(start = 118L, end = 140L), strand = "+"
+    )
+    GenomicRanges::mcols(plus.non.g.read)$seq <- "TTTACCCTCCATTACCCTGCCTC"
+    plus.non.g.trimmed <- TSSr:::`.trimUncodedGOneStrand`(
+        plus.non.g.read, Genome, minusStrand = FALSE
     )
 
     minus.read <- GenomicRanges::GRanges(
         "chrI", IRanges::IRanges(start = 100L, end = 120L), strand = "-"
     )
-    GenomicRanges::mcols(minus.read)$seq <- "GGCCAACCTGTCTCTCAACAC"
-    minus.trimmed <- TSSr:::`.trimTerminalMismatchesOneStrand`(
+    GenomicRanges::mcols(minus.read)$seq <- "GGCCAACCTGTCTCTCAACCC"
+    minus.trimmed <- TSSr:::`.trimUncodedGOneStrand`(
         minus.read, Genome, minusStrand = TRUE
     )
 
-    expect_equal(start(plus.trimmed), 102L)
-    expect_equal(end(plus.trimmed), 120L)
+    expect_equal(start(plus.trimmed), 121L)
+    expect_equal(end(plus.trimmed), 140L)
+    expect_equal(start(plus.non.g.trimmed), 118L)
+    expect_equal(end(plus.non.g.trimmed), 140L)
     expect_equal(start(minus.trimmed), 100L)
     expect_equal(end(minus.trimmed), 118L)
 })

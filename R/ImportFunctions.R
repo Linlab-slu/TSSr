@@ -23,40 +23,36 @@
     }, character(1))
 }
 
-.leadingMismatchCount <- function(read.seq, reference.seq, maxMismatches = 3L) {
+.uncodedGTrimWidth <- function(read.seq, reference.seq) {
     read.seq <- toupper(as.character(read.seq))
     reference.seq <- toupper(as.character(reference.seq))
-    limit <- min(as.integer(maxMismatches), nchar(read.seq), nchar(reference.seq))
-    mismatches <- 0L
+    limit <- min(nchar(read.seq), nchar(reference.seq))
+    trim.width <- 0L
     if (limit == 0L) {
-        return(mismatches)
+        return(trim.width)
     }
 
-    known.bases <- c("A", "C", "G", "T")
     for (i in seq_len(limit)) {
         read.base <- substr(read.seq, i, i)
         reference.base <- substr(reference.seq, i, i)
-        if (read.base %in% known.bases &&
-            reference.base %in% known.bases &&
-            read.base != reference.base) {
-            mismatches <- mismatches + 1L
+        if (read.base == "G" && reference.base != "G") {
+            trim.width <- trim.width + 1L
         } else {
             break
         }
     }
-    mismatches
+    trim.width
 }
 
-.trimTerminalMismatchesOneStrand <- function(readsGR, Genome, minusStrand = FALSE, maxMismatches = 3L) {
+.trimUncodedGOneStrand <- function(readsGR, Genome, minusStrand = FALSE) {
     if (length(readsGR) == 0L) {
         return(readsGR)
     }
 
     read.seq <- as.character(GenomicRanges::elementMetadata(readsGR)$seq)
     terminal.width <- pmin(
-        as.integer(maxMismatches),
         nchar(read.seq),
-        pmax(width(readsGR) - 1L, 0L)
+        pmax(width(readsGR), 0L)
     )
     valid <- which(terminal.width > 0L)
     trim.width <- integer(length(readsGR))
@@ -83,7 +79,7 @@
     }
 
     trim.width[valid] <- vapply(seq_along(query.seq), function(i) {
-        .leadingMismatchCount(query.seq[i], reference.seq[i], maxMismatches)
+        .uncodedGTrimWidth(query.seq[i], reference.seq[i])
     }, integer(1))
 
     trimmed <- which(trim.width > 0L)
@@ -97,16 +93,12 @@
     readsGR
 }
 
-.trimTerminalMismatches <- function(readsGR.p, readsGR.m, Genome, maxMismatches = 3L) {
+.removeNewG <- function(readsGR.p, readsGR.m, Genome) {
     chr <- pos <- tag_count <- NULL
 
-    message("\t-> Removing 5' terminal mismatched bases...")
-    readsGR.p <- .trimTerminalMismatchesOneStrand(
-        readsGR.p, Genome, minusStrand = FALSE, maxMismatches = maxMismatches
-    )
-    readsGR.m <- .trimTerminalMismatchesOneStrand(
-        readsGR.m, Genome, minusStrand = TRUE, maxMismatches = maxMismatches
-    )
+    message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
+    readsGR.p <- .trimUncodedGOneStrand(readsGR.p, Genome, minusStrand = FALSE)
+    readsGR.m <- .trimUncodedGOneStrand(readsGR.m, Genome, minusStrand = TRUE)
 
     TSS.p <- data.table(
         chr = as.character(seqnames(readsGR.p)),
@@ -220,7 +212,7 @@
             setDT(TSS)
             TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
         } else {
-            TSS <- .trimTerminalMismatches(readsGR.p, readsGR.m, Genome)
+            TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
         }
 
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
