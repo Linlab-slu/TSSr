@@ -46,7 +46,6 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
 ) {
     message("\nClustering TSS data with ", method, " method...")
     ## initialize values
-    Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
     objName <- deparse(substitute(object))
 

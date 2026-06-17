@@ -1,3 +1,8 @@
+# TSSr 0.99.17 (2026-06-17)
+
+* Optimized `clusterTSS(method = "peakclu")` peak detection by replacing repeated per-row window scans with an indexed range-maximum lookup that preserves the original peak selection rule and tie behavior.
+* Removed an unused genome load from `clusterTSS()`, reducing fixed overhead without changing clustering output.
+
 # TSSr 0.99.16 (2026-06-16)
 
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
