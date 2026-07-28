@@ -79,6 +79,7 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         }
         object@refTable <- ref
     }
+    ref <- data.table::copy(ref)
 
     ## prepare clusters
     if (clusters == "tagClusters") {
@@ -89,7 +90,7 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
 
     ##
     asn <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
-        cs.temp <- cs.dt[[sampleLabelsMerged[i]]]
+        cs.temp <- data.table::copy(cs.dt[[sampleLabelsMerged[i]]])
         cs.asn <- .assign2gene(cs.temp, ref, upstream, upstreamOverlap, downstream, filterCluster)
         return(cs.asn)
     })

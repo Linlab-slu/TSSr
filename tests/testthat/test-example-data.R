@@ -42,3 +42,15 @@ test_that("exampleTSSr has all expected slots populated", {
     expect_true(length(exampleTSSr@DEtables) > 0)
     expect_true(length(exampleTSSr@PromoterShift) > 0)
 })
+
+test_that("exampleTSSr annotation inputs contain no internal indexing fields", {
+    data(exampleTSSr)
+
+    expect_false("subset" %in% names(exampleTSSr@refTable))
+    expect_null(data.table::key(exampleTSSr@refTable))
+
+    for (cluster_table in exampleTSSr@consensusClusters) {
+        expect_false("subset" %in% names(cluster_table))
+        expect_null(data.table::key(cluster_table))
+    }
+})

@@ -23,9 +23,17 @@ data("exampleTSSr", package = "TSSr", envir = environment())
 exampleTSSr@TSSrawMatrix <- exampleTSSr@TSSrawMatrix[
     exampleTSSr@TSSrawMatrix$chr == "chrI"
 ]
-exampleTSSr@refTable <- exampleTSSr@refTable[
-    as.character(exampleTSSr@refTable$seqnames) == "chrI"
+reference_columns <- c(
+    "seqnames", "start", "end", "width", "strand", "gene_id"
+)
+reference_table <- exampleTSSr@refTable[
+    as.character(exampleTSSr@refTable$seqnames) == "chrI",
+    .SD,
+    .SDcols = reference_columns
 ]
+data.table::setorder(reference_table, seqnames, start, end, strand, gene_id)
+data.table::setkey(reference_table, NULL)
+exampleTSSr@refTable <- reference_table
 
 exampleTSSr@tagClusters <- list()
 exampleTSSr@consensusClusters <- list()
