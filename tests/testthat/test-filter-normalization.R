@@ -22,7 +22,6 @@ make_filter_test_object <- function(counts) {
 }
 
 test_that("TPM filtering accepts normalized libraries below one million", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     object <- make_filter_test_object(list(small = c(1, 2, 3)))
     normalizeTSS(object)
 
@@ -30,7 +29,6 @@ test_that("TPM filtering accepts normalized libraries below one million", {
 })
 
 test_that("TPM filtering accepts normalized libraries above one million", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     object <- make_filter_test_object(
         list(large = c(1, 1, 1999998))
     )
@@ -40,7 +38,6 @@ test_that("TPM filtering accepts normalized libraries above one million", {
 })
 
 test_that("poisson filtering rejects normalized libraries below one million", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     object <- make_filter_test_object(list(small = c(1, 2, 3)))
     normalizeTSS(object)
 
@@ -51,13 +48,51 @@ test_that("poisson filtering rejects normalized libraries below one million", {
     )
 })
 
-test_that("normalization detection checks every merged sample", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
-    object <- make_filter_test_object(list(
-        small = c(1, 2, 3),
-        large = c(1, 1, 1999998)
-    ))
+test_that("TPM filtering rejects mixed normalized and raw samples", {
+    counts <- list(normalized = c(1, 2, 3), raw = c(1, 1, 1999998))
+    object <- make_filter_test_object(counts)
     normalizeTSS(object)
+    object@TSSprocessedMatrix[["raw"]] <- counts$raw
 
-    expect_no_error(filterTSS(object, method = "TPM", tpmLow = 0.1))
+    expect_error(
+        filterTSS(object, method = "TPM", tpmLow = 0.1),
+        "Data must be normalized.",
+        fixed = TRUE
+    )
+})
+
+test_that("poisson filtering rejects mixed normalized and raw samples", {
+    counts <- list(normalized = c(1, 2, 3), raw = c(1, 1, 1999998))
+    object <- make_filter_test_object(counts)
+    normalizeTSS(object)
+    object@TSSprocessedMatrix[["raw"]] <- counts$raw
+
+    expect_error(
+        filterTSS(object, method = "poisson"),
+        "Raw count data required for poisson method.",
+        fixed = TRUE
+    )
+})
+
+test_that("poisson filtering accepts raw count data", {
+    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
+    object <- make_filter_test_object(list(raw = c(1, 2, 3)))
+
+    expect_no_error(
+        filterTSS(object, method = "poisson", normalization = FALSE)
+    )
+})
+
+test_that("normalization detection aligns named library sizes", {
+    counts <- list(small = c(1, 2, 3), large = c(1, 1, 1999998))
+    object <- make_filter_test_object(counts)
+    normalizeTSS(object)
+    object@TSSprocessedMatrix[["small"]] <- counts$small
+    object@librarySizes <- object@librarySizes[c("large", "small")]
+
+    expect_error(
+        filterTSS(object, method = "TPM", tpmLow = 0.1),
+        "Data must be normalized.",
+        fixed = TRUE
+    )
 })

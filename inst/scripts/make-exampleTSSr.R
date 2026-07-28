@@ -27,12 +27,6 @@ exampleTSSr@refTable <- exampleTSSr@refTable[
     as.character(exampleTSSr@refTable$seqnames) == "chrI"
 ]
 
-sample_columns <- exampleTSSr@sampleLabels
-exampleTSSr@librarySizes <- colSums(
-    as.data.frame(exampleTSSr@TSSrawMatrix)[, sample_columns, drop = FALSE],
-    na.rm = TRUE
-)
-
 exampleTSSr@tagClusters <- list()
 exampleTSSr@consensusClusters <- list()
 exampleTSSr@clusterShape <- list()

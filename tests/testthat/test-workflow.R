@@ -38,25 +38,28 @@ test_that("filterTSS with TPM method reduces rows", {
 
 test_that("clusterTSS produces tagClusters", {
     .skip_on_bioc_spb()
-    clusterTSS(exampleTSSr,
+    result <- clusterTSS(exampleTSSr,
         method = "peakclu", clusterThreshold = 1,
         useMultiCore = FALSE
     )
 
-    tc <- exampleTSSr@tagClusters
+    expect_s4_class(result, "TSSr")
+    tc <- result@tagClusters
     expect_type(tc, "list")
     expect_true(length(tc) > 0)
 
     first_tc <- tc[[1]]
     expect_true(is.data.frame(first_tc) || inherits(first_tc, "data.table"))
+    expect_true(nrow(first_tc) > 0)
     expect_true(all(c("chr", "start", "end", "strand") %in% names(first_tc)))
 })
 
 test_that("consensusCluster produces consensus clusters", {
     .skip_on_bioc_spb()
-    consensusCluster(exampleTSSr, useMultiCore = FALSE)
+    result <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
 
-    cc <- exampleTSSr@consensusClusters
+    expect_s4_class(result, "TSSr")
+    cc <- result@consensusClusters
     expect_type(cc, "list")
     expect_true(length(cc) > 0)
 

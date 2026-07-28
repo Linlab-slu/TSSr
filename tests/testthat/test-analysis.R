@@ -23,26 +23,42 @@ if (!.on_bioc_spb) {
 
 test_that("shapeCluster calculates shape scores with PSS method", {
     .skip_on_bioc_spb()
-    shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS",
+    result <- shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS",
         useMultiCore = FALSE)
 
-    cs <- exampleTSSr@clusterShape
+    expect_s4_class(result, "TSSr")
+    cs <- result@clusterShape
     expect_type(cs, "list")
     expect_true(length(cs) > 0)
 
     first_shape <- cs[[1]]
+    expect_true(is.data.frame(first_shape))
     expect_true("shape.score" %in% names(first_shape))
     expect_true(is.numeric(first_shape$shape.score))
 })
 
+test_that("deGene calculates differential expression tables", {
+    .skip_on_bioc_spb()
+    result <- deGene(
+        exampleTSSr,
+        comparePairs = list(c("control", "treat")),
+        pval = 0.01,
+        useMultiCore = FALSE
+    )
+
+    expect_s4_class(result, "TSSr")
+    expect_true(length(result@DEtables) > 0)
+})
+
 test_that("shiftPromoter detects promoter shifts", {
     .skip_on_bioc_spb()
-    shiftPromoter(exampleTSSr,
+    result <- shiftPromoter(exampleTSSr,
         comparePairs = list(c("control", "treat")),
         pval = 0.01
     )
 
-    ps <- exampleTSSr@PromoterShift
+    expect_s4_class(result, "TSSr")
+    ps <- result@PromoterShift
     expect_type(ps, "list")
     expect_true(length(ps) > 0)
     expect_true("control_VS_treat" %in% names(ps))

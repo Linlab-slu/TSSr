@@ -31,7 +31,6 @@ setGeneric("filterTSS", function(
 #' @export
 setMethod("filterTSS", signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow) {
     ## initialize values
-    Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
     objName <- deparse(substitute(object))
     library.size <- object@librarySizes
@@ -43,6 +42,10 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
 
     ## filter tss data
     if (method == "poisson") {
+        if (any(is.normalized)) {
+            stop("Raw count data required for poisson method.")
+        }
+        Genome <- .getGenome(object@genomeName)
         # calculate size of genome
         genomeSize <- 0
         for (chrom in seq_len(length(Genome)))
@@ -50,9 +53,6 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
             genomeSize <- genomeSize + length(Genome[[chrom]])
         }
         message("\nFiltering data with ", method, " method...")
-        if (any(is.normalized)) {
-            stop("Raw count data required for poisson method.")
-        }
         tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
             temp <- tss.dt[, .SD, .SDcols = sampleLabelsMerged[i]]
             setnames(temp, colnames(temp)[[1]], "tags")

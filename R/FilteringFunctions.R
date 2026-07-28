@@ -1,6 +1,13 @@
 ################################################################################################
 .isNormalized <- function(object) {
     sample_labels <- object@sampleLabelsMerged
+    library_sizes <- object@librarySizes
+    if (!is.null(names(library_sizes)) &&
+        all(sample_labels %in% names(library_sizes))) {
+        library_sizes <- library_sizes[sample_labels]
+    } else {
+        library_sizes <- library_sizes[seq_along(sample_labels)]
+    }
     column_sums <- vapply(
         sample_labels,
         function(sample_label) {
@@ -9,7 +16,7 @@
         numeric(1)
     )
 
-    distance_to_raw <- abs(column_sums - object@librarySizes)
+    distance_to_raw <- abs(column_sums - library_sizes)
     distance_to_tpm <- abs(column_sums - 1e6)
     distance_to_tpm <= distance_to_raw
 }
