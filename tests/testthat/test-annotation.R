@@ -21,3 +21,24 @@ test_that("unassignedClusters slot is populated", {
     expect_type(exampleTSSr@unassignedClusters, "list")
     expect_true(length(exampleTSSr@unassignedClusters) > 0)
 })
+
+test_that("annotateCluster creates valid filtered cluster tables", {
+    data(exampleTSSr)
+    result <- annotateCluster(
+        exampleTSSr,
+        clusters = "consensusClusters",
+        filterCluster = TRUE
+    )
+
+    for (sample_label in result@sampleLabelsMerged) {
+        filtered <- result@filteredClusters[[sample_label]]
+        expected_names <- names(
+            result@assignedClusters[[sample_label]]
+        )[seq_len(12)]
+
+        expect_s3_class(filtered, "data.frame")
+        expect_identical(names(filtered), expected_names)
+        expect_false(any(grepl("^V[0-9]+$", names(filtered))))
+        expect_gt(nrow(filtered), 2L)
+    }
+})

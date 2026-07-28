@@ -110,6 +110,11 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
     })
     ## filter clusters
     if (isTRUE(filterCluster)) {
+        filteredColumns <- c(
+            "cluster", "chr", "start", "end", "strand", "dominant_tss",
+            "tags", "tags.dominant_tss", "q_0.1", "q_0.9",
+            "interquantile_width", "gene"
+        )
         asn.filtered <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
             cs <- asn[[sampleLabelsMerged[i]]]
             m <- cs[is.na(gene) & is.na(inCoding), ]
@@ -129,7 +134,10 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
             })
             new <- rbindlist(new)
             new <- new[f == 1, ]
-            cs <- rbind(m[, seq(12)], new[, seq(12)])
+            cs <- rbindlist(list(
+                m[, .SD, .SDcols = filteredColumns],
+                new[, .SD, .SDcols = filteredColumns]
+            ), use.names = TRUE)
             return(cs)
         })
     }
