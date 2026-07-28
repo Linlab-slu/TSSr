@@ -37,6 +37,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
     library.size <- object@librarySizes
 
     tss.dt <- object@TSSprocessedMatrix
+    is.normalized <- .isNormalized(object)
     ## define variable as a NULL value
     tags <- NULL
 
@@ -49,7 +50,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
             genomeSize <- genomeSize + length(Genome[[chrom]])
         }
         message("\nFiltering data with ", method, " method...")
-        if (any(tss.dt[, 4] > 0 & tss.dt[, 4] < 1)) {
+        if (any(is.normalized)) {
             stop("Raw count data required for poisson method.")
         }
         tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
@@ -75,7 +76,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
         assign(objName, object, envir = parent.frame())
     } else if (method == "TPM") {
         message("\nFiltering data with ", method, " method...")
-        if (any(tss.dt[, 4] > 0 & tss.dt[, 4] < 1) == FALSE) {
+        if (!all(is.normalized)) {
             stop("Data must be normalized.")
         }
         tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {

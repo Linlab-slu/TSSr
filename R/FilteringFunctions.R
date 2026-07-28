@@ -1,4 +1,20 @@
 ################################################################################################
+.isNormalized <- function(object) {
+    sample_labels <- object@sampleLabelsMerged
+    column_sums <- vapply(
+        sample_labels,
+        function(sample_label) {
+            sum(object@TSSprocessedMatrix[[sample_label]], na.rm = TRUE)
+        },
+        numeric(1)
+    )
+
+    distance_to_raw <- abs(column_sums - object@librarySizes)
+    distance_to_tpm <- abs(column_sums - 1e6)
+    distance_to_tpm <= distance_to_raw
+}
+
+################################################################################################
 .filterWithPoisson <- function(data, coverageDepth, genomeSize, pVal) {
     # calculate lambda value (average)
     lambda <- coverageDepth / (genomeSize * 2)
