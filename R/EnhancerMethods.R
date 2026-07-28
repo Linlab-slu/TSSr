@@ -43,12 +43,14 @@ setMethod(
         objName <- deparse(substitute(object))
 
         cs.en <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
-            cs <- cs.dt[[sampleLabelsMerged[i]]]
-            asn <- asn.dt[[sampleLabelsMerged[i]]]
+            cs <- data.table::copy(cs.dt[[sampleLabelsMerged[i]]])
+            asn <- data.table::copy(asn.dt[[sampleLabelsMerged[i]]])
             # cs <- cs[is.na(inCoding)]
             if (nrow(cs) > 0) {
-                cs[, gene := NULL]
-                cs[, inCoding := NULL]
+                enhancerColumns <- c(
+                    "cluster", "chr", "strand", "dominant_tss", "tags"
+                )
+                cs <- cs[, .SD, .SDcols = enhancerColumns]
                 setkey(cs, chr)
                 setkey(asn, chr)
                 ce <- lapply(as.list(as.character(cs[, unique(chr)])), function(x) {
