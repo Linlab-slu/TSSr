@@ -26,6 +26,8 @@
 #' start from transcription start sites (TSSs), the recommended value = 500.
 #' @return A modified TSSr object with updated \code{assignedClusters},
 #'   \code{unassignedClusters}, and optionally \code{filteredClusters} slots.
+#'   The input object is not modified; assign the returned object to retain
+#'   the changes.
 #'
 #' @export
 #'
@@ -55,7 +57,6 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
     message("\nAnnotating...")
     Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
-    objName <- deparse(substitute(object))
     refGFF <- object@refSource
     refTable <- object@refTable
     organismName <- object@organismName
@@ -150,5 +151,5 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         names(asn.filtered) <- sampleLabelsMerged
         object@filteredClusters <- asn.filtered
     }
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

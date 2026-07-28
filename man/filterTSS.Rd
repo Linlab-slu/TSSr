@@ -31,12 +31,13 @@ Used only if method = “poisson”. Default is TRUE.}
 }
 \value{
 A modified TSSr object with updated \code{TSSprocessedMatrix}
-  slot after filtering.
+  slot after filtering. The input object is not modified; assign the
+  returned object to retain the changes.
 }
 \description{
 Filters transcriptional or sequencing noise.
 }
 \examples{
 data(exampleTSSr)
-filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
 }

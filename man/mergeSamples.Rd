@@ -16,12 +16,13 @@ mergeSamples(object, mergeIndex)
 }
 \value{
 A modified TSSr object with updated \code{TSSprocessedMatrix}
-  and \code{librarySizes} slots after merging samples.
+  and \code{librarySizes} slots after merging samples. The input object is
+  not modified; assign the returned object to retain the changes.
 }
 \description{
 Merges individual samples within TSSr object into specified groups.
 }
 \examples{
 data(exampleTSSr)
-mergeSamples(exampleTSSr, mergeIndex = c(1, 1, 2, 2))
+exampleTSSr <- mergeSamples(exampleTSSr, mergeIndex = c(1, 1, 2, 2))
 }

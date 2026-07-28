@@ -29,7 +29,9 @@ Default is "consensusClusters".}
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.}
 }
 \value{
-A modified TSSr object with updated \code{clusterShape} slot.
+A modified TSSr object with updated \code{clusterShape} slot. The
+  input object is not modified; assign the returned object to retain the
+  changes.
 }
 \description{
 Calculates core promoter shape based on the distributions of TSSs within core

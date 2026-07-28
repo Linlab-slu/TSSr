@@ -17,7 +17,9 @@ shiftPromoter(object, comparePairs, pval=0.01)
 \item{pval}{Genes with adjusted p value >= pval will be returned. Default value = 0.01.}
 }
 \value{
-A modified TSSr object with updated \code{PromoterShift} slot.
+A modified TSSr object with updated \code{PromoterShift} slot. The
+  input object is not modified; assign the returned object to retain the
+  changes.
 }
 \description{
 Selects genes which have multiple core promoters and undergo core promoter

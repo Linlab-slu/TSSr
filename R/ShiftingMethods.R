@@ -9,7 +9,9 @@
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison.
 #' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
-#' @return A modified TSSr object with updated \code{PromoterShift} slot.
+#' @return A modified TSSr object with updated \code{PromoterShift} slot. The
+#'   input object is not modified; assign the returned object to retain the
+#'   changes.
 #'
 #' @export
 #'
@@ -30,7 +32,6 @@ setMethod("shiftPromoter", signature(object = "TSSr"), function(
 ) {
     ## initialize data
     message("\nCalculating core promoter shifts...")
-    objName <- deparse(substitute(object))
     sampleLabelsMerged <- object@sampleLabelsMerged
 
     D <- lapply(as.list(seq(comparePairs)), function(i) {
@@ -49,5 +50,5 @@ setMethod("shiftPromoter", signature(object = "TSSr"), function(
     }, character(1))
     names(D) <- D.names
     object@PromoterShift <- D
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

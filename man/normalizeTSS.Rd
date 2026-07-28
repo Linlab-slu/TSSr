@@ -14,12 +14,13 @@ normalizeTSS(object)
 }
 \value{
 A modified TSSr object with updated \code{TSSprocessedMatrix}
-  slot containing normalized TPM values.
+  slot containing normalized TPM values. The input object is not modified;
+  assign the returned object to retain the changes.
 }
 \description{
 Normalizes raw TSS counts in all samples by tags per million (TPM)
 }
 \examples{
 data(exampleTSSr)
-normalizeTSS(exampleTSSr)
+exampleTSSr <- normalizeTSS(exampleTSSr)
 }

@@ -19,7 +19,9 @@ composing a enhancer candidate. Default is 400.}
 Default is 2000.}
 }
 \value{
-A modified TSSr object with updated \code{enhancers} slot.
+A modified TSSr object with updated \code{enhancers} slot. The
+  input object is not modified; assign the returned object to retain the
+  changes.
 }
 \description{
 Calculates enhancer candidates, which are characterized by

@@ -11,17 +11,17 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' normalizeTSS(exampleTSSr)
+#' exampleTSSr <- normalizeTSS(exampleTSSr)
 setGeneric("normalizeTSS", function(object) standardGeneric("normalizeTSS"))
 #' @rdname normalizeTSS
 #' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
-#'   slot containing normalized TPM values.
+#'   slot containing normalized TPM values. The input object is not modified;
+#'   assign the returned object to retain the changes.
 #' @export
 setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
     message("\nNormalizing TSS matrix...")
     ## initialize values
     sampleLabelsMerged <- object@sampleLabelsMerged
-    objName <- deparse(substitute(object))
 
     tss.dt <- object@TSSprocessedMatrix
     is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) abs(x - round(x)) < tol
@@ -52,5 +52,5 @@ setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
     re <- cbind(tss.dt[, c(1, 2, 3)], re)
     setorder(re, "strand", "chr", "pos")
     object@TSSprocessedMatrix <- re
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

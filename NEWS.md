@@ -1,5 +1,11 @@
 # TSSr 0.99.16 (2026-06-16)
 
+* Mutating workflow functions now return a modified `TSSr` object without
+  changing the caller's object. Assign the result to retain each operation:
+
+      Before: mergeSamples(myTSSr)
+      After:  myTSSr <- mergeSamples(myTSSr)
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

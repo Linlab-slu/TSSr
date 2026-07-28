@@ -34,7 +34,8 @@ skips uncoded G correction.}
 }
 \value{
 A modified TSSr object with updated \code{TSSrawMatrix},
-  \code{TSSprocessedMatrix}, and \code{librarySizes} slots.
+  \code{TSSprocessedMatrix}, and \code{librarySizes} slots. The input
+  object is not modified; assign the returned object to retain the changes.
 }
 \description{
 getTSS function is used to precisely identify TSSs from multiple

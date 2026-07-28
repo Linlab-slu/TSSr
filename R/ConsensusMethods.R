@@ -15,7 +15,8 @@
 #' @param numCores Number of cores are used in clustering step. Used only if
 #' useMultiCore = TRUE. Default is NULL.
 #' @return A modified TSSr object with updated \code{consensusClusters}
-#'   slot.
+#'   slot. The input object is not modified; assign the returned object to
+#'   retain the changes.
 #'
 #' @export
 #'
@@ -36,7 +37,6 @@ setMethod("consensusCluster", signature(object = "TSSr"), function(object, dis, 
     dominant_tss <- NULL
 
     sampleLabelsMerged <- object@sampleLabelsMerged
-    objName <- deparse(substitute(object))
     cs <- object@tagClusters
     if (length(cs) == 0) {
         stop("You must have tagClusters data in order to proceed.")
@@ -70,5 +70,5 @@ setMethod("consensusCluster", signature(object = "TSSr"), function(object, dis, 
     })
     names(cs.consensus) <- sampleLabelsMerged
     object@consensusClusters <- cs.consensus
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

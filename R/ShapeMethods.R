@@ -13,7 +13,9 @@
 #' @param method Method to be used for calculating core promoter shape score: "SI" or "PSS". Default is "PSS".
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE. Default is NULL.
-#' @return A modified TSSr object with updated \code{clusterShape} slot.
+#' @return A modified TSSr object with updated \code{clusterShape} slot. The
+#'   input object is not modified; assign the returned object to retain the
+#'   changes.
 #'
 #' @export
 #'
@@ -44,7 +46,6 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
     }
 
     sampleLabelsMerged <- object@sampleLabelsMerged
-    objName <- deparse(substitute(object))
 
     if (useMultiCore) {
         if (is.null(numCores)) {
@@ -104,5 +105,5 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
     }
     names(cs.shape) <- sampleLabelsMerged
     object@clusterShape <- cs.shape
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

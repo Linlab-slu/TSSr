@@ -212,7 +212,7 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
 
 **Update in TSSr 0.99.16 (2026-06-16):** When `softclippingAllowed = TRUE`, TSSr uses the aligner's aligned 5' boundary directly and does not apply uncoded G correction. When `softclippingAllowed = FALSE`, TSSr applies the corrected G-only uncoded G correction described above. BAM CIGAR widths are now calculated in reference coordinates: soft clips, hard clips, and insertions do not extend the reference interval, whereas reference-consuming operations determine the aligned interval and the minus-strand end coordinate.
 	
-        getTSS(myTSSr)
+        myTSSr <- getTSS(myTSSr)
 
 > **Note:**  If you ran STAR with the default alignment parameters (without using `--alignEndsType Extend5pOfRead1`), please ensure that you set `softclippingAllowed = TRUE` when running TSSr.
 
@@ -252,7 +252,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
 * Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
   
-        mergeSamples(myTSSr)
+        myTSSr <- mergeSamples(myTSSr)
         
         myTSSr@TSSprocessedMatrix
 	    
@@ -278,12 +278,12 @@ TSS calling from bam files or retrieving TSS data from TSS table
   Library sizes are usually different among samples. To provide between-sample comparability, the raw read counts of each TSS need to be scaled as tags per million mapped reads (TPM) with normalizeTSS function. 
   TSSr also provides two options to exclude TSSs with a low support: "poisson" and "tpm". If you intend to remove TSSs with low support using the “poisson” option, you should skip the "normalizeTSS" because the "poisson" method (method = "poisson") use the raw read count data to calculate the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. TSSr will normalize the raw read counts as TPM after filtering by the "poisson" method.   
 
-        filterTSS(myTSSr, method = "poisson")
+        myTSSr <- filterTSS(myTSSr, method = "poisson")
   
   If you use the "normalizeTSS" function, you may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TMP value (method = "TPM"), and any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1).  
 
-        normalizeTSS(myTSSr)
-        filterTSS(myTSSr, method = "TPM")
+        myTSSr <- normalizeTSS(myTSSr)
+        myTSSr <- filterTSS(myTSSr, method = "TPM")
         myTSSr@TSSprocessedMatrix
 	 
         
@@ -318,7 +318,7 @@ exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
 
 
 ```
-        clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
+        myTSSr <- clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02, clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
 	           
@@ -366,7 +366,7 @@ exportClustersToBed(myTSSr, data = "tagClusters")
 
   TSSr infers a set of consensus core promoters using the “consensusCluster” function to assign the same ID for TCs belong to the same core promoter, which allows subsequent comparative studies across samples. TCs from different samples are considered to belong to the same consensus core promoter if the distance of their dominant TSSs is smaller than a user-defined distance (default = 50 bp). Similarly to clusterTSS function, consensusCluster function also returns genomic coordinates, sum of TSS tags, dominate TSS coordinate, a lower (q0.1) and an upper (q0.9) quantile coordinates, and interquantile widths for each consensus cluster in each sample.
   
-        consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE, numCores = NULL)
+        myTSSr <- consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE, numCores = NULL)
 	
   Similarly, the detailed information of consensus clusters can be exported to delimited text files with "exportClustersTable" function or bedGraph files with "exportClustersToBed" function. 
 ```
@@ -384,7 +384,7 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
 
   Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is also calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. The SI = 2 represents singletons. 
     
-        shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
+        myTSSr <- shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
     
         myTSSr@clusterShape
         
@@ -430,7 +430,7 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
 
   Assigning TCs to downstream genes as their core promoters is required for annotation of the 5’ boundaries of genomic features. This process is also a prerequisite for further interrogations of regulated transcription initiation at the gene level. TSSr offers the “annotateCluster” function to assign TCs to their downstream genes. The assignment of a TC to a gene is based on the distance between the position of the dominant TSS of a TC and the annotated 5’ends of coding sequences (CDS) or transcripts. The default maximum distance between the dominant TSS and CDS is 1000 bp (“upstream = 1000”). If a TC overlaps with the CDS of an upstream gene, the dominant TSS of the TC must be within 500 bp to the 3’end of the overlapping CDS by default (“upstreamOverlap = 500”) to be eligible to assign to its downstream gene. If the 5’ends of annotated transcripts, instead of CDS, are used for TC assignment, users should set “annotationType” as “transcript,” and the default distance parameter is 500 bp. Because the genomes size and the number of introns vary substantially among organisms, it is necessary to apply customized criteria for TC assignment for different organisms. Users are advised to adjust the assignment criteria for core promoter assignment in TSSr. By default, only TCs with ≥ 0.02 TPM are used for the annotation process. To reduce transcriptional or technical noise of small clusters downstream a strong cluster, the filterCluster argument was set as "filterClusterThreshold = 0.02", indicating that any TC with TPM value < 0.02 TPM will be excluded from assigning to genes. 
 
-        annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
+        myTSSr <- annotateCluster(myTSSr,clusters = "consensusClusters",filterCluster = TRUE,
                   filterClusterThreshold = 0.02, annotationType = "genes"
                   ,upstream=1000, upstreamOverlap = 500, downstream = 0)
                   
@@ -476,7 +476,7 @@ exportClustersTable(myTSSr, data = "unassigned")
 
   TSS data allow for the robust identification of enhancers by transcription of enhancer RNAs (eRNAs). Active enhancers produce bidirectional transcription of capped eRNAs, resulting in two diverging tag clusters by at most 400 bp. TSSr can identify this bidirectional cluster pairs and calculate a sample-set wide directionality score D for each locus (Andersson et al., 2014). D = (F-R)/(F+R), where F is the aggregated normalized tag counts in forward strandm and R is the aggregated normalized tag counts in reverse strand. Putative enhancers were then filtered with |D| < 0.8. 
 
-        callEnhancer(myTSSr, flanking = 400)
+        myTSSr <- callEnhancer(myTSSr, flanking = 400)
 	
   The results of putative enhancers can be exported to delimited text files with "exportEnhancerTable" function. 
 
@@ -486,7 +486,7 @@ exportClustersTable(myTSSr, data = "unassigned")
 
   The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis. 
         
-        deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+        myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
   
   Differential expression analysis results can be visualized by plotDE function which generates a volcano plots. Names of genes differential expressed between the compared pairs are displayed on the dots when the withGeneName argument is set as TRUE.  
 
@@ -503,7 +503,7 @@ exportClustersTable(myTSSr, data = "unassigned")
 
   One gene might have multiple core promoters which can be used differently in different samples. TSSr implements degree of shift (Ds) algorithm (Lu and Lin 2019) to quantify the degree of promoter shift across different samples.
 
-        shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
+        myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
                 
         myTSSr@PromoterShift
         

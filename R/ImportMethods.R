@@ -22,7 +22,8 @@
 #' When TRUE, TSSr uses the aligner's aligned 5' boundary directly and
 #' skips uncoded G correction.
 #' @return A modified TSSr object with updated \code{TSSrawMatrix},
-#'   \code{TSSprocessedMatrix}, and \code{librarySizes} slots.
+#'   \code{TSSprocessedMatrix}, and \code{librarySizes} slots. The input
+#'   object is not modified; assign the returned object to retain the changes.
 #'
 #' @export
 #'
@@ -65,7 +66,6 @@ setMethod("getTSS", signature(object = "TSSr"), function(
     if (length(object@sampleLabelsMerged) == 0) {
         object@sampleLabelsMerged <- sampleLabels
     }
-    objName <- deparse(substitute(object))
     if (inputFilesType == "bam" | inputFilesType == "bamPairedEnd") {
         tss <- .getTSS_from_bam(
             object@inputFiles,
@@ -91,5 +91,5 @@ setMethod("getTSS", signature(object = "TSSr"), function(
 
     object@TSSrawMatrix <- tss
     object@TSSprocessedMatrix <- tss
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

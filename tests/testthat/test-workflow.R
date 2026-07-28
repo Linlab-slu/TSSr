@@ -6,20 +6,21 @@ data(exampleTSSr)
 
 test_that("mergeSamples merges raw TSS data correctly", {
     .skip_on_bioc_spb()
-    mergeSamples(exampleTSSr)
+    result <- mergeSamples(exampleTSSr)
 
-    processed <- exampleTSSr@TSSprocessedMatrix
+    processed <- result@TSSprocessedMatrix
     expect_true(nrow(processed) > 0)
-    merged_labels <- exampleTSSr@sampleLabelsMerged
+    merged_labels <- result@sampleLabelsMerged
     expect_true(all(merged_labels %in% names(processed)))
 })
 
 test_that("normalizeTSS normalizes to TPM", {
     .skip_on_bioc_spb()
-    normalizeTSS(exampleTSSr)
+    object <- mergeSamples(exampleTSSr)
+    result <- normalizeTSS(object)
 
-    processed <- exampleTSSr@TSSprocessedMatrix
-    merged_labels <- exampleTSSr@sampleLabelsMerged
+    processed <- result@TSSprocessedMatrix
+    merged_labels <- result@sampleLabelsMerged
     first_col <- processed[[merged_labels[1]]]
     nonzero <- first_col[first_col > 0]
     ## TPM values should have decimals
@@ -28,9 +29,10 @@ test_that("normalizeTSS normalizes to TPM", {
 
 test_that("filterTSS with TPM method reduces rows", {
     .skip_on_bioc_spb()
-    rows_before <- nrow(exampleTSSr@TSSprocessedMatrix)
-    filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
-    rows_after <- nrow(exampleTSSr@TSSprocessedMatrix)
+    object <- normalizeTSS(mergeSamples(exampleTSSr))
+    rows_before <- nrow(object@TSSprocessedMatrix)
+    result <- filterTSS(object, method = "TPM", tpmLow = 0.1)
+    rows_after <- nrow(result@TSSprocessedMatrix)
 
     expect_true(rows_after > 0)
     expect_true(rows_after <= rows_before)
@@ -38,11 +40,15 @@ test_that("filterTSS with TPM method reduces rows", {
 
 test_that("clusterTSS produces tagClusters", {
     .skip_on_bioc_spb()
-    result <- clusterTSS(exampleTSSr,
+    object <- exampleTSSr
+    object@tagClusters <- list()
+    before <- tssr_content(object)
+    result <- clusterTSS(object,
         method = "peakclu", clusterThreshold = 1,
         useMultiCore = FALSE
     )
 
+    expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
     tc <- result@tagClusters
     expect_type(tc, "list")
@@ -56,8 +62,12 @@ test_that("clusterTSS produces tagClusters", {
 
 test_that("consensusCluster produces consensus clusters", {
     .skip_on_bioc_spb()
-    result <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
+    object <- exampleTSSr
+    object@consensusClusters <- list()
+    before <- tssr_content(object)
+    result <- consensusCluster(object, useMultiCore = FALSE)
 
+    expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
     cc <- result@consensusClusters
     expect_type(cc, "list")

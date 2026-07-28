@@ -21,6 +21,10 @@ test_that("annotateCluster preserves reference and consensus cluster inputs", {
             cluster_table
         }
     )
+    object@assignedClusters <- list()
+    object@unassignedClusters <- list()
+    object@filteredClusters <- list()
+    object_before <- tssr_content(object)
 
     ref_before <- list(
         names = data.table::copy(names(object@refTable)),
@@ -46,6 +50,10 @@ test_that("annotateCluster preserves reference and consensus cluster inputs", {
         filterCluster = TRUE
     )
 
+    expect_tssr_content_equal(object, object_before)
+    expect_true(length(result@assignedClusters) > 0)
+    expect_true(length(result@unassignedClusters) > 0)
+    expect_true(length(result@filteredClusters) > 0)
     expect_identical(names(result@refTable), ref_before$names)
     expect_identical(nrow(result@refTable), ref_before$rows)
     expect_identical(result@refTable$gene_id, ref_before$gene_id)

@@ -13,7 +13,8 @@
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 #' Default is NULL.
 #' @return A modified TSSr object with updated \code{DEtables} and
-#'   \code{TAGtables} slots.
+#'   \code{TAGtables} slots. The input object is not modified; assign the
+#'   returned object to retain the changes.
 #'
 #'
 #' @export
@@ -28,7 +29,6 @@ setGeneric("deGene", function(object, comparePairs = list(c("control", "treat"))
 setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, pval, useMultiCore, numCores) {
     ## initialize data
     message("\nCalculating gene differential expression...")
-    objName <- deparse(substitute(object))
     sampleLabels <- object@sampleLabels
     sampleLabelsMerged <- object@sampleLabelsMerged
     mergeIndex <- object@mergeIndex
@@ -64,5 +64,5 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
     load(file.path(tempdir(), "TAGtable_temp.RData"))
     object@TAGtables <- TAGtables
     file.remove(file.path(tempdir(), "TAGtable_temp.RData"))
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

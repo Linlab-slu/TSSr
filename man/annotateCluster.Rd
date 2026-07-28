@@ -49,6 +49,8 @@ start from transcription start sites (TSSs), the recommended value = 500.}
 \value{
 A modified TSSr object with updated \code{assignedClusters},
   \code{unassignedClusters}, and optionally \code{filteredClusters} slots.
+  The input object is not modified; assign the returned object to retain
+  the changes.
 }
 \description{
 Annotates clusters with gene or transcript names from GFF annotation file.
@@ -57,4 +59,5 @@ Annotates clusters with gene or transcript names from GFF annotation file.
 data(exampleTSSr)
 # Annotated clusters are pre-computed in the @assignedClusters slot
 head(slot(exampleTSSr, "assignedClusters")[["control"]])
+
 }

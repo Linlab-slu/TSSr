@@ -42,7 +42,9 @@ Default is FALSE.}
 Default is NULL.}
 }
 \value{
-A modified TSSr object with updated \code{tagClusters} slot.
+A modified TSSr object with updated \code{tagClusters} slot. The
+  input object is not modified; assign the returned object to retain the
+  changes.
 }
 \description{
 Clusters TSSs within small genomic regions into tag clusters (TCs)
@@ -53,4 +55,5 @@ The minimum distance of two neighboring peaks can be specified.
 data(exampleTSSr)
 # Tag clusters are pre-computed in the @tagClusters slot
 head(slot(exampleTSSr, "tagClusters")[["control"]])
+
 }

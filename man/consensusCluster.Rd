@@ -24,7 +24,8 @@ useMultiCore = TRUE. Default is NULL.}
 }
 \value{
 A modified TSSr object with updated \code{consensusClusters}
-  slot.
+  slot. The input object is not modified; assign the returned object to
+  retain the changes.
 }
 \description{
 Makes consensus clusters from multiple samples in TSSr object and

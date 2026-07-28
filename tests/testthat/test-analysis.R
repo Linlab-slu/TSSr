@@ -11,21 +11,25 @@
 
 data(exampleTSSr)
 if (!.on_bioc_spb) {
-    mergeSamples(exampleTSSr)
-    normalizeTSS(exampleTSSr)
-    filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
-    clusterTSS(exampleTSSr,
+    exampleTSSr <- mergeSamples(exampleTSSr)
+    exampleTSSr <- normalizeTSS(exampleTSSr)
+    exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+    exampleTSSr <- clusterTSS(exampleTSSr,
         method = "peakclu", clusterThreshold = 1,
         useMultiCore = FALSE
     )
-    consensusCluster(exampleTSSr, useMultiCore = FALSE)
+    exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
 }
 
 test_that("shapeCluster calculates shape scores with PSS method", {
     .skip_on_bioc_spb()
-    result <- shapeCluster(exampleTSSr, clusters = "consensusClusters", method = "PSS",
+    object <- exampleTSSr
+    object@clusterShape <- list()
+    before <- tssr_content(object)
+    result <- shapeCluster(object, clusters = "consensusClusters", method = "PSS",
         useMultiCore = FALSE)
 
+    expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
     cs <- result@clusterShape
     expect_type(cs, "list")
@@ -39,24 +43,34 @@ test_that("shapeCluster calculates shape scores with PSS method", {
 
 test_that("deGene calculates differential expression tables", {
     .skip_on_bioc_spb()
+    object <- exampleTSSr
+    object@DEtables <- list()
+    object@TAGtables <- list()
+    before <- tssr_content(object)
     result <- deGene(
-        exampleTSSr,
+        object,
         comparePairs = list(c("control", "treat")),
         pval = 0.01,
         useMultiCore = FALSE
     )
 
+    expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
     expect_true(length(result@DEtables) > 0)
+    expect_true(length(result@TAGtables) > 0)
 })
 
 test_that("shiftPromoter detects promoter shifts", {
     .skip_on_bioc_spb()
-    result <- shiftPromoter(exampleTSSr,
+    object <- exampleTSSr
+    object@PromoterShift <- list()
+    before <- tssr_content(object)
+    result <- shiftPromoter(object,
         comparePairs = list(c("control", "treat")),
         pval = 0.01
     )
 
+    expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
     ps <- result@PromoterShift
     expect_type(ps, "list")
@@ -72,9 +86,14 @@ test_that("callEnhancer identifies enhancer candidates when data available", {
     skip_if(length(exampleTSSr@unassignedClusters) == 0,
         "No unassignedClusters in exampleTSSr")
 
-    callEnhancer(exampleTSSr, flanking = 400, dis2gene = 2000)
+    object <- exampleTSSr
+    object@enhancers <- list()
+    before <- tssr_content(object)
+    result <- callEnhancer(object, flanking = 400, dis2gene = 2000)
 
-    en <- exampleTSSr@enhancers
+    expect_tssr_content_equal(object, before)
+    expect_s4_class(result, "TSSr")
+    en <- result@enhancers
     expect_type(en, "list")
     expect_true(length(en) > 0)
 })

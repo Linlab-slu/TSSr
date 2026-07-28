@@ -22,7 +22,9 @@
 #' Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 #' Default is NULL.
-#' @return A modified TSSr object with updated \code{tagClusters} slot.
+#' @return A modified TSSr object with updated \code{tagClusters} slot. The
+#'   input object is not modified; assign the returned object to retain the
+#'   changes.
 #'
 #' @export
 #' @examples
@@ -48,7 +50,6 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
     ## initialize values
     Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
-    objName <- deparse(substitute(object))
 
     # initialize data
     tss.dt <- object@TSSprocessedMatrix
@@ -107,5 +108,5 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
     }
     names(cs) <- sampleLabelsMerged
     object@tagClusters <- cs
-    assign(objName, object, envir = parent.frame())
+    return(object)
 })

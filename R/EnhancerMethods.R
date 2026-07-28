@@ -10,7 +10,9 @@
 #' composing a enhancer candidate. Default is 400.
 #' @param dis2gene The minimum distance to the main annotated core promoter of genes.
 #' Default is 2000.
-#' @return A modified TSSr object with updated \code{enhancers} slot.
+#' @return A modified TSSr object with updated \code{enhancers} slot. The
+#'   input object is not modified; assign the returned object to retain the
+#'   changes.
 #'
 #' @export
 #'
@@ -40,7 +42,6 @@ setMethod(
         }
 
         sampleLabelsMerged <- object@sampleLabelsMerged
-        objName <- deparse(substitute(object))
 
         cs.en <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
             cs <- data.table::copy(cs.dt[[sampleLabelsMerged[i]]])
@@ -105,7 +106,7 @@ setMethod(
 
         names(cs.en) <- sampleLabelsMerged
         object@enhancers <- cs.en
-        assign(objName, object, envir = parent.frame())
+        return(object)
     }
 )
 ## ------------------------------------------------------------------------------

@@ -31,7 +31,8 @@ Default is NULL.}
 }
 \value{
 A modified TSSr object with updated \code{DEtables} and
-  \code{TAGtables} slots.
+  \code{TAGtables} slots. The input object is not modified; assign the
+  returned object to retain the changes.
 }
 \description{
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
