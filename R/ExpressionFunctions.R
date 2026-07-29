@@ -10,12 +10,9 @@
 ############################################################################
 ## tss.raw is the raw tss merged tables, before any sums
 ############################################################################
-.deseq2 <- function(object, cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo, useMultiCore, numCores) {
-    ## define variable as a NULL value
-    TAGtables <- NULL
-
+.deseq2 <- function(cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo,
+                    useMultiCore, numCores, TAGtables) {
     ## get raw count tables
-    TAGtables <- object@TAGtables
     if (sampleOne %in% names(TAGtables)) {
         xCounts <- TAGtables[[which(names(TAGtables) == sampleOne)]]
     } else {
@@ -30,8 +27,6 @@
         yCounts <- .tagCount_updated(cy, tss.raw, sampley, useMultiCore, numCores)
         TAGtables[[sampleTwo]] <- yCounts
     }
-    # save TAGtable as temp file
-    save(TAGtables, file = file.path(tempdir(), "TAGtable_temp.RData"))
     xCounts <- xCounts[, -c(2:11)]
     yCounts <- yCounts[, -c(2:11)]
     ## tag counts by gene for sampleOne
@@ -86,7 +81,10 @@
     dds <- DESeq(dds)
     res <- results(dds)
     res <- res[order(res$padj), ]
-    return(as.data.frame(res))
+    return(list(
+        DEtable = as.data.frame(res),
+        TAGtables = TAGtables
+    ))
 }
 
 ############################################################################

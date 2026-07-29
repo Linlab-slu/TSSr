@@ -43,7 +43,9 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
     ## define variable as a NULL value
     padj <- NULL
 
-    D <- lapply(as.list(seq(comparePairs)), function(i) {
+    D <- vector("list", length(comparePairs))
+    TAGtables <- list()
+    for (i in seq_along(comparePairs)) {
         sampleOne <- comparePairs[[i]][1]
         sampleTwo <- comparePairs[[i]][2]
         cx <- object@assignedClusters[[sampleOne]]
@@ -51,7 +53,12 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
         tss.raw <- object@TSSrawMatrix
         samplex <- sampleLabels[which(mergeIndex == which(sampleLabelsMerged == sampleOne))]
         sampley <- sampleLabels[which(mergeIndex == which(sampleLabelsMerged == sampleTwo))]
-        DE.dt <- .deseq2(object, cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo, useMultiCore, numCores)
+        de.result <- .deseq2(
+            cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo,
+            useMultiCore, numCores, TAGtables
+        )
+        DE.dt <- de.result$DEtable
+        TAGtables <- de.result$TAGtables
         DE.sig <- subset(DE.dt, padj < pval)
         DE.dt$gene <- row.names(DE.dt)
         DE.sig$gene <- row.names(DE.sig)
@@ -60,17 +67,13 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
         setDT(DE.dt)
         setDT(DE.sig)
         DE <- list("DEtable" = DE.dt, "DEsig" = DE.sig)
-        return(DE)
-    })
+        D[[i]] <- DE
+    }
     D.names <- vapply(as.list(seq(comparePairs)), function(i) {
         paste0(comparePairs[[i]][1], "_VS_", comparePairs[[i]][2], sep = "")
     }, character(1))
     names(D) <- D.names
     object@DEtables <- D
-    ## define variable as a NULL value
-    TAGtables <- NULL
-    load(file.path(tempdir(), "TAGtable_temp.RData"))
     object@TAGtables <- TAGtables
-    file.remove(file.path(tempdir(), "TAGtable_temp.RData"))
     return(object)
 })
