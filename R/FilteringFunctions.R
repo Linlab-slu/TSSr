@@ -1,24 +1,32 @@
 ################################################################################################
-.isNormalized <- function(object) {
-    sample_labels <- object@sampleLabelsMerged
-    library_sizes <- object@librarySizes
-    if (!is.null(names(library_sizes)) &&
-        all(sample_labels %in% names(library_sizes))) {
-        library_sizes <- library_sizes[sample_labels]
-    } else {
-        library_sizes <- library_sizes[seq_along(sample_labels)]
-    }
-    column_sums <- vapply(
-        sample_labels,
-        function(sample_label) {
-            sum(object@TSSprocessedMatrix[[sample_label]], na.rm = TRUE)
-        },
-        numeric(1)
+.normalizationStatus <- function(object) {
+    status <- tryCatch(
+        object@normalizationStatus,
+        error = function(e) character()
     )
+    if (length(status) == 1 && !is.na(status)) {
+        return(status)
+    }
 
-    distance_to_raw <- abs(column_sums - library_sizes)
-    distance_to_tpm <- abs(column_sums - 1e6)
-    distance_to_tpm <= distance_to_raw
+    sample_labels <- object@sampleLabelsMerged
+    if (length(sample_labels) == 0 ||
+        nrow(object@TSSprocessedMatrix) == 0) {
+        return(NA_character_)
+    }
+
+    processed <- as.data.frame(object@TSSprocessedMatrix)
+    values <- unlist(processed[sample_labels], use.names = FALSE)
+    values <- values[is.finite(values)]
+    if (length(values) == 0) {
+        return(NA_character_)
+    }
+
+    tolerance <- .Machine$double.eps^0.5
+    if (all(abs(values - round(values)) < tolerance)) "raw" else "normalized"
+}
+
+.isNormalized <- function(object) {
+    identical(.normalizationStatus(object), "normalized")
 }
 
 ################################################################################################

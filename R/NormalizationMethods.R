@@ -11,6 +11,7 @@
 #'
 #' @examples
 #' data(exampleTSSr)
+#' exampleTSSr <- mergeSamples(exampleTSSr)
 #' exampleTSSr <- normalizeTSS(exampleTSSr)
 setGeneric(
     "normalizeTSS",
@@ -28,8 +29,7 @@ setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
     sampleLabelsMerged <- object@sampleLabelsMerged
 
     tss.dt <- object@TSSprocessedMatrix
-    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) abs(x - round(x)) < tol
-    if (all(is.wholenumber(object@librarySizes)) == FALSE) {
+    if (isTRUE(.isNormalized(object))) {
         stop("\tStopping... data is already normalized")
     }
 
@@ -56,5 +56,6 @@ setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
     re <- cbind(tss.dt[, c(1, 2, 3)], re)
     setorder(re, "strand", "chr", "pos")
     object@TSSprocessedMatrix <- re
+    object@normalizationStatus <- "normalized"
     return(object)
 })

@@ -84,6 +84,11 @@ result tables and plots. Multiple cores are supported on Linux or Mac platforms.
 
 \item{\code{librarySizes}}{numeric.}
 
+\item{\code{normalizationStatus}}{A scalar character value describing whether
+\code{TSSprocessedMatrix} contains \code{"raw"} counts or
+\code{"normalized"} values. \code{NA} indicates that no state has been
+established yet.}
+
 \item{\code{TSSrawMatrix}}{data.frame.}
 
 \item{\code{mergeIndex}}{numeric.}

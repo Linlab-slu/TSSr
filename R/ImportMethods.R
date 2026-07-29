@@ -89,5 +89,6 @@ setMethod("getTSS", signature(object = "TSSr"), function(
 
     object@TSSrawMatrix <- tss
     object@TSSprocessedMatrix <- tss
+    object@normalizationStatus <- "raw"
     return(object)
 })

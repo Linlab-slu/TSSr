@@ -28,11 +28,11 @@ test_that("normalizeTSS normalizes to TPM", {
 test_that("filterTSS with TPM method reduces rows", {
     object <- normalizeTSS(mergeSamples(exampleTSSr))
     rows_before <- nrow(object@TSSprocessedMatrix)
-    result <- filterTSS(object, method = "TPM", tpmLow = 0.1)
+    result <- filterTSS(object, method = "TPM", tpmLow = 2)
     rows_after <- nrow(result@TSSprocessedMatrix)
 
     expect_true(rows_after > 0)
-    expect_true(rows_after <= rows_before)
+    expect_lt(rows_after, rows_before)
 })
 
 test_that("clusterTSS produces tagClusters", {

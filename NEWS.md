@@ -25,6 +25,14 @@
   clusters and accumulated in memory across multiple comparisons. This removes
   stale cached results and the previous disk-backed return channel.
 
+* Updated the reduced example workflow to use an effective TPM filtering
+  threshold and to verify that filtering strictly reduces the processed TSS
+  matrix.
+
+* Added explicit normalization state to `TSSr` objects. Filtering no longer
+  guesses state from column sums, so normalized data remain valid after rows
+  are removed and repeated normalization is rejected reliably.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

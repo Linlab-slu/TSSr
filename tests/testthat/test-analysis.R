@@ -4,7 +4,7 @@
 data(exampleTSSr)
 exampleTSSr <- mergeSamples(exampleTSSr)
 exampleTSSr <- normalizeTSS(exampleTSSr)
-exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 2)
 exampleTSSr <- clusterTSS(exampleTSSr,
     method = "peakclu", clusterThreshold = 1,
     useMultiCore = FALSE

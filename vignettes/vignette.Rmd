@@ -114,7 +114,12 @@ myTSSr <- mergeSamples(myTSSr)
 # Normalization
 myTSSr <- normalizeTSS(myTSSr)
 # TSS filtering
-myTSSr <- filterTSS(myTSSr, method = "TPM", tpmLow = 0.1)
+rowsBeforeFiltering <- nrow(slot(myTSSr, "TSSprocessedMatrix"))
+myTSSr <- filterTSS(myTSSr, method = "TPM", tpmLow = 2)
+c(
+    before = rowsBeforeFiltering,
+    after = nrow(slot(myTSSr, "TSSprocessedMatrix"))
+)
 ```
 
 ```{r TSSprocessing-show}

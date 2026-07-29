@@ -61,6 +61,10 @@
 #' @slot sampleLabels character.
 #' @slot sampleLabelsMerged character.
 #' @slot librarySizes numeric.
+#' @slot normalizationStatus A scalar character value describing whether
+#'   \code{TSSprocessedMatrix} contains \code{"raw"} counts or
+#'   \code{"normalized"} values. \code{NA} indicates that no state has been
+#'   established yet.
 #' @slot TSSrawMatrix data.frame.
 #' @slot mergeIndex numeric.
 #' @slot TSSprocessedMatrix data.frame.
@@ -91,6 +95,7 @@ setClass(
         sampleLabels = "character",
         sampleLabelsMerged = "character",
         librarySizes = "numeric",
+        normalizationStatus = "character",
         TSSrawMatrix = "data.frame",
         mergeIndex = "numeric",
         TSSprocessedMatrix = "data.frame",
@@ -115,6 +120,7 @@ setClass(
         sampleLabels = character(),
         sampleLabelsMerged = character(),
         librarySizes = numeric(),
+        normalizationStatus = NA_character_,
         TSSrawMatrix = data.frame(),
         mergeIndex = numeric(),
         TSSprocessedMatrix = data.frame(),
@@ -150,6 +156,15 @@ setClass(
             if (length(unique(object@mergeIndex)) != length(object@sampleLabelsMerged)) {
                 return("Number of unique values in 'mergeIndex' must equal length of 'sampleLabelsMerged'.")
             }
+        }
+        if (length(object@normalizationStatus) > 1 ||
+            (length(object@normalizationStatus) == 1 &&
+                !is.na(object@normalizationStatus) &&
+                !object@normalizationStatus %in% c("raw", "normalized"))) {
+            return(paste0(
+                "'normalizationStatus' must be length zero or one of ",
+                "NA, 'raw', or 'normalized'."
+            ))
         }
         TRUE
     }

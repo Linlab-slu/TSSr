@@ -53,5 +53,6 @@ setMethod("mergeSamples", signature(object = "TSSr"), function(object, mergeInde
     # object@mergeIndex <- mergeIndex
     object@TSSprocessedMatrix <- re
     object@librarySizes <- colSums(re[, 4:ncol(re), drop = FALSE], na.rm = TRUE)
+    object@normalizationStatus <- "raw"
     return(object)
 })

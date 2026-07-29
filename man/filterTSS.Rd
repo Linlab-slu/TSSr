@@ -27,7 +27,10 @@ Used only if method = “poisson”. Default is TRUE.}
 
 \item{pVal}{Used only if method = "poisson". Default value is 0.01.}
 
-\item{tpmLow}{Used only if method = "TPM". Default value is 0.1.}
+\item{tpmLow}{Used only if method = "TPM". Default value is 0.1. Filtering
+removes a nonzero count only when this threshold is greater than that
+sample's smallest possible nonzero TPM value, approximately
+\code{1e6 / librarySize}.}
 }
 \value{
 A modified TSSr object with updated \code{TSSprocessedMatrix}
@@ -39,5 +42,5 @@ Filters transcriptional or sequencing noise.
 }
 \examples{
 data(exampleTSSr)
-exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 2)
 }

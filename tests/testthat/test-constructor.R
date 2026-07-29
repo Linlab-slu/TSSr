@@ -20,6 +20,7 @@ test_that("TSSr() constructor with empty arguments creates valid object", {
     expect_s4_class(obj, "TSSr")
     expect_equal(length(obj@inputFiles), 0)
     expect_equal(length(obj@sampleLabels), 0)
+    expect_identical(obj@normalizationStatus, NA_character_)
 })
 
 test_that("TSSr() rejects invalid inputFilesType", {

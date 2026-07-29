@@ -11,7 +11,10 @@
 #' @param normalization Define whether normalization data to TPM.
 #' Used only if method = “poisson”. Default is TRUE.
 #' @param pVal Used only if method = "poisson". Default value is 0.01.
-#' @param tpmLow Used only if method = "TPM". Default value is 0.1.
+#' @param tpmLow Used only if method = "TPM". Default value is 0.1. Filtering
+#'   removes a nonzero count only when this threshold is greater than that
+#'   sample's smallest possible nonzero TPM value, approximately
+#'   \code{1e6 / librarySize}.
 #' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
 #'   slot after filtering. The input object is not modified; assign the
 #'   returned object to retain the changes.
@@ -21,7 +24,7 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+#' exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 2)
 setGeneric("filterTSS", function(
   object, method = "poisson", normalization = TRUE,
   pVal = 0.01, tpmLow = 0.1
@@ -40,7 +43,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
 
     ## filter tss data
     if (method == "poisson") {
-        if (any(is.normalized)) {
+        if (isTRUE(is.normalized)) {
             stop("Raw count data required for poisson method.")
         }
         Genome <- .getGenome(object@genomeName)
@@ -71,9 +74,14 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
         re <- re[rowSums(re[, 4:ncol(re)]) > 0, ]
         setorder(re, "strand", "chr", "pos")
         object@TSSprocessedMatrix <- re
+        object@normalizationStatus <- if (isTRUE(normalization)) {
+            "normalized"
+        } else {
+            "raw"
+        }
     } else if (method == "TPM") {
         message("\nFiltering data with ", method, " method...")
-        if (!all(is.normalized)) {
+        if (!isTRUE(is.normalized)) {
             stop("Data must be normalized.")
         }
         tss.new <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
@@ -92,6 +100,7 @@ setMethod("filterTSS", signature(object = "TSSr"), function(object, method, norm
         re <- re[rowSums(re[, 4:ncol(re)]) > 0, ]
         setorder(re, "strand", "chr", "pos")
         object@TSSprocessedMatrix <- re
+        object@normalizationStatus <- "normalized"
     } else {
         message("\tNo filtering method is defined...")
     }

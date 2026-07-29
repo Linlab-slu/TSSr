@@ -220,18 +220,18 @@ TSS calling from bam files or retrieving TSS data from TSS table
         
         myTSSr@TSSrawMatrix
     
-        #           chr    pos strand SL01 SL02 SL03 SL04
-        #      1:  chrI   1561      +    0    0    0    1
-        #      2:  chrI   5759      +    1    0    0    0
-        #      3:  chrI   5765      +    1    0    0    0
-        #      4:  chrI   5773      +    1    0    0    0
-        #      5:  chrI   5925      +    0    1    0    0
-        #     ---                                        
-        # 163199: chrII 810860      -    0    0    0    2
-        # 163200: chrII 810963      -    0    1    0    0
-        # 163201: chrII 811112      -    0    0    1    0
-        # 163202: chrII 811370      -    1    0    0    0
-        # 163203: chrII 812101      -    1    0    0    0
+        #          chr    pos strand SL01 SL02 SL03 SL04
+        #     1:  chrI   1561      +    0    0    0    1
+        #     2:  chrI   5759      +    1    0    0    0
+        #     3:  chrI   5765      +    1    0    0    0
+        #     4:  chrI   5773      +    1    0    0    0
+        #     5:  chrI   5925      +    0    1    0    0
+        #    ---
+        # 29452:  chrI 227276      -    0    2    2    4
+        # 29453:  chrI 227279      -    0    0    0    1
+        # 29454:  chrI 227289      -    0    0    0    1
+        # 29455:  chrI 227300      -    0    0    0    1
+        # 29456:  chrI 227310      -    0    0    0    2
 
 * TSSrawMatrix contains genomic coordinates and read counts of each called TSS. TSSrawMatrix can be exported by "exportTSStable" function to a TSS table "ALL.samples.TSS.raw.txt" in the working directory. The TSS table can be used as input file for future downstram analyses using TSSr or other tools. It is advised to export unmerged TSSrawMatrix to an TSS table to avoid repeated TSS calling step.    
 
@@ -263,42 +263,42 @@ TSS calling from bam files or retrieving TSS data from TSS table
         #     4:  chrI   5773      +       1     0
         #     5:  chrI   5925      +       1     0
         #    ---                                  
-        #163199: chrII 810860      -       0     2
-        #163200: chrII 810963      -       1     0
-        #163201: chrII 811112      -       0     1
-        #163202: chrII 811370      -       1     0
-        #163203: chrII 812101      -       1     0
+        # 29452:  chrI 227276      -       2     6
+        # 29453:  chrI 227279      -       0     1
+        # 29454:  chrI 227289      -       0     1
+        # 29455:  chrI 227300      -       0     1
+        # 29456:  chrI 227310      -       0     2
 
   To return library sizes (number of total read counts) of merged samples in TSSr object in the specified order (note: order is specified in mergeSample function):
 
         myTSSr@librarySizes
         # control   treat 
-        # 3221609 5131202
+        #  596280  982703
 
   Library sizes are usually different among samples. To provide between-sample comparability, the raw read counts of each TSS need to be scaled as tags per million mapped reads (TPM) with normalizeTSS function. 
   TSSr also provides two options to exclude TSSs with a low support: "poisson" and "tpm". If you intend to remove TSSs with low support using the “poisson” option, you should skip the "normalizeTSS" because the "poisson" method (method = "poisson") use the raw read count data to calculate the probability of observing k numbers of reads supporting each TSS based on the sequencing depth of the sample per the Poisson distribution. Only TSSs with a significantly larger number of supporting reads than expected (default threshold p < 0.01) are considered as qualified TSSs. Non-significant TSSs are thus filtered by TSSr. TSSr will normalize the raw read counts as TPM after filtering by the "poisson" method.   
 
-        myTSSr <- filterTSS(myTSSr, method = "poisson")
+        poissonTSSr <- filterTSS(myTSSr, method = "poisson")
   
-  If you use the "normalizeTSS" function, you may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TMP value (method = "TPM"), and any TSS that has a lower TPM value than user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1).  
+  If you use the "normalizeTSS" function, you may use the “filterTSS” option to remove TSSs with low support from mapped reads based on TPM value (method = "TPM"), and any TSS that has a lower TPM value than the user-defined threshold "tpmLow" will be removed (default TPM threshold = 0.1). For a threshold to remove a nonzero count, it must be greater than the smallest possible nonzero TPM for that sample, approximately `1e6 / librarySize`. The reduced chromosome I example therefore uses `tpmLow = 2` so that filtering has a measurable effect.
 
         myTSSr <- normalizeTSS(myTSSr)
-        myTSSr <- filterTSS(myTSSr, method = "TPM")
+        myTSSr <- filterTSS(myTSSr, method = "TPM", tpmLow = 2)
         myTSSr@TSSprocessedMatrix
 	 
         
-        #           chr    pos strand  control    treat
-        #      1:  chrI   1561      + 0.000000 0.194886
-        #      2:  chrI   5759      + 0.310404 0.000000
-        #      3:  chrI   5765      + 0.310404 0.000000
-        #      4:  chrI   5773      + 0.310404 0.000000
-        #      5:  chrI   5925      + 0.310404 0.000000
-        #     ---                                      
-        # 163199: chrII 810860      - 0.000000 0.389772
-        # 163200: chrII 810963      - 0.310404 0.000000
-        # 163201: chrII 811112      - 0.000000 0.194886
-        # 163202: chrII 811370      - 0.310404 0.000000
-        # 163203: chrII 812101      - 0.310404 0.000000
+        #          chr    pos strand   control     treat
+        #     1:  chrI   6163      +  0.000000  2.035203
+        #     2:  chrI   6530      +  5.031193  0.000000
+        #     3:  chrI   6534      +  0.000000  2.035203
+        #     4:  chrI   6545      +  0.000000  2.035203
+        #     5:  chrI   6548      + 20.124774  4.070406
+        #    ---
+        # 14891:  chrI 227270      -  3.354129 11.193616
+        # 14892:  chrI 227271      -  0.000000  2.035203
+        # 14893:  chrI 227274      -  5.031193  5.088007
+        # 14894:  chrI 227276      -  3.354129  6.105609
+        # 14895:  chrI 227310      -  0.000000  2.035203
 
   Similar to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function or bedGraph/BigWig files with "exportTSStoBedgraph" function. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or Genome Browser at YeasTSS.org for selected yeast species.
 ```
@@ -321,38 +321,9 @@ exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
         myTSSr <- clusterTSS(myTSSr, method = "peakclu",peakDistance=100,extensionDistance=30
 	           ,localThreshold = 0.02, clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
-	           
-        myTSSr@tagClusters
-```
 
-```
-        # $control
-        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width
-        #    1:       1  chrI   6530   6564      +         6548   9.312118          3.724847   6530   6562                  33
-        #    2:       2  chrI   7166   7189      +         7169   1.241616          0.620808   7166   7189                  24
-        #    3:       3  chrI   8084   8087      +         8084   1.241616          0.620808   8084   8087                   4
-        #    4:       4  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65
-        #    5:       5  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27
-        #   ---                                                                                                               
-        # 3303:    3303 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32
-        # 3304:    3304 chrII 807129 807179      -       807165  16.761812          6.518482 807161 807168                   8
-        # 3305:    3305 chrII 808679 808723      -       808723   1.862424          0.931212 808679 808723                  45
-        # 3306:    3306 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25
-        # 3307:    3307 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18
-	    
-        # $treat
-        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width
-        #    1:       1  chrI   6521   6564      +         6559   5.067037          1.753975   6530   6559                  30
-        #    2:       2  chrI   7096   7118      +         7100   1.948860          0.584658   7096   7114                  19
-        #    3:       3  chrI   8061   8087      +         8061   1.948860          0.584658   8061   8087                  27
-        #    4:       4  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126
-        #    5:       5  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42
-        #   ---                                                                                                               
-        # 3244:    3244 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30
-        # 3245:    3245 chrII 807118 807179      -       807165  13.642026          5.456811 807153 807165                  13
-        # 3246:    3246 chrII 808655 808691      -       808679   1.753974          0.779544 808655 808691                  37
-        # 3247:    3247 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13
-        # 3248:    3248 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4
+        head(myTSSr@tagClusters[["control"]])
+        head(myTSSr@tagClusters[["treat"]])
 ```
 
     
@@ -385,36 +356,9 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
   Promoter shape score (PSS) integrates both inter quantile width and the observed probabilities of tags at every TSSs within a cluster (Lu and Lin 2019). PSS can be calculated using using shapeCluster function with method set as “PSS”. The smaller value represents the sharper core promoter. PSS is 0 representing singletons. SI is determined by the probabilities of tags at every TSSs within one cluster (Hoskins, Landolin et al. 2011). SI is also calculated using shapeCluster function with method set as “SI”. The greater value represents the sharper core promoter. The SI = 2 represents singletons. 
     
         myTSSr <- shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
-    
-        myTSSr@clusterShape
-        
-        # $control
-        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width shape.score
-        #    1:       1  chrI   6530   6564      +         6548   9.312118          3.724847   6530   6562                  33    9.646916
-        #    2:       3  chrI   7166   7189      +         7169   1.241616          0.620808   7166   7189                  24    6.877444
-        #    3:       4  chrI   8084   8087      +         8084   1.241616          0.620808   8084   8087                   4    2.000000
-        #    4:       5  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65   17.767262
-        #    5:       6  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27    7.469695
-        #   ---                                                                                                                           
-        # 3302:    4285 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32   14.764972
-        # 3303:    4286 chrII 807129 807179      -       807165  16.761812          6.518482 807161 807168                   8    5.251317
-        # 3304:    4287 chrII 808679 808723      -       808723   1.862424          0.931212 808679 808723                  45    9.844044
-        # 3305:    4288 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25    3.018611
-        # 3306:    4289 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18    7.425270
-        # 
-        # $treat
-        #       cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width shape.score
-        #    1:       1  chrI   6521   6564      +         6559   5.067037          1.753975   6530   6559                  30   13.123285
-        #    2:       2  chrI   7096   7118      +         7100   1.948860          0.584658   7096   7114                  19    9.333375
-        #    3:       4  chrI   8061   8087      +         8061   1.948860          0.584658   8061   8087                  27    9.012708
-        #    4:       5  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126   25.664108
-        #    5:       7  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42   15.020408
-        #   ---                                                                                                                           
-        # 3240:    4285 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30   13.439327
-        # 3241:    4286 chrII 807118 807179      -       807165  13.642026          5.456811 807153 807165                  13    7.308196
-        # 3242:    4287 chrII 808655 808691      -       808679   1.753974          0.779544 808655 808691                  37   10.725295
-        # 3243:    4288 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13    3.398098
-        # 3244:    4289 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4    1.726241
+
+        head(myTSSr@clusterShape[["control"]])
+        head(myTSSr@clusterShape[["treat"]])
 
   The distributions of core promoter shape (PSS or SI) can be illustrated by a histograms with plotShape function. Please be noted that there is only one shapeCluster slot, so either PSS or SI can be saved in the shapeCluster slot depending on which method argument was used for shapeCluster. 
 
@@ -434,35 +378,8 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
                   filterClusterThreshold = 0.02, annotationType = "genes"
                   ,upstream=1000, upstreamOverlap = 500, downstream = 0)
                   
-        myTSSr@assignedClusters
-        
-        # $control
-        #      cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width      gene inCoding
-        #   1:       5  chrI   9325   9411      +         9327   4.966464          1.241616   9327   9391                  65   YAL066W     <NA>
-        #   2:       6  chrI   9442   9479      +         9442   3.414443          1.862423   9442   9468                  27   YAL066W     <NA>
-        #   3:       7  chrI  11253  11343      +        11329  40.662913         17.693022  11275  11329                  55 YAL064W-B     <NA>
-        #   4:      33  chrI  31026  31151      +        31108  48.112608         17.072215  31108  31145                  38   YAL062W     <NA>
-        #   5:      34  chrI  31187  31263      +        31242 320.026426        122.609541  31212  31242                  31   YAL062W     <NA>
-        #  ---                                                                                                                                  
-        # 856:    4279 chrII 801003 801075      -       801023  11.174543          4.656059 801018 801061                  44 YBR296C-A     <NA>
-        # 857:    4284 chrII 804563 804593      -       804592   1.552020          0.931212 804563 804593                  31   YBR298C     <NA>
-        # 858:    4285 chrII 804855 804975      -       804895 260.739280         71.703301 804868 804899                  32   YBR298C     <NA>
-        # 859:    4288 chrII 809353 809377      -       809377   1.862424          1.552020 809353 809377                  25   YBR300C     <NA>
-        # 860:    4289 chrII 809707 809748      -       809707   4.035251          2.172827 809707 809724                  18   YBR300C     <NA>
-        # 
-        # $treat
-        #      cluster   chr  start    end strand dominant_tss       tags tags.dominant_tss  q_0.1  q_0.9 interquantile_width      gene inCoding
-        #   1:       5  chrI   9327   9476      +         9359  11.498278          1.753975   9327   9452                 126   YAL066W     <NA>
-        #   2:       7  chrI  11259  11343      +        11329  59.245376         21.827244  11288  11329                  42 YAL064W-B     <NA>
-        #   3:       8  chrI  11907  11934      +        11919   2.338633          0.974431  11916  11922                   7 YAL064W-B     <NA>
-        #   4:      19  chrI  21237  21248      +        21246   1.948861          1.169317  21240  21246                   7   YAL064W     <NA>
-        #   5:      34  chrI  31087  31263      +        31242 117.711208         34.299955  31119  31242                 124   YAL062W     <NA>
-        #  ---                                                                                                                                  
-        # 810:    4271 chrII 799104 799125      -       799125   1.169316          0.584658 799104 799125                  22   YBR296C     <NA>
-        # 811:    4279 chrII 801017 801061      -       801023   6.821011          2.338633 801023 801058                  36 YBR296C-A     <NA>
-        # 812:    4285 chrII 804855 804952      -       804895 155.908888         54.568111 804872 804901                  30   YBR298C     <NA>
-        # 813:    4288 chrII 809377 809389      -       809377   1.169316          0.779544 809377 809389                  13   YBR300C     <NA>
-        # 814:    4289 chrII 809707 809710      -       809707   1.364203          0.974431 809707 809710                   4   YBR300C     <NA>
+        head(myTSSr@assignedClusters[["control"]])
+        head(myTSSr@assignedClusters[["treat"]])
 
   Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.
                   
@@ -505,23 +422,7 @@ exportClustersTable(myTSSr, data = "unassigned")
 
         myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
                 
-        myTSSr@PromoterShift
-        
-        # $control_VS_treat
-        #          gene                 Ds                  pval          padj
-        #  1:   YBL017C   16.5567506300711                     0  0.000000e+00
-        #  2:   YBR006W  -26.3346456736974                     0  0.000000e+00
-        #  3:   YBR023C   18.2077046044299                     0  0.000000e+00
-        #  4:   YBR039W  -27.6613679948891                     0  0.000000e+00
-        #  5:   YBR121C  -32.7177356221814                     0  0.000000e+00
-        #  ---                                                                                                                                  
-        # 70:   YBR158W   7.23779193641262   0.00110612692207393  4.424508e-03
-        # 71:   YBR140C  -6.96937554342683   0.00119456280847422  4.710952e-03
-        # 72:   YBR157C  0.867544334037256   0.00122552060110212  4.765913e-03
-        # 73:   YBR143C  -1.42890967687923   0.00163014425826738  6.252608e-03
-        # 74:   YBL060W    -1.471483572077   0.00197980632089202  7.491159e-03
-        # 75:   YBR053C   2.26685314089749   0.00259863406742416  9.701567e-03
-        #          gene                 Ds                  pval          padj
+        head(myTSSr@PromoterShift[["control_VS_treat"]])
 
 
 

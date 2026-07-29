@@ -19,6 +19,7 @@ test_that("mergeSamples returns changes without modifying caller symbols", {
         unname(result@librarySizes),
         unname(colSums(result@TSSprocessedMatrix[, c("control", "treat")]))
     )
+    expect_identical(result@normalizationStatus, "raw")
 
     toto <- function(x) mergeSamples(x)
     wrapped_input <- exampleTSSr
@@ -110,4 +111,5 @@ test_that("getTSS imports data without modifying its input", {
     expect_equal(nrow(result@TSSrawMatrix), 3)
     expect_equal(result@TSSrawMatrix$example, c(3L, 2L, 5L))
     expect_equal(unname(result@librarySizes), 10)
+    expect_identical(result@normalizationStatus, "raw")
 })
