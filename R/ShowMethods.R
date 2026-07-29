@@ -59,6 +59,20 @@
     sprintf("%d (%s)", length(tables), .formatTSSrItems(labels))
 }
 
+#' Display a compact summary of a TSSr object
+#'
+#' Shows the genome, sample and TSS counts, and concise row counts for completed
+#' analyses without expanding the full contents of the object's slots.
+#'
+#' @param object A TSSr object.
+#'
+#' @return The input TSSr object, invisibly.
+#'
+#' @export
+#'
+#' @examples
+#' data(exampleTSSr)
+#' show(exampleTSSr)
 setMethod(
     "show",
     signature(object = "TSSr"),

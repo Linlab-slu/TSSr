@@ -1,3 +1,19 @@
+format_expected_count <- function(value) {
+    format(value, big.mark = ",", scientific = FALSE, trim = TRUE)
+}
+
+format_expected_table_summary <- function(tables) {
+    paste(
+        paste(
+            names(tables),
+            vapply(tables, function(table) {
+                format_expected_count(nrow(table))
+            }, character(1))
+        ),
+        collapse = "; "
+    )
+}
+
 test_that("show keeps a populated TSSr object within one screen", {
     data(exampleTSSr)
 
@@ -11,10 +27,24 @@ test_that("show reports the core identity and data volume", {
 
     output <- capture.output(show(exampleTSSr))
 
-    expect_true(any(output == "  Genome: BSgenome.Scerevisiae.UCSC.sacCer3"))
-    expect_true(any(output == "  Samples: 4 (SL01, SL02, SL03, SL04)"))
-    expect_true(any(output == "  Merged samples: 2 (control, treat)"))
-    expect_true(any(output == "  TSSs: raw 29,456; processed 29,456"))
+    expect_true(any(output == sprintf(
+        "  Genome: %s", exampleTSSr@genomeName
+    )))
+    expect_true(any(output == sprintf(
+        "  Samples: %d (%s)",
+        length(exampleTSSr@sampleLabels),
+        paste(exampleTSSr@sampleLabels, collapse = ", ")
+    )))
+    expect_true(any(output == sprintf(
+        "  Merged samples: %d (%s)",
+        length(exampleTSSr@sampleLabelsMerged),
+        paste(exampleTSSr@sampleLabelsMerged, collapse = ", ")
+    )))
+    expect_true(any(output == sprintf(
+        "  TSSs: raw %s; processed %s",
+        format_expected_count(nrow(exampleTSSr@TSSrawMatrix)),
+        format_expected_count(nrow(exampleTSSr@TSSprocessedMatrix))
+    )))
 })
 
 test_that("show summarizes completed analyses without expanding result tables", {
@@ -23,16 +53,47 @@ test_that("show summarizes completed analyses without expanding result tables", 
     output <- capture.output(show(exampleTSSr))
     expected <- c(
         "  Analyses:",
-        "    Tag clusters: control 1,066; treat 1,098",
-        "    Consensus clusters: control 1,065; treat 1,097",
-        "    Cluster shapes: control 1,065; treat 1,097",
-        "    Assigned clusters: control 267; treat 264",
-        "    Unassigned clusters: control 798; treat 833",
-        "    Filtered clusters: control 781; treat 868",
-        "    Enhancers: control 21; treat 14",
-        "    DE comparisons: 1 (control_VS_treat)",
-        "    TAG tables: control 267; treat 264",
-        "    Promoter shifts: control_VS_treat 30"
+        paste0(
+            "    Tag clusters: ",
+            format_expected_table_summary(exampleTSSr@tagClusters)
+        ),
+        paste0(
+            "    Consensus clusters: ",
+            format_expected_table_summary(exampleTSSr@consensusClusters)
+        ),
+        paste0(
+            "    Cluster shapes: ",
+            format_expected_table_summary(exampleTSSr@clusterShape)
+        ),
+        paste0(
+            "    Assigned clusters: ",
+            format_expected_table_summary(exampleTSSr@assignedClusters)
+        ),
+        paste0(
+            "    Unassigned clusters: ",
+            format_expected_table_summary(exampleTSSr@unassignedClusters)
+        ),
+        paste0(
+            "    Filtered clusters: ",
+            format_expected_table_summary(exampleTSSr@filteredClusters)
+        ),
+        paste0(
+            "    Enhancers: ",
+            format_expected_table_summary(exampleTSSr@enhancers)
+        ),
+        sprintf(
+            "    DE comparisons: %d (%s)",
+            length(exampleTSSr@DEtables),
+            paste(names(exampleTSSr@DEtables), collapse = ", ")
+        ),
+        paste0(
+            "    TAG tables: ",
+            format_expected_table_summary(exampleTSSr@TAGtables)
+        ),
+        paste0(
+            "    Promoter shifts: ",
+            format_expected_table_summary(exampleTSSr@PromoterShift)
+        )
     )
 
     expect_true(all(expected %in% output))
@@ -85,4 +146,8 @@ test_that("displaying a TSSr object is read-only and print uses its show method"
     expect_s4_class(visibility$value, "TSSr")
     expect_tssr_content_equal(exampleTSSr, before)
     expect_identical(print_output, show_output)
+})
+
+test_that("the TSSr show method is part of the documented package interface", {
+    expect_true("show" %in% getNamespaceExports("TSSr"))
 })
