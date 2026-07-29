@@ -37,9 +37,7 @@ setGeneric("clusterTSS", function(
   peakDistance = 100, extensionDistance = 30,
   localThreshold = 0.02, clusterThreshold = 1,
   useMultiCore = FALSE, numCores = NULL
-) {
-    standardGeneric("clusterTSS")
-})
+) standardGeneric("clusterTSS"), signature = "object")
 #' @rdname clusterTSS
 #' @export
 setMethod("clusterTSS", signature(object = "TSSr"), function(

@@ -19,10 +19,11 @@
 #' data(exampleTSSr)
 #' # Promoter shift results are pre-computed in the @PromoterShift slot
 #' head(slot(exampleTSSr, "PromoterShift")[["control_VS_treat"]])
-setGeneric("shiftPromoter", function(object, comparePairs,
-                                     pval = 0.01) {
-    standardGeneric("shiftPromoter")
-})
+setGeneric(
+    "shiftPromoter",
+    function(object, comparePairs, pval = 0.01) standardGeneric("shiftPromoter"),
+    signature = "object"
+)
 #' @rdname shiftPromoter
 #' @export
 setMethod("shiftPromoter", signature(object = "TSSr"), function(

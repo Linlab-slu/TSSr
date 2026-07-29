@@ -37,9 +37,7 @@ setGeneric("getTSS", function(
   sequencingQualityThreshold = 10,
   mappingQualityThreshold = 20,
   softclippingAllowed = FALSE
-) {
-    standardGeneric("getTSS")
-})
+) standardGeneric("getTSS"), signature = "object")
 #' @rdname getTSS
 #' @export
 setMethod("getTSS", signature(object = "TSSr"), function(

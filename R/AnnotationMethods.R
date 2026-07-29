@@ -44,9 +44,7 @@ setGeneric("annotateCluster", function(
   upstream = 1000,
   upstreamOverlap = 500,
   downstream = 0
-) {
-    standardGeneric("annotateCluster")
-})
+) standardGeneric("annotateCluster"), signature = "object")
 #' @rdname annotateCluster
 #' @export
 setMethod("annotateCluster", signature(object = "TSSr"), function(

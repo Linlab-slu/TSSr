@@ -12,7 +12,11 @@
 #' @examples
 #' data(exampleTSSr)
 #' exampleTSSr <- normalizeTSS(exampleTSSr)
-setGeneric("normalizeTSS", function(object) standardGeneric("normalizeTSS"))
+setGeneric(
+    "normalizeTSS",
+    function(object) standardGeneric("normalizeTSS"),
+    signature = "object"
+)
 #' @rdname normalizeTSS
 #' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
 #'   slot containing normalized TPM values. The input object is not modified;

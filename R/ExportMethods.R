@@ -19,7 +19,7 @@
 #' plotCorrelation(exampleTSSr, samples = "all")
 #' setwd(oldwd)
 #'
-setGeneric("plotCorrelation", function(object, samples = "all") standardGeneric("plotCorrelation"))
+setGeneric("plotCorrelation", function(object, samples = "all") standardGeneric("plotCorrelation"), signature = "object")
 #' @rdname plotCorrelation
 #' @export
 setMethod("plotCorrelation", signature(object = "TSSr"), function(object, samples) {
@@ -59,7 +59,7 @@ setMethod("plotCorrelation", signature(object = "TSSr"), function(object, sample
 #' oldwd <- setwd(tempdir())
 #' plotTssPCA(exampleTSSr, TSS.threshold = 10)
 #' setwd(oldwd)
-setGeneric("plotTssPCA", function(object, TSS.threshold = 10) standardGeneric("plotTssPCA"))
+setGeneric("plotTssPCA", function(object, TSS.threshold = 10) standardGeneric("plotTssPCA"), signature = "object")
 #' @rdname plotTssPCA
 #' @export
 setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.threshold) {
@@ -103,7 +103,7 @@ setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.thresho
 #' oldwd <- setwd(tempdir())
 #' plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
 #' setwd(oldwd)
-setGeneric("plotInterQuantile", function(object, samples = "all", tagsThreshold = 1) standardGeneric("plotInterQuantile"))
+setGeneric("plotInterQuantile", function(object, samples = "all", tagsThreshold = 1) standardGeneric("plotInterQuantile"), signature = "object")
 #' @rdname plotInterQuantile
 #' @export
 setMethod("plotInterQuantile", signature(object = "TSSr"), function(object, samples, tagsThreshold) {
@@ -164,7 +164,7 @@ setMethod("plotInterQuantile", signature(object = "TSSr"), function(object, samp
 #' oldwd <- setwd(tempdir())
 #' plotShape(exampleTSSr, samples = "all")
 #' setwd(oldwd)
-setGeneric("plotShape", function(object, samples = "all") standardGeneric("plotShape"))
+setGeneric("plotShape", function(object, samples = "all") standardGeneric("plotShape"), signature = "object")
 #' @rdname plotShape
 #' @export
 setMethod("plotShape", signature(object = "TSSr"), function(object, samples) {
@@ -226,9 +226,7 @@ setGeneric("plotDE", function(
   withGeneName = TRUE,
   xlim = c(-2.5, 2.5),
   ylim = c(0, 10)
-) {
-    standardGeneric("plotDE")
-})
+) standardGeneric("plotDE"), signature = "object")
 #' @rdname plotDE
 #' @export
 setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, xlim, ylim) {
@@ -299,9 +297,7 @@ setGeneric("plotTSS", function(
   up.dis = 500,
   down.dis = 500,
   yFixed = TRUE
-) {
-    standardGeneric("plotTSS")
-})
+) standardGeneric("plotTSS"), signature = "object")
 #' @rdname plotTSS
 #' @export
 setMethod("plotTSS", signature(object = "TSSr"), function(
@@ -375,7 +371,7 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
 #' oldwd <- setwd(tempdir())
 #' exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
 #' setwd(oldwd)
-setGeneric("exportTSStable", function(object, data = "raw", merged = TRUE) standardGeneric("exportTSStable"))
+setGeneric("exportTSStable", function(object, data = "raw", merged = TRUE) standardGeneric("exportTSStable"), signature = "object")
 #' @rdname exportTSStable
 #' @export
 setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, merged) {
@@ -415,7 +411,7 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
 #' oldwd <- setwd(tempdir())
 #' exportClustersTable(exampleTSSr, data = "tagClusters")
 #' setwd(oldwd)
-setGeneric("exportClustersTable", function(object, data = "assigned") standardGeneric("exportClustersTable"))
+setGeneric("exportClustersTable", function(object, data = "assigned") standardGeneric("exportClustersTable"), signature = "object")
 #' @rdname exportClustersTable
 #' @export
 setMethod("exportClustersTable", signature(object = "TSSr"), function(object, data) {
@@ -474,7 +470,7 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
 #' oldwd <- setwd(tempdir())
 #' exportShapeTable(exampleTSSr)
 #' setwd(oldwd)
-setGeneric("exportShapeTable", function(object) standardGeneric("exportShapeTable"))
+setGeneric("exportShapeTable", function(object) standardGeneric("exportShapeTable"), signature = "object")
 #' @rdname exportShapeTable
 #' @export
 setMethod("exportShapeTable", signature(object = "TSSr"), function(object) {
@@ -508,7 +504,7 @@ setMethod("exportShapeTable", signature(object = "TSSr"), function(object) {
 #' oldwd <- setwd(tempdir())
 #' exportEnhancerTable(exampleTSSr)
 #' setwd(oldwd)
-setGeneric("exportEnhancerTable", function(object) standardGeneric("exportEnhancerTable"))
+setGeneric("exportEnhancerTable", function(object) standardGeneric("exportEnhancerTable"), signature = "object")
 #' @rdname exportEnhancerTable
 #' @export
 setMethod("exportEnhancerTable", signature(object = "TSSr"), function(object) {
@@ -546,7 +542,7 @@ setMethod("exportEnhancerTable", signature(object = "TSSr"), function(object) {
 #' oldwd <- setwd(tempdir())
 #' exportDETable(exampleTSSr, data = "sig")
 #' setwd(oldwd)
-setGeneric("exportDETable", function(object, data = "sig") standardGeneric("exportDETable"))
+setGeneric("exportDETable", function(object, data = "sig") standardGeneric("exportDETable"), signature = "object")
 #' @rdname exportDETable
 #' @export
 setMethod("exportDETable", signature(object = "TSSr"), function(object, data) {
@@ -584,7 +580,7 @@ setMethod("exportDETable", signature(object = "TSSr"), function(object, data) {
 #' oldwd <- setwd(tempdir())
 #' exportShiftTable(exampleTSSr)
 #' setwd(oldwd)
-setGeneric("exportShiftTable", function(object) standardGeneric("exportShiftTable"))
+setGeneric("exportShiftTable", function(object) standardGeneric("exportShiftTable"), signature = "object")
 #' @rdname exportShiftTable
 #' @export
 setMethod("exportShiftTable", signature(object = "TSSr"), function(object) {
@@ -621,9 +617,7 @@ setGeneric("exportTSStoBedgraph", function(
   object, data = "processed",
   format = "bedGraph",
   oneFile = FALSE
-) {
-    standardGeneric("exportTSStoBedgraph")
-})
+) standardGeneric("exportTSStoBedgraph"), signature = "object")
 #' @rdname exportTSStoBedgraph
 #' @export
 setMethod("exportTSStoBedgraph", signature(object = "TSSr"), function(object, data, format, oneFile) {
@@ -687,9 +681,11 @@ setMethod("exportTSStoBedgraph", signature(object = "TSSr"), function(object, da
 #' oldwd <- setwd(tempdir())
 #' exportClustersToBed(exampleTSSr, data = "tagClusters")
 #' setwd(oldwd)
-setGeneric("exportClustersToBed", function(object, data = "consensusClusters", assigned = TRUE) {
-    standardGeneric("exportClustersToBed")
-})
+setGeneric(
+    "exportClustersToBed",
+    function(object, data = "consensusClusters", assigned = TRUE) standardGeneric("exportClustersToBed"),
+    signature = "object"
+)
 #' @rdname exportClustersToBed
 #' @export
 setMethod("exportClustersToBed", signature(object = "TSSr"), function(object, data, assigned) {

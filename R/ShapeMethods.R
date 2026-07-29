@@ -26,9 +26,7 @@
 setGeneric("shapeCluster", function(
   object, clusters = "consensusClusters",
   method = "PSS", useMultiCore = FALSE, numCores = NULL
-) {
-    standardGeneric("shapeCluster")
-})
+) standardGeneric("shapeCluster"), signature = "object")
 #' @rdname shapeCluster
 #' @export
 setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters, method, useMultiCore, numCores) {

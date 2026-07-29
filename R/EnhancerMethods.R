@@ -20,10 +20,11 @@
 #' data(exampleTSSr)
 #' # Enhancer calls are pre-computed in the @enhancers slot
 #' head(slot(exampleTSSr, "enhancers")[["control"]])
-setGeneric("callEnhancer", function(object, flanking = 400,
-                                    dis2gene = 2000) {
-    standardGeneric("callEnhancer")
-})
+setGeneric(
+    "callEnhancer",
+    function(object, flanking = 400, dis2gene = 2000) standardGeneric("callEnhancer"),
+    signature = "object"
+)
 #' @rdname callEnhancer
 #' @export
 setMethod(

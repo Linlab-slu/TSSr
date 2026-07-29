@@ -25,9 +25,7 @@
 setGeneric("filterTSS", function(
   object, method = "poisson", normalization = TRUE,
   pVal = 0.01, tpmLow = 0.1
-) {
-    standardGeneric("filterTSS")
-})
+) standardGeneric("filterTSS"), signature = "object")
 #' @rdname filterTSS
 #' @export
 setMethod("filterTSS", signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow) {
