@@ -21,7 +21,10 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Shape scores are pre-computed in the @clusterShape slot
+#' exampleTSSr <- shapeCluster(
+#'     exampleTSSr, clusters = "consensusClusters", method = "PSS",
+#'     useMultiCore = FALSE
+#' )
 #' head(slot(exampleTSSr, "clusterShape")[["control"]])
 setGeneric("shapeCluster", function(
   object, clusters = "consensusClusters",

@@ -1,28 +1,17 @@
 # Test downstream analysis: shapeCluster, shiftPromoter, callEnhancer
 # Prepare data once at the top to avoid repeating expensive workflow steps
 
-# Top-level workflow setup mirrors .skip_on_bioc_spb(): on Bioconductor
-# build machines we skip the heavy prep so the SPB 15-min budget holds;
-# everywhere else (devtools::test, CI, user installs) it runs normally.
-.on_bioc_spb <- identical(Sys.info()[["user"]], "biocbuild") ||
-    grepl("bbs-", R.home(), fixed = TRUE) ||
-    nzchar(Sys.getenv("BBS_HOME")) ||
-    identical(Sys.getenv("IS_BIOC_BUILD_MACHINE"), "true")
-
 data(exampleTSSr)
-if (!.on_bioc_spb) {
-    exampleTSSr <- mergeSamples(exampleTSSr)
-    exampleTSSr <- normalizeTSS(exampleTSSr)
-    exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
-    exampleTSSr <- clusterTSS(exampleTSSr,
-        method = "peakclu", clusterThreshold = 1,
-        useMultiCore = FALSE
-    )
-    exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
-}
+exampleTSSr <- mergeSamples(exampleTSSr)
+exampleTSSr <- normalizeTSS(exampleTSSr)
+exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 0.1)
+exampleTSSr <- clusterTSS(exampleTSSr,
+    method = "peakclu", clusterThreshold = 1,
+    useMultiCore = FALSE
+)
+exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
 
 test_that("shapeCluster calculates shape scores with PSS method", {
-    .skip_on_bioc_spb()
     object <- exampleTSSr
     object@clusterShape <- list()
     before <- tssr_content(object)
@@ -42,7 +31,6 @@ test_that("shapeCluster calculates shape scores with PSS method", {
 })
 
 test_that("deGene calculates differential expression tables", {
-    .skip_on_bioc_spb()
     object <- exampleTSSr
     object@DEtables <- list()
     object@TAGtables <- list()
@@ -61,7 +49,6 @@ test_that("deGene calculates differential expression tables", {
 })
 
 test_that("shiftPromoter detects promoter shifts", {
-    .skip_on_bioc_spb()
     object <- exampleTSSr
     object@PromoterShift <- list()
     before <- tssr_content(object)
@@ -79,12 +66,8 @@ test_that("shiftPromoter detects promoter shifts", {
 })
 
 test_that("callEnhancer identifies enhancer candidates when data available", {
-    .skip_on_bioc_spb()
-    ## callEnhancer requires annotated clusters; skip if not available
-    skip_if(length(exampleTSSr@assignedClusters) == 0,
-        "No assignedClusters in exampleTSSr")
-    skip_if(length(exampleTSSr@unassignedClusters) == 0,
-        "No unassignedClusters in exampleTSSr")
+    expect_gt(length(exampleTSSr@assignedClusters), 0)
+    expect_gt(length(exampleTSSr@unassignedClusters), 0)
 
     object <- exampleTSSr
     object@enhancers <- list()

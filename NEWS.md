@@ -10,6 +10,13 @@
   the `object` argument; configuration arguments no longer participate in
   dispatch.
 
+* Removed Bioconductor-build-specific test skips. Core workflow tests, the
+  seven workflow examples, and the vignette now execute their documented
+  functions on the reduced chromosome I example data.
+
+* Updated the vignette installation instructions to use
+  `BiocManager::install("TSSr")`.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

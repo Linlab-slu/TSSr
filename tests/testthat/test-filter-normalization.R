@@ -77,7 +77,6 @@ test_that("poisson filtering rejects mixed normalized and raw samples", {
 })
 
 test_that("poisson filtering accepts raw count data", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     object <- make_filter_test_object(list(raw = c(1, 2, 3)))
 
     expect_no_error(

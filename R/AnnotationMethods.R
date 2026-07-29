@@ -33,7 +33,9 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Annotated clusters are pre-computed in the @assignedClusters slot
+#' exampleTSSr <- annotateCluster(
+#'     exampleTSSr, clusters = "consensusClusters", filterCluster = TRUE
+#' )
 #' head(slot(exampleTSSr, "assignedClusters")[["control"]])
 #'
 setGeneric("annotateCluster", function(

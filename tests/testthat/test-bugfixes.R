@@ -81,7 +81,6 @@ test_that("uncoded G trimming only removes terminal mismatched Gs", {
 })
 
 test_that("uncoded G trimming updates plus starts and minus ends", {
-    skip_if_not_installed("BSgenome.Scerevisiae.UCSC.sacCer3")
     Genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
 
     plus.read <- GenomicRanges::GRanges(

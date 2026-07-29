@@ -29,6 +29,6 @@ bidirectional clusters as described in Andersson et al. 2014.
 }
 \examples{
 data(exampleTSSr)
-# Enhancer calls are pre-computed in the @enhancers slot
+exampleTSSr <- callEnhancer(exampleTSSr)
 head(slot(exampleTSSr, "enhancers")[["control"]])
 }

@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Enhancer calls are pre-computed in the @enhancers slot
+#' exampleTSSr <- callEnhancer(exampleTSSr)
 #' head(slot(exampleTSSr, "enhancers")[["control"]])
 setGeneric(
     "callEnhancer",

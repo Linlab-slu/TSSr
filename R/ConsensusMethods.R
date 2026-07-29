@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Consensus clusters are pre-computed in the @consensusClusters slot
+#' exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
 #' head(slot(exampleTSSr, "consensusClusters")[["control"]])
 setGeneric(
     "consensusCluster",

@@ -53,7 +53,10 @@ The minimum distance of two neighboring peaks can be specified.
 }
 \examples{
 data(exampleTSSr)
-# Tag clusters are pre-computed in the @tagClusters slot
+exampleTSSr <- clusterTSS(
+    exampleTSSr, method = "peakclu", clusterThreshold = 1,
+    useMultiCore = FALSE
+)
 head(slot(exampleTSSr, "tagClusters")[["control"]])
 
 }

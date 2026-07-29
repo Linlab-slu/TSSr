@@ -27,10 +27,13 @@ gene annotation, differential expression, and promoter shifting.
 
 ## Installation
 
-You can install the development version directly from GitHub using `devtools`:
+Install TSSr through Bioconductor with `BiocManager`:
 
-```{r github, eval=FALSE}
-devtools::install_github("Linlab-slu/TSSr")
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("TSSr")
 ```
 
 And load `TSSr`:
@@ -80,23 +83,32 @@ newObj <- TSSr(
 newObj
 ```
 
-Then read in TSS data from the input files (requires actual files):
+The package includes a small TSS table that can be used to exercise the import
+step without requiring external files:
 
-```{r getTSS, eval=FALSE}
-# Get TSS (requires input files to exist)
-myTSSr <- getTSS(myTSSr)
+```{r getTSS}
+exampleInput <- system.file(
+    "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+)
+importedTSSr <- TSSr(
+    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+    inputFiles = exampleInput,
+    inputFilesType = "TSStable",
+    sampleLabels = "example",
+    sampleLabelsMerged = "example",
+    mergeIndex = 1
+)
+importedTSSr <- getTSS(importedTSSr)
+head(slot(importedTSSr, "TSSrawMatrix"))
 ```
 
 # TSS data processing
 
-> The `exampleTSSr` object distributed with the package already contains
-> the results of every pipeline step below. Each computational chunk is
-> shown as `eval=FALSE` to keep the vignette build time small on
-> Bioconductor's Single Package Builder; the chunk that follows it
-> displays the corresponding pre-computed result from `exampleTSSr` so
-> the reader can see what each step produces.
+The `exampleTSSr` object contains chromosome I data and the upstream inputs
+needed for each workflow stage. The chunks below recompute the complete
+workflow and assign the returned object at every step.
 
-```{r TSSprocessing, eval=FALSE, tidy=FALSE}
+```{r TSSprocessing, tidy=FALSE}
 # Merge replicates
 myTSSr <- mergeSamples(myTSSr)
 # Normalization
@@ -112,7 +124,7 @@ head(slot(myTSSr, "TSSprocessedMatrix"))
 
 # TSS clustering
 
-```{r TSSclustering, eval=FALSE, tidy=FALSE}
+```{r TSSclustering, tidy=FALSE}
 # TSS clustering
 myTSSr <- clusterTSS(myTSSr,
     method = "peakclu", peakDistance = 100, extensionDistance = 30,
@@ -134,7 +146,7 @@ head(slot(myTSSr, "consensusClusters")[["control"]])
 
 # Core promoter shape
 
-```{r shapeCluster, eval=FALSE, tidy=FALSE}
+```{r shapeCluster, tidy=FALSE}
 # Calculating core promoter shape score
 myTSSr <- shapeCluster(myTSSr,
     clusters = "consensusClusters", method = "PSS",
@@ -149,7 +161,7 @@ head(slot(myTSSr, "clusterShape")[["control"]])
 
 # Annotation of core promoters
 
-```{r annotateCluster, eval=FALSE, tidy=FALSE}
+```{r annotateCluster, tidy=FALSE}
 # Assign clusters to the annotated features
 myTSSr <- annotateCluster(myTSSr, clusters = "consensusClusters",
     filterCluster = TRUE, filterClusterThreshold = 0.02,
@@ -162,9 +174,20 @@ myTSSr <- annotateCluster(myTSSr, clusters = "consensusClusters",
 head(slot(myTSSr, "assignedClusters")[["control"]])
 ```
 
+# Enhancer identification
+
+```{r callEnhancer, tidy=FALSE}
+myTSSr <- callEnhancer(myTSSr, flanking = 400, dis2gene = 2000)
+```
+
+```{r callEnhancer-show}
+# Putative enhancers per sample (@enhancers)
+head(slot(myTSSr, "enhancers")[["control"]])
+```
+
 # Differential expression analysis
 
-```{r deGene, eval=FALSE, tidy=FALSE}
+```{r deGene, tidy=FALSE}
 # Gene-level differential expression using DESeq2
 myTSSr <- deGene(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01, useMultiCore = FALSE, numCores = NULL)
@@ -177,7 +200,7 @@ head(slot(myTSSr, "DEtables")[["control_VS_treat"]])
 
 # Core promoter shifts
 
-```{r shiftPromoter, eval=FALSE, tidy=FALSE}
+```{r shiftPromoter, tidy=FALSE}
 # Calculate core promoter shifts
 myTSSr <- shiftPromoter(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01)
@@ -192,7 +215,9 @@ head(slot(myTSSr, "PromoterShift")[["control_VS_treat"]])
 
 TSSr provides several export functions for saving results:
 
-```{r export, eval=FALSE}
+```{r export}
+oldwd <- setwd(tempdir())
+
 # Export TSS tables
 exportTSStable(myTSSr, data = "processed")
 
@@ -204,6 +229,8 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
 
 # Export TSS to bedGraph
 exportTSStoBedgraph(myTSSr, data = "processed")
+
+setwd(oldwd)
 ```
 
 # Session info

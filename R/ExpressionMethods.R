@@ -21,7 +21,10 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Differential expression results are pre-computed in the @DEtables slot
+#' exampleTSSr <- deGene(
+#'     exampleTSSr, comparePairs = list(c("control", "treat")),
+#'     pval = 0.01, useMultiCore = FALSE
+#' )
 #' head(slot(exampleTSSr, "DEtables")[["control_VS_treat"]])
 setGeneric(
     "deGene",

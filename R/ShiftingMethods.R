@@ -17,7 +17,9 @@
 #'
 #' @examples
 #' data(exampleTSSr)
-#' # Promoter shift results are pre-computed in the @PromoterShift slot
+#' exampleTSSr <- shiftPromoter(
+#'     exampleTSSr, comparePairs = list(c("control", "treat")), pval = 0.01
+#' )
 #' head(slot(exampleTSSr, "PromoterShift")[["control_VS_treat"]])
 setGeneric(
     "shiftPromoter",

@@ -40,6 +40,9 @@ Calculates core promoter shape based on the distributions of TSSs within core
 }
 \examples{
 data(exampleTSSr)
-# Shape scores are pre-computed in the @clusterShape slot
+exampleTSSr <- shapeCluster(
+    exampleTSSr, clusters = "consensusClusters", method = "PSS",
+    useMultiCore = FALSE
+)
 head(slot(exampleTSSr, "clusterShape")[["control"]])
 }
