@@ -61,7 +61,10 @@
   bundled chromosome I workflow, all 65 testable genes retain the same effect
   sizes, while the genes significant at `pval = 0.01` decrease from 25 to 24;
   `YAR019W-A` is no longer significant. Expected sparse-table approximation
-  warnings increase from 35 to 42 and are not suppressed.
+  warnings increase from 35 to 42 and are not suppressed. The p-value direction
+  is scale-dependent: reconstructed counts reduce effective sample size when
+  `librarySize / 1e6` is below one and increase it when the factor is above
+  one; effect-size calculations are unchanged.
 
 * Fixed restoration of graphical parameters after drawing correlation panels.
   Correlation documentation now states how non-positive values are handled on
