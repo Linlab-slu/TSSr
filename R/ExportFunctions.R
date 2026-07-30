@@ -34,6 +34,33 @@
 }
 
 ###############################################################################
+.prepareExportTable <- function(x) {
+    x <- data.table::copy(data.table::as.data.table(x))
+    coordinate_columns <- intersect(
+        c(
+            "pos", "start", "end", "dominant_tss", "dominant_tss.m",
+            "dominant_tss.p", "q_0.1", "q_0.9"
+        ),
+        names(x)
+    )
+    for (column in coordinate_columns) {
+        data.table::set(
+            x, j = column,
+            value = .asIntegerCoordinate(x[[column]], column)
+        )
+    }
+    x
+}
+
+.writeTSStable <- function(x, file) {
+    x <- .prepareExportTable(x)
+    data.table::fwrite(
+        x, file = file, sep = "\t", quote = FALSE,
+        row.names = FALSE, scipen = 999
+    )
+}
+
+###############################################################################
 .plotCorrelation <- function(TSS.all.samples) {
     z <- TSS.all.samples[, -c(1, 2, 3)]
     # Customize lower panel
@@ -189,12 +216,12 @@
         }
         list(
             p[i, chr],
-            p[i, start] - 1,
+            p[i, start] - 1L,
             p[i, end],
             ".",
             0,
             p[i, strand],
-            p[i, dominant_tss] - 1,
+            p[i, dominant_tss] - 1L,
             p[i, dominant_tss],
             0,
             nrBlocks,

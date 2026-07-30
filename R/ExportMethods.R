@@ -402,10 +402,7 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
     } else {
         stop("No data for the given TSS data type!")
     }
-    write.table(
-        tss, file = output_file, sep = "\t", quote = FALSE,
-        row.names = FALSE
-    )
+    .writeTSStable(tss, output_file)
 })
 
 ################################################################################################
@@ -436,7 +433,7 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
         tc <- object@tagClusters
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- tc[[samples[i]]]
+            temp <- .prepareExportTable(tc[[samples[i]]])
             write.table(temp, file = paste(samples[i], "tagClusters", "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         }
     } else if (data == "consensusClusters") {
@@ -444,7 +441,7 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
         tc <- object@consensusClusters
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- tc[[samples[i]]]
+            temp <- .prepareExportTable(tc[[samples[i]]])
             write.table(temp, file = paste(samples[i], "consensusClusters", "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         }
     } else if (data == "assigned") {
@@ -452,7 +449,7 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
         tc <- object@assignedClusters
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- tc[[samples[i]]]
+            temp <- .prepareExportTable(tc[[samples[i]]])
             write.table(temp, file = paste(samples[i], "assignedClusters", "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         }
     } else if (data == "unassigned") {
@@ -460,7 +457,7 @@ setMethod("exportClustersTable", signature(object = "TSSr"), function(object, da
         tc <- object@unassignedClusters
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- tc[[samples[i]]]
+            temp <- .prepareExportTable(tc[[samples[i]]])
             write.table(temp, file = paste(samples[i], "unassignedClusters", "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         }
     } else {
@@ -495,7 +492,7 @@ setMethod("exportShapeTable", signature(object = "TSSr"), function(object) {
     if (!is.null(s)) {
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- s[[samples[i]]]
+            temp <- .prepareExportTable(s[[samples[i]]])
             write.table(temp, file = paste(samples[i], "promoter.shape", "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
         }
     } else {
@@ -529,7 +526,7 @@ setMethod("exportEnhancerTable", signature(object = "TSSr"), function(object) {
     if (!is.null(s)) {
         samples <- object@sampleLabelsMerged
         for (i in seq_len(length(samples))) {
-            temp <- s[[samples[i]]]
+            temp <- .prepareExportTable(s[[samples[i]]])
             write.table(temp,
                 file = paste(samples[i], "enhancers", "txt", sep = "."),
                 sep = "\t", quote = FALSE, row.names = FALSE
@@ -717,7 +714,7 @@ setMethod("exportClustersToBed", signature(object = "TSSr"), function(object, da
         }
     }
     for (i in seq_len(length(sampleLabelsMerged))) {
-        temp <- cs[[sampleLabelsMerged[i]]]
+        temp <- .prepareExportTable(cs[[sampleLabelsMerged[i]]])
         temp <- .getBed(temp)
         df <- file(paste(sampleLabelsMerged[i], data, "bed", sep = "."), open = "wt")
         writeLines(paste('track name="', sampleLabelsMerged[i],

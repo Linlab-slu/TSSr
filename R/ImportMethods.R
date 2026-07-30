@@ -47,6 +47,7 @@ setMethod("getTSS", signature(object = "TSSr"), function(
   softclippingAllowed
 ) {
     ## initialize values
+    pos <- NULL
     Genome <- .getGenome(object@genomeName)
     sampleLabels <- object@sampleLabels
     inputFilesType <- object@inputFilesType
@@ -83,6 +84,7 @@ setMethod("getTSS", signature(object = "TSSr"), function(
     } else if (inputFilesType == "TSStable") {
         tss <- .getTSS_from_TSStable(object@inputFiles, sampleLabels)
     }
+    tss[, pos := .asIntegerCoordinate(pos)]
     setorder(tss, "strand", "chr", "pos")
     # get library sizes
     object@librarySizes <- colSums(tss[, 4:ncol(tss), drop = FALSE], na.rm = TRUE)

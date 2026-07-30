@@ -1,4 +1,24 @@
 ################################################################################
+.asIntegerCoordinate <- function(x, column = "pos", minimum = 1L) {
+    if (!is.numeric(x)) {
+        stop("Coordinate column '", column, "' must be numeric.")
+    }
+    if (any(!is.finite(x))) {
+        stop("Coordinate column '", column, "' contains non-finite values.")
+    }
+    if (any(x != trunc(x))) {
+        stop("Coordinate column '", column, "' must contain whole numbers.")
+    }
+    if (any(x < minimum | x > .Machine$integer.max)) {
+        stop(
+            "Coordinate column '", column, "' must be between ",
+            minimum, " and ", .Machine$integer.max, "."
+        )
+    }
+    as.integer(x)
+}
+
+################################################################################
 .getGenome <- function(genomeName) {
     if (is.null(genomeName)) {
         stop("Can not run this function with a NULL genome.")
@@ -94,19 +114,23 @@
 }
 
 .removeNewG <- function(readsGR.p, readsGR.m, Genome) {
-    chr <- pos <- tag_count <- NULL
-
     message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
     readsGR.p <- .trimUncodedGOneStrand(readsGR.p, Genome, minusStrand = FALSE)
     readsGR.m <- .trimUncodedGOneStrand(readsGR.m, Genome, minusStrand = TRUE)
 
+    .makeTSSFromGRanges(readsGR.p, readsGR.m)
+}
+
+.makeTSSFromGRanges <- function(readsGR.p, readsGR.m) {
+    chr <- pos <- tag_count <- NULL
+
     TSS.p <- data.table(
         chr = as.character(seqnames(readsGR.p)),
-        pos = start(readsGR.p), strand = "+"
+        pos = as.integer(start(readsGR.p)), strand = "+"
     )
     TSS.m <- data.table(
         chr = as.character(seqnames(readsGR.m)),
-        pos = end(readsGR.m), strand = "-"
+        pos = as.integer(end(readsGR.m)), strand = "-"
     )
     TSS <- rbind(TSS.p, TSS.m)
     TSS <- TSS[, c("chr", "pos", "strand")]
@@ -114,7 +138,7 @@
     setDT(TSS)
     TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
 
-    return(TSS)
+    TSS
 }
 
 .getTSS_from_bam <- function(
@@ -195,22 +219,7 @@
         readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >=
             sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
         if (softclippingAllowed) {
-            ## ------------------------------------------------------------------------
-            TSS.p <- data.table(
-                chr = as.character(seqnames(readsGR.p)),
-                pos = start(readsGR.p), strand = "+"
-            )
-            ## ------------------------------------------------------------------------
-            TSS.m <- data.table(
-                chr = as.character(seqnames(readsGR.m)),
-                pos = end(readsGR.m), strand = "-"
-            )
-            #-------------------------------------------------------------------------
-            TSS <- rbind(TSS.p, TSS.m)
-            TSS <- TSS[, c("chr", "pos", "strand")]
-            TSS$tag_count <- 1
-            setDT(TSS)
-            TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
+            TSS <- .makeTSSFromGRanges(readsGR.p, readsGR.m)
         } else {
             TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
         }
@@ -226,6 +235,7 @@
         gc()
     }
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
+    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
     return(TSS.all.samples)
 }
 
@@ -260,6 +270,7 @@
         gc()
     }
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
+    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
     return(TSS.all.samples)
 }
 ################################################################################
@@ -297,6 +308,7 @@
         gc()
     }
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
+    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
     return(TSS.all.samples)
 }
 
@@ -305,17 +317,19 @@
 ## .getTSS_from_tss function calls TSS from tss files
 
 .getTSS_from_tss <- function(tss.files, sampleLabels) {
+    pos <- NULL
     first <- TRUE
 
     for (i in seq_len(length(tss.files))) {
         message("\nReading in file: ", tss.files[i], "...")
         TSS <- read.table(
             file = tss.files[i], header = TRUE, sep = "\t",
-            colClasses = c("character", "integer", "character", "integer"),
+            colClasses = c("character", "numeric", "character", "numeric"),
             col.names = c("chr", "pos", "strand", sampleLabels[i])
         )
 
         setDT(TSS)
+        TSS[, pos := .asIntegerCoordinate(pos)]
 
         setkeyv(TSS, cols = c("chr", "pos", "strand"))
         if (first == TRUE) {
@@ -335,6 +349,7 @@
 ## .getTSS_from_TSStable function calls TSS from one TSStable file
 
 .getTSS_from_TSStable <- function(TSStable.file, sampleLabels) {
+    pos <- NULL
     if (length(TSStable.file) > 1) {
         stop("Only one file should be provided when inputFilesType = \"TSStable\"!")
     }
@@ -344,13 +359,17 @@
 
     TSS.all.samples <- read.table(
         file = TSStable.file, header = TRUE, stringsAsFactors = FALSE,
-        colClasses = c("character", "integer", "character", rep("integer", length(sampleLabels))),
+        colClasses = c(
+            "character", "numeric", "character",
+            rep("numeric", length(sampleLabels))
+        ),
         col.names = c("chr", "pos", "strand", sampleLabels)
     )
     if (ncol(TSS.all.samples) != (length(sampleLabels) + 3)) {
         stop("Number of provided sample labels must match the number of samples in the TSS table!")
     }
     setDT(TSS.all.samples)
+    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
     return(TSS.all.samples)
 }
