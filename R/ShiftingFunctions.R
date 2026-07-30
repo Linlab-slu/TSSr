@@ -60,6 +60,8 @@
     })
     Ds <- data.frame(matrix(unlist(cmp), nrow = length(cmp), byrow = TRUE), stringsAsFactors = FALSE)
     colnames(Ds) <- c("gene", "Ds", "pval")
+    Ds$Ds <- as.numeric(Ds$Ds)
+    Ds$pval <- as.numeric(Ds$pval)
     Ds$padj <- p.adjust(Ds[, "pval"], method = "BH")
     setDT(Ds)
     Ds <- Ds[!is.na(padj), ]
