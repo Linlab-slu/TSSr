@@ -48,6 +48,11 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
   localThreshold, clusterThreshold, useMultiCore, numCores
 ) {
     message("\nClustering TSS data with ", method, " method...")
+    if (length(peakDistance) != 1L || !is.numeric(peakDistance) ||
+            is.na(peakDistance) || !is.finite(peakDistance) ||
+            peakDistance <= 0) {
+        stop("peakDistance must be greater than zero.")
+    }
     ## initialize values
     Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
