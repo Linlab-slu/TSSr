@@ -1,5 +1,49 @@
 ###############################################################################
 
+.rangeMaxFirstIndex <- function(values) {
+    n <- length(values)
+    if (n == 0L) {
+        return(list(query = function(left, right) integer(length(left))))
+    }
+
+    choose_best <- function(a, b) {
+        replace_a <- values[b] > values[a] | (values[b] == values[a] & b < a)
+        a[replace_a] <- b[replace_a]
+        a
+    }
+
+    max_log <- floor(log2(n))
+    table <- vector("list", max_log + 1L)
+    table[[1L]] <- seq_len(n)
+    if (max_log > 0L) {
+        for (level in seq_len(max_log)) {
+            span <- 2L^(level - 1L)
+            prev <- table[[level]]
+            len <- n - 2L^level + 1L
+            left <- prev[seq_len(len)]
+            right <- prev[seq_len(len) + span]
+            table[[level + 1L]] <- choose_best(left, right)
+        }
+    }
+
+    query <- function(left, right) {
+        len <- right - left + 1L
+        level <- floor(log2(len))
+        left_idx <- integer(length(left))
+        right_idx <- integer(length(left))
+        for (current_level in unique(level)) {
+            current <- which(level == current_level)
+            span <- 2L^current_level
+            current_table <- table[[current_level + 1L]]
+            left_idx[current] <- current_table[left[current]]
+            right_idx[current] <- current_table[right[current] - span + 1L]
+        }
+        choose_best(left_idx, right_idx)
+    }
+
+    list(query = query)
+}
+
 .clusterByPeak <- function(tss.dt, peakDistance, localThreshold, extensionDistance) {
     # create copy for reference later
     copied.dt <- copy(tss.dt)
@@ -7,18 +51,14 @@
     ## define variable as a NULL value
     pos <- peak <- ID <- forward <- reverse <- V1 <- V2 <- chr <- NULL
     # get peakID
-    # TODO could potentially by optimized more
-    peakID <- vapply(seq_len(tss.dt[, .N]), function(x) {
-        id <- 0
-        temp <- tss.dt[x, pos]
-        ## ZL
-        if (tss.dt[x, pos] == tss.dt[pos > temp - peakDistance & pos < temp + peakDistance, ][which(tags == max(tags)), pos][1]) {
-            id <- x
-        } else {
-            id <- 0
-        }
-        return(id)
-    }, numeric(1))
+    pos_vec <- tss.dt[["pos"]]
+    tags_vec <- tss.dt[["tags"]]
+    left <- findInterval(pos_vec - peakDistance, pos_vec) + 1L
+    right <- findInterval(pos_vec + peakDistance, pos_vec)
+    equal_upper <- right > 0L & pos_vec[right] == pos_vec + peakDistance
+    right[equal_upper] <- right[equal_upper] - 1L
+    window_peak <- .rangeMaxFirstIndex(tags_vec)$query(left, right)
+    peakID <- ifelse(pos_vec == pos_vec[window_peak], seq_along(pos_vec), 0L)
 
     # manipulate data.table to collapse clustered rows
     tss.dt[, peak := peakID]

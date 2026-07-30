@@ -54,7 +54,6 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
         stop("peakDistance must be greater than zero.")
     }
     ## initialize values
-    Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
 
     # initialize data
