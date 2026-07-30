@@ -3,12 +3,16 @@
 #' @description Selects genes which have multiple core promoters and undergo core promoter
 #' shifting across different experiments. Generates gene list with Ds (degree of shift)
 #' value (Lu et al., 2019), p value and adjusted p value.
+#' Chi-squared tests use raw counts reconstructed from TPM values and the
+#' corresponding library sizes. Sparse 2-by-2 tables may produce R's
+#' \code{Chi-squared approximation may be incorrect} warning.
 #'
 #' @usage shiftPromoter(object, comparePairs, pval=0.01)
 #'
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison.
-#' @param pval Genes with adjusted p value >= pval will be returned. Default value = 0.01.
+#' @param pval Genes with adjusted p value less than or equal to \code{pval}
+#'   will be returned. Default value = 0.01.
 #' @return A modified TSSr object with updated \code{PromoterShift} slot. The
 #'   input object is not modified; assign the returned object to retain the
 #'   changes.

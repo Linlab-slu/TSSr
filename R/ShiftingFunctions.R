@@ -51,7 +51,7 @@
                 Xtable$tags.x <- Xtable$tags.x * librarySizex / 1000000
                 Xtable$tags.y <- Xtable$tags.y * librarySizey / 1000000
             }
-            pval <- chisq.test(data[, c("tags.x", "tags.y")])$p.value
+            pval <- chisq.test(Xtable)$p.value
         } else {
             Ds <- NA
             pval <- NA

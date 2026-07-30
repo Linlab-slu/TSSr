@@ -39,3 +39,30 @@ test_that("shiftPromoter returns numeric statistics", {
     expect_type(shifts$pval, "double")
     expect_type(shifts$padj, "double")
 })
+
+test_that("shiftPromoter tests reconstructed raw counts", {
+    object <- make_shift_test_object()
+    object@librarySizes <- c(control = 500000, treat = 800000)
+    raw_counts <- matrix(
+        c(200, 300, 480, 320),
+        nrow = 2,
+        dimnames = list(
+            c("cluster_2", "cluster_1"),
+            c("control", "treat")
+        )
+    )
+    expected_pval <- chisq.test(raw_counts)$p.value
+
+    result <- shiftPromoter(
+        object,
+        comparePairs = list(c("control", "treat")),
+        pval = 1
+    )
+    shifts <- result@PromoterShift[["control_VS_treat"]]
+
+    expect_equal(
+        unname(shifts$pval),
+        unname(expected_pval),
+        tolerance = 1e-15
+    )
+})

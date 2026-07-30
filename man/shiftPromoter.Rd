@@ -14,7 +14,8 @@ shiftPromoter(object, comparePairs, pval=0.01)
 
 \item{comparePairs}{Specified list of sample pairs for comparison.}
 
-\item{pval}{Genes with adjusted p value >= pval will be returned. Default value = 0.01.}
+\item{pval}{Genes with adjusted p value less than or equal to \code{pval}
+will be returned. Default value = 0.01.}
 }
 \value{
 A modified TSSr object with updated \code{PromoterShift} slot. The
@@ -25,6 +26,9 @@ A modified TSSr object with updated \code{PromoterShift} slot. The
 Selects genes which have multiple core promoters and undergo core promoter
 shifting across different experiments. Generates gene list with Ds (degree of shift)
 value (Lu et al., 2019), p value and adjusted p value.
+Chi-squared tests use raw counts reconstructed from TPM values and the
+corresponding library sizes. Sparse 2-by-2 tables may produce R's
+\code{Chi-squared approximation may be incorrect} warning.
 }
 \examples{
 data(exampleTSSr)
