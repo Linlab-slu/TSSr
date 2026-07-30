@@ -72,6 +72,9 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         ## define variable as a NULL value
         inCoding <- r <- f <- dominant_tss <- NULL
         ## prepare annotation file
+        .requireSuggestedPackage(
+            "GenomeInfoDbData", "GFF-based annotation"
+        )
         txdb <- makeTxDbFromGFF(refGFF, organism = organismName, format = "auto")
         if (annotationType == "genes") {
             ref <- setDT(as.data.frame(genes(txdb)))

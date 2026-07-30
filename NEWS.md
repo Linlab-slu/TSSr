@@ -1,4 +1,10 @@
-# TSSr 0.99.18 (2026-07-30)
+# TSSr 0.99.19 (2026-07-30)
+
+* Declared `GenomeInfoDbData` as a suggested dependency and added an
+  actionable guard for GFF-based annotation. Existing `refTable` workflows do
+  not require it; building a TxDb from GFF with organism metadata now reports
+  the exact Bioconductor installation command when the taxonomy data package
+  is unavailable.
 
 * Added 13 documented, read-only accessors for TSS matrices, reference data,
   library sizes, and analysis results. Table accessors return independent base
