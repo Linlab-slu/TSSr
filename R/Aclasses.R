@@ -140,6 +140,8 @@ setClass(
     ),
     validity = function(object) {
         supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
+        is_ts_table <- length(object@inputFilesType) == 1L &&
+            identical(object@inputFilesType, "TSStable")
         if (length(object@inputFilesType) > 0 &&
             !(object@inputFilesType %in% supportedTypes)) {
             return(paste(
@@ -147,10 +149,16 @@ setClass(
                 paste(sQuote(supportedTypes), collapse = ", "), "."
             ))
         }
-        if (length(object@inputFiles) > 0 && length(object@sampleLabels) > 0) {
+        if (!is_ts_table && length(object@inputFiles) > 0 &&
+            length(object@sampleLabels) > 0) {
             if (length(object@inputFiles) != length(object@sampleLabels)) {
                 return("Length of 'inputFiles' must equal length of 'sampleLabels'.")
             }
+        }
+        if (length(object@sampleLabels) > 0 &&
+            length(object@mergeIndex) > 0 &&
+            length(object@sampleLabels) != length(object@mergeIndex)) {
+            return("Length of 'mergeIndex' must equal length of 'sampleLabels'.")
         }
         if (length(object@sampleLabelsMerged) > 0 && length(object@mergeIndex) > 0) {
             if (length(unique(object@mergeIndex)) != length(object@sampleLabelsMerged)) {
@@ -176,11 +184,13 @@ setClass(
 #'
 #' @param genomeName A character string specifying the BSgenome object name
 #'   (e.g., "BSgenome.Scerevisiae.UCSC.sacCer3").
-#' @param inputFiles A character vector of input file paths.
+#' @param inputFiles A character vector of input file paths. For
+#'   \code{inputFilesType = "TSStable"}, provide one table containing all
+#'   sample columns; other input types require one file per sample.
 #' @param inputFilesType A character string specifying the type of input files.
 #'   Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".
 #' @param sampleLabels A character vector of sample labels corresponding to
-#'   inputFiles.
+#'   input files, or to sample columns in a TSStable table.
 #' @param sampleLabelsMerged A character vector of merged sample labels for
 #'   biological replicates.
 #' @param mergeIndex A numeric vector indicating which samples to merge
@@ -223,7 +233,9 @@ TSSr <- function(genomeName = character(),
     }
 
     ## Validate inputFiles and sampleLabels correspondence
-    if (length(inputFiles) > 0 && length(sampleLabels) > 0) {
+    is_ts_table <- length(inputFilesType) == 1L &&
+        identical(inputFilesType, "TSStable")
+    if (!is_ts_table && length(inputFiles) > 0 && length(sampleLabels) > 0) {
         if (length(inputFiles) != length(sampleLabels)) {
             stop("Length of 'inputFiles' (", length(inputFiles),
                  ") must equal length of 'sampleLabels' (", length(sampleLabels), ").")
@@ -238,8 +250,9 @@ TSSr <- function(genomeName = character(),
                  ") must equal length of 'sampleLabelsMerged' (",
                  length(sampleLabelsMerged), ").")
         }
-        if (length(mergeIndex) != length(inputFiles) && length(inputFiles) > 0) {
-            stop("Length of 'mergeIndex' must equal length of 'inputFiles'.")
+        if (length(mergeIndex) != length(sampleLabels) &&
+            length(sampleLabels) > 0) {
+            stop("Length of 'mergeIndex' must equal length of 'sampleLabels'.")
         }
     }
 

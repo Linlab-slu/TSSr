@@ -21,13 +21,15 @@ TSSr(
 \item{genomeName}{A character string specifying the BSgenome object name
 (e.g., "BSgenome.Scerevisiae.UCSC.sacCer3").}
 
-\item{inputFiles}{A character vector of input file paths.}
+\item{inputFiles}{A character vector of input file paths. For
+\code{inputFilesType = "TSStable"}, provide one table containing all
+sample columns; other input types require one file per sample.}
 
 \item{inputFilesType}{A character string specifying the type of input files.
 Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".}
 
 \item{sampleLabels}{A character vector of sample labels corresponding to
-inputFiles.}
+input files, or to sample columns in a TSStable table.}
 
 \item{sampleLabelsMerged}{A character vector of merged sample labels for
 biological replicates.}

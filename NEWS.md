@@ -55,6 +55,11 @@
   coordinates use integer notation, and TSStable sample values are written
   without scientific notation without changing global R options.
 
+* Allowed one multi-sample TSStable file to be paired with all of its sample
+  column labels. Constructor and class validation now compare `mergeIndex`
+  with `sampleLabels`, while retaining one-file-per-sample validation for the
+  other input formats.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

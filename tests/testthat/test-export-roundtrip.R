@@ -1,21 +1,27 @@
 make_export_roundtrip_object <- function() {
+    sample_labels <- paste0("SL0", 1:4)
     object <- TSSr(
         genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
         inputFiles = "unused.tsv",
         inputFilesType = "TSStable",
-        sampleLabels = "sample",
-        sampleLabelsMerged = "sample",
-        mergeIndex = 1
+        sampleLabels = sample_labels,
+        sampleLabelsMerged = c("control", "treat"),
+        mergeIndex = c(1, 1, 2, 2)
     )
     raw <- data.table::data.table(
         chr = rep("chrI", 3L),
         pos = as.numeric(c(100000L, 200000L, 1000000L)),
         strand = c("+", "-", "+"),
-        sample = c(1, 0.00025, 12.5)
+        SL01 = c(1, 0, 2),
+        SL02 = c(0, 0.00025, 3),
+        SL03 = c(4, 5, 6),
+        SL04 = c(7, 8, 12.5)
     )
     object@TSSrawMatrix <- raw
     object@TSSprocessedMatrix <- data.table::copy(raw)
-    object@librarySizes <- sum(raw$sample)
+    object@librarySizes <- colSums(
+        raw[, .SD, .SDcols = sample_labels]
+    )
     object@normalizationStatus <- "raw"
     object
 }
@@ -29,9 +35,9 @@ test_that("TSStable export and getTSS preserve coordinates and values", {
             genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
             inputFiles = exported,
             inputFilesType = "TSStable",
-            sampleLabels = "sample",
-            sampleLabelsMerged = "sample",
-            mergeIndex = 1
+            sampleLabels = object@sampleLabels,
+            sampleLabelsMerged = object@sampleLabelsMerged,
+            mergeIndex = object@mergeIndex
         )
         imported <- getTSS(imported)
         expected <- data.table::copy(object@TSSrawMatrix)
