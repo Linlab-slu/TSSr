@@ -46,5 +46,9 @@ exampleTSSr <- deGene(
     exampleTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01, useMultiCore = FALSE
 )
-head(slot(exampleTSSr, "DEtables")[["control_VS_treat"]])
+head(DEtables(
+    exampleTSSr,
+    comparison = "control_VS_treat",
+    result = "all"
+))
 }

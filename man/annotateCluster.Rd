@@ -60,6 +60,6 @@ data(exampleTSSr)
 exampleTSSr <- annotateCluster(
     exampleTSSr, clusters = "consensusClusters", filterCluster = TRUE
 )
-head(slot(exampleTSSr, "assignedClusters")[["control"]])
+head(assignedClusters(exampleTSSr, sample = "control"))
 
 }

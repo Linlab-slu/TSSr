@@ -56,5 +56,5 @@ importedTSSr <- TSSr(
     mergeIndex = 1
 )
 importedTSSr <- getTSS(importedTSSr)
-head(slot(importedTSSr, "TSSrawMatrix"))
+head(TSSmatrix(importedTSSr, data = "raw"))
 }

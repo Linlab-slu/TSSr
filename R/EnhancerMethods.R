@@ -19,7 +19,7 @@
 #' @examples
 #' data(exampleTSSr)
 #' exampleTSSr <- callEnhancer(exampleTSSr)
-#' head(slot(exampleTSSr, "enhancers")[["control"]])
+#' head(enhancers(exampleTSSr, sample = "control"))
 setGeneric(
     "callEnhancer",
     function(object, flanking = 400, dis2gene = 2000) standardGeneric("callEnhancer"),

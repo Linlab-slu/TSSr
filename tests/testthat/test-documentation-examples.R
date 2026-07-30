@@ -26,3 +26,29 @@ test_that("reviewer-requested examples call their documented functions", {
         )
     }
 })
+
+test_that("read-only accessors are all exercised by their man example", {
+    accessor_names <- c(
+        "TSSmatrix", "librarySizes", "refTable", "tagClusters",
+        "consensusClusters", "clusterShape", "assignedClusters",
+        "unassignedClusters", "filteredClusters", "enhancers", "DEtables",
+        "TAGtables", "PromoterShift"
+    )
+    documentation <- tools::Rd_db("TSSr")
+    rd <- documentation[["TSSr-accessors.Rd"]]
+    examples_tag <- paste0(intToUtf8(92), "examples")
+    examples <- rd[vapply(
+        rd,
+        function(node) identical(attr(node, "Rd_tag"), examples_tag),
+        logical(1)
+    )]
+    example_text <- paste(unlist(examples), collapse = "")
+
+    for (accessor_name in accessor_names) {
+        expect_match(
+            example_text,
+            paste0("\\b", accessor_name, "\\s*\\("),
+            info = paste(accessor_name, "must be called by the accessor example")
+        )
+    }
+})

@@ -3,16 +3,20 @@ get_tssr_generic <- function(name) {
 }
 
 tssr_generic_names <- c(
-    "annotateCluster", "callEnhancer", "clusterTSS", "consensusCluster",
-    "deGene", "exportClustersTable", "exportClustersToBed", "exportDETable",
-    "exportEnhancerTable", "exportShapeTable", "exportShiftTable",
-    "exportTSStable", "exportTSStoBedgraph", "filterTSS", "getTSS",
+    "annotateCluster", "assignedClusters", "callEnhancer", "clusterShape",
+    "clusterTSS", "consensusCluster", "consensusClusters", "DEtables",
+    "deGene", "enhancers", "exportClustersTable", "exportClustersToBed",
+    "exportDETable", "exportEnhancerTable", "exportShapeTable",
+    "exportShiftTable", "exportTSStable", "exportTSStoBedgraph",
+    "filteredClusters", "filterTSS", "getTSS", "librarySizes",
     "mergeSamples", "normalizeTSS", "plotCorrelation", "plotDE",
     "plotInterQuantile", "plotShape", "plotTSS", "plotTssPCA",
-    "shapeCluster", "shiftPromoter"
+    "PromoterShift", "refTable", "shapeCluster", "shiftPromoter",
+    "TAGtables", "tagClusters", "TSSmatrix", "unassignedClusters"
 )
 
 test_that("all exported TSSr generics are standard S4 generics", {
+    expect_length(tssr_generic_names, 38L)
     for (name in tssr_generic_names) {
         generic <- get_tssr_generic(name)
         expect_true(

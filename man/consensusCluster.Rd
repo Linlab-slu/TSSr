@@ -34,5 +34,5 @@ calculates inter-quantile positions within consensus clusters for each sample.
 \examples{
 data(exampleTSSr)
 exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
-head(slot(exampleTSSr, "consensusClusters")[["control"]])
+head(consensusClusters(exampleTSSr, sample = "control"))
 }

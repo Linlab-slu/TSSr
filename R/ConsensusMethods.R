@@ -23,7 +23,7 @@
 #' @examples
 #' data(exampleTSSr)
 #' exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
-#' head(slot(exampleTSSr, "consensusClusters")[["control"]])
+#' head(consensusClusters(exampleTSSr, sample = "control"))
 setGeneric(
     "consensusCluster",
     function(object, dis = 50, useMultiCore = FALSE,

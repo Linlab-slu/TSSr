@@ -1,7 +1,7 @@
 Type: Package
 Package: TSSr
 Title: TSS sequencing data analysis
-Version: 0.99.17
+Version: 0.99.18
 Date: 2026-07-30
 Authors@R: c(
     person("Zhaolian", "Lu", , "luzhaolian@gmail.com", role = c("aut", "com"),

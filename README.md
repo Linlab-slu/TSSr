@@ -136,75 +136,29 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
 	              ,refSource = refSource
 	              ,organismName = "Saccharomyces cerevisiae")
 	
-	To display the available slots in the created TSSr object by typing the TSSr object name. Most slots in the newly created TSSr object are empty at this point since no analysis has been conducted.:
+	Typing the object name displays a compact summary. Analysis results are
+    initially marked as not run:
 	
 	     myTSSr
 	      
-        # An object of class "TSSr"
-        # Slot "genomeName":
-        # [1] "BSgenome.Scerevisiae.UCSC.sacCer3"
-        # 
-        # Slot "inputFiles":
-        # [1] "S01.sorted.bam" "S02.sorted.bam" "S03.sorted.bam" "S04.sorted.bam"
-        # 
-        # Slot "inputFilesType":
-        # [1] "bam"
-        # 
-        # Slot "sampleLabels":
-        # [1] "SL01" "SL02" "SL03" "SL04"
-        # 
-        # Slot "sampleLabelsMerged":
-        # [1] "control" "treat"  
-        # 
-        # Slot "librarySizes":
-        # numeric(0)
-        # 
-        # Slot "TSSrawMatrix":
-        # data frame with 0 columns and 0 rows
-        # 
-        # Slot "mergeIndex":
-        # [1] 1 1 2 2
-        # 
-        # Slot "TSSprocessedMatrix":
-        # data frame with 0 columns and 0 rows
-        # 
-        # Slot "tagClusters":
-        # list()
-        # 
-        # Slot "consensusClusters":
-        # list()
-        # 
-        # Slot "clusterShape":
-        # list()
-        # 
-        # Slot "refSource":
-        # [1] "saccharomyces_cerevisiae_R64-2-1.gff"
-        # 
-        # Slot "refTable":
-        # data frame with 0 columns and 0 rows
-        # 
-        # Slot "organismName":
-        # [1] "Saccharomyces cerevisiae"
-        # 
-        # Slot "assignedClusters":
-        # list()
-        # 
-        # Slot "unassignedClusters":
-        # list()
-        # 
-        # Slot "filteredClusters":
-        # list()
-        # 
-        # Slot "DEtables":
-        # list()
-        # 
-        # Slot "TAGtables":
-        # list()
-        # 
-        # Slot "PromoterShift":
-        # list()
+        # TSSr object
+        #   Genome: BSgenome.Scerevisiae.UCSC.sacCer3
+        #   Samples: 4 (SL01, SL02, SL03, SL04)
+        #   Merged samples: 2 (control, treat)
+        #   TSSs: raw 0; processed 0
+        #   Analyses:
+        #     Tag clusters: <not run>
+        #     Consensus clusters: <not run>
+        #     Cluster shapes: <not run>
+        #     Assigned clusters: <not run>
+        #     Unassigned clusters: <not run>
+        #     Filtered clusters: <not run>
+        #     Enhancers: <not run>
+        #     DE comparisons: <not run>
+        #     TAG tables: <not run>
+        #     Promoter shifts: <not run>
 	
-* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and calculates read counts supporting each TSS from bam file and return values to the slot of TSSrawMatrix. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these arguments by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS” function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus the uncoded G will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy also makes TSSr suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques. 
+* TSS calling from bam files or retrieving TSS data from TSS table using "getTSS" function. The "getTSS" function identifies genomic coordinates of all TSSs and calculates read counts supporting each TSS from bam file. The results are available through `TSSmatrix(myTSSr, data = "raw")`. Before TSS calling, TSSr removes reads that are below certain sequencing quality and mapping quality. The default threshold for Phred quality score is 10, and mapping quality (MAPQ score) is 20. Users may change these arguments by setting different values for “sequencingQualityThreshold” and “mappingQualityThreshold” when running the “getTSS" function. If a mapped TSS sequencing read starts with a G that is a mismatch to the reference genome, the uncoded 5’ end G is likely the m7G cap, and thus the uncoded G will be removed from TSS calling by "getTSS". If a matched G at the 5’end of a tag is considered as an added cap, TSSr treats the 5’end of reads with matched G as genome-coded G, and the first G is not removed when calling TSS. This strategy is based on a stronge preference of PyPu dinucleotide at the [-1, +1] sites. This strategy also makes TSSr suitable for calling TSSs from 5’end sequencing reads that are not based on cap capture techniques.
 
 **Update in TSSr 0.99.16 (2026-06-16):** The BAM implementation keeps the original G-specific biological rule for uncoded cap bases. For BAM input with `softclippingAllowed = FALSE`, TSSr removes only consecutive terminal uncoded G bases that mismatch the reference genome. On the plus strand, this means leading read `G` bases at the 5' end. On the minus strand, this means trailing read `C` bases that correspond to transcript-sense 5' `G` bases. Matched terminal G bases are treated as genome-coded and are not removed, and non-G mismatches are not trimmed. Consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 
@@ -218,7 +172,7 @@ Considering that soft-clipping during mapping of sequencing reads to reference g
 
 TSS calling from bam files or retrieving TSS data from TSS table         
         
-        myTSSr@TSSrawMatrix
+        TSSmatrix(myTSSr, data = "raw")
     
         #          chr    pos strand SL01 SL02 SL03 SL04
         #     1:  chrI   1561      +    0    0    0    1
@@ -254,11 +208,11 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
 ![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v3.png)
 
-* Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. The merged read counts and genomic coordinates are stored in the TSSprocessedMatrix slot.
+* Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. Retrieve the merged read counts and genomic coordinates with `TSSmatrix(myTSSr, data = "processed")`.
   
         myTSSr <- mergeSamples(myTSSr)
         
-        myTSSr@TSSprocessedMatrix
+        TSSmatrix(myTSSr, data = "processed")
 	    
         #          chr    pos strand control treat
         #     1:  chrI   1561      +       0     1
@@ -275,7 +229,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
   To return library sizes (number of total read counts) of merged samples in TSSr object in the specified order (note: order is specified in mergeSample function):
 
-        myTSSr@librarySizes
+        librarySizes(myTSSr)
         # control   treat 
         #  596280  982703
 
@@ -288,7 +242,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
         myTSSr <- normalizeTSS(myTSSr)
         myTSSr <- filterTSS(myTSSr, method = "TPM", tpmLow = 2)
-        myTSSr@TSSprocessedMatrix
+        TSSmatrix(myTSSr, data = "processed")
 	 
         
         #          chr    pos strand   control     treat
@@ -326,8 +280,8 @@ exportTSStoBedgraph(myTSSr, data = "processed", format = "BigWig")
 	           ,localThreshold = 0.02, clusterThreshold = 1
 	           ,useMultiCore=FALSE, numCores=NULL)
 
-        head(myTSSr@tagClusters[["control"]])
-        head(myTSSr@tagClusters[["treat"]])
+        head(tagClusters(myTSSr, sample = "control"))
+        head(tagClusters(myTSSr, sample = "treat"))
 ```
 
     
@@ -361,10 +315,10 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
     
         myTSSr <- shapeCluster(myTSSr,clusters = "consensusClusters", method = "PSS",useMultiCore= FALSE, numCores = NULL)
 
-        head(myTSSr@clusterShape[["control"]])
-        head(myTSSr@clusterShape[["treat"]])
+        head(clusterShape(myTSSr, sample = "control"))
+        head(clusterShape(myTSSr, sample = "treat"))
 
-  The distributions of core promoter shape (PSS or SI) can be illustrated by a histograms with plotShape function. Please be noted that there is only one shapeCluster slot, so either PSS or SI can be saved in the shapeCluster slot depending on which method argument was used for shapeCluster. 
+  The distributions of core promoter shape (PSS or SI) can be illustrated by a histograms with plotShape function. Only the most recently calculated shape method is retained and can be retrieved with `clusterShape()`.
 
         plotShape(myTSSr)
 
@@ -382,8 +336,8 @@ exportClustersToBed(myTSSr, data = "consensusClusters")
                   filterClusterThreshold = 0.02, annotationType = "genes"
                   ,upstream=1000, upstreamOverlap = 500, downstream = 0)
                   
-        head(myTSSr@assignedClusters[["control"]])
-        head(myTSSr@assignedClusters[["treat"]])
+        head(assignedClusters(myTSSr, sample = "control"))
+        head(assignedClusters(myTSSr, sample = "treat"))
 
   Instead of visualizing TSSs and core promoters in the UCSC Genome Browser or IGV, plotTSS function is able to generate publish ready figures when list of interested genes are provided and plotting region is specified.
                   
@@ -426,7 +380,7 @@ exportClustersTable(myTSSr, data = "unassigned")
 
         myTSSr <- shiftPromoter(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01)
                 
-        head(myTSSr@PromoterShift[["control_VS_treat"]])
+        head(PromoterShift(myTSSr, comparison = "control_VS_treat"))
 
 
 

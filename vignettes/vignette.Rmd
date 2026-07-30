@@ -99,7 +99,7 @@ importedTSSr <- TSSr(
     mergeIndex = 1
 )
 importedTSSr <- getTSS(importedTSSr)
-head(slot(importedTSSr, "TSSrawMatrix"))
+head(TSSmatrix(importedTSSr, data = "raw"))
 ```
 
 # TSS data processing
@@ -114,17 +114,17 @@ myTSSr <- mergeSamples(myTSSr)
 # Normalization
 myTSSr <- normalizeTSS(myTSSr)
 # TSS filtering
-rowsBeforeFiltering <- nrow(slot(myTSSr, "TSSprocessedMatrix"))
+rowsBeforeFiltering <- nrow(TSSmatrix(myTSSr, data = "processed"))
 myTSSr <- filterTSS(myTSSr, method = "TPM", tpmLow = 2)
 c(
     before = rowsBeforeFiltering,
-    after = nrow(slot(myTSSr, "TSSprocessedMatrix"))
+    after = nrow(TSSmatrix(myTSSr, data = "processed"))
 )
 ```
 
 ```{r TSSprocessing-show}
-# Result available in the @TSSprocessedMatrix slot
-head(slot(myTSSr, "TSSprocessedMatrix"))
+# Access the processed TSS matrix without exposing internal storage
+head(TSSmatrix(myTSSr, data = "processed"))
 ```
 
 # TSS clustering
@@ -142,11 +142,11 @@ myTSSr <- consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 ```
 
 ```{r TSSclustering-show}
-# Tag clusters per sample (@tagClusters)
-head(slot(myTSSr, "tagClusters")[["control"]])
+# Tag clusters per sample
+head(tagClusters(myTSSr, sample = "control"))
 
-# Consensus clusters across samples (@consensusClusters)
-head(slot(myTSSr, "consensusClusters")[["control"]])
+# Consensus clusters across samples
+head(consensusClusters(myTSSr, sample = "control"))
 ```
 
 # Core promoter shape
@@ -160,8 +160,8 @@ myTSSr <- shapeCluster(myTSSr,
 ```
 
 ```{r shapeCluster-show}
-# Shape scores per cluster (@clusterShape)
-head(slot(myTSSr, "clusterShape")[["control"]])
+# Shape scores per cluster
+head(clusterShape(myTSSr, sample = "control"))
 ```
 
 # Annotation of core promoters
@@ -175,8 +175,8 @@ myTSSr <- annotateCluster(myTSSr, clusters = "consensusClusters",
 ```
 
 ```{r annotateCluster-show}
-# Clusters assigned to genes (@assignedClusters)
-head(slot(myTSSr, "assignedClusters")[["control"]])
+# Clusters assigned to genes
+head(assignedClusters(myTSSr, sample = "control"))
 ```
 
 # Enhancer identification
@@ -186,8 +186,8 @@ myTSSr <- callEnhancer(myTSSr, flanking = 400, dis2gene = 2000)
 ```
 
 ```{r callEnhancer-show}
-# Putative enhancers per sample (@enhancers)
-head(slot(myTSSr, "enhancers")[["control"]])
+# Putative enhancers per sample
+head(enhancers(myTSSr, sample = "control"))
 ```
 
 # Differential expression analysis
@@ -199,8 +199,12 @@ myTSSr <- deGene(myTSSr, comparePairs = list(c("control", "treat")),
 ```
 
 ```{r deGene-show}
-# Differential expression results (@DEtables)
-head(slot(myTSSr, "DEtables")[["control_VS_treat"]])
+# Differential expression results
+head(DEtables(
+    myTSSr,
+    comparison = "control_VS_treat",
+    result = "significant"
+))
 ```
 
 # Core promoter shifts
@@ -212,8 +216,8 @@ myTSSr <- shiftPromoter(myTSSr, comparePairs = list(c("control", "treat")),
 ```
 
 ```{r shiftPromoter-show}
-# Promoter shift results (@PromoterShift)
-head(slot(myTSSr, "PromoterShift")[["control_VS_treat"]])
+# Promoter shift results
+head(PromoterShift(myTSSr, comparison = "control_VS_treat"))
 ```
 
 # Exporting results

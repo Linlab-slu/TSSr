@@ -25,7 +25,7 @@
 #'     exampleTSSr, clusters = "consensusClusters", method = "PSS",
 #'     useMultiCore = FALSE
 #' )
-#' head(slot(exampleTSSr, "clusterShape")[["control"]])
+#' head(clusterShape(exampleTSSr, sample = "control"))
 setGeneric("shapeCluster", function(
   object, clusters = "consensusClusters",
   method = "PSS", useMultiCore = FALSE, numCores = NULL

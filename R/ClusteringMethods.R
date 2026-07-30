@@ -33,7 +33,7 @@
 #'     exampleTSSr, method = "peakclu", clusterThreshold = 1,
 #'     useMultiCore = FALSE
 #' )
-#' head(slot(exampleTSSr, "tagClusters")[["control"]])
+#' head(tagClusters(exampleTSSr, sample = "control"))
 #'
 setGeneric("clusterTSS", function(
   object, method = "peakclu",

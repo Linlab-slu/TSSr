@@ -1,4 +1,13 @@
-# TSSr 0.99.17 (2026-07-30)
+# TSSr 0.99.18 (2026-07-30)
+
+* Added 13 documented, read-only accessors for TSS matrices, reference data,
+  library sizes, and analysis results. Table accessors return independent base
+  `data.frame` copies rather than exposing the package's internal `data.table`
+  representation. User-facing examples, the README, and the vignette now use
+  these accessors instead of direct slot access.
+
+* `DEtables()` explicitly selects either all tested genes or significant genes
+  with `result = "all"` or `result = "significant"`.
 
 * Updated the `getTSS()` man-page example to import the bundled TSStable
   fixture. All reviewer-requested user-facing examples now execute their

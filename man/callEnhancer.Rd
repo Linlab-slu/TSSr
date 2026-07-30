@@ -30,5 +30,5 @@ bidirectional clusters as described in Andersson et al. 2014.
 \examples{
 data(exampleTSSr)
 exampleTSSr <- callEnhancer(exampleTSSr)
-head(slot(exampleTSSr, "enhancers")[["control"]])
+head(enhancers(exampleTSSr, sample = "control"))
 }
