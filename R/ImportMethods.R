@@ -28,10 +28,19 @@
 #' @export
 #'
 #' @examples
-#' # getTSS requires input files to exist.
-#' # The exampleTSSr object has pre-loaded TSS data.
-#' data(exampleTSSr)
-#' head(slot(exampleTSSr, "TSSrawMatrix"))
+#' exampleInput <- system.file(
+#'     "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+#' )
+#' importedTSSr <- TSSr(
+#'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+#'     inputFiles = exampleInput,
+#'     inputFilesType = "TSStable",
+#'     sampleLabels = "example",
+#'     sampleLabelsMerged = "example",
+#'     mergeIndex = 1
+#' )
+#' importedTSSr <- getTSS(importedTSSr)
+#' head(slot(importedTSSr, "TSSrawMatrix"))
 setGeneric("getTSS", function(
   object,
   sequencingQualityThreshold = 10,

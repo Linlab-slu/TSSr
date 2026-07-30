@@ -1,4 +1,8 @@
-# TSSr 0.99.16 (2026-06-16)
+# TSSr 0.99.17 (2026-07-30)
+
+* Updated the `getTSS()` man-page example to import the bundled TSStable
+  fixture. All reviewer-requested user-facing examples now execute their
+  documented functions during `R CMD check`.
 
 * Mutating workflow functions now return a modified `TSSr` object without
   changing the caller's object. Assign the result to retain each operation:
