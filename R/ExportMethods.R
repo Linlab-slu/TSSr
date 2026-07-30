@@ -365,8 +365,16 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
 #'
 #' @param object A TSSr object.
 #' @param data Specify which data will be exported: "raw" or "processed". Default is "raw".
-#' @param merged Logical indicating whether to export merged TSS table. Used only if data = "raw".
-#' @return TSS tables
+#' @param merged Logical indicating whether raw sample columns should be merged
+#'   according to \code{mergeIndex}. Used only if \code{data = "raw"}.
+#' @return Invisibly returns \code{NULL} after writing a TSS table.
+#'
+#' @details Raw exports always use \code{TSSrawMatrix}. With
+#'   \code{merged = FALSE}, the file is \code{ALL.samples.TSS.raw.txt}; with
+#'   \code{merged = TRUE}, raw counts are combined according to
+#'   \code{mergeIndex} and written to
+#'   \code{ALL.samples.TSS.raw.merged.txt}. Processed data are written to
+#'   \code{ALL.samples.TSS.processed.txt}.
 #'
 #' @export
 #'
@@ -382,18 +390,22 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
     message("Exporting TSS table...")
     if (data == "raw") {
         if (isTRUE(merged)) {
-            tss <- object@TSSprocessedMatrix
-            write.table(tss, file = paste("ALL.samples.TSS", data, "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
+            tss <- .mergeRawTSS(object)
+            output_file <- "ALL.samples.TSS.raw.merged.txt"
         } else {
             tss <- object@TSSrawMatrix
-            write.table(tss, file = paste("ALL.samples.TSS", data, "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
+            output_file <- "ALL.samples.TSS.raw.txt"
         }
     } else if (data == "processed") {
         tss <- object@TSSprocessedMatrix
-        write.table(tss, file = paste("ALL.samples.TSS", data, "txt", sep = "."), sep = "\t", quote = FALSE, row.names = FALSE)
+        output_file <- "ALL.samples.TSS.processed.txt"
     } else {
         stop("No data for the given TSS data type!")
     }
+    write.table(
+        tss, file = output_file, sep = "\t", quote = FALSE,
+        row.names = FALSE
+    )
 })
 
 ################################################################################################

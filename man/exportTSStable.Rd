@@ -14,13 +14,22 @@ exportTSStable(object, data = "raw", merged = TRUE)
 
 \item{data}{Specify which data will be exported: "raw" or "processed". Default is "raw".}
 
-\item{merged}{Logical indicating whether to export merged TSS table. Used only if data = "raw".}
+\item{merged}{Logical indicating whether raw sample columns should be merged
+according to \code{mergeIndex}. Used only if \code{data = "raw"}.}
 }
 \value{
-TSS tables
+Invisibly returns \code{NULL} after writing a TSS table.
 }
 \description{
 Exports TSS tables to text file.
+}
+\details{
+Raw exports always use \code{TSSrawMatrix}. With
+  \code{merged = FALSE}, the file is \code{ALL.samples.TSS.raw.txt}; with
+  \code{merged = TRUE}, raw counts are combined according to
+  \code{mergeIndex} and written to
+  \code{ALL.samples.TSS.raw.merged.txt}. Processed data are written to
+  \code{ALL.samples.TSS.processed.txt}.
 }
 \examples{
 data(exampleTSSr)

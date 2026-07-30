@@ -223,7 +223,7 @@ TSSr provides several export functions for saving results:
 ```{r export}
 oldwd <- setwd(tempdir())
 
-# Export TSS tables
+# Export processed TSS values to ALL.samples.TSS.processed.txt
 exportTSStable(myTSSr, data = "processed")
 
 # Export cluster tables

@@ -1,14 +1,41 @@
 # Test export functions — all write to tempdir to avoid side effects
 
-test_that("exportTSStable writes TSS table to file", {
+test_that("exportTSStable keeps raw and processed data semantics distinct", {
     data(exampleTSSr)
     tmpdir <- tempdir()
     withr::with_dir(tmpdir, {
-        exportTSStable(exampleTSSr, data = "raw", merged = "TRUE")
-        expect_true(file.exists("ALL.samples.TSS.raw.txt"))
-        content <- read.table("ALL.samples.TSS.raw.txt", header = TRUE, sep = "\t")
-        expect_true(nrow(content) > 0)
-        unlink("ALL.samples.TSS.raw.txt")
+        exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
+        exportTSStable(exampleTSSr, data = "raw", merged = FALSE)
+        exportTSStable(exampleTSSr, data = "processed")
+
+        merged_file <- "ALL.samples.TSS.raw.merged.txt"
+        raw_file <- "ALL.samples.TSS.raw.txt"
+        processed_file <- "ALL.samples.TSS.processed.txt"
+        expect_true(all(file.exists(c(
+            merged_file, raw_file, processed_file
+        ))))
+
+        merged <- data.table::fread(merged_file)
+        raw <- data.table::fread(raw_file)
+        processed <- data.table::fread(processed_file)
+        raw_matrix <- exampleTSSr@TSSrawMatrix
+        expected_merged <- data.table::data.table(
+            control = rowSums(raw_matrix[, c("SL01", "SL02")]),
+            treat = rowSums(raw_matrix[, c("SL03", "SL04")])
+        )
+
+        expect_identical(names(raw), c(
+            "chr", "pos", "strand", exampleTSSr@sampleLabels
+        ))
+        expect_identical(names(merged), c(
+            "chr", "pos", "strand", exampleTSSr@sampleLabelsMerged
+        ))
+        expect_identical(names(processed), names(
+            exampleTSSr@TSSprocessedMatrix
+        ))
+        expect_equal(merged[, c("control", "treat")], expected_merged)
+        expect_equal(raw, exampleTSSr@TSSrawMatrix)
+        expect_equal(processed, exampleTSSr@TSSprocessedMatrix)
     })
 })
 

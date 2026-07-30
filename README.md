@@ -233,9 +233,13 @@ TSS calling from bam files or retrieving TSS data from TSS table
         # 29455:  chrI 227300      -    0    0    0    1
         # 29456:  chrI 227310      -    0    0    0    2
 
-* TSSrawMatrix contains genomic coordinates and read counts of each called TSS. TSSrawMatrix can be exported by "exportTSStable" function to a TSS table "ALL.samples.TSS.raw.txt" in the working directory. The TSS table can be used as input file for future downstram analyses using TSSr or other tools. It is advised to export unmerged TSSrawMatrix to an TSS table to avoid repeated TSS calling step.    
+* TSSrawMatrix contains genomic coordinates and read counts of each called TSS.
+  `exportTSStable(..., data = "raw", merged = FALSE)` writes these data to
+  "ALL.samples.TSS.raw.txt" for reuse in TSSr or other tools. Setting
+  `merged = TRUE` instead combines raw counts according to `mergeIndex` and
+  writes "ALL.samples.TSS.raw.merged.txt".
 
-        exportTSStable(myTSSr, data = "raw", merged = "FALSE")
+        exportTSStable(myTSSr, data = "raw", merged = FALSE)
 	
 * The "plotCorrelation" function is used to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS counts. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”. The default setting generates scatter plots for all samples (samples = "all"). For plotting a subset of samples, users may provide a list of sample labels for "sample", e.g., samples = c("SL01","SL02","SL03"). 
 	
@@ -300,7 +304,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
         # 14894:  chrI 227276      -  3.354129  6.105609
         # 14895:  chrI 227310      -  0.000000  2.035203
 
-  Similar to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to delimited text file with "exportTSStable" function or bedGraph/BigWig files with "exportTSStoBedgraph" function. bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or Genome Browser at YeasTSS.org for selected yeast species.
+  Similar to the raw read counts, the normalized and filtered (processed) TSS matrix can be exported to the delimited text file "ALL.samples.TSS.processed.txt" with "exportTSStable" or to bedGraph/BigWig files with "exportTSStoBedgraph". bedGraph/BigWig files can be visualized in the UCSC Genome Browser or Integrative Genomics Viewer (IGV) or Genome Browser at YeasTSS.org for selected yeast species.
 ```
 exportTSStable(myTSSr, data = "processed") 
 exportTSStoBedgraph(myTSSr, data = "processed", format = "bedGraph") 

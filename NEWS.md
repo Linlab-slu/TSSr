@@ -44,6 +44,12 @@
   Correlation documentation now states how non-positive values are handled on
   logarithmic scatterplot axes.
 
+* Corrected `exportTSStable()` raw export semantics. Raw exports now always
+  originate from `TSSrawMatrix`; `merged = TRUE` combines raw sample counts
+  according to `mergeIndex` and writes `ALL.samples.TSS.raw.merged.txt`.
+  Unmerged raw and processed exports remain distinct as
+  `ALL.samples.TSS.raw.txt` and `ALL.samples.TSS.processed.txt`.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

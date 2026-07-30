@@ -1,4 +1,39 @@
 ###############################################################################
+.mergeRawTSS <- function(object) {
+    raw <- data.table::copy(data.table::as.data.table(object@TSSrawMatrix))
+    sample_labels <- object@sampleLabels
+    merged_labels <- object@sampleLabelsMerged
+    merge_index <- object@mergeIndex
+
+    if (length(sample_labels) == 0L || length(merged_labels) == 0L ||
+        length(merge_index) == 0L) {
+        stop(
+            "Merged raw export requires sampleLabels, sampleLabelsMerged, ",
+            "and mergeIndex."
+        )
+    }
+    if (length(sample_labels) != length(merge_index)) {
+        stop("Length of mergeIndex must match number of samples.")
+    }
+
+    group_ids <- unique(merge_index)
+    if (length(group_ids) != length(merged_labels)) {
+        stop(
+            "Number of mergeIndex groups must match number of ",
+            "sampleLabelsMerged."
+        )
+    }
+
+    merged <- raw[, .SD, .SDcols = c("chr", "pos", "strand")]
+    merged_counts <- lapply(seq_along(group_ids), function(i) {
+        group_samples <- sample_labels[merge_index == group_ids[i]]
+        rowSums(raw[, .SD, .SDcols = group_samples], na.rm = TRUE)
+    })
+    merged[, (merged_labels) := merged_counts]
+    merged
+}
+
+###############################################################################
 .plotCorrelation <- function(TSS.all.samples) {
     z <- TSS.all.samples[, -c(1, 2, 3)]
     # Customize lower panel
