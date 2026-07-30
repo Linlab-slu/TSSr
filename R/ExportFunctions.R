@@ -4,7 +4,7 @@
     # Customize lower panel
     panel.cor <- function(x, y) {
         usr <- par("usr")
-        on.exit(par(usr))
+        on.exit(par(usr = usr))
         par(usr = c(0, 1, 0, 1), xlog = FALSE, ylog = FALSE)
         r <- round(cor(x, y), digits = 2)
         txt <- paste0(r)

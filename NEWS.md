@@ -40,6 +40,10 @@
   TPM values and sample library sizes. The previous implementation calculated
   the raw-count table but mistakenly tested the TPM table instead.
 
+* Fixed restoration of graphical parameters after drawing correlation panels.
+  Correlation documentation now states how non-positive values are handled on
+  logarithmic scatterplot axes.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

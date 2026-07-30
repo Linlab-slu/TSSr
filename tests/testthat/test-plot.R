@@ -4,7 +4,21 @@ test_that("plotCorrelation creates PDF", {
     data(exampleTSSr)
     tmpdir <- tempdir()
     withr::with_dir(tmpdir, {
-        plotCorrelation(exampleTSSr, samples = "all")
+        invalid_graphics_warning <- FALSE
+        withCallingHandlers(
+            plotCorrelation(exampleTSSr, samples = "all"),
+            warning = function(warning) {
+                if (grepl(
+                    "argument 1 does not name a graphical parameter",
+                    conditionMessage(warning),
+                    fixed = TRUE
+                )) {
+                    invalid_graphics_warning <<- TRUE
+                    invokeRestart("muffleWarning")
+                }
+            }
+        )
+        expect_false(invalid_graphics_warning)
         expect_true(file.exists("TSS_correlation_plot_of_all_samples.pdf"))
         unlink("TSS_correlation_plot_of_all_samples.pdf")
     })

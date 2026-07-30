@@ -21,10 +21,15 @@ pairwise correlations visualized in a graph
 \description{
 Calculates the pairwise correlation coefficients between samples and
 creates a matix showing pairwise scatter plots and correlation coefficients.
+Scatterplot panels use logarithmic axes, so observations with a non-positive
+value in either sample are omitted from that panel with a warning. Correlation
+coefficients are calculated from the original, untransformed values,
+including zeros.
 }
 \examples{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
 plotCorrelation(exampleTSSr, samples = "all")
 setwd(oldwd)
+
 }
