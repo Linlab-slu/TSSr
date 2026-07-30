@@ -45,6 +45,7 @@
 }
 
 .clusterByPeak <- function(tss.dt, peakDistance, localThreshold, extensionDistance) {
+    # The public clusterTSS() entry point requires peakDistance > 0.
     # create copy for reference later
     copied.dt <- copy(tss.dt)
     setkey(tss.dt, pos)

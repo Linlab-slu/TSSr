@@ -8,6 +8,25 @@ TSSr was published in **NAR Genomics and Bioinformatics** in 2021, please cite:
 
 [Lu, Z., Berry, K., Hu, Z., Zhan, Y., Ahn, T., & Lin, Z. (2021). TSSr: an R package for comprehensive analyses of TSS sequencing data. *NAR Genomics and Bioinformatics, 3*.](https://academic.oup.com/nargab/article/3/4/lqab108/6426031)
 
+## Important migration note for TSSr 0.99.17 and later
+
+Workflow functions now return the modified `TSSr` object and no longer modify
+the caller's object implicitly. Existing scripts must assign the return value:
+
+```r
+# Before 0.99.17 (no longer updates myTSSr)
+mergeSamples(myTSSr)
+
+# TSSr 0.99.17 and later
+myTSSr <- mergeSamples(myTSSr)
+```
+
+The same assignment pattern applies to `getTSS()`, `normalizeTSS()`,
+`filterTSS()`, `clusterTSS()`, `consensusCluster()`, `shapeCluster()`,
+`annotateCluster()`, `deGene()`, `callEnhancer()`, and `shiftPromoter()`.
+This change replaces the previous non-standard caller-environment mutation
+with normal R value semantics.
+
 
 ## 1. Introduction
 
