@@ -35,18 +35,14 @@ Depends:
     R (>= 4.6.0)
 Imports: 
     BiocGenerics (>= 0.36.1),
-    DESeq2 (>= 1.30.1),
     GenomeInfoDb (>= 1.26.7),
     GenomicFeatures (>= 1.42.3),
     GenomicRanges (>= 1.42.0),
-    Gviz (>= 1.34.1),
     IRanges (>= 2.24.1),
     Rsamtools (>= 2.6.0),
-    calibrate (>= 1.7.7),
     cigarillo (>= 0.99.2),
     data.table (>= 1.14.0),
     dplyr (>= 1.0.7),
-    ggfortify (>= 0.4.12),
     ggplot2 (>= 3.3.5),
     grDevices (>= 4.0.3),
     graphics (>= 4.0.3),
@@ -59,6 +55,10 @@ Imports:
     utils (>= 4.0.3)
 Suggests:
     BSgenome.Scerevisiae.UCSC.sacCer3,
+    DESeq2 (>= 1.30.1),
+    Gviz (>= 1.34.1),
+    calibrate (>= 1.7.7),
+    ggfortify (>= 0.4.12),
     knitr,
     pkgdown,
     rmarkdown,

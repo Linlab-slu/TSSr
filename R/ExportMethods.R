@@ -54,6 +54,7 @@ setMethod("plotCorrelation", signature(object = "TSSr"), function(object, sample
 #' @param object A TSSr object.
 #' @param TSS.threshold Only TSSs with raw signal >= TSS.threshold will be included in PCA analysis
 #' @return PCA plotted in a graph
+#' @details Requires the suggested package \pkg{ggfortify}.
 #'
 #'
 #' @export
@@ -67,6 +68,7 @@ setGeneric("plotTssPCA", function(object, TSS.threshold = 10) standardGeneric("p
 #' @rdname plotTssPCA
 #' @export
 setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.threshold) {
+    .requireSuggestedPackage("ggfortify", "plotTssPCA()")
     message("Plotting TSS PCA...")
     tss <- object@TSSrawMatrix
     tss <- tss[, 4:ncol(tss)]
@@ -80,7 +82,7 @@ setMethod("plotTssPCA", signature(object = "TSSr"), function(object, TSS.thresho
         file = "PCA_plot.pdf",
         width = 8, height = 8, onefile = TRUE, bg = "transparent", family = "Helvetica", fonts = NULL
     )
-    p <- autoplot(prcomp(y),
+    p <- ggplot2::autoplot(prcomp(y),
         data = data.frame(sample = s),
         colour = "sample", size = 3
     ) + theme_minimal() + theme(text = element_text(size = 12))
@@ -217,6 +219,8 @@ setMethod("plotShape", signature(object = "TSSr"), function(object, samples) {
 #' @param xlim Only enes of which log2FoldChange value within the xlim range are plotted. Default xlim = c(-2.5, 2.5).
 #' @param ylim Only genes of which -log10(pvalue) within the ylim range are plotted. Default ylim = c(0, 10).
 #' @return gene differential expression visualized in a graph
+#' @details Displaying gene names requires the suggested package
+#'   \pkg{calibrate}.
 #'
 #' @export
 #'
@@ -234,6 +238,9 @@ setGeneric("plotDE", function(
 #' @rdname plotDE
 #' @export
 setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, xlim, ylim) {
+    if (isTRUE(withGeneName)) {
+        .requireSuggestedPackage("calibrate", "plotDE(withGeneName = TRUE)")
+    }
     message("Plotting DE graphs...")
     pdf(
         file = paste("Volcano_plot.pdf", sep = ""), width = 8, height = 8, bg = "transparent",
@@ -254,7 +261,12 @@ setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, x
         with(subset(res, abs(log2FoldChange) > 1), points(log2FoldChange, -log10(pvalue), pch = 20, col = "orange"))
         with(subset(res, padj < .05 & abs(log2FoldChange) > 1), points(log2FoldChange, -log10(pvalue), pch = 20, col = "green"))
         if (isTRUE(withGeneName)) {
-            with(subset(res, padj < .05 & abs(log2FoldChange) > 1), textxy(log2FoldChange, -log10(pvalue), labs = gene, cex = .8))
+            with(
+                subset(res, padj < .05 & abs(log2FoldChange) > 1),
+                calibrate::textxy(
+                    log2FoldChange, -log10(pvalue), labs = gene, cex = .8
+                )
+            )
         }
     }
     ##
@@ -281,6 +293,7 @@ setMethod("plotDE", signature(object = "TSSr"), function(object, withGeneName, x
 #' @param down.dis Distance downstream of genes to specify plotting range. Default value = 500.
 #' @param yFixed Logical, specify whether to fix y axis limits. Default is TRUE.
 #' @return TSS and cluster examples visualized in a graph
+#' @details Requires the suggested package \pkg{Gviz}.
 #'
 #'
 #' @export
@@ -308,6 +321,7 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
   object, samples, tssData, clusters, clusterThreshold,
   genelist, Bidirection, up.dis, down.dis, yFixed
 ) {
+    .requireSuggestedPackage("Gviz", "plotTSS()")
     message("Plotting TSS graphs...")
     ## define variable as a NULL value
     gene_id <- NULL

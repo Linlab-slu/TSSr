@@ -21,6 +21,9 @@ PCA plotted in a graph
 Calculates principle component analysis (PCA) of all samples and creates a biplot
 which includes the position of each sample in terms of PC1 and PC2.
 }
+\details{
+Requires the suggested package \pkg{ggfortify}.
+}
 \examples{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())

@@ -15,6 +15,7 @@
 #' @return A modified TSSr object with updated \code{DEtables} and
 #'   \code{TAGtables} slots. The input object is not modified; assign the
 #'   returned object to retain the changes.
+#' @details Requires the suggested package \pkg{DESeq2}.
 #'
 #'
 #' @export

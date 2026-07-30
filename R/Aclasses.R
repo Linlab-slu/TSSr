@@ -27,10 +27,6 @@
 #' @import ggplot2
 #' @importFrom GenomicFeatures genes transcripts
 #' @importFrom txdbmaker makeTxDbFromGFF
-#' @import Gviz
-#' @import DESeq2
-#' @import calibrate
-#' @import ggfortify
 #' @import parallel
 #' @importFrom IRanges IRanges
 #' @importFrom IRanges findOverlaps

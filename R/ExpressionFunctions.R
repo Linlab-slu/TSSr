@@ -12,6 +12,7 @@
 ############################################################################
 .deseq2 <- function(cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo,
                     useMultiCore, numCores, TAGtables) {
+    .requireSuggestedPackage("DESeq2", "deGene()")
     ## get raw count tables
     if (sampleOne %in% names(TAGtables)) {
         xCounts <- TAGtables[[which(names(TAGtables) == sampleOne)]]
@@ -76,10 +77,12 @@
     Dtable <- Dtable[, -1]
     Dtable <- data.matrix(Dtable)
     condition <- factor(c(rep(sampleOne, times = length(samplex)), rep(sampleTwo, times = length(sampley))))
-    dds <- DESeqDataSetFromMatrix(countData = Dtable, data.frame(condition), ~condition)
+    dds <- DESeq2::DESeqDataSetFromMatrix(
+        countData = Dtable, data.frame(condition), ~condition
+    )
     dds$condition <- factor(dds$condition, levels = c(sampleOne, sampleTwo))
-    dds <- DESeq(dds)
-    res <- results(dds)
+    dds <- DESeq2::DESeq(dds)
+    res <- DESeq2::results(dds)
     res <- res[order(res$padj), ]
     return(list(
         DEtable = as.data.frame(res),

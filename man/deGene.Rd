@@ -37,6 +37,9 @@ A modified TSSr object with updated \code{DEtables} and
 \description{
 Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 }
+\details{
+Requires the suggested package \pkg{DESeq2}.
+}
 \examples{
 data(exampleTSSr)
 exampleTSSr <- deGene(

@@ -24,3 +24,16 @@
 #'
 #' @keywords internal
 "_PACKAGE"
+
+utils::globalVariables(c("gene", "tags"))
+
+.requireSuggestedPackage <- function(package, feature) {
+    if (!requireNamespace(package, quietly = TRUE)) {
+        stop(
+            feature, " requires the suggested package '", package,
+            "'. Install it with BiocManager::install(\"", package, "\").",
+            call. = FALSE
+        )
+    }
+    invisible(TRUE)
+}

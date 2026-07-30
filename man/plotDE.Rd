@@ -24,6 +24,10 @@ gene differential expression visualized in a graph
 \description{
 Vocano plots of gene differential expression (with DESeq2 method) results.
 }
+\details{
+Displaying gene names requires the suggested package
+  \pkg{calibrate}.
+}
 \examples{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())

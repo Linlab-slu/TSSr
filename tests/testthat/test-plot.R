@@ -63,7 +63,7 @@ test_that("plotDE creates PDF", {
     tmpdir <- tempdir()
     if (length(exampleTSSr@DEtables) > 0) {
         withr::with_dir(tmpdir, {
-            plotDE(exampleTSSr, withGeneName = "TRUE")
+            plotDE(exampleTSSr, withGeneName = TRUE)
             expect_true(file.exists("Volcano_plot.pdf"))
             unlink("Volcano_plot.pdf")
         })

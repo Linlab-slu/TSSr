@@ -64,6 +64,11 @@
   with `sampleLabels`, while retaining one-file-per-sample validation for the
   other input formats.
 
+* Moved feature-specific heavy dependencies DESeq2, Gviz, ggfortify, and
+  calibrate from Imports to Suggests. Core package loading no longer imports
+  them; functions that need them load their namespace on demand and report an
+  actionable installation command when a package is unavailable.
+
 * Fixed BAM CIGAR width handling so aligned read intervals are calculated in reference coordinates. Soft clips, hard clips, and insertions no longer inflate the reference span used to determine minus-strand TSS coordinates.
 * Restored the BAM terminal correction to the original G-only biological rule while correcting the implementation. With `softclippingAllowed = FALSE`, plus-strand reads trim only leading mismatched `G` bases, and minus-strand reads trim trailing `C` bases as transcript-sense 5' `G` bases. Non-G mismatches are not trimmed, and consecutive mismatched terminal G bases are removed until the first matched G or non-G read base.
 * Clarified that `softclippingAllowed = TRUE` uses the aligner's aligned 5' boundary directly and skips uncoded G correction.

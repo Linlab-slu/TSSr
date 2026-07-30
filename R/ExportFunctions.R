@@ -106,7 +106,7 @@
         ranges = IRanges(start = p, end = q),
         strand = as.character(df$strand)
     )
-    gtrack <- GenomeAxisTrack(range = range.gr, fontcolor = "black")
+    gtrack <- Gviz::GenomeAxisTrack(range = range.gr, fontcolor = "black")
     ## Gene region track
     gene.gr <- makeGRangesFromDataFrame(df,
         keep.extra.columns = FALSE, ignore.strand = FALSE,
@@ -114,7 +114,7 @@
         start.field = "start", end.field = c("end"),
         strand.field = "strand", starts.in.df.are.0based = FALSE
     )
-    atrack.gene <- GeneRegionTrack(gene.gr,
+    atrack.gene <- Gviz::GeneRegionTrack(gene.gr,
         name = "gene", col.title = "black",
         transcriptAnnotation = "gene"
     )
@@ -156,7 +156,7 @@
             starts.in.df.are.0based = FALSE
         )
         # atrack.cs <- AnnotationTrack(cs.gr, name = paste(samples[my.sample],"clusters",sep = " "),col.title="black")
-        atrack.cs <- AnnotationTrack(cs.gr,
+        atrack.cs <- Gviz::AnnotationTrack(cs.gr,
             name = paste(samples[my.sample], "clusters", sep = " "),
             id = cs_sub$cluster, col.title = "black"
         )
@@ -169,7 +169,7 @@
             start.field = "pos", end.field = c("pos"),
             strand.field = "strand", starts.in.df.are.0based = FALSE
         )
-        dtrack <- DataTrack(data_tss_track,
+        dtrack <- Gviz::DataTrack(data_tss_track,
             name = paste(samples[my.sample], "TSS (TPM)", sep = "\n"),
             type = "h", col = rainbow(length(samples))[my.sample],
             baseline = 0, col.baseline = "grey",
@@ -178,7 +178,7 @@
         s <- c(s, atrack.cs, dtrack)
     }
     ## plot Genome range track, gene track, clusters track, TSS track
-    plotTracks(c(list(gtrack, atrack.gene), s),
+    Gviz::plotTracks(c(list(gtrack, atrack.gene), s),
         main = df$gene,
         featureAnnotation = "id",
         fontcolor.feature = "black",

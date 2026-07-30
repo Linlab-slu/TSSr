@@ -50,6 +50,9 @@ TSS and cluster examples visualized in a graph
 \description{
 Plots Gviz-track of TSSs, clusters, and genes.
 }
+\details{
+Requires the suggested package \pkg{Gviz}.
+}
 \examples{
 data(exampleTSSr)
 oldwd <- setwd(tempdir())
