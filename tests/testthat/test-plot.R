@@ -1,5 +1,12 @@
 # Test plot functions — all write PDF to tempdir
 
+expect_valid_pdf <- function(path) {
+    expect_true(file.exists(path))
+    expect_gt(unname(file.info(path)$size), 1000)
+    header <- readBin(path, what = "raw", n = 5L)
+    expect_identical(rawToChar(header), "%PDF-")
+}
+
 test_that("plotCorrelation creates PDF", {
     data(exampleTSSr)
     tmpdir <- tempdir()
@@ -19,7 +26,7 @@ test_that("plotCorrelation creates PDF", {
             }
         )
         expect_false(invalid_graphics_warning)
-        expect_true(file.exists("TSS_correlation_plot_of_all_samples.pdf"))
+        expect_valid_pdf("TSS_correlation_plot_of_all_samples.pdf")
         unlink("TSS_correlation_plot_of_all_samples.pdf")
     })
 })
@@ -29,7 +36,7 @@ test_that("plotTssPCA creates PDF", {
     tmpdir <- tempdir()
     withr::with_dir(tmpdir, {
         plotTssPCA(exampleTSSr, TSS.threshold = 10)
-        expect_true(file.exists("PCA_plot.pdf"))
+        expect_valid_pdf("PCA_plot.pdf")
         unlink("PCA_plot.pdf")
     })
 })
@@ -40,7 +47,7 @@ test_that("plotInterQuantile creates PDF", {
     expect_gt(length(exampleTSSr@clusterShape), 0L)
     withr::with_dir(tmpdir, {
         plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
-        expect_true(file.exists("Interquantile_plot_of_ALL_samples.pdf"))
+        expect_valid_pdf("Interquantile_plot_of_ALL_samples.pdf")
         unlink("Interquantile_plot_of_ALL_samples.pdf")
     })
 })
@@ -51,7 +58,7 @@ test_that("plotShape creates PDF", {
     expect_gt(length(exampleTSSr@clusterShape), 0L)
     withr::with_dir(tmpdir, {
         plotShape(exampleTSSr, samples = "all")
-        expect_true(file.exists("Shape_plot_of_ALL_samples.pdf"))
+        expect_valid_pdf("Shape_plot_of_ALL_samples.pdf")
         unlink("Shape_plot_of_ALL_samples.pdf")
     })
 })
@@ -62,7 +69,7 @@ test_that("plotDE creates PDF", {
     expect_gt(length(exampleTSSr@DEtables), 0L)
     withr::with_dir(tmpdir, {
         plotDE(exampleTSSr, withGeneName = TRUE)
-        expect_true(file.exists("Volcano_plot.pdf"))
+        expect_valid_pdf("Volcano_plot.pdf")
         unlink("Volcano_plot.pdf")
     })
 })

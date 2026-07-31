@@ -1,5 +1,41 @@
 # Test export functions — all write to tempdir to avoid side effects
 
+expect_exported_table <- function(path, expected) {
+    observed <- as.data.frame(
+        data.table::fread(path),
+        check.names = FALSE
+    )
+    expected <- as.data.frame(
+        TSSr:::.prepareExportTable(expected),
+        check.names = FALSE
+    )
+
+    expect_identical(names(observed), names(expected))
+    expect_identical(nrow(observed), nrow(expected))
+    for (column in names(expected)) {
+        if (is.integer(expected[[column]])) {
+            expect_identical(
+                as.integer(observed[[column]]),
+                expected[[column]],
+                info = column
+            )
+        } else if (is.numeric(expected[[column]])) {
+            expect_equal(
+                as.numeric(observed[[column]]),
+                expected[[column]],
+                tolerance = 1e-12,
+                info = column
+            )
+        } else {
+            expect_identical(
+                as.character(observed[[column]]),
+                as.character(expected[[column]]),
+                info = column
+            )
+        }
+    }
+}
+
 test_that("exportTSStable keeps raw and processed data semantics distinct", {
     data(exampleTSSr)
     tmpdir <- tempdir()
@@ -47,7 +83,7 @@ test_that("exportClustersTable writes tag cluster tables", {
         samples <- exampleTSSr@sampleLabelsMerged
         for (s in samples) {
             fname <- paste0(s, ".tagClusters.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(fname, tagClusters(exampleTSSr, s))
             unlink(fname)
         }
     })
@@ -61,7 +97,10 @@ test_that("exportClustersTable writes consensus cluster tables", {
         samples <- exampleTSSr@sampleLabelsMerged
         for (s in samples) {
             fname <- paste0(s, ".consensusClusters.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(
+                fname,
+                consensusClusters(exampleTSSr, s)
+            )
             unlink(fname)
         }
     })
@@ -76,8 +115,25 @@ test_that("exportClustersTable writes assigned cluster tables", {
         samples <- exampleTSSr@sampleLabelsMerged
         for (s in samples) {
             fname <- paste0(s, ".assignedClusters.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(fname, assignedClusters(exampleTSSr, s))
             unlink(fname)
+        }
+    })
+})
+
+test_that("exportClustersTable writes unassigned cluster table contents", {
+    data(exampleTSSr)
+    tmpdir <- tempdir()
+    expect_gt(length(exampleTSSr@unassignedClusters), 0L)
+    withr::with_dir(tmpdir, {
+        exportClustersTable(exampleTSSr, data = "unassigned")
+        for (sample in exampleTSSr@sampleLabelsMerged) {
+            path <- paste0(sample, ".unassignedClusters.txt")
+            expect_exported_table(
+                path,
+                unassignedClusters(exampleTSSr, sample)
+            )
+            unlink(path)
         }
     })
 })
@@ -91,7 +147,7 @@ test_that("exportShapeTable writes shape tables", {
         samples <- exampleTSSr@sampleLabelsMerged
         for (s in samples) {
             fname <- paste0(s, ".promoter.shape.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(fname, clusterShape(exampleTSSr, s))
             unlink(fname)
         }
     })
@@ -106,7 +162,7 @@ test_that("exportEnhancerTable writes enhancer tables", {
         samples <- exampleTSSr@sampleLabelsMerged
         for (s in samples) {
             fname <- paste0(s, ".enhancers.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(fname, enhancers(exampleTSSr, s))
             unlink(fname)
         }
     })
@@ -121,7 +177,10 @@ test_that("exportDETable writes DE tables", {
         d_names <- names(exampleTSSr@DEtables)
         for (d in d_names) {
             fname <- paste0(d, ".DE.table.sig.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(
+                fname,
+                DEtables(exampleTSSr, d, result = "significant")
+            )
             unlink(fname)
         }
     })
@@ -136,7 +195,7 @@ test_that("exportShiftTable writes shift tables", {
         d_names <- names(exampleTSSr@PromoterShift)
         for (d in d_names) {
             fname <- paste0(d, ".promoter.shift.table.txt")
-            expect_true(file.exists(fname))
+            expect_exported_table(fname, PromoterShift(exampleTSSr, d))
             unlink(fname)
         }
     })
