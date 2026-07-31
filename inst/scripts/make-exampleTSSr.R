@@ -35,6 +35,35 @@ data.table::setorder(reference_table, seqnames, start, end, strand, gene_id)
 data.table::setkey(reference_table, NULL)
 exampleTSSr@refTable <- reference_table
 
+# Build the bundled TSStable import fixture from the same chromosome-I raw
+# data. Keep both strands and all four original samples while remaining small
+# enough for examples and vignette builds.
+fixture_columns <- c(
+    "chr", "pos", "strand", exampleTSSr@sampleLabels
+)
+fixture_source <- data.table::copy(
+    exampleTSSr@TSSrawMatrix[, .SD, .SDcols = fixture_columns]
+)
+if (sum(fixture_source$strand == "+") < 50L ||
+        sum(fixture_source$strand == "-") < 50L) {
+    stop("At least 50 TSS records per strand are required for the fixture.")
+}
+example_tss_table <- data.table::rbindlist(list(
+    fixture_source[strand == "+"][seq_len(50L)],
+    fixture_source[strand == "-"][seq_len(50L)]
+))
+data.table::setorder(example_tss_table, strand, chr, pos)
+stopifnot(
+    nrow(example_tss_table) == 100L,
+    identical(unique(example_tss_table$strand), c("+", "-"))
+)
+data.table::fwrite(
+    example_tss_table,
+    file = "inst/extdata/example-tss-table.tsv",
+    sep = "\t",
+    quote = FALSE
+)
+
 exampleTSSr@tagClusters <- list()
 exampleTSSr@consensusClusters <- list()
 exampleTSSr@clusterShape <- list()

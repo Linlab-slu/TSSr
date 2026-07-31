@@ -15,9 +15,10 @@
 * `DEtables()` explicitly selects either all tested genes or significant genes
   with `result = "all"` or `result = "significant"`.
 
-* Updated the `getTSS()` man-page example to import the bundled TSStable
-  fixture. All reviewer-requested user-facing examples now execute their
-  documented functions during `R CMD check`.
+* Updated the `getTSS()` man-page example to import a reproducible 100-row,
+  four-sample TSStable fixture containing 50 TSSs from each strand. All
+  reviewer-requested user-facing examples now execute their documented
+  functions during `R CMD check`.
 
 * Mutating workflow functions now return a modified `TSSr` object without
   changing the caller's object. Assign the result to retain each operation:

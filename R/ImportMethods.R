@@ -35,9 +35,9 @@
 #'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
 #'     inputFiles = exampleInput,
 #'     inputFilesType = "TSStable",
-#'     sampleLabels = "example",
-#'     sampleLabelsMerged = "example",
-#'     mergeIndex = 1
+#'     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+#'     sampleLabelsMerged = c("control", "treat"),
+#'     mergeIndex = c(1, 1, 2, 2)
 #' )
 #' importedTSSr <- getTSS(importedTSSr)
 #' head(TSSmatrix(importedTSSr, data = "raw"))

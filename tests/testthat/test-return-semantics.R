@@ -94,13 +94,14 @@ test_that("getTSS imports data without modifying its input", {
         package = "TSSr",
         mustWork = TRUE
     )
+    sample_labels <- paste0("SL0", seq_len(4L))
     object <- TSSr(
         genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
         inputFiles = fixture,
         inputFilesType = "TSStable",
-        sampleLabels = "example",
-        sampleLabelsMerged = "example",
-        mergeIndex = 1
+        sampleLabels = sample_labels,
+        sampleLabelsMerged = c("control", "treat"),
+        mergeIndex = c(1, 1, 2, 2)
     )
     before <- tssr_content(object)
 
@@ -108,8 +109,21 @@ test_that("getTSS imports data without modifying its input", {
 
     expect_tssr_content_equal(object, before)
     expect_s4_class(result, "TSSr")
-    expect_equal(nrow(result@TSSrawMatrix), 3)
-    expect_equal(result@TSSrawMatrix$example, c(3L, 2L, 5L))
-    expect_equal(unname(result@librarySizes), 10)
+    imported <- TSSmatrix(result, data = "raw")
+    expected <- data.table::fread(fixture)
+    expected[, pos := as.integer(pos)]
+    data.table::setorder(expected, strand, chr, pos)
+
+    expect_equal(nrow(imported), 100L)
+    expect_identical(
+        names(imported),
+        c("chr", "pos", "strand", sample_labels)
+    )
+    expect_setequal(unique(imported$strand), c("+", "-"))
+    expect_equal(imported, as.data.frame(expected))
+    expect_equal(
+        unname(librarySizes(result)),
+        unname(colSums(expected[, ..sample_labels]))
+    )
     expect_identical(result@normalizationStatus, "raw")
 })
