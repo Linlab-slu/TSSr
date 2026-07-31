@@ -20,6 +20,13 @@
   reviewer-requested user-facing examples now execute their documented
   functions during `R CMD check`.
 
+* Added a reproducible, unindexed micro-BAM fixture built from real sacCer3
+  chromosome-I sequence. Its public `getTSS()` regression test covers both
+  strands, insertion/deletion/soft-clipping CIGAR operations, terminal
+  matched and mismatched G correction, quality filtering, and count
+  aggregation. The expected minus-strand coordinates distinguish reference
+  width from the former query-width implementation.
+
 * Removed inert legacy QA assertions that did not exercise TSSr. Single-sample
   consensus, DESeq2 output columns, and plot/export prerequisites now have
   behavior-level assertions, so missing results cannot produce an empty PASS.
