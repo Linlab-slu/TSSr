@@ -154,3 +154,94 @@ stopifnot(
 )
 
 message("Wrote ", bam_path, " with 15 designed reads and no BAM index.")
+
+reverse_complement <- function(sequence) {
+    bases <- strsplit(
+        chartr("ACGTRYSWKMBDHVN", "TGCAYRSWMKVHDBN", sequence),
+        "",
+        fixed = TRUE
+    )[[1L]]
+    paste(rev(bases), collapse = "")
+}
+
+# A separate paired-end fixture exercises the inputFilesType="bamPairedEnd"
+# contract. Only the first mate from each proper pair should contribute a TSS;
+# second mates, an improper pair, and an unpaired alignment must be ignored.
+paired_records <- data.frame(
+    qname = c(
+        "proper_plus", "proper_plus",
+        "proper_minus", "proper_minus",
+        "improper", "improper", "unpaired"
+    ),
+    flag = c(99L, 147L, 83L, 163L, 65L, 129L, 0L),
+    pos = c(3000L, 3050L, 3200L, 3150L, 3400L, 3450L, 3600L),
+    mate_pos = c(3050L, 3000L, 3150L, 3200L, 3450L, 3400L, 0L),
+    template_length = c(60L, -60L, -60L, 60L, 60L, -60L, 0L),
+    stringsAsFactors = FALSE
+)
+paired_records$seq <- vapply(seq_len(nrow(paired_records)), function(index) {
+    sequence <- reference_sequence(
+        paired_records$pos[index],
+        paired_records$pos[index] + 9L
+    )
+    if (bitwAnd(paired_records$flag[index], 16L) != 0L) {
+        reverse_complement(sequence)
+    } else {
+        sequence
+    }
+}, character(1))
+paired_records$qual <- strrep("I", 10L)
+
+paired_sam_lines <- c(
+    "@HD\tVN:1.6\tSO:unsorted",
+    paste0(
+        "@SQ\tSN:chrI\tLN:",
+        GenomeInfoDb::seqlengths(genome)[["chrI"]]
+    ),
+    vapply(seq_len(nrow(paired_records)), function(index) {
+        is_unpaired <- paired_records$flag[index] == 0L
+        paste(
+            paired_records$qname[index],
+            paired_records$flag[index],
+            "chrI",
+            paired_records$pos[index],
+            60L,
+            "10M",
+            if (is_unpaired) "*" else "=",
+            paired_records$mate_pos[index],
+            paired_records$template_length[index],
+            paired_records$seq[index],
+            paired_records$qual[index],
+            sep = "\t"
+        )
+    }, character(1))
+)
+
+paired_sam_path <- tempfile(fileext = ".sam")
+on.exit(unlink(paired_sam_path), add = TRUE)
+writeLines(paired_sam_lines, paired_sam_path, useBytes = TRUE)
+
+paired_destination <- file.path("inst", "extdata", "example-paired")
+paired_bam_path <- Rsamtools::asBam(
+    paired_sam_path,
+    destination = paired_destination,
+    overwrite = TRUE,
+    indexDestination = FALSE
+)
+paired_scan <- Rsamtools::scanBam(paired_bam_path)[[1L]]
+
+stopifnot(
+    identical(
+        normalizePath(paired_bam_path),
+        normalizePath(paste0(paired_destination, ".bam"))
+    ),
+    !file.exists(paste0(paired_destination, ".bam.bai")),
+    length(paired_scan$qname) == 7L,
+    sum(bitwAnd(paired_scan$flag, 2L) != 0L) == 4L,
+    sum(bitwAnd(paired_scan$flag, 64L) != 0L) == 3L
+)
+
+message(
+    "Wrote ", paired_bam_path,
+    " with two proper pairs and negative controls, without a BAM index."
+)

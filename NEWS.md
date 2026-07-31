@@ -12,6 +12,12 @@
   Public `annotateCluster()` tests compare its results with an equivalent
   `refTable` workflow on both strands.
 
+* Added public-API import coverage for BED, per-sample TSS tables, BigWig, and
+  paired-end BAM. The tests verify format-specific coordinate, strand,
+  aggregation, missing-site, signed-score, and proper-first-mate behavior. A
+  reproducible 346-byte paired BAM fixture is generated from real sacCer3
+  sequence and requires no BAM index.
+
 * Added 13 documented, read-only accessors for TSS matrices, reference data,
   library sizes, and analysis results. Table accessors return independent base
   `data.frame` copies rather than exposing the package's internal `data.table`
