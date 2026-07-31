@@ -44,7 +44,7 @@ test_that("DEtable contains expected DESeq2 columns", {
 
     col_names <- names(de_table)
     deseq_cols <- c("baseMean", "log2FoldChange", "pvalue", "padj")
-    has_deseq_cols <- any(deseq_cols %in% col_names)
+    has_deseq_cols <- all(deseq_cols %in% col_names)
     expect_true(has_deseq_cols)
 })
 

@@ -1,16 +1,6 @@
-# Test fixes for bugs found in v3 code review
+# Regression tests for package behavior fixed during earlier reviews.
 
-test_that("BUG-1: data.table calls have no stringsAsFactors column", {
-    # data.table() doesn't support stringsAsFactors; it would create a
-    # spurious column. Verify the internal function produces clean output.
-    dt <- data.table::data.table(
-        chr = "chrI", pos = 100L, strand = "+", score = 1.5
-    )
-    expect_false("stringsAsFactors" %in% names(dt))
-    expect_equal(ncol(dt), 4)
-})
-
-test_that("BUG-2: consensusCluster handles single sample without error", {
+test_that("consensusCluster returns clusters for a single sample", {
     data(exampleTSSr)
     # Create a single-sample scenario
     obj <- TSSr(
@@ -27,37 +17,21 @@ test_that("BUG-2: consensusCluster handles single sample without error", {
     obj@sampleLabelsMerged <- c("control")
     obj@tagClusters <- list(control = exampleTSSr@tagClusters[["control"]])
 
-    # Should not error with single sample
-    expect_no_error(consensusCluster(obj, useMultiCore = FALSE))
-})
+    before <- tssr_content(obj)
+    result <- consensusCluster(obj, useMultiCore = FALSE)
 
-test_that("BUG-3: normalizeTSS does not load BSgenome unnecessarily", {
-    data(exampleTSSr)
-    exampleTSSr <- mergeSamples(exampleTSSr)
-    # normalizeTSS should work without .getGenome being called
-    # (previously it loaded BSgenome but never used it)
-    expect_no_error(result <- normalizeTSS(exampleTSSr))
+    expect_tssr_content_equal(obj, before)
     expect_s4_class(result, "TSSr")
-})
-
-test_that("BUG-4: no direct @seqnames slot access in source code", {
-    # Verify source files don't use @seqnames (should use seqnames() accessor)
-    r_files <- list.files(
-        system.file("R", package = "TSSr"),
-        full.names = TRUE
+    expect_identical(names(result@consensusClusters), "control")
+    expect_gt(nrow(result@consensusClusters$control), 0L)
+    expect_true(all(
+        c("cluster", "chr", "start", "end", "strand", "dominant_tss") %in%
+            names(result@consensusClusters$control)
+    ))
+    expect_identical(
+        unique(result@consensusClusters$control$strand),
+        c("+", "-")
     )
-    # If installed R files aren't accessible, check source
-    src_files <- list.files(
-        file.path(system.file(package = "TSSr"), ".."),
-        pattern = "[.]R$", recursive = TRUE, full.names = TRUE
-    )
-    # At minimum, verify seqnames() accessor works on a GRanges object
-    gr <- GenomicRanges::GRanges("chrI:1-100:+")
-    expect_equal(as.character(GenomeInfoDb::seqnames(gr)), "chrI")
-})
-
-test_that("BUG-5: withr is available for tests", {
-    expect_true(requireNamespace("withr", quietly = TRUE))
 })
 
 test_that("BAM CIGAR widths are measured in reference space", {

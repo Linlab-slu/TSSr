@@ -37,35 +37,32 @@ test_that("plotTssPCA creates PDF", {
 test_that("plotInterQuantile creates PDF", {
     data(exampleTSSr)
     tmpdir <- tempdir()
-    if (length(exampleTSSr@clusterShape) > 0) {
-        withr::with_dir(tmpdir, {
-            plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
-            expect_true(file.exists("Interquantile_plot_of_ALL_samples.pdf"))
-            unlink("Interquantile_plot_of_ALL_samples.pdf")
-        })
-    }
+    expect_gt(length(exampleTSSr@clusterShape), 0L)
+    withr::with_dir(tmpdir, {
+        plotInterQuantile(exampleTSSr, samples = "all", tagsThreshold = 1)
+        expect_true(file.exists("Interquantile_plot_of_ALL_samples.pdf"))
+        unlink("Interquantile_plot_of_ALL_samples.pdf")
+    })
 })
 
 test_that("plotShape creates PDF", {
     data(exampleTSSr)
     tmpdir <- tempdir()
-    if (length(exampleTSSr@clusterShape) > 0) {
-        withr::with_dir(tmpdir, {
-            plotShape(exampleTSSr, samples = "all")
-            expect_true(file.exists("Shape_plot_of_ALL_samples.pdf"))
-            unlink("Shape_plot_of_ALL_samples.pdf")
-        })
-    }
+    expect_gt(length(exampleTSSr@clusterShape), 0L)
+    withr::with_dir(tmpdir, {
+        plotShape(exampleTSSr, samples = "all")
+        expect_true(file.exists("Shape_plot_of_ALL_samples.pdf"))
+        unlink("Shape_plot_of_ALL_samples.pdf")
+    })
 })
 
 test_that("plotDE creates PDF", {
     data(exampleTSSr)
     tmpdir <- tempdir()
-    if (length(exampleTSSr@DEtables) > 0) {
-        withr::with_dir(tmpdir, {
-            plotDE(exampleTSSr, withGeneName = TRUE)
-            expect_true(file.exists("Volcano_plot.pdf"))
-            unlink("Volcano_plot.pdf")
-        })
-    }
+    expect_gt(length(exampleTSSr@DEtables), 0L)
+    withr::with_dir(tmpdir, {
+        plotDE(exampleTSSr, withGeneName = TRUE)
+        expect_true(file.exists("Volcano_plot.pdf"))
+        unlink("Volcano_plot.pdf")
+    })
 })

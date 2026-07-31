@@ -20,6 +20,10 @@
   reviewer-requested user-facing examples now execute their documented
   functions during `R CMD check`.
 
+* Removed inert legacy QA assertions that did not exercise TSSr. Single-sample
+  consensus, DESeq2 output columns, and plot/export prerequisites now have
+  behavior-level assertions, so missing results cannot produce an empty PASS.
+
 * Mutating workflow functions now return a modified `TSSr` object without
   changing the caller's object. Assign the result to retain each operation:
 
