@@ -40,7 +40,9 @@ together.}
 \item{refSource}{A character string specifying the path to GFF annotation
 file.}
 
-\item{organismName}{A character string specifying the organism name.}
+\item{organismName}{An optional character string describing the organism.
+This metadata is retained for backward compatibility and is not required
+by \code{annotateCluster()}.}
 }
 \value{
 A TSSr object.
@@ -107,7 +109,9 @@ established yet.}
 
 \item{\code{refTable}}{data.frame.}
 
-\item{\code{organismName}}{character.}
+\item{\code{organismName}}{Optional character metadata describing the organism.
+It is retained for backward compatibility and is not used for
+cluster-to-gene assignment.}
 
 \item{\code{assignedClusters}}{list.}
 

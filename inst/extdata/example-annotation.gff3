@@ -1,0 +1,63 @@
+##gff-version 3
+#date Tue Jan 13 13:06:13 2015
+#
+# Saccharomyces cerevisiae S288C genome (version=R64-2-1)
+#
+# Features from the 16 nuclear chromosomes labeled chrI to chrXIV,
+# plus the mitochondrial genome labeled chrmt.
+#
+# Created by Saccharomyces Genome Database (http://www.yeastgenome.org/)
+#
+# Weekly updates of this file are available for download from:
+# http://downloads.yeastgenome.org/curation/chromosomal_feature/saccharomyces_cerevisiae.gff
+#
+# Please send comments and suggestions to sgd-helpdesk@lists.stanford.edu
+#
+# SGD is funded as a National Human Genome Research Institute Biomedical Informatics Resource from
+# the U. S. National Institutes of Health to Stanford University.
+#
+chrI	SGD	chromosome	1	230218	.	.	.	ID=chrI;dbxref=NCBI:NC_001133;Name=chrI
+chrI	SGD	telomere	1	801	.	-	.	ID=TEL01L;Name=TEL01L;Note=Telomeric%20region%20on%20the%20left%20arm%20of%20Chromosome%20I%3B%20composed%20of%20an%20X%20element%20core%20sequence%2C%20X%20element%20combinatorial%20repeats%2C%20and%20a%20short%20terminal%20stretch%20of%20telomeric%20repeats;display=Telomeric%20region%20on%20the%20left%20arm%20of%20Chromosome%20I;dbxref=SGD:S000028862
+chrI	SGD	X_element	337	801	.	-	.	ID=TEL01L_X_element;Name=TEL01L_X_element;dbxref=SGD:S000028862
+chrI	SGD	X_element_combinatorial_repeat	63	336	.	-	.	ID=TEL01L_X_element_combinatorial_repeat;Name=TEL01L_X_element_combinatorial_repeat;dbxref=SGD:S000028862
+chrI	SGD	telomeric_repeat	1	62	.	-	.	ID=TEL01L_telomeric_repeat;Name=TEL01L_telomeric_repeat;dbxref=SGD:S000028862
+chrI	SGD	gene	335	649	.	+	.	ID=YAL069W;Name=YAL069W;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Dubious%20open%20reading%20frame%3B%20unlikely%20to%20encode%20a%20functional%20protein%2C%20based%20on%20available%20experimental%20and%20comparative%20sequence%20data;display=Dubious%20open%20reading%20frame;dbxref=SGD:S000002143;orf_classification=Dubious
+chrI	SGD	CDS	335	649	.	+	0	Parent=YAL069W_mRNA;Name=YAL069W_CDS;orf_classification=Dubious
+chrI	SGD	mRNA	335	649	.	+	.	ID=YAL069W_mRNA;Name=YAL069W_mRNA;Parent=YAL069W
+chrI	SGD	gene	538	792	.	+	.	ID=YAL068W-A;Name=YAL068W-A;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Dubious%20open%20reading%20frame%3B%20unlikely%20to%20encode%20a%20functional%20protein%2C%20based%20on%20available%20experimental%20and%20comparative%20sequence%20data%3B%20identified%20by%20gene-trapping%2C%20microarray-based%20expression%20analysis%2C%20and%20genome-wide%20homology%20searching;display=Dubious%20open%20reading%20frame;dbxref=SGD:S000028594;orf_classification=Dubious
+chrI	SGD	CDS	538	792	.	+	0	Parent=YAL068W-A_mRNA;Name=YAL068W-A_CDS;orf_classification=Dubious
+chrI	SGD	mRNA	538	792	.	+	.	ID=YAL068W-A_mRNA;Name=YAL068W-A_mRNA;Parent=YAL068W-A
+chrI	SGD	ARS	707	776	.	.	.	ID=ARS102;Name=ARS102;Alias=ARSI-1;Note=Autonomously%20Replicating%20Sequence;display=Autonomously%20Replicating%20Sequence;dbxref=SGD:S000121252
+chrI	SGD	gene	1807	2169	.	-	.	ID=YAL068C;Name=YAL068C;gene=PAU8;Alias=PAU8,seripauperin%20PAU8;Ontology_term=GO:0003674,GO:0005575,GO:0030437,GO:0045944;Note=Protein%20of%20unknown%20function%3B%20member%20of%20the%20seripauperin%20multigene%20family%20encoded%20mainly%20in%20subtelomeric%20regions;display=Protein%20of%20unknown%20function;dbxref=SGD:S000002142;orf_classification=Verified
+chrI	SGD	CDS	1807	2169	.	-	0	Parent=YAL068C_mRNA;Name=YAL068C_CDS;orf_classification=Verified
+chrI	SGD	mRNA	1807	2169	.	-	.	ID=YAL068C_mRNA;Name=YAL068C_mRNA;Parent=YAL068C
+chrI	SGD	gene	2480	2707	.	+	.	ID=YAL067W-A;Name=YAL067W-A;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Putative%20protein%20of%20unknown%20function%3B%20identified%20by%20gene-trapping%2C%20microarray-based%20expression%20analysis%2C%20and%20genome-wide%20homology%20searching;display=Putative%20protein%20of%20unknown%20function;dbxref=SGD:S000028593;orf_classification=Uncharacterized
+chrI	SGD	CDS	2480	2707	.	+	0	Parent=YAL067W-A_mRNA;Name=YAL067W-A_CDS;orf_classification=Uncharacterized
+chrI	SGD	mRNA	2480	2707	.	+	.	ID=YAL067W-A_mRNA;Name=YAL067W-A_mRNA;Parent=YAL067W-A
+chrI	SGD	gene	7235	9016	.	-	.	ID=YAL067C;Name=YAL067C;gene=SEO1;Alias=SEO1,putative%20permease%20SEO1;Ontology_term=GO:0005215,GO:0006810,GO:0016020,GO:0016021;Note=Putative%20permease%3B%20member%20of%20the%20allantoate%20transporter%20subfamily%20of%20the%20major%20facilitator%20superfamily%3B%20mutation%20confers%20resistance%20to%20ethionine%20sulfoxide;display=Putative%20permease;dbxref=SGD:S000000062;orf_classification=Verified
+chrI	SGD	CDS	7235	9016	.	-	0	Parent=YAL067C_mRNA;Name=YAL067C_CDS;orf_classification=Verified
+chrI	SGD	mRNA	7235	9016	.	-	.	ID=YAL067C_mRNA;Name=YAL067C_mRNA;Parent=YAL067C
+chrI	SGD	ARS	7997	8547	.	.	.	ID=ARS103;Name=ARS103;Alias=ARSI-8;Note=Autonomously%20Replicating%20Sequence%3B%20replication%20origin%20of%20very%20weak%20function;display=Autonomously%20Replicating%20Sequence;dbxref=SGD:S000121253
+chrI	SGD	gene	10091	10399	.	+	.	ID=YAL066W;Name=YAL066W;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Dubious%20open%20reading%20frame%3B%20unlikely%20to%20encode%20a%20functional%20protein%2C%20based%20on%20available%20experimental%20and%20comparative%20sequence%20data;display=Dubious%20open%20reading%20frame;dbxref=SGD:S000000061;orf_classification=Dubious
+chrI	SGD	CDS	10091	10399	.	+	0	Parent=YAL066W_mRNA;Name=YAL066W_CDS;orf_classification=Dubious
+chrI	SGD	mRNA	10091	10399	.	+	.	ID=YAL066W_mRNA;Name=YAL066W_mRNA;Parent=YAL066W
+chrI	SGD	gene	11565	11951	.	-	.	ID=YAL065C;Name=YAL065C;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Putative%20protein%20of%20unknown%20function%3B%20has%20homology%20to%20FLO1%3B%20possible%20pseudogene;display=Putative%20protein%20of%20unknown%20function;dbxref=SGD:S000001817;orf_classification=Uncharacterized
+chrI	SGD	CDS	11565	11951	.	-	0	Parent=YAL065C_mRNA;Name=YAL065C_CDS;orf_classification=Uncharacterized
+chrI	SGD	mRNA	11565	11951	.	-	.	ID=YAL065C_mRNA;Name=YAL065C_mRNA;Parent=YAL065C
+chrI	SGD	gene	12046	12426	.	+	.	ID=YAL064W-B;Name=YAL064W-B;Ontology_term=GO:0003674,GO:0008150,GO:0016021;Note=Fungal-specific%20protein%20of%20unknown%20function;display=Fungal-specific%20protein%20of%20unknown%20function;dbxref=SGD:S000002141;orf_classification=Uncharacterized
+chrI	SGD	CDS	12046	12426	.	+	0	Parent=YAL064W-B_mRNA;Name=YAL064W-B_CDS;orf_classification=Uncharacterized
+chrI	SGD	mRNA	12046	12426	.	+	.	ID=YAL064W-B_mRNA;Name=YAL064W-B_mRNA;Parent=YAL064W-B
+chrI	SGD	gene	13363	13743	.	-	.	ID=YAL064C-A;Name=YAL064C-A;gene=TDA8;Alias=TDA8,YAL065C-A;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Putative%20protein%20of%20unknown%20function%3B%20null%20mutant%20is%20sensitive%20to%20expression%20of%20the%20top1-T722A%20allele%3B%20not%20an%20essential%20gene;display=Putative%20protein%20of%20unknown%20function;dbxref=SGD:S000002140;orf_classification=Uncharacterized
+chrI	SGD	CDS	13363	13743	.	-	0	Parent=YAL064C-A_mRNA;Name=YAL064C-A_CDS;orf_classification=Uncharacterized
+chrI	SGD	mRNA	13363	13743	.	-	.	ID=YAL064C-A_mRNA;Name=YAL064C-A_mRNA;Parent=YAL064C-A
+chrI	SGD	gene	21566	21850	.	+	.	ID=YAL064W;Name=YAL064W;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Protein%20of%20unknown%20function%3B%20may%20interact%20with%20ribosomes%2C%20based%20on%20co-purification%20experiments;display=Protein%20of%20unknown%20function;dbxref=SGD:S000000060;orf_classification=Verified
+chrI	SGD	CDS	21566	21850	.	+	0	Parent=YAL064W_mRNA;Name=YAL064W_CDS;orf_classification=Verified
+chrI	SGD	mRNA	21566	21850	.	+	.	ID=YAL064W_mRNA;Name=YAL064W_mRNA;Parent=YAL064W
+chrI	SGD	long_terminal_repeat	22230	22552	.	+	.	ID=YALWdelta1;Name=YALWdelta1;Ontology_term=SO:0000286;Note=Ty1%20LTR;display=Ty1%20LTR;dbxref=SGD:S000006787
+chrI	SGD	gene	22395	22685	.	-	.	ID=YAL063C-A;Name=YAL063C-A;Ontology_term=GO:0003674,GO:0005575,GO:0008150;Note=Putative%20protein%20of%20unknown%20function%3B%20identified%20by%20expression%20profiling%20and%20mass%20spectrometry;display=Putative%20protein%20of%20unknown%20function;dbxref=SGD:S000028813;orf_classification=Uncharacterized
+chrI	SGD	CDS	22395	22685	.	-	0	Parent=YAL063C-A_mRNA;Name=YAL063C-A_CDS;orf_classification=Uncharacterized
+chrI	SGD	mRNA	22395	22685	.	-	.	ID=YAL063C-A_mRNA;Name=YAL063C-A_mRNA;Parent=YAL063C-A
+chrI	landmark	region	24000	27968	.	-	.	ID=FLO9
+chrI	SGD	gene	24000	27968	.	-	.	ID=YAL063C;Name=YAL063C;gene=FLO9;Alias=FLO9,flocculin%20FLO9;Ontology_term=GO:0000128,GO:0000501,GO:0005537,GO:0009277,GO:0031589;Note=Lectin-like%20protein%20with%20similarity%20to%20Flo1p%3B%20thought%20to%20be%20expressed%20and%20involved%20in%20flocculation;display=Lectin-like%20protein%20with%20similarity%20to%20Flo1p;dbxref=SGD:S000000059;orf_classification=Verified
+chrI	SGD	CDS	24000	27968	.	-	0	Parent=YAL063C_mRNA;Name=YAL063C_CDS;orf_classification=Verified
+chrI	SGD	mRNA	24000	27968	.	-	.	ID=YAL063C_mRNA;Name=YAL063C_mRNA;Parent=YAL063C

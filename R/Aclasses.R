@@ -69,7 +69,9 @@
 #' @slot clusterShape list.
 #' @slot refSource character.
 #' @slot refTable data.frame.
-#' @slot organismName character.
+#' @slot organismName Optional character metadata describing the organism.
+#'   It is retained for backward compatibility and is not used for
+#'   cluster-to-gene assignment.
 #' @slot assignedClusters list.
 #' @slot unassignedClusters list.
 #' @slot filteredClusters list.
@@ -193,7 +195,9 @@ setClass(
 #'   together.
 #' @param refSource A character string specifying the path to GFF annotation
 #'   file.
-#' @param organismName A character string specifying the organism name.
+#' @param organismName An optional character string describing the organism.
+#'   This metadata is retained for backward compatibility and is not required
+#'   by \code{annotateCluster()}.
 #'
 #' @return A TSSr object.
 #'

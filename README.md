@@ -144,7 +144,18 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
 
         refSource <- "saccharomyces_cerevisiae_R64-2-1.gff" 
 	
-* Creating a new TSSr object using the constructer "new" function. In addition to the input data file "inputFiles" and file type "inputFilesType", BSgenome object name, and genome annotaion file "refSource", several other arguments need to be specified, including "sampleLabels", "sampleLabelsMerged", and "mergeIndex" and "organismName". In the example data, sample lables "SL01, SL02, SL03 and SL04" were used for "S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam", respectively (sampleLabels = c("SL01","SL02","SL03","SL04")). If a TSS table is used as input data, the sample lable of each sample is its column name in the TSS table. "sampleLabelsMerged" will be used if the user need to merge TSS signals from multiple samples (e.g., biological replicates) into a single dataset. In this case, SL01 and SL02 are two biological replicates obtained from S. cerevisiae cells grown in rich medium ("control"), while SL03 and SL04 were obtained by treating S. cerevisiae with α factor ("treat"). Thus, sampleLabelsMerged = c("control","treat") and mergeIndex = c(1,1,2,2), which means SL01 and SL02 will be merged as group 1 "control", and SL03 and SL04 will be merged as group 2 "treat". "organismName" is the species name of the samples, which will be used to annotate TSS clusters by "annotateCluster".
+* Creating a new TSSr object using the constructor function. In addition to
+  `inputFiles`, `inputFilesType`, `genomeName`, and the optional annotation
+  file `refSource`, users provide `sampleLabels`, `sampleLabelsMerged`, and
+  `mergeIndex`. In this example, SL01 and SL02 are biological replicates from
+  the control condition, while SL03 and SL04 are replicates from the treatment
+  condition. Therefore, `sampleLabelsMerged = c("control", "treat")` and
+  `mergeIndex = c(1, 1, 2, 2)` merge the four samples into two groups.
+
+  (`organismName` is retained as optional descriptive metadata for backward
+  compatibility. It is not required by `annotateCluster()` and does not
+  affect cluster-to-gene assignment, which is determined by the genomic
+  coordinates and strands in `refSource` or `refTable`.)
 
         myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 	              ,inputFiles = inputFiles
@@ -152,8 +163,7 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
 	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
 	              ,sampleLabelsMerged = c("control","treat")
 	              ,mergeIndex = c(1,1,2,2)
-	              ,refSource = refSource
-	              ,organismName = "Saccharomyces cerevisiae")
+	              ,refSource = refSource)
 	
 	Typing the object name displays a compact summary. Analysis results are
     initially marked as not run:

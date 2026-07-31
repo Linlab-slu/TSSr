@@ -340,7 +340,6 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
         tss <- object@TSSrawMatrix
     }
     refGFF <- object@refSource
-    organismName <- object@organismName
     sampleLabelsMerged <- object@sampleLabelsMerged
 
     ## prepare tss table

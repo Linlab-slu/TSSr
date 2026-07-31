@@ -1,10 +1,16 @@
 # TSSr 0.99.19 (2026-07-30)
 
-* Declared `GenomeInfoDbData` as a suggested dependency and added an
-  actionable guard for GFF-based annotation. Existing `refTable` workflows do
-  not require it; building a TxDb from GFF with organism metadata now reports
-  the exact Bioconductor installation command when the taxonomy data package
-  is unavailable.
+* GFF-based annotation no longer requires `GenomeInfoDbData` or a taxonomic
+  lookup. `organismName` remains available as optional descriptive metadata
+  for backward compatibility, but cluster-to-gene assignment is determined
+  from the coordinates and strands in `refSource` or `refTable`. Earlier
+  versions passed this value only to metadata on a temporary TxDb object; it
+  did not participate in the annotation calculation.
+
+* Added a reproducible GFF3 fixture containing the first 12 complete genes and
+  associated features from the original SGD R64-2-1 chromosome-I annotation.
+  Public `annotateCluster()` tests compare its results with an equivalent
+  `refTable` workflow on both strands.
 
 * Added 13 documented, read-only accessors for TSS matrices, reference data,
   library sizes, and analysis results. Table accessors return independent base
