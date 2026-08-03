@@ -1,5 +1,10 @@
 # TSSr 0.99.19 (2026-07-30)
 
+* `sampleLabelsMerged` and `mergeIndex` are now optional when no samples need
+  to be combined. Omitting both creates a one-to-one mapping from each sample
+  to its own analysis group, so `mergeSamples()` can be skipped. Supplying
+  only one of the two grouping arguments now gives an immediate error.
+
 * GFF-based annotation no longer requires `GenomeInfoDbData` or a taxonomic
   lookup. `organismName` remains available as optional descriptive metadata
   for backward compatibility, but cluster-to-gene assignment is determined

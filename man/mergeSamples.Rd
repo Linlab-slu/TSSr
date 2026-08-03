@@ -5,14 +5,15 @@
 \alias{mergeSamples,TSSr-method}
 \title{Merge TSS samples}
 \usage{
-mergeSamples(object, mergeIndex)
+mergeSamples(object, mergeIndex = NULL)
 
 \S4method{mergeSamples}{TSSr}(object, mergeIndex = NULL)
 }
 \arguments{
 \item{object}{A TSSr object}
 
-\item{mergeIndex}{Integer vector specifying which samples to be merged}
+\item{mergeIndex}{Optional integer vector specifying which samples are
+merged. By default, the mapping stored in \code{object} is used.}
 }
 \value{
 A modified TSSr object with updated \code{TSSprocessedMatrix}
@@ -21,6 +22,13 @@ A modified TSSr object with updated \code{TSSprocessedMatrix}
 }
 \description{
 Merges individual samples within TSSr object into specified groups.
+}
+\details{
+When sample grouping was omitted from \code{TSSr()}, the constructor
+  creates a one-to-one mapping. In that case \code{mergeSamples()} leaves all
+  samples separate and does not combine their counts. The function can also
+  be skipped because \code{getTSS()} initializes the processed matrix from
+  the raw matrix.
 }
 \examples{
 data(exampleTSSr)

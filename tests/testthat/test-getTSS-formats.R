@@ -9,6 +9,27 @@ make_import_object <- function(files, type, labels) {
     )
 }
 
+test_that("getTSS supplies one-to-one grouping for legacy objects", {
+    input <- system.file(
+        "extdata", "example-tss-table.tsv",
+        package = "TSSr", mustWork = TRUE
+    )
+    labels <- c("SL01", "SL02", "SL03", "SL04")
+    legacy <- methods::new(
+        "TSSr",
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        inputFiles = input,
+        inputFilesType = "TSStable",
+        sampleLabels = labels
+    )
+
+    result <- getTSS(legacy)
+
+    expect_identical(result@sampleLabelsMerged, labels)
+    expect_identical(result@mergeIndex, seq_along(labels))
+    expect_true(validObject(result))
+})
+
 test_that("getTSS imports BED boundaries and aggregates duplicate reads", {
     bed <- withr::local_tempfile(fileext = ".bed")
     writeLines(

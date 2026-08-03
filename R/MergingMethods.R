@@ -2,10 +2,16 @@
 #' Merge TSS samples
 #'
 #' @description Merges individual samples within TSSr object into specified groups.
-#' @usage mergeSamples(object, mergeIndex)
+#' @usage mergeSamples(object, mergeIndex = NULL)
 #'
 #' @param object A TSSr object
-#' @param mergeIndex Integer vector specifying which samples to be merged
+#' @param mergeIndex Optional integer vector specifying which samples are
+#'   merged. By default, the mapping stored in \code{object} is used.
+#' @details When sample grouping was omitted from \code{TSSr()}, the constructor
+#'   creates a one-to-one mapping. In that case \code{mergeSamples()} leaves all
+#'   samples separate and does not combine their counts. The function can also
+#'   be skipped because \code{getTSS()} initializes the processed matrix from
+#'   the raw matrix.
 #' @return A modified TSSr object with updated \code{TSSprocessedMatrix}
 #'   and \code{librarySizes} slots after merging samples. The input object is
 #'   not modified; assign the returned object to retain the changes.

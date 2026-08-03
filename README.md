@@ -146,10 +146,12 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
 	
 * Creating a new TSSr object using the constructor function. In addition to
   `inputFiles`, `inputFilesType`, `genomeName`, and the optional annotation
-  file `refSource`, users provide `sampleLabels`, `sampleLabelsMerged`, and
-  `mergeIndex`. In this example, SL01 and SL02 are biological replicates from
-  the control condition, while SL03 and SL04 are replicates from the treatment
-  condition. Therefore, `sampleLabelsMerged = c("control", "treat")` and
+  file `refSource`, users provide `sampleLabels`. The grouping arguments
+  `sampleLabelsMerged` and `mergeIndex` are optional. If both are omitted,
+  each sample remains a separate analysis group. In this example, SL01 and
+  SL02 are biological replicates from the control condition, while SL03 and
+  SL04 are replicates from the treatment condition. Therefore,
+  `sampleLabelsMerged = c("control", "treat")` and
   `mergeIndex = c(1, 1, 2, 2)` merge the four samples into two groups.
 
   (`organismName` is retained as optional descriptive metadata for backward
@@ -157,7 +159,7 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
   affect cluster-to-gene assignment, which is determined by the genomic
   coordinates and strands in `refSource` or `refTable`.)
 
-        myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
+        myTSSr <- TSSr(genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
 	              ,inputFiles = inputFiles
 	              ,inputFilesType = inputFilesType
 	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
@@ -237,7 +239,7 @@ TSS calling from bam files or retrieving TSS data from TSS table
 
 ![02_PCA_plot](https://github.com/Linlab-slu/TSSr/raw/master/vignettes/figures/02_PCA_plot_v3.png)
 
-* Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. Retrieve the merged read counts and genomic coordinates with `TSSmatrix(myTSSr, data = "processed")`.
+* Merging samples (biological replicates). Users can merge multiple samples (e.g., biological replicates) into previously defined groups with mergeSamples function. The "mergeIndex" argument directs which samples will be merged and how the final dataset will be ordered accordingly. Retrieve the merged read counts and genomic coordinates with `TSSmatrix(myTSSr, data = "processed")`. If no replicates should be merged, omit both grouping arguments when constructing the object and skip this step; TSSr will keep every sample as a separate group by default.
   
         myTSSr <- mergeSamples(myTSSr)
         

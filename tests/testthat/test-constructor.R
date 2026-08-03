@@ -15,6 +15,47 @@ test_that("TSSr() constructor creates valid object", {
     expect_equal(obj@sampleLabels, c("S1", "S2"))
 })
 
+test_that("TSSr() defaults to one group per sample when merging is omitted", {
+    obj <- TSSr(
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        inputFiles = c("s1.bam", "s2.bam", "s3.bam"),
+        inputFilesType = "bam",
+        sampleLabels = c("S1", "S2", "S3")
+    )
+
+    expect_identical(obj@sampleLabelsMerged, c("S1", "S2", "S3"))
+    expect_identical(obj@mergeIndex, 1:3)
+    expect_true(validObject(obj))
+})
+
+test_that("TSSr() rejects partially specified sample grouping", {
+    common_args <- list(
+        inputFiles = c("s1.bam", "s2.bam"),
+        inputFilesType = "bam",
+        sampleLabels = c("S1", "S2")
+    )
+
+    expect_error(
+        do.call(TSSr, c(common_args, list(sampleLabelsMerged = "merged"))),
+        regexp = "sampleLabelsMerged.*mergeIndex.*both"
+    )
+    expect_error(
+        do.call(TSSr, c(common_args, list(mergeIndex = c(1, 1)))),
+        regexp = "sampleLabelsMerged.*mergeIndex.*both"
+    )
+})
+
+test_that("TSSr class validity rejects partially specified sample grouping", {
+    expect_error(
+        methods::new(
+            "TSSr",
+            sampleLabels = c("S1", "S2"),
+            sampleLabelsMerged = "merged"
+        ),
+        regexp = "sampleLabelsMerged.*mergeIndex.*both"
+    )
+})
+
 test_that("TSSr() constructor with empty arguments creates valid object", {
     obj <- TSSr()
     expect_s4_class(obj, "TSSr")

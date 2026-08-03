@@ -89,11 +89,14 @@ setMethod("getTSS", signature(object = "TSSr"), function(
         )
     }
 
+    grouping <- .resolveSampleGrouping(
+        sampleLabels, object@sampleLabelsMerged, object@mergeIndex
+    )
+    object@sampleLabelsMerged <- grouping$sampleLabelsMerged
+    object@mergeIndex <- grouping$mergeIndex
+
     Genome <- .getGenome(object@genomeName)
 
-    if (length(object@sampleLabelsMerged) == 0) {
-        object@sampleLabelsMerged <- sampleLabels
-    }
     if (inputFilesType == "bam" | inputFilesType == "bamPairedEnd") {
         tss <- .getTSS_from_bam(
             object@inputFiles,

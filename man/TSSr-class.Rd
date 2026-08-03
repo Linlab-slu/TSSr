@@ -31,11 +31,14 @@ Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".}
 \item{sampleLabels}{A character vector of sample labels corresponding to
 input files, or to sample columns in a TSStable table.}
 
-\item{sampleLabelsMerged}{A character vector of merged sample labels for
-biological replicates.}
+\item{sampleLabelsMerged}{An optional character vector of merged sample
+labels for biological replicates. When this and \code{mergeIndex} are both
+omitted, it defaults to \code{sampleLabels}, so every sample remains a
+separate analysis group.}
 
-\item{mergeIndex}{A numeric vector indicating which samples to merge
-together.}
+\item{mergeIndex}{An optional numeric vector indicating which samples to
+merge together. When this and \code{sampleLabelsMerged} are both omitted,
+it defaults to \code{seq_along(sampleLabels)}.}
 
 \item{refSource}{A character string specifying the path to GFF annotation
 file.}
@@ -134,9 +137,9 @@ myTSSr <- TSSr(
     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
     inputFiles = c("sample1.bam", "sample2.bam"),
     inputFilesType = "bam",
-    sampleLabels = c("S1", "S2"),
-    sampleLabelsMerged = c("merged"),
-    mergeIndex = c(1, 1)
+    sampleLabels = c("S1", "S2")
 )
+# Because no grouping was supplied, S1 and S2 remain separate groups.
+myTSSr
 
 }

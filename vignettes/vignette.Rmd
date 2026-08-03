@@ -82,6 +82,11 @@ newObj <- TSSr(
 newObj
 ```
 
+The grouping arguments `sampleLabelsMerged` and `mergeIndex` are optional. If
+both are omitted, TSSr assigns each sample to its own analysis group. In that
+case no counts are combined and `mergeSamples()` can be skipped. When
+biological replicates should be combined, provide both arguments as above.
+
 The package includes a small TSS table that can be used to exercise the import
 step without requiring external files:
 

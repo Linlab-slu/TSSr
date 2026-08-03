@@ -153,6 +153,14 @@ setClass(
                 return("Length of 'inputFiles' must equal length of 'sampleLabels'.")
             }
         }
+        has_merged_labels <- length(object@sampleLabelsMerged) > 0
+        has_merge_index <- length(object@mergeIndex) > 0
+        if (xor(has_merged_labels, has_merge_index)) {
+            return(paste0(
+                "'sampleLabelsMerged' and 'mergeIndex' must either both be ",
+                "provided or both be omitted."
+            ))
+        }
         if (length(object@sampleLabels) > 0 &&
             length(object@mergeIndex) > 0 &&
             length(object@sampleLabels) != length(object@mergeIndex)) {
@@ -176,6 +184,25 @@ setClass(
     }
 )
 
+.resolveSampleGrouping <- function(sampleLabels, sampleLabelsMerged, mergeIndex) {
+    hasMergedLabels <- length(sampleLabelsMerged) > 0
+    hasMergeIndex <- length(mergeIndex) > 0
+    if (xor(hasMergedLabels, hasMergeIndex)) {
+        stop(
+            "'sampleLabelsMerged' and 'mergeIndex' must either both be ",
+            "provided or both be omitted."
+        )
+    }
+    if (length(sampleLabels) > 0 && !hasMergedLabels && !hasMergeIndex) {
+        sampleLabelsMerged <- sampleLabels
+        mergeIndex <- seq_along(sampleLabels)
+    }
+    list(
+        sampleLabelsMerged = sampleLabelsMerged,
+        mergeIndex = mergeIndex
+    )
+}
+
 #' TSSr Constructor Function
 #'
 #' @description Creates a new TSSr object for TSS sequencing data analysis.
@@ -189,10 +216,13 @@ setClass(
 #'   Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".
 #' @param sampleLabels A character vector of sample labels corresponding to
 #'   input files, or to sample columns in a TSStable table.
-#' @param sampleLabelsMerged A character vector of merged sample labels for
-#'   biological replicates.
-#' @param mergeIndex A numeric vector indicating which samples to merge
-#'   together.
+#' @param sampleLabelsMerged An optional character vector of merged sample
+#'   labels for biological replicates. When this and \code{mergeIndex} are both
+#'   omitted, it defaults to \code{sampleLabels}, so every sample remains a
+#'   separate analysis group.
+#' @param mergeIndex An optional numeric vector indicating which samples to
+#'   merge together. When this and \code{sampleLabelsMerged} are both omitted,
+#'   it defaults to \code{seq_along(sampleLabels)}.
 #' @param refSource A character string specifying the path to GFF annotation
 #'   file.
 #' @param organismName An optional character string describing the organism.
@@ -210,10 +240,10 @@ setClass(
 #'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
 #'     inputFiles = c("sample1.bam", "sample2.bam"),
 #'     inputFilesType = "bam",
-#'     sampleLabels = c("S1", "S2"),
-#'     sampleLabelsMerged = c("merged"),
-#'     mergeIndex = c(1, 1)
+#'     sampleLabels = c("S1", "S2")
 #' )
+#' # Because no grouping was supplied, S1 and S2 remain separate groups.
+#' myTSSr
 #'
 TSSr <- function(genomeName = character(),
                  inputFiles = character(),
@@ -223,6 +253,12 @@ TSSr <- function(genomeName = character(),
                  mergeIndex = numeric(),
                  refSource = character(),
                  organismName = character()) {
+    grouping <- .resolveSampleGrouping(
+        sampleLabels, sampleLabelsMerged, mergeIndex
+    )
+    sampleLabelsMerged <- grouping$sampleLabelsMerged
+    mergeIndex <- grouping$mergeIndex
+
     ## Validate inputFilesType
     supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
     if (length(inputFilesType) > 0 && !(inputFilesType %in% supportedTypes)) {
