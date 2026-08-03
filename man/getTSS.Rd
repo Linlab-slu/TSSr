@@ -43,6 +43,12 @@ input file formats. The files include users' home-made alignment files (bam form
 or downloaded files from public databases. See inputFilesType for details on
 the supported input file formats.
 }
+\details{
+Input files do not need to exist when the \code{TSSr} object is
+created. Before loading the genome or reading data, \code{getTSS()} checks
+that every path in the \code{inputFiles} slot identifies an existing file
+and reports all invalid paths in a single error.
+}
 \examples{
 exampleInput <- system.file(
     "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE

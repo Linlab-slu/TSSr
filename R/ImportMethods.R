@@ -7,6 +7,11 @@
 #' or downloaded files from public databases. See inputFilesType for details on
 #' the supported input file formats.
 #'
+#' @details Input files do not need to exist when the \code{TSSr} object is
+#' created. Before loading the genome or reading data, \code{getTSS()} checks
+#' that every path in the \code{inputFiles} slot identifies an existing file
+#' and reports all invalid paths in a single error.
+#'
 #' @usage getTSS(object, sequencingQualityThreshold = 10,
 #' mappingQualityThreshold = 20, softclippingAllowed = FALSE)
 #'
@@ -57,19 +62,34 @@ setMethod("getTSS", signature(object = "TSSr"), function(
 ) {
     ## initialize values
     pos <- NULL
-    Genome <- .getGenome(object@genomeName)
     sampleLabels <- object@sampleLabels
     inputFilesType <- object@inputFilesType
     inputFiles <- object@inputFiles
 
     ## Check if input files exist
-    missingFiles <- inputFiles[!file.exists(inputFiles)]
-    if (length(missingFiles) > 0) {
-        stop("Input file(s) not found: ",
-             paste(sQuote(missingFiles), collapse = ", "),
-             ". Please check the 'inputFiles' slot of your TSSr object ",
-             "and ensure the files exist at the specified paths.")
+    if (length(inputFiles) == 0) {
+        stop(
+            "No input files were provided. Please set the 'inputFiles' ",
+            "slot of your TSSr object before calling getTSS()."
+        )
     }
+    invalidFiles <- is.na(inputFiles) |
+        !nzchar(inputFiles) |
+        !file.exists(inputFiles) |
+        dir.exists(inputFiles)
+    if (any(invalidFiles)) {
+        invalidPaths <- inputFiles[invalidFiles]
+        invalidPaths[is.na(invalidPaths)] <- "<NA>"
+        invalidPaths[!nzchar(invalidPaths)] <- "<empty>"
+        stop(
+            "Input file(s) not found or paths are directories: ",
+            paste(sQuote(invalidPaths), collapse = ", "),
+            ". Please check the 'inputFiles' slot of your TSSr object ",
+            "and ensure the files exist at the specified paths."
+        )
+    }
+
+    Genome <- .getGenome(object@genomeName)
 
     if (length(object@sampleLabelsMerged) == 0) {
         object@sampleLabelsMerged <- sampleLabels
