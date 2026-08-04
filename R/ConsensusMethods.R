@@ -21,9 +21,26 @@
 #' @export
 #'
 #' @examples
-#' data(exampleTSSr)
-#' exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
-#' head(consensusClusters(exampleTSSr, sample = "control"))
+#' example_input <- system.file(
+#'     "extdata", "example-tss-table.tsv", package = "TSSr",
+#'     mustWork = TRUE
+#' )
+#' example_object <- TSSr(
+#'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+#'     inputFiles = example_input,
+#'     inputFilesType = "TSStable",
+#'     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+#'     sampleLabelsMerged = c("control", "treat"),
+#'     mergeIndex = c(1, 1, 2, 2)
+#' )
+#' example_object <- getTSS(example_object)
+#' example_object <- mergeSamples(example_object)
+#' example_object <- normalizeTSS(example_object)
+#' example_object <- clusterTSS(example_object, useMultiCore = FALSE)
+#' example_object <- consensusCluster(
+#'     example_object, useMultiCore = FALSE
+#' )
+#' head(consensusClusters(example_object, sample = "control"))
 setGeneric(
     "consensusCluster",
     function(object, dis = 50, useMultiCore = FALSE,

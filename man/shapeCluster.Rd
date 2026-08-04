@@ -39,10 +39,28 @@ Calculates core promoter shape based on the distributions of TSSs within core
   algorithm (Lu et al. 2019).
 }
 \examples{
-data(exampleTSSr)
-exampleTSSr <- shapeCluster(
-    exampleTSSr, clusters = "consensusClusters", method = "PSS",
+example_input <- system.file(
+    "extdata", "example-tss-table.tsv", package = "TSSr",
+    mustWork = TRUE
+)
+example_object <- TSSr(
+    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+    inputFiles = example_input,
+    inputFilesType = "TSStable",
+    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+    sampleLabelsMerged = c("control", "treat"),
+    mergeIndex = c(1, 1, 2, 2)
+)
+example_object <- getTSS(example_object)
+example_object <- mergeSamples(example_object)
+example_object <- normalizeTSS(example_object)
+example_object <- clusterTSS(example_object, useMultiCore = FALSE)
+example_object <- consensusCluster(
+    example_object, useMultiCore = FALSE
+)
+example_object <- shapeCluster(
+    example_object, clusters = "consensusClusters", method = "PSS",
     useMultiCore = FALSE
 )
-head(clusterShape(exampleTSSr, sample = "control"))
+head(clusterShape(example_object, sample = "control"))
 }
