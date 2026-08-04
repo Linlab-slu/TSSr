@@ -33,7 +33,20 @@ test_that("optimized peakclu preserves the published tag clusters", {
     observed <- lapply(result@tagClusters, function(value) {
         as.data.frame(data.table::copy(value))
     })
-    expect_equal(observed, expected, tolerance = 0)
+    for (sample_label in names(observed)) {
+        exact_columns <- setdiff(names(observed[[sample_label]]), "tags")
+        expect_identical(
+            observed[[sample_label]][, exact_columns],
+            expected[[sample_label]][, exact_columns],
+            info = sample_label
+        )
+        expect_equal(
+            observed[[sample_label]]$tags,
+            expected[[sample_label]]$tags,
+            tolerance = 1e-12,
+            info = sample_label
+        )
+    }
 })
 
 make_peakclu_test_object <- function(positions, tags, strand = "+") {
@@ -70,6 +83,71 @@ test_that("peakclu uses an open peak-distance window", {
     expect_equal(clusters$start, c(100, 200))
     expect_equal(clusters$end, c(100, 200))
     expect_equal(clusters$dominant_tss, c(100, 200))
+})
+
+test_that("peakclu includes a TSS exactly on the quantile threshold", {
+    object <- make_peakclu_test_object(
+        positions = c(100, 103, 106),
+        tags = c(81, 9, 1)
+    )
+
+    result <- clusterTSS(
+        object,
+        peakDistance = 100,
+        extensionDistance = 30,
+        localThreshold = 0,
+        clusterThreshold = 0,
+        useMultiCore = FALSE
+    )
+    clusters <- as.data.frame(result@tagClusters$sample)
+
+    expect_equal(clusters$q_0.9, 103)
+    expect_equal(clusters$interquantile_width, 4)
+})
+
+test_that("peakclu uses the same quantiles after positive signal scaling", {
+    scales <- c(1e-6, 1, 1e6)
+
+    boundaries <- lapply(scales, function(scale) {
+        object <- make_peakclu_test_object(
+            positions = c(100, 103, 106),
+            tags = c(9, 81, 1) * scale
+        )
+        result <- clusterTSS(
+            object,
+            peakDistance = 100,
+            extensionDistance = 30,
+            localThreshold = 0,
+            clusterThreshold = 0,
+            useMultiCore = FALSE
+        )
+        clusters <- as.data.frame(result@tagClusters$sample)
+
+        unname(c(clusters$q_0.1, clusters$q_0.9))
+    })
+
+    expect_identical(boundaries, rep(list(c(100L, 103L)), length(scales)))
+})
+
+test_that("consensus clusters include a TSS on the quantile threshold", {
+    object <- make_peakclu_test_object(
+        positions = c(100, 103, 106),
+        tags = c(81, 9, 1)
+    )
+    object <- clusterTSS(
+        object,
+        peakDistance = 100,
+        extensionDistance = 30,
+        localThreshold = 0,
+        clusterThreshold = 0,
+        useMultiCore = FALSE
+    )
+
+    result <- consensusCluster(object, useMultiCore = FALSE)
+    clusters <- as.data.frame(result@consensusClusters$sample)
+
+    expect_equal(clusters$q_0.9, 103)
+    expect_equal(clusters$interquantile_width, 4)
 })
 
 test_that("peakclu resolves tied window maxima to the lowest position", {

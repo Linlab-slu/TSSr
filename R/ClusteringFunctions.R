@@ -1,5 +1,14 @@
 ###############################################################################
 
+.firstCumulativeFractionIndex <- function(values, fraction) {
+    cumulative <- cumsum(values)
+    target <- fraction * sum(values)
+    tolerance <- 8 * .Machine$double.eps * max(1, length(values)) *
+        max(1, abs(target), abs(cumulative))
+
+    which(cumulative >= target - tolerance)[[1L]]
+}
+
 .rangeMaxFirstIndex <- function(values) {
     n <- length(values)
     if (n == 0L) {
@@ -134,8 +143,15 @@
         # copied.dt[, ID := .I]##NEW April18
         cluster.data <- copied.dt[pos >= start & pos <= end, ]
         tags.sum <- cluster.data[, sum(tags)] ## NEW Sep25, tags -> tags.sum
-        q1 <- cluster.data[which(cumsum(tags) > 0.1 * tags.sum), min(pos)]
-        q9 <- cluster.data[order(-pos)][which(cumsum(tags) > 0.1 * tags.sum), max(pos)]
+        q1.index <- .firstCumulativeFractionIndex(
+            cluster.data[["tags"]], 0.1
+        )
+        reverse.data <- cluster.data[order(-pos)]
+        q9.index <- .firstCumulativeFractionIndex(
+            reverse.data[["tags"]], 0.1
+        )
+        q1 <- cluster.data[["pos"]][[q1.index]]
+        q9 <- reverse.data[["pos"]][[q9.index]]
         list(
             i,
             cluster.data[, chr[[1]]],
