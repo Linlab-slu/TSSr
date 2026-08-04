@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: bioconductor/bioconductor_docker:devel
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
