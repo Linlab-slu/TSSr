@@ -84,6 +84,16 @@
 #' @rdname TSSr-class
 #' @exportClass TSSr
 #'
+.sampleGroupingPairMessage <- function() {
+    paste0(
+        "'sampleLabelsMerged' and 'mergeIndex' must either both be provided ",
+        "or both be omitted. When both are omitted, each sample remains a ",
+        "separate analysis group: 'sampleLabelsMerged' defaults to ",
+        "'sampleLabels' and 'mergeIndex' defaults to ",
+        "seq_along(sampleLabels)."
+    )
+}
+
 setClass(
     Class = "TSSr",
     slots = list(
@@ -156,10 +166,7 @@ setClass(
         has_merged_labels <- length(object@sampleLabelsMerged) > 0
         has_merge_index <- length(object@mergeIndex) > 0
         if (xor(has_merged_labels, has_merge_index)) {
-            return(paste0(
-                "'sampleLabelsMerged' and 'mergeIndex' must either both be ",
-                "provided or both be omitted."
-            ))
+            return(.sampleGroupingPairMessage())
         }
         if (length(object@sampleLabels) > 0 &&
             length(object@mergeIndex) > 0 &&
@@ -188,10 +195,7 @@ setClass(
     hasMergedLabels <- length(sampleLabelsMerged) > 0
     hasMergeIndex <- length(mergeIndex) > 0
     if (xor(hasMergedLabels, hasMergeIndex)) {
-        stop(
-            "'sampleLabelsMerged' and 'mergeIndex' must either both be ",
-            "provided or both be omitted."
-        )
+        stop(.sampleGroupingPairMessage())
     }
     if (length(sampleLabels) > 0 && !hasMergedLabels && !hasMergeIndex) {
         sampleLabelsMerged <- sampleLabels

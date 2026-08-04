@@ -35,10 +35,13 @@ test_that("TSSr() rejects partially specified sample grouping", {
         sampleLabels = c("S1", "S2")
     )
 
-    expect_error(
+    condition <- expect_error(
         do.call(TSSr, c(common_args, list(sampleLabelsMerged = "merged"))),
         regexp = "sampleLabelsMerged.*mergeIndex.*both"
     )
+    message <- conditionMessage(condition)
+    expect_match(message, "sampleLabelsMerged.*sampleLabels")
+    expect_match(message, "mergeIndex.*seq_along\\(sampleLabels\\)")
     expect_error(
         do.call(TSSr, c(common_args, list(mergeIndex = c(1, 1)))),
         regexp = "sampleLabelsMerged.*mergeIndex.*both"
@@ -46,13 +49,17 @@ test_that("TSSr() rejects partially specified sample grouping", {
 })
 
 test_that("TSSr class validity rejects partially specified sample grouping", {
-    expect_error(
+    condition <- expect_error(
         methods::new(
             "TSSr",
             sampleLabels = c("S1", "S2"),
             sampleLabelsMerged = "merged"
         ),
         regexp = "sampleLabelsMerged.*mergeIndex.*both"
+    )
+    expect_match(
+        conditionMessage(condition),
+        "sampleLabelsMerged.*sampleLabels.*mergeIndex.*seq_along"
     )
 })
 
