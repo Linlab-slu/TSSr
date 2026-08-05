@@ -415,7 +415,15 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
     } else {
         stop("No data for the given TSS data type!")
     }
-    .writeTSStable(tss, output_file)
+    metadata <- .TSStableMetadata(
+        data,
+        object@genomeName,
+        unique(as.character(tss[["chr"]]))
+    )
+    .writeTSStableWithMetadata(
+        tss, output_file, metadata, overwrite = TRUE
+    )
+    invisible(NULL)
 })
 
 ################################################################################################

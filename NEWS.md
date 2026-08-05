@@ -1,5 +1,13 @@
 # TSSr 0.99.19 (2026-07-30)
 
+* Added `combineTSSTables()` and `splitTSSTable()` for assembling any number
+  of independent raw-count TSS tables and extracting explicit sample columns.
+  The functions align the union of `chr`, `pos`, and `strand` coordinates,
+  fill missing sample values with zero, remove all-zero rows when requested,
+  validate raw counts and chromosome compatibility, and preserve versioned
+  data type, genome, and chromosome metadata. `exportTSStable()` now writes
+  the same metadata so processed tables cannot be mistaken for raw counts.
+
 * `sampleLabelsMerged` and `mergeIndex` are now optional when no samples need
   to be combined. Omitting both creates a one-to-one mapping from each sample
   to its own analysis group, so `mergeSamples()` can be skipped. Supplying

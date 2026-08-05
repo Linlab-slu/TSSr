@@ -1,3 +1,13 @@
+.sampleGroupingPairMessage <- function() {
+    paste0(
+        "'sampleLabelsMerged' and 'mergeIndex' must either both be provided ",
+        "or both be omitted. When both are omitted, each sample remains a ",
+        "separate analysis group: 'sampleLabelsMerged' defaults to ",
+        "'sampleLabels' and 'mergeIndex' defaults to ",
+        "seq_along(sampleLabels)."
+    )
+}
+
 #' TSSr: A package for transcription start site sequencing data analyses.
 #'
 #' TSSr is designed to analyze transcription start sites (TSSs) and core promoters
@@ -83,17 +93,6 @@
 #' @name TSSr-class
 #' @rdname TSSr-class
 #' @exportClass TSSr
-#'
-.sampleGroupingPairMessage <- function() {
-    paste0(
-        "'sampleLabelsMerged' and 'mergeIndex' must either both be provided ",
-        "or both be omitted. When both are omitted, each sample remains a ",
-        "separate analysis group: 'sampleLabelsMerged' defaults to ",
-        "'sampleLabels' and 'mergeIndex' defaults to ",
-        "seq_along(sampleLabels)."
-    )
-}
-
 setClass(
     Class = "TSSr",
     slots = list(

@@ -106,6 +106,30 @@ importedTSSr <- getTSS(importedTSSr)
 head(TSSmatrix(importedTSSr, data = "raw"))
 ```
 
+## Combining and splitting raw TSS tables
+
+Raw-count TSS tables from independently processed samples or projects can be
+combined directly. Each file may contain one or multiple sample columns. The
+same interface can extract selected samples while removing positions that are
+zero in every selected column.
+
+```{r TSStable-combine-split}
+part1 <- file.path(tempdir(), "TSSr-SL01-SL02.tsv")
+part2 <- file.path(tempdir(), "TSSr-SL03-SL04.tsv")
+splitTSSTable(
+    exampleInput, c("SL01", "SL02"), part1, overwrite = TRUE
+)
+splitTSSTable(
+    exampleInput, c("SL03", "SL04"), part2, overwrite = TRUE
+)
+combinedTable <- combineTSSTables(c(part1, part2))
+head(combinedTable)
+```
+
+The table functions require finite, non-negative integer raw counts. They
+reject processed tables and incompatible chromosome or genome metadata rather
+than silently combining incomparable values.
+
 # TSS data processing
 
 The `exampleTSSr` object contains chromosome I data and the upstream inputs

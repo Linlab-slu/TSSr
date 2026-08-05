@@ -1,11 +1,12 @@
 test_that("reviewer-requested examples call their documented functions", {
     documented_functions <- c(
-        "callEnhancer", "clusterTSS", "exportClustersTable",
+        "callEnhancer", "clusterTSS", "combineTSSTables",
+        "exportClustersTable",
         "exportClustersToBed", "exportDETable", "exportEnhancerTable",
         "exportShapeTable", "exportShiftTable", "exportTSStable",
         "exportTSStoBedgraph", "getTSS", "plotCorrelation", "plotDE",
         "plotInterQuantile", "plotShape", "plotTssPCA", "plotTSS",
-        "shapeCluster", "shiftPromoter"
+        "shapeCluster", "shiftPromoter", "splitTSSTable"
     )
     documentation <- tools::Rd_db("TSSr")
     examples_tag <- paste0(intToUtf8(92), "examples")

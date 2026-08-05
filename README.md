@@ -225,8 +225,33 @@ TSS calling from bam files or retrieving TSS data from TSS table
   writes "ALL.samples.TSS.raw.merged.txt".
 
         exportTSStable(myTSSr, data = "raw", merged = FALSE)
+
+* Independent raw-count TSS tables can be combined without rerunning TSS
+  calling. Each input file may contain one or multiple samples, and any number
+  of files greater than one can be supplied. Coordinates are aligned by
+  `chr`, `pos`, and `strand`; missing sample values are filled with zero.
+
+        combined <- combineTSSTables(
+            c("sample1.tsv", "sample2.tsv", "project3.tsv"),
+            outputFile = "combined.raw.tsv"
+        )
+
+  To extract selected samples, specify their column names. The function does
+  not rename or sum samples. By default, positions at which all selected
+  samples are zero are removed.
+
+        control <- splitTSSTable(
+            "combined.raw.tsv",
+            samples = c("SL01", "SL02"),
+            outputFile = "control.raw.tsv"
+        )
+
+  These operations accept only finite, non-negative integer raw counts.
+  TSSr-produced files include metadata identifying raw and processed values,
+  the genome when known, and the chromosome set. Legacy tables without
+  metadata remain supported after value and chromosome validation.
 	
-* The "plotCorrelation" function is used to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS counts. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”. The default setting generates scatter plots for all samples (samples = "all"). For plotting a subset of samples, users may provide a list of sample labels for "sample", e.g., samples = c("SL01","SL02","SL03"). 
+* The "plotCorrelation" function is used to calculate the pairwise correlation coefficients and plot pairwise scatter plots of TSS counts. A subset of samples can also be specified to display the pairwise correlations. Three correlation methods are supported: “pearson”, “kendall”, or “spearman”. The default setting generates scatter plots for all samples (samples = "all"). For plotting a subset of samples, users may provide a list of sample labels for "sample", e.g., samples = c("SL01","SL02","SL03").
 	
         plotCorrelation(myTSSr, samples = "all")
     
