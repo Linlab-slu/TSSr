@@ -1,15 +1,7 @@
 # Test downstream analysis: shapeCluster, shiftPromoter, callEnhancer
-# Prepare data once at the top to avoid repeating expensive workflow steps
+# Use the bundled upstream results and recompute each method under test.
 
 data(exampleTSSr)
-exampleTSSr <- mergeSamples(exampleTSSr)
-exampleTSSr <- normalizeTSS(exampleTSSr)
-exampleTSSr <- filterTSS(exampleTSSr, method = "TPM", tpmLow = 2)
-exampleTSSr <- clusterTSS(exampleTSSr,
-    method = "peakclu", clusterThreshold = 1,
-    useMultiCore = FALSE
-)
-exampleTSSr <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
 
 test_that("shapeCluster calculates shape scores with PSS method", {
     object <- exampleTSSr

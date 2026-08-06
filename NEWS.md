@@ -1,3 +1,28 @@
+# TSSr 0.99.20 (2026-08-04)
+
+* Made the 10th- and 90th-percentile TSS cluster boundaries deterministic
+  across platforms. Cumulative signal that equals a percentile threshold
+  within a scale-aware floating-point tolerance is now treated as having
+  reached that threshold, consistently with the documented definition that
+  the interval contains at least 80% of the cluster signal. The same rule is
+  used for tag clusters and consensus clusters in single- and multicore code.
+
+* Added public-workflow regression tests for exact-threshold behavior and
+  invariance under positive signal scaling. Cluster coordinates and other
+  discrete fields remain exact in cross-platform comparisons; only aggregate
+  floating-point tag sums use a relative tolerance. On the bundled chromosome
+  I data, the deterministic rule changes one control cluster's lower boundary
+  from 123531 to 123502 and its interquantile width from 16 to 45. Its promoter
+  shape score changes accordingly; assigned clusters, enhancers, differential
+  expression, TAG tables, and promoter-shift results are unchanged.
+
+* Reduced repeated work in tests and examples without skipping any code paths.
+  Workflow examples now run on the bundled 100-row, four-sample, two-strand
+  TSStable input rather than recomputing against the full example object. On
+  the Linux Bioconductor devel container used for validation, no example takes
+  more than five seconds and `R CMD check --no-vignettes --no-manual` decreased
+  from 566 to 421 seconds while all 1,000 test assertions still run.
+
 # TSSr 0.99.19 (2026-07-30)
 
 * `getTSS()` now streams BAM and paired-end BAM inputs in bounded chunks.

@@ -28,12 +28,26 @@
 #'
 #' @export
 #' @examples
-#' data(exampleTSSr)
-#' exampleTSSr <- clusterTSS(
-#'     exampleTSSr, method = "peakclu", clusterThreshold = 1,
+#' example_input <- system.file(
+#'     "extdata", "example-tss-table.tsv", package = "TSSr",
+#'     mustWork = TRUE
+#' )
+#' example_object <- TSSr(
+#'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+#'     inputFiles = example_input,
+#'     inputFilesType = "TSStable",
+#'     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+#'     sampleLabelsMerged = c("control", "treat"),
+#'     mergeIndex = c(1, 1, 2, 2)
+#' )
+#' example_object <- getTSS(example_object)
+#' example_object <- mergeSamples(example_object)
+#' example_object <- normalizeTSS(example_object)
+#' example_object <- clusterTSS(
+#'     example_object, method = "peakclu", clusterThreshold = 1,
 #'     useMultiCore = FALSE
 #' )
-#' head(tagClusters(exampleTSSr, sample = "control"))
+#' head(tagClusters(example_object, sample = "control"))
 #'
 setGeneric("clusterTSS", function(
   object, method = "peakclu",

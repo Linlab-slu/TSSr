@@ -4,6 +4,18 @@
 
 data(exampleTSSr)
 
+make_small_workflow_object <- function() {
+    object <- exampleTSSr
+    processed <- object@TSSprocessedMatrix
+    selected_rows <- unlist(lapply(c("+", "-"), function(strand_value) {
+        head(which(processed$strand == strand_value), 500L)
+    }))
+    object@TSSprocessedMatrix <- data.table::copy(processed[selected_rows])
+    object@tagClusters <- list()
+    object@consensusClusters <- list()
+    object
+}
+
 test_that("mergeSamples merges raw TSS data correctly", {
     result <- mergeSamples(exampleTSSr)
 
@@ -36,8 +48,7 @@ test_that("filterTSS with TPM method reduces rows", {
 })
 
 test_that("clusterTSS produces tagClusters", {
-    object <- exampleTSSr
-    object@tagClusters <- list()
+    object <- make_small_workflow_object()
     before <- tssr_content(object)
     result <- clusterTSS(object,
         method = "peakclu", clusterThreshold = 1,
@@ -57,8 +68,12 @@ test_that("clusterTSS produces tagClusters", {
 })
 
 test_that("consensusCluster produces consensus clusters", {
-    object <- exampleTSSr
-    object@consensusClusters <- list()
+    object <- clusterTSS(
+        make_small_workflow_object(),
+        method = "peakclu",
+        clusterThreshold = 1,
+        useMultiCore = FALSE
+    )
     before <- tssr_content(object)
     result <- consensusCluster(object, useMultiCore = FALSE)
 

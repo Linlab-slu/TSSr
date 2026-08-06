@@ -737,9 +737,24 @@ setMethod("exportTSStoBedgraph", signature(object = "TSSr"), function(object, da
 #' @export
 #'
 #' @examples
-#' data(exampleTSSr)
+#' example_input <- system.file(
+#'     "extdata", "example-tss-table.tsv", package = "TSSr",
+#'     mustWork = TRUE
+#' )
+#' example_object <- TSSr(
+#'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+#'     inputFiles = example_input,
+#'     inputFilesType = "TSStable",
+#'     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+#'     sampleLabelsMerged = c("control", "treat"),
+#'     mergeIndex = c(1, 1, 2, 2)
+#' )
+#' example_object <- getTSS(example_object)
+#' example_object <- mergeSamples(example_object)
+#' example_object <- normalizeTSS(example_object)
+#' example_object <- clusterTSS(example_object, useMultiCore = FALSE)
 #' oldwd <- setwd(tempdir())
-#' exportClustersToBed(exampleTSSr, data = "tagClusters")
+#' exportClustersToBed(example_object, data = "tagClusters")
 #' setwd(oldwd)
 setGeneric(
     "exportClustersToBed",

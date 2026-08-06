@@ -31,8 +31,15 @@
             if (nrow(temp) > 0) {
                 s <- tss.temp[chr == temp[1, chr] & strand == temp[1, strand] & pos >= temp[, min(start)] & pos <= temp[, max(end)], ]
                 tags.sum <- s[, sum(tags)]
-                q1 <- s[which(cumsum(tags) > 0.1 * tags.sum), min(pos)]
-                q9 <- s[order(-pos)][which(cumsum(tags) > 0.1 * tags.sum), max(pos)]
+                q1.index <- .firstCumulativeFractionIndex(
+                    s[["tags"]], 0.1
+                )
+                reverse.s <- s[order(-pos)]
+                q9.index <- .firstCumulativeFractionIndex(
+                    reverse.s[["tags"]], 0.1
+                )
+                q1 <- s[["pos"]][[q1.index]]
+                q9 <- reverse.s[["pos"]][[q9.index]]
                 list(
                     gr[x, consensusCluster],
                     gr[x, chr[[1]]],
@@ -55,8 +62,15 @@
             if (nrow(temp) > 0) {
                 s <- tss.temp[chr == temp[1, chr] & strand == temp[1, strand] & pos >= temp[, min(start)] & pos <= temp[, max(end)], ]
                 tags.sum <- s[, sum(tags)]
-                q1 <- s[which(cumsum(tags) > 0.1 * tags.sum), min(pos)]
-                q9 <- s[order(-pos)][which(cumsum(tags) > 0.1 * tags.sum), max(pos)]
+                q1.index <- .firstCumulativeFractionIndex(
+                    s[["tags"]], 0.1
+                )
+                reverse.s <- s[order(-pos)]
+                q9.index <- .firstCumulativeFractionIndex(
+                    reverse.s[["tags"]], 0.1
+                )
+                q1 <- s[["pos"]][[q1.index]]
+                q9 <- reverse.s[["pos"]][[q9.index]]
                 list(
                     gr[x, consensusCluster],
                     gr[x, chr[[1]]],

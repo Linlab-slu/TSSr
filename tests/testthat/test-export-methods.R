@@ -22,9 +22,8 @@ test_that("exportClustersToBed runs without print() calls", {
     old_wd <- setwd(tmpdir)
     on.exit(setwd(old_wd))
 
-    result <- consensusCluster(exampleTSSr, useMultiCore = FALSE)
     # This exercises the BED export code including the show() path
     expect_no_error(
-        exportClustersToBed(result, data = "consensusClusters")
+        exportClustersToBed(exampleTSSr, data = "consensusClusters")
     )
 })
