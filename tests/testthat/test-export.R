@@ -75,6 +75,203 @@ test_that("exportTSStable keeps raw and processed data semantics distinct", {
     })
 })
 
+test_that("exportTSStable uses a custom prefix with the established suffix", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        exportTSStable(
+            exampleTSSr,
+            data = "raw",
+            merged = FALSE,
+            outputPrefix = "project1"
+        )
+        exportTSStable(
+            exampleTSSr,
+            data = "raw",
+            merged = TRUE,
+            outputPrefix = "project2"
+        )
+        exportTSStable(
+            exampleTSSr,
+            data = "processed",
+            outputPrefix = "project3"
+        )
+
+        expect_true(file.exists("project1.TSS.raw.txt"))
+        expect_true(file.exists("project2.TSS.raw.merged.txt"))
+        expect_true(file.exists("project3.TSS.processed.txt"))
+        expect_false(file.exists("ALL.samples.TSS.raw.txt"))
+        expect_exported_table(
+            "project1.TSS.raw.txt",
+            exampleTSSr@TSSrawMatrix
+        )
+        expect_exported_table(
+            "project3.TSS.processed.txt",
+            exampleTSSr@TSSprocessedMatrix
+        )
+        header <- readLines("project1.TSS.raw.txt", n = 5L)
+        expect_true(any(grepl("^# dataType: raw$", header)))
+    })
+})
+
+test_that("exportTSStable accepts an explicit dot-separated suffix", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        exportTSStable(
+            exampleTSSr,
+            data = "raw",
+            merged = FALSE,
+            outputPrefix = "project1",
+            outputSuffix = "TSS.raw.txt"
+        )
+
+        expect_true(file.exists("project1.TSS.raw.txt"))
+        expect_false(file.exists("ALL.samples.TSS.raw.txt"))
+    })
+})
+
+test_that("exportTSStable refuses to overwrite an existing file by default", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        target <- "project1.TSS.raw.txt"
+        writeLines("keep this file", target)
+
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = "project1"
+            ),
+            "already exists.*outputPrefix.*overwrite = TRUE"
+        )
+        expect_identical(readLines(target), "keep this file")
+
+        expect_no_error(exportTSStable(
+            exampleTSSr,
+            data = "raw",
+            merged = FALSE,
+            outputPrefix = "project1",
+            overwrite = TRUE
+        ))
+        expect_exported_table(target, exampleTSSr@TSSrawMatrix)
+    })
+})
+
+test_that("exportTSStable rejects a suffix that contradicts the data type", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = "project1",
+                outputSuffix = "TSS.processed.txt"
+            ),
+            "raw data.*processed.*outputSuffix"
+        )
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "processed",
+                outputPrefix = "project1",
+                outputSuffix = "TSS.raw.txt"
+            ),
+            "processed data.*raw.*outputSuffix"
+        )
+    })
+})
+
+test_that("exportTSStable keeps directory paths out of outputSuffix", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = "project1",
+                outputSuffix = "nested/TSS.raw.txt"
+            ),
+            "outputSuffix.*path separators"
+        )
+    })
+})
+
+test_that("exportTSStable requires one non-empty outputPrefix", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = ""
+            ),
+            "outputPrefix.*one non-empty string"
+        )
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = c("project1", "project2")
+            ),
+            "outputPrefix.*one non-empty string"
+        )
+    })
+})
+
+test_that("exportTSStable requires a single logical overwrite value", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = "project1",
+                overwrite = NA
+            ),
+            "overwrite must be TRUE or FALSE"
+        )
+    })
+})
+
+test_that("exportTSStable accepts an existing directory in outputPrefix", {
+    data(exampleTSSr)
+
+    withr::with_tempdir({
+        dir.create("results")
+        exportTSStable(
+            exampleTSSr,
+            data = "raw",
+            merged = FALSE,
+            outputPrefix = file.path("results", "project1")
+        )
+        expect_true(file.exists(file.path(
+            "results", "project1.TSS.raw.txt"
+        )))
+
+        expect_error(
+            exportTSStable(
+                exampleTSSr,
+                data = "raw",
+                merged = FALSE,
+                outputPrefix = file.path("missing", "project1")
+            ),
+            "Output directory does not exist.*missing"
+        )
+    })
+})
+
 test_that("exportClustersTable writes tag cluster tables", {
     data(exampleTSSr)
     tmpdir <- tempdir()

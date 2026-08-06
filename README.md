@@ -222,9 +222,18 @@ TSS calling from bam files or retrieving TSS data from TSS table
   `exportTSStable(..., data = "raw", merged = FALSE)` writes these data to
   "ALL.samples.TSS.raw.txt" for reuse in TSSr or other tools. Setting
   `merged = TRUE` instead combines raw counts according to `mergeIndex` and
-  writes "ALL.samples.TSS.raw.merged.txt".
+  writes "ALL.samples.TSS.raw.merged.txt". Set `outputPrefix` to change the
+  beginning of the filename while retaining the established suffix. Existing
+  files are protected by default; use `overwrite = TRUE` only when replacement
+  is intentional.
 
-        exportTSStable(myTSSr, data = "raw", merged = FALSE)
+        exportTSStable(
+            myTSSr,
+            data = "raw",
+            merged = FALSE,
+            outputPrefix = "project1"
+        )
+        # Writes project1.TSS.raw.txt
 
 * Independent raw-count TSS tables can be combined without rerunning TSS
   calling. Each input file may contain one or multiple samples, and any number
@@ -232,8 +241,8 @@ TSS calling from bam files or retrieving TSS data from TSS table
   `chr`, `pos`, and `strand`; missing sample values are filled with zero.
 
         combined <- combineTSSTables(
-            c("sample1.tsv", "sample2.tsv", "project3.tsv"),
-            outputFile = "combined.raw.tsv"
+            c("sample1.txt", "sample2.txt", "project3.txt"),
+            outputFile = "combined.TSS.raw.txt"
         )
 
   To extract selected samples, specify their column names. The function does
@@ -241,9 +250,9 @@ TSS calling from bam files or retrieving TSS data from TSS table
   samples are zero are removed.
 
         control <- splitTSSTable(
-            "combined.raw.tsv",
+            "combined.TSS.raw.txt",
             samples = c("SL01", "SL02"),
-            outputFile = "control.raw.tsv"
+            outputFile = "control.TSS.raw.txt"
         )
 
   These operations accept only finite, non-negative integer raw counts.

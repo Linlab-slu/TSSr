@@ -5,17 +5,36 @@
 \alias{exportTSStable,TSSr-method}
 \title{Export TSS tables}
 \usage{
-exportTSStable(object, data = "raw", merged = TRUE)
+exportTSStable(object, data = "raw", merged = TRUE,
+outputPrefix = "ALL.samples", outputSuffix = NULL, overwrite = FALSE)
 
-\S4method{exportTSStable}{TSSr}(object, data = "raw", merged = TRUE)
+\S4method{exportTSStable}{TSSr}(
+  object,
+  data = "raw",
+  merged = TRUE,
+  outputPrefix = "ALL.samples",
+  outputSuffix = NULL,
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{object}{A TSSr object.}
 
-\item{data}{Specify which data will be exported: "raw" or "processed". Default is "raw".}
+\item{data}{Specify which data will be exported: "raw" or "processed".
+Default is "raw".}
 
 \item{merged}{Logical indicating whether raw sample columns should be merged
 according to \code{mergeIndex}. Used only if \code{data = "raw"}.}
+
+\item{outputPrefix}{A non-empty prefix for the output filename. It may
+include a directory path. The default is \code{"ALL.samples"}.}
+
+\item{outputSuffix}{Optional complete filename suffix without a leading
+period or directory path. When \code{NULL}, the suffix is derived from
+\code{data} and \code{merged}.}
+
+\item{overwrite}{Logical indicating whether an existing output file may be
+replaced. The default is \code{FALSE}.}
 }
 \value{
 Invisibly returns \code{NULL} after writing a TSS table.
@@ -24,16 +43,20 @@ Invisibly returns \code{NULL} after writing a TSS table.
 Exports TSS tables to text file.
 }
 \details{
-Raw exports always use \code{TSSrawMatrix}. With
-  \code{merged = FALSE}, the file is \code{ALL.samples.TSS.raw.txt}; with
-  \code{merged = TRUE}, raw counts are combined according to
-  \code{mergeIndex} and written to
-  \code{ALL.samples.TSS.raw.merged.txt}. Processed data are written to
-  \code{ALL.samples.TSS.processed.txt}.
+Raw exports always use \code{TSSrawMatrix}. The default suffix is
+  \code{TSS.raw.txt} when \code{merged = FALSE} and
+  \code{TSS.raw.merged.txt} when \code{merged = TRUE}. Processed data use
+  \code{TSS.processed.txt}. Existing calls therefore retain the original
+  default filenames beginning with \code{ALL.samples}. A contradictory
+  custom suffix, such as \code{TSS.processed.txt} for raw data, is rejected.
+  Existing files are not replaced unless \code{overwrite = TRUE}.
 }
 \examples{
 data(exampleTSSr)
-oldwd <- setwd(tempdir())
-exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
-setwd(oldwd)
+prefix <- file.path(tempdir(), "project1")
+exportTSStable(
+    exampleTSSr, data = "raw", merged = FALSE,
+    outputPrefix = prefix
+)
+unlink(paste0(prefix, ".TSS.raw.txt"))
 }

@@ -1,5 +1,11 @@
 # TSSr 0.99.19 (2026-07-30)
 
+* `exportTSStable()` now accepts `outputPrefix` and `outputSuffix` while
+  retaining the established `TSS.raw.txt`, `TSS.raw.merged.txt`, and
+  `TSS.processed.txt` suffixes by default. Existing output files are no longer
+  silently replaced: callers must explicitly set `overwrite = TRUE` to
+  replace one.
+
 * Added `combineTSSTables()` and `splitTSSTable()` for assembling any number
   of independent raw-count TSS tables and extracting explicit sample columns.
   The functions align the union of `chr`, `pos`, and `strand` coordinates,

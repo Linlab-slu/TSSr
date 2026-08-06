@@ -114,8 +114,8 @@ same interface can extract selected samples while removing positions that are
 zero in every selected column.
 
 ```{r TSStable-combine-split}
-part1 <- file.path(tempdir(), "TSSr-SL01-SL02.tsv")
-part2 <- file.path(tempdir(), "TSSr-SL03-SL04.tsv")
+part1 <- file.path(tempdir(), "TSSr.SL01.SL02.txt")
+part2 <- file.path(tempdir(), "TSSr.SL03.SL04.txt")
 splitTSSTable(
     exampleInput, c("SL01", "SL02"), part1, overwrite = TRUE
 )
@@ -255,8 +255,12 @@ TSSr provides several export functions for saving results:
 ```{r export}
 oldwd <- setwd(tempdir())
 
-# Export processed TSS values to ALL.samples.TSS.processed.txt
-exportTSStable(myTSSr, data = "processed")
+# Export processed TSS values to project1.TSS.processed.txt
+exportTSStable(
+    myTSSr,
+    data = "processed",
+    outputPrefix = file.path(tempdir(), "project1")
+)
 
 # Export cluster tables
 exportClustersTable(myTSSr, data = "assigned")

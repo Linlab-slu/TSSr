@@ -47,8 +47,8 @@ Input tables must begin with \code{chr}, \code{pos}, and
 fixture <- system.file(
     "extdata", "example-tss-table.tsv", package = "TSSr"
 )
-part1 <- tempfile(fileext = ".tsv")
-part2 <- tempfile(fileext = ".tsv")
+part1 <- tempfile(fileext = ".txt")
+part2 <- tempfile(fileext = ".txt")
 splitTSSTable(fixture, c("SL01", "SL02"), part1)
 splitTSSTable(fixture, c("SL03", "SL04"), part2)
 combined <- combineTSSTables(c(part1, part2))

@@ -60,6 +60,70 @@
     invisible(value)
 }
 
+.resolveTSStableExportFile <- function(data, merged, outputPrefix,
+                                       outputSuffix, overwrite) {
+    .validateTSStableFlag(overwrite, "overwrite")
+    if (!is.character(data) || length(data) != 1L || is.na(data) ||
+        !data %in% c("raw", "processed")) {
+        stop("No data for the given TSS data type!")
+    }
+    if (!is.character(outputPrefix) || length(outputPrefix) != 1L ||
+        is.na(outputPrefix) || !nzchar(trimws(outputPrefix))) {
+        stop("outputPrefix must be one non-empty string.")
+    }
+
+    default_suffix <- if (identical(data, "processed")) {
+        "TSS.processed.txt"
+    } else if (isTRUE(merged)) {
+        "TSS.raw.merged.txt"
+    } else {
+        "TSS.raw.txt"
+    }
+    suffix <- if (is.null(outputSuffix)) default_suffix else outputSuffix
+    if (!is.character(suffix) || length(suffix) != 1L || is.na(suffix) ||
+        !nzchar(suffix)) {
+        stop("outputSuffix must be NULL or one non-empty string.")
+    }
+    if (grepl("[/\\\\]", suffix)) {
+        stop(
+            "outputSuffix must not contain path separators; put the ",
+            "directory in outputPrefix."
+        )
+    }
+
+    has_token <- function(token) {
+        grepl(
+            paste0("(^|[._-])", token, "([._-]|$)"),
+            tolower(suffix),
+            perl = TRUE
+        )
+    }
+    if (identical(data, "raw") && has_token("processed")) {
+        stop(
+            "Cannot export raw data with a processed outputSuffix: ",
+            suffix, "."
+        )
+    }
+    if (identical(data, "processed") && has_token("raw")) {
+        stop(
+            "Cannot export processed data with a raw outputSuffix: ",
+            suffix, "."
+        )
+    }
+
+    output_file <- paste0(outputPrefix, ".", suffix)
+    if (!dir.exists(dirname(output_file))) {
+        stop("Output directory does not exist: ", dirname(output_file))
+    }
+    if (file.exists(output_file) && !overwrite) {
+        stop(
+            "Output file already exists: ", output_file, ". Change ",
+            "outputPrefix/outputSuffix or set overwrite = TRUE."
+        )
+    }
+    output_file
+}
+
 .writeTSStableWithMetadata <- function(x, file, metadata, overwrite) {
     if (length(file) != 1L || is.na(file) || !nzchar(file)) {
         stop("outputFile must be one non-empty file path.")
@@ -257,8 +321,8 @@
 #' fixture <- system.file(
 #'     "extdata", "example-tss-table.tsv", package = "TSSr"
 #' )
-#' part1 <- tempfile(fileext = ".tsv")
-#' part2 <- tempfile(fileext = ".tsv")
+#' part1 <- tempfile(fileext = ".txt")
+#' part2 <- tempfile(fileext = ".txt")
 #' splitTSSTable(fixture, c("SL01", "SL02"), part1)
 #' splitTSSTable(fixture, c("SL03", "SL04"), part2)
 #' combined <- combineTSSTables(c(part1, part2))

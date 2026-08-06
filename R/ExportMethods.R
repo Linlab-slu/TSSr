@@ -374,46 +374,72 @@ setMethod("plotTSS", signature(object = "TSSr"), function(
 #' Export TSS tables
 #'
 #' @description Exports TSS tables to text file.
-#' @usage exportTSStable(object, data = "raw", merged = TRUE)
+#' @usage exportTSStable(object, data = "raw", merged = TRUE,
+#' outputPrefix = "ALL.samples", outputSuffix = NULL, overwrite = FALSE)
 #'
 #' @param object A TSSr object.
-#' @param data Specify which data will be exported: "raw" or "processed". Default is "raw".
+#' @param data Specify which data will be exported: "raw" or "processed".
+#'   Default is "raw".
 #' @param merged Logical indicating whether raw sample columns should be merged
 #'   according to \code{mergeIndex}. Used only if \code{data = "raw"}.
+#' @param outputPrefix A non-empty prefix for the output filename. It may
+#'   include a directory path. The default is \code{"ALL.samples"}.
+#' @param outputSuffix Optional complete filename suffix without a leading
+#'   period or directory path. When \code{NULL}, the suffix is derived from
+#'   \code{data} and \code{merged}.
+#' @param overwrite Logical indicating whether an existing output file may be
+#'   replaced. The default is \code{FALSE}.
 #' @return Invisibly returns \code{NULL} after writing a TSS table.
 #'
-#' @details Raw exports always use \code{TSSrawMatrix}. With
-#'   \code{merged = FALSE}, the file is \code{ALL.samples.TSS.raw.txt}; with
-#'   \code{merged = TRUE}, raw counts are combined according to
-#'   \code{mergeIndex} and written to
-#'   \code{ALL.samples.TSS.raw.merged.txt}. Processed data are written to
-#'   \code{ALL.samples.TSS.processed.txt}.
+#' @details Raw exports always use \code{TSSrawMatrix}. The default suffix is
+#'   \code{TSS.raw.txt} when \code{merged = FALSE} and
+#'   \code{TSS.raw.merged.txt} when \code{merged = TRUE}. Processed data use
+#'   \code{TSS.processed.txt}. Existing calls therefore retain the original
+#'   default filenames beginning with \code{ALL.samples}. A contradictory
+#'   custom suffix, such as \code{TSS.processed.txt} for raw data, is rejected.
+#'   Existing files are not replaced unless \code{overwrite = TRUE}.
 #'
 #' @export
 #'
 #' @examples
 #' data(exampleTSSr)
-#' oldwd <- setwd(tempdir())
-#' exportTSStable(exampleTSSr, data = "raw", merged = TRUE)
-#' setwd(oldwd)
-setGeneric("exportTSStable", function(object, data = "raw", merged = TRUE) standardGeneric("exportTSStable"), signature = "object")
+#' prefix <- file.path(tempdir(), "project1")
+#' exportTSStable(
+#'     exampleTSSr, data = "raw", merged = FALSE,
+#'     outputPrefix = prefix
+#' )
+#' unlink(paste0(prefix, ".TSS.raw.txt"))
+setGeneric("exportTSStable", function(
+  object,
+  data = "raw",
+  merged = TRUE,
+  outputPrefix = "ALL.samples",
+  outputSuffix = NULL,
+  overwrite = FALSE
+) standardGeneric("exportTSStable"), signature = "object")
 #' @rdname exportTSStable
 #' @export
-setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, merged) {
+setMethod("exportTSStable", signature(object = "TSSr"), function(
+  object,
+  data,
+  merged,
+  outputPrefix,
+  outputSuffix,
+  overwrite
+) {
     message("Exporting TSS table...")
-    if (data == "raw") {
+    output_file <- .resolveTSStableExportFile(
+        data, merged, outputPrefix, outputSuffix, overwrite
+    )
+
+    if (identical(data, "raw")) {
         if (isTRUE(merged)) {
             tss <- .mergeRawTSS(object)
-            output_file <- "ALL.samples.TSS.raw.merged.txt"
         } else {
             tss <- object@TSSrawMatrix
-            output_file <- "ALL.samples.TSS.raw.txt"
         }
-    } else if (data == "processed") {
-        tss <- object@TSSprocessedMatrix
-        output_file <- "ALL.samples.TSS.processed.txt"
     } else {
-        stop("No data for the given TSS data type!")
+        tss <- object@TSSprocessedMatrix
     }
     metadata <- .TSStableMetadata(
         data,
@@ -421,7 +447,7 @@ setMethod("exportTSStable", signature(object = "TSSr"), function(object, data, m
         unique(as.character(tss[["chr"]]))
     )
     .writeTSStableWithMetadata(
-        tss, output_file, metadata, overwrite = TRUE
+        tss, output_file, metadata, overwrite = overwrite
     )
     invisible(NULL)
 })
