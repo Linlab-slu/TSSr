@@ -114,7 +114,6 @@
 }
 
 .removeNewG <- function(readsGR.p, readsGR.m, Genome) {
-    message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
     readsGR.p <- .trimUncodedGOneStrand(readsGR.p, Genome, minusStrand = FALSE)
     readsGR.m <- .trimUncodedGOneStrand(readsGR.m, Genome, minusStrand = TRUE)
 
@@ -136,7 +135,9 @@
     TSS <- TSS[, c("chr", "pos", "strand")]
     TSS$tag_count <- 1
     setDT(TSS)
-    TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
+    TSS <- TSS[, list(
+        tag_count = as.integer(sum(tag_count))
+    ), by = list(chr, pos, strand)]
 
     TSS
 }
@@ -145,7 +146,8 @@
   bam.files, Genome, sampleLabels, inputFilesType,
   sequencingQualityThreshold,
   mappingQualityThreshold,
-  softclippingAllowed
+  softclippingAllowed,
+  bamYieldSize
 ) {
     ## define variable as a NULL value
     chr <- pos <- tag_count <- strand <- NULL
@@ -166,62 +168,46 @@
             isFirstMateRead = TRUE
         )
     }
-    chunksize <- 1e6
     first <- TRUE
     for (i in seq_len(length(bam.files))) {
         message("\nReading in file: ", bam.files[i], "...")
-        bam <- scanBam(bam.files[i], param = param)
         message("\t-> Filtering out low quality reads...")
-        qual <- bam[[1]]$qual
-        start <- 1
-        # chunksize <- 1e6
-        qa.avg <- vector(mode = "integer")
-        repeat {
-            if (start + chunksize <= length(qual)) {
-                end <- start + chunksize
-            } else {
-                end <- length(qual)
-            }
-            qa.avg <- c(qa.avg, as.integer(vapply(as(qual[start:end], "IntegerList"), mean, numeric(1))))
-            if (end == length(qual)) {
-                break
-            } else {
-                start <- end + 1
-            }
+        if (!softclippingAllowed) {
+            message("\t-> Removing the bases of the reads if mismatched 'Gs'...")
         }
-        cigar <- bam[[1]]$cigar
-        start <- 1
-        # chunksize <- 1e6
-        mapped.length <- vector(mode = "integer")
-        repeat {
-            if (start + chunksize <= length(cigar)) {
-                end <- start + chunksize
-            } else {
-                end <- length(cigar)
-            }
-            mapped.length <- c(mapped.length, .cigarReferenceWidth(cigar[start:end]))
-            if (end == length(cigar)) {
-                break
-            } else {
-                start <- end + 1
-            }
-        }
-        readsGR <- GRanges(
-            seqnames = as.vector(bam[[1]]$rname), IRanges(start = bam[[1]]$pos, width = mapped.length),
-            strand = bam[[1]]$strand, qual = qa.avg, mapq = bam[[1]]$mapq, seq = bam[[1]]$seq, read.length = width(bam[[1]]$seq),
-            flag = bam[[1]]$flag
+        bamFile <- Rsamtools::BamFile(
+            bam.files[i], yieldSize = bamYieldSize
         )
-        readsGR <- readsGR[as.character(seqnames(readsGR)) %in% seqnames(Genome)]
-        readsGR <- readsGR[!(end(readsGR) > seqlengths(Genome)[as.character(seqnames(readsGR))])]
-        GenomicRanges::elementMetadata(readsGR)$mapq[is.na(GenomicRanges::elementMetadata(readsGR)$mapq)] <- Inf
-        readsGR.p <- readsGR[(as.character(strand(readsGR)) == "+" & GenomicRanges::elementMetadata(readsGR)$qual >=
-            sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-        readsGR.m <- readsGR[(as.character(strand(readsGR)) == "-" & GenomicRanges::elementMetadata(readsGR)$qual >=
-            sequencingQualityThreshold) & GenomicRanges::elementMetadata(readsGR)$mapq >= mappingQualityThreshold]
-        if (softclippingAllowed) {
-            TSS <- .makeTSSFromGRanges(readsGR.p, readsGR.m)
+        open(bamFile)
+        chunk.tables <- tryCatch({
+            chunks <- list()
+            repeat {
+                bam <- scanBam(bamFile, param = param)
+                if (length(bam[[1L]]$pos) == 0L) {
+                    break
+                }
+                chunk <- .bamChunkToTSS(
+                    bam,
+                    Genome,
+                    sequencingQualityThreshold,
+                    mappingQualityThreshold,
+                    softclippingAllowed
+                )
+                if (nrow(chunk) > 0L) {
+                    chunks[[length(chunks) + 1L]] <- chunk
+                }
+            }
+            chunks
+        }, finally = {
+            close(bamFile)
+        })
+
+        if (length(chunk.tables) == 0L) {
+            TSS <- .emptyTSSCounts()
         } else {
-            TSS <- .removeNewG(readsGR.p, readsGR.m, Genome)
+            TSS <- rbindlist(chunk.tables, use.names = TRUE)
+            TSS <- TSS[, list(tag_count = as.integer(sum(tag_count))),
+                by = list(chr, pos, strand)]
         }
 
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
@@ -237,6 +223,62 @@
     TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
     TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
     return(TSS.all.samples)
+}
+
+.emptyTSSCounts <- function() {
+    data.table(
+        chr = character(),
+        pos = integer(),
+        strand = character(),
+        tag_count = integer()
+    )
+}
+
+.bamChunkToTSS <- function(
+  bam, Genome, sequencingQualityThreshold, mappingQualityThreshold,
+  softclippingAllowed
+) {
+    qa.avg <- as.integer(vapply(
+        as(bam[[1L]]$qual, "IntegerList"), mean, numeric(1)
+    ))
+    mapped.length <- .cigarReferenceWidth(bam[[1L]]$cigar)
+    readsGR <- GRanges(
+        seqnames = as.vector(bam[[1L]]$rname),
+        IRanges(start = bam[[1L]]$pos, width = mapped.length),
+        strand = bam[[1L]]$strand,
+        qual = qa.avg,
+        mapq = bam[[1L]]$mapq,
+        seq = bam[[1L]]$seq,
+        read.length = width(bam[[1L]]$seq),
+        flag = bam[[1L]]$flag
+    )
+    readsGR <- readsGR[as.character(seqnames(readsGR)) %in% seqnames(Genome)]
+    readsGR <- readsGR[
+        !(end(readsGR) >
+            seqlengths(Genome)[as.character(seqnames(readsGR))])
+    ]
+    GenomicRanges::elementMetadata(readsGR)$mapq[
+        is.na(GenomicRanges::elementMetadata(readsGR)$mapq)
+    ] <- Inf
+    readsGR.p <- readsGR[
+        as.character(strand(readsGR)) == "+" &
+            GenomicRanges::elementMetadata(readsGR)$qual >=
+                sequencingQualityThreshold &
+            GenomicRanges::elementMetadata(readsGR)$mapq >=
+                mappingQualityThreshold
+    ]
+    readsGR.m <- readsGR[
+        as.character(strand(readsGR)) == "-" &
+            GenomicRanges::elementMetadata(readsGR)$qual >=
+                sequencingQualityThreshold &
+            GenomicRanges::elementMetadata(readsGR)$mapq >=
+                mappingQualityThreshold
+    ]
+    if (softclippingAllowed) {
+        .makeTSSFromGRanges(readsGR.p, readsGR.m)
+    } else {
+        .removeNewG(readsGR.p, readsGR.m, Genome)
+    }
 }
 
 ################################################################################

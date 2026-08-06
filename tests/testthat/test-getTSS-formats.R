@@ -155,7 +155,8 @@ test_that("getTSS counts only first mates from proper BAM pairs", {
         object,
         sequencingQualityThreshold = 10,
         mappingQualityThreshold = 20,
-        softclippingAllowed = TRUE
+        softclippingAllowed = TRUE,
+        bamYieldSize = 1L
     )
     observed <- TSSmatrix(result, data = "raw")
 

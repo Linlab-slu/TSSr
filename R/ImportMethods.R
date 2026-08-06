@@ -12,8 +12,14 @@
 #' that every path in the \code{inputFiles} slot identifies an existing file
 #' and reports all invalid paths in a single error.
 #'
+#' BAM inputs are read in bounded chunks rather than loaded into memory in
+#' their entirety. Changing \code{bamYieldSize} changes only the number of
+#' alignments processed per chunk; it does not change TSS coordinates or
+#' counts.
+#'
 #' @usage getTSS(object, sequencingQualityThreshold = 10,
-#' mappingQualityThreshold = 20, softclippingAllowed = FALSE)
+#' mappingQualityThreshold = 20, softclippingAllowed = FALSE,
+#' bamYieldSize = 1000000L)
 #'
 #' @param object A TSSr object.
 #' @param sequencingQualityThreshold Used only if inputFilesType == "bam" or
@@ -26,6 +32,9 @@
 #' trailing C bases on minus-strand reads as transcript-sense G bases.
 #' When TRUE, TSSr uses the aligner's aligned 5' boundary directly and
 #' skips uncoded G correction.
+#' @param bamYieldSize Number of BAM alignments read per chunk. Used only for
+#'   \code{inputFilesType = "bam"} or \code{"bamPairedEnd"}. Must be a single
+#'   positive whole number. Default is 1,000,000 alignments.
 #' @return A modified TSSr object with updated \code{TSSrawMatrix},
 #'   \code{TSSprocessedMatrix}, and \code{librarySizes} slots. The input
 #'   object is not modified; assign the returned object to retain the changes.
@@ -50,7 +59,8 @@ setGeneric("getTSS", function(
   object,
   sequencingQualityThreshold = 10,
   mappingQualityThreshold = 20,
-  softclippingAllowed = FALSE
+  softclippingAllowed = FALSE,
+  bamYieldSize = 1000000L
 ) standardGeneric("getTSS"), signature = "object")
 #' @rdname getTSS
 #' @export
@@ -58,7 +68,8 @@ setMethod("getTSS", signature(object = "TSSr"), function(
   object,
   sequencingQualityThreshold,
   mappingQualityThreshold,
-  softclippingAllowed
+  softclippingAllowed,
+  bamYieldSize
 ) {
     ## initialize values
     pos <- NULL
@@ -95,6 +106,16 @@ setMethod("getTSS", signature(object = "TSSr"), function(
     object@sampleLabelsMerged <- grouping$sampleLabelsMerged
     object@mergeIndex <- grouping$mergeIndex
 
+    if (inputFilesType == "bam" | inputFilesType == "bamPairedEnd") {
+        if (length(bamYieldSize) != 1L || !is.numeric(bamYieldSize) ||
+                is.na(bamYieldSize) || !is.finite(bamYieldSize) ||
+                bamYieldSize <= 0 || bamYieldSize != trunc(bamYieldSize) ||
+                bamYieldSize > .Machine$integer.max) {
+            stop("bamYieldSize must be a single positive whole number.")
+        }
+        bamYieldSize <- as.integer(bamYieldSize)
+    }
+
     Genome <- .getGenome(object@genomeName)
 
     if (inputFilesType == "bam" | inputFilesType == "bamPairedEnd") {
@@ -105,7 +126,8 @@ setMethod("getTSS", signature(object = "TSSr"), function(
             inputFilesType,
             sequencingQualityThreshold,
             mappingQualityThreshold,
-            softclippingAllowed
+            softclippingAllowed,
+            bamYieldSize
         )
     } else if (inputFilesType == "bed") {
         tss <- .getTSS_from_bed(object@inputFiles, Genome, sampleLabels)

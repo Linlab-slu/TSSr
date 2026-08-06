@@ -7,13 +7,15 @@
 BigWig files, tss files, or tss tables.}
 \usage{
 getTSS(object, sequencingQualityThreshold = 10,
-mappingQualityThreshold = 20, softclippingAllowed = FALSE)
+mappingQualityThreshold = 20, softclippingAllowed = FALSE,
+bamYieldSize = 1000000L)
 
 \S4method{getTSS}{TSSr}(
   object,
   sequencingQualityThreshold = 10,
   mappingQualityThreshold = 20,
-  softclippingAllowed = FALSE
+  softclippingAllowed = FALSE,
+  bamYieldSize = 1000000L
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ uncoded G correction to leading G bases on plus-strand reads and
 trailing C bases on minus-strand reads as transcript-sense G bases.
 When TRUE, TSSr uses the aligner's aligned 5' boundary directly and
 skips uncoded G correction.}
+
+\item{bamYieldSize}{Number of BAM alignments read per chunk. Used only for
+\code{inputFilesType = "bam"} or \code{"bamPairedEnd"}. Must be a single
+positive whole number. Default is 1,000,000 alignments.}
 }
 \value{
 A modified TSSr object with updated \code{TSSrawMatrix},
@@ -48,6 +54,11 @@ Input files do not need to exist when the \code{TSSr} object is
 created. Before loading the genome or reading data, \code{getTSS()} checks
 that every path in the \code{inputFiles} slot identifies an existing file
 and reports all invalid paths in a single error.
+
+BAM inputs are read in bounded chunks rather than loaded into memory in
+their entirety. Changing \code{bamYieldSize} changes only the number of
+alignments processed per chunk; it does not change TSS coordinates or
+counts.
 }
 \examples{
 exampleInput <- system.file(

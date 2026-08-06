@@ -1,5 +1,12 @@
 # TSSr 0.99.19 (2026-07-30)
 
+* `getTSS()` now streams BAM and paired-end BAM inputs in bounded chunks.
+  The new `bamYieldSize` argument controls the number of alignments read per
+  chunk and defaults to one million. Chunk processing stops only at end of
+  file, so exact chunk multiples and fully filtered inputs cannot create an
+  extra empty record. Chunked imports retain the current reference-CIGAR,
+  strand, terminal-G, quality, and proper-first-mate behavior.
+
 * `exportTSStable()` now accepts `outputPrefix` and `outputSuffix` while
   retaining the established `TSS.raw.txt`, `TSS.raw.merged.txt`, and
   `TSS.processed.txt` suffixes by default. Existing output files are no longer
