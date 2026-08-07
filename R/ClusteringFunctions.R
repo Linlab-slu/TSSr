@@ -60,12 +60,12 @@
     }
 
     priority <- order(-tags, positions)
-    left <- findInterval(
-        positions - peakDistance,
+    left <- findInterval(positions - peakDistance, positions) + 1L
+    right <- findInterval(
+        positions + peakDistance,
         positions,
         left.open = TRUE
-    ) + 1L
-    right <- findInterval(positions + peakDistance, positions)
+    )
     suppressed <- logical(n)
     selected <- integer(n)
     selected_count <- 0L

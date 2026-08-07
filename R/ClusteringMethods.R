@@ -4,7 +4,7 @@
 #' @description Clusters TSSs within small genomic regions into tag clusters (TCs)
 #' using the "peakclu" or "peakcluMax" method. "peakclu" identifies local
 #' maxima in open peak-distance windows. "peakcluMax" greedily retains the
-#' strongest remaining TSS and suppresses candidates in its closed
+#' strongest remaining TSS and suppresses candidates in its open
 #' peak-distance window. Ties are resolved in favor of the lower genomic
 #' position.
 #'

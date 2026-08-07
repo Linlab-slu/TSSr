@@ -35,7 +35,7 @@ test_that("peakcluMax keeps the next strongest unsuppressed peak", {
     expect_identical(clusters$dominant_tss, c(1L, 181L))
 })
 
-test_that("peakcluMax suppresses positions exactly peakDistance away", {
+test_that("peakcluMax retains positions exactly peakDistance apart", {
     object <- make_peakclu_max_test_object(
         positions = c(100, 200, 301),
         tags = c(10, 9, 8)
@@ -52,7 +52,7 @@ test_that("peakcluMax suppresses positions exactly peakDistance away", {
     )
     clusters <- as.data.frame(result@tagClusters$sample)
 
-    expect_identical(clusters$dominant_tss, c(100L, 301L))
+    expect_identical(clusters$dominant_tss, c(100L, 200L, 301L))
 })
 
 test_that("peakcluMax resolves equal signals to the lowest position", {
@@ -84,8 +84,8 @@ test_that("peakcluMax selector matches a brute-force greedy reference", {
             if (suppressed[[index]]) next
             selected <- c(selected, index)
             suppressed[
-                positions >= positions[[index]] - peak_distance &
-                    positions <= positions[[index]] + peak_distance
+                positions > positions[[index]] - peak_distance &
+                    positions < positions[[index]] + peak_distance
             ] <- TRUE
         }
         sort(selected)
@@ -106,6 +106,40 @@ test_that("peakcluMax selector matches a brute-force greedy reference", {
                 positions, tags, peak_distance
             ),
             brute_force(positions, tags, peak_distance),
+            info = paste("iteration", iteration)
+        )
+    }
+})
+
+test_that("peakcluMax retains every ordinary open-window local peak", {
+    set.seed(20260807)
+    for (iteration in seq_len(100L)) {
+        size <- sample(2:500, 1L)
+        positions <- sort(sample.int(size * 10L, size))
+        tags <- sample(c(1:20, rep(10, 10), rep(20, 5)),
+            size,
+            replace = TRUE
+        )
+        peak_distance <- sample(1:200, 1L)
+        left <- findInterval(
+            positions - peak_distance,
+            positions,
+            left.open = TRUE
+        ) + 1L
+        right <- findInterval(positions + peak_distance, positions)
+        equal_upper <- right > 0L &
+            positions[right] == positions + peak_distance
+        right[equal_upper] <- right[equal_upper] - 1L
+        local_peaks <- which(
+            seq_along(positions) ==
+                TSSr:::.rangeMaxFirstIndex(tags)$query(left, right)
+        )
+        maximum_peaks <- TSSr:::.selectPeakMaxIndices(
+            positions, tags, peak_distance
+        )
+
+        expect_true(
+            all(local_peaks %in% maximum_peaks),
             info = paste("iteration", iteration)
         )
     }

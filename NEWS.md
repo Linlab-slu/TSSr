@@ -3,9 +3,18 @@
 * Added `clusterTSS(method = "peakcluMax")`, a greedy maximum-signal
   alternative to the published `peakclu` method. It repeatedly retains the
   strongest remaining TSS, resolves ties toward the lower genomic position,
-  and suppresses candidates in the retained peak's closed `peakDistance`
+  and suppresses candidates in the retained peak's open `peakDistance`
   window. Peak selection is implemented in O(n log n) time and O(n) memory;
   the default remains `method = "peakclu"`.
+
+* Aligned the `peakcluMax` distance boundary with the published `peakclu`
+  convention. Peaks exactly `peakDistance` bases apart are now both eligible,
+  while only candidates strictly closer than the requested distance suppress
+  one another. This makes every ordinary `peakclu` local peak eligible in the
+  greedy candidate set and removes an avoidable closed-boundary discrepancy.
+  Full yeast and Arabidopsis validation retained every `peakclu` dominant TSS;
+  the open boundary added 3--32 clusters per sample relative to the earlier
+  closed implementation.
 
 * Vectorized the shared tag-cluster assembly path used by `peakclu` and
   `peakcluMax`. Directional local filtering now uses indexed range maxima,
