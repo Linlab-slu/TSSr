@@ -1,5 +1,9 @@
 # TSSr 0.99.20 (2026-08-04)
 
+* Periodically compacted BAM chunk results by genomic coordinate during
+  `getTSS()` imports. This keeps the number of retained intermediate chunk
+  tables bounded while preserving exact integer counts and final row order.
+
 * Added `clusterTSS(method = "peakcluMax")`, a greedy maximum-signal
   alternative to the published `peakclu` method. It repeatedly retains the
   strongest remaining TSS, resolves ties toward the lower genomic position,

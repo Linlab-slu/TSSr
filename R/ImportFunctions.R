@@ -142,6 +142,29 @@
     TSS
 }
 
+.aggregateTSSCountTables <- function(tables) {
+    chr <- pos <- strand <- tag_count <- NULL
+
+    if (length(tables) == 0L) {
+        return(.emptyTSSCounts())
+    }
+
+    counts <- rbindlist(tables, use.names = TRUE)
+    counts[, list(
+        tag_count = as.integer(sum(tag_count))
+    ), by = list(chr, pos, strand)]
+}
+
+.appendTSSChunkTable <- function(
+  tables, chunk, compactionLimit = 8L
+) {
+    tables[[length(tables) + 1L]] <- chunk
+    if (length(tables) >= compactionLimit) {
+        return(list(.aggregateTSSCountTables(tables)))
+    }
+    tables
+}
+
 .getTSS_from_bam <- function(
   bam.files, Genome, sampleLabels, inputFilesType,
   sequencingQualityThreshold,
@@ -194,7 +217,7 @@
                     softclippingAllowed
                 )
                 if (nrow(chunk) > 0L) {
-                    chunks[[length(chunks) + 1L]] <- chunk
+                    chunks <- .appendTSSChunkTable(chunks, chunk)
                 }
             }
             chunks
@@ -202,13 +225,7 @@
             close(bamFile)
         })
 
-        if (length(chunk.tables) == 0L) {
-            TSS <- .emptyTSSCounts()
-        } else {
-            TSS <- rbindlist(chunk.tables, use.names = TRUE)
-            TSS <- TSS[, list(tag_count = as.integer(sum(tag_count))),
-                by = list(chr, pos, strand)]
-        }
+        TSS <- .aggregateTSSCountTables(chunk.tables)
 
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
         setkey(TSS, chr, pos, strand)

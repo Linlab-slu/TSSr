@@ -98,6 +98,37 @@ test_that("getTSS streams BAM input one alignment at a time", {
     expect_identical(librarySizes(result), c(sample = 13))
 })
 
+test_that("BAM chunk accumulation compacts counts without changing them", {
+    chunks <- list(
+        data.table::data.table(
+            chr = "chrI", pos = 100L, strand = "+", tag_count = 2L
+        ),
+        data.table::data.table(
+            chr = c("chrI", "chrI"),
+            pos = c(100L, 200L),
+            strand = c("+", "-"),
+            tag_count = c(3L, 4L)
+        )
+    )
+
+    compacted <- TSSr:::.appendTSSChunkTable(
+        chunks[1L], chunks[[2L]], compactionLimit = 2L
+    )
+
+    expect_length(compacted, 1L)
+    expect_identical(
+        compacted[[1L]][order(chr, pos, strand)],
+        data.table::data.table(
+            chr = c("chrI", "chrI"),
+            pos = c(100L, 200L),
+            strand = c("+", "-"),
+            tag_count = c(5L, 4L)
+        )
+    )
+    expect_identical(typeof(compacted[[1L]]$pos), "integer")
+    expect_identical(typeof(compacted[[1L]]$tag_count), "integer")
+})
+
 test_that("BAM output is independent of chunk boundaries", {
     object <- make_example_bam_object()
     expected <- expected_example_bam_tss(correct_uncoded_g = TRUE)
