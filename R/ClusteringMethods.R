@@ -2,15 +2,19 @@
 #' Cluster TSSs into tag clusters
 #'
 #' @description Clusters TSSs within small genomic regions into tag clusters (TCs)
-#' using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.
-#' The minimum distance of two neighboring peaks can be specified.
+#' using the "peakclu" or "peakcluMax" method. "peakclu" identifies local
+#' maxima in open peak-distance windows. "peakcluMax" greedily retains the
+#' strongest remaining TSS and suppresses candidates in its closed
+#' peak-distance window. Ties are resolved in favor of the lower genomic
+#' position.
 #'
 #' @usage clusterTSS(object, method = "peakclu", peakDistance=100,extensionDistance=30
 #' , localThreshold = 0.02,clusterThreshold = 1, useMultiCore=FALSE, numCores=NULL)
 #'
 #'
 #' @param object  A TSSr object
-#' @param method  Clustering method to be used for clustering: "peakclu". Default is "peakclu".
+#' @param method Clustering method: \code{"peakclu"} or
+#'   \code{"peakcluMax"}. Default is \code{"peakclu"}.
 #' @param peakDistance  Minimum distance of two neighboring peaks. Default value = 100.
 #' @param extensionDistance Maximal distance between peak and its neighboring TSS or two
 #' neighboring TSSs to be grouped in the same cluster. Default value = 30.
@@ -61,6 +65,10 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
   object, method, peakDistance, extensionDistance,
   localThreshold, clusterThreshold, useMultiCore, numCores
 ) {
+    if (length(method) != 1L || is.na(method) ||
+            !method %in% c("peakclu", "peakcluMax")) {
+        stop("method must be one of 'peakclu' or 'peakcluMax'.")
+    }
     message("\nClustering TSS data with ", method, " method...")
     if (length(peakDistance) != 1L || !is.numeric(peakDistance) ||
             is.na(peakDistance) || !is.finite(peakDistance) ||
@@ -72,6 +80,11 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
 
     # initialize data
     tss.dt <- object@TSSprocessedMatrix
+    cluster_function <- if (method == "peakclu") {
+        .clusterByPeak
+    } else {
+        .clusterByPeakMax
+    }
 
     ## define variable as a NULL value
     chr <- pos <- cluster <- NULL
@@ -93,9 +106,9 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
                 tss <- temp[list(x)]
                 setkey(tss, NULL)
                 setorder(tss, pos)
-                if (method == "peakclu") {
-                    cluster.data <- .clusterByPeak(tss, peakDistance, localThreshold, extensionDistance)
-                }
+                cluster.data <- cluster_function(
+                    tss, peakDistance, localThreshold, extensionDistance
+                )
             }, mc.cores = numCores)
             tss.clusters <- rbindlist(clusters, use.names = TRUE, fill = TRUE)
             tss.clusters <- tss.clusters[tags > clusterThreshold, ]
@@ -114,9 +127,9 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
                 tss <- temp[list(x)]
                 setkey(tss, NULL)
                 setorder(tss, pos)
-                if (method == "peakclu") {
-                    cluster.data <- .clusterByPeak(tss, peakDistance, localThreshold, extensionDistance)
-                }
+                cluster.data <- cluster_function(
+                    tss, peakDistance, localThreshold, extensionDistance
+                )
             })
             tss.clusters <- rbindlist(clusters, use.names = TRUE, fill = TRUE)
             tss.clusters <- tss.clusters[tags > clusterThreshold, ]

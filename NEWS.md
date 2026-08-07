@@ -1,5 +1,12 @@
 # TSSr 0.99.20 (2026-08-04)
 
+* Added `clusterTSS(method = "peakcluMax")`, a greedy maximum-signal
+  alternative to the published `peakclu` method. It repeatedly retains the
+  strongest remaining TSS, resolves ties toward the lower genomic position,
+  and suppresses candidates in the retained peak's closed `peakDistance`
+  window. Peak selection is implemented in O(n log n) time and O(n) memory;
+  the default remains `method = "peakclu"`.
+
 * Made the 10th- and 90th-percentile TSS cluster boundaries deterministic
   across platforms. Cumulative signal that equals a percentile threshold
   within a scale-aware floating-point tolerance is now treated as having

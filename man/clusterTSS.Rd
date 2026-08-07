@@ -22,7 +22,8 @@ clusterTSS(object, method = "peakclu", peakDistance=100,extensionDistance=30
 \arguments{
 \item{object}{A TSSr object}
 
-\item{method}{Clustering method to be used for clustering: "peakclu". Default is "peakclu".}
+\item{method}{Clustering method: \code{"peakclu"} or
+\code{"peakcluMax"}. Default is \code{"peakclu"}.}
 
 \item{peakDistance}{Minimum distance of two neighboring peaks. Default value = 100.}
 
@@ -48,8 +49,11 @@ A modified TSSr object with updated \code{tagClusters} slot. The
 }
 \description{
 Clusters TSSs within small genomic regions into tag clusters (TCs)
-using "peakclu" method. "peakclu" method is an implementation of peak-based clustering.
-The minimum distance of two neighboring peaks can be specified.
+using the "peakclu" or "peakcluMax" method. "peakclu" identifies local
+maxima in open peak-distance windows. "peakcluMax" greedily retains the
+strongest remaining TSS and suppresses candidates in its closed
+peak-distance window. Ties are resolved in favor of the lower genomic
+position.
 }
 \examples{
 example_input <- system.file(
