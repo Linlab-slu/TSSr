@@ -54,6 +54,29 @@ test_that("uncoded G trimming only removes terminal mismatched Gs", {
     expect_equal(TSSr:::`.uncodedGTrimWidth`("GGA", "GAA"), 0L)
 })
 
+test_that("terminal G correction handles complete read batches", {
+    read_seq <- c(
+        "GGG", "GGGG", "GTA", "TGA", "GGA", "", "ggn", "G", "GG"
+    )
+    reference_seq <- c(
+        "AAG", "AAAA", "AAA", "AAA", "GAA", "", "aan", "", "A"
+    )
+
+    expect_identical(
+        TSSr:::`.uncodedGTrimWidths`(read_seq, reference_seq),
+        c(2L, 4L, 1L, 0L, 0L, 0L, 2L, 0L, 1L)
+    )
+    expect_identical(
+        TSSr:::`.reverseComplementText`(
+            c(
+                simple = "acgt", iupac = "ACGTRYSWKMBDHVN",
+                sam_symbols = "=ac*", empty = ""
+            )
+        ),
+        c("ACGT", "NBDHVKMWSRYACGT", "*GT=", "")
+    )
+})
+
 test_that("uncoded G trimming updates plus starts and minus ends", {
     Genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
 

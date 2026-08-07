@@ -4,6 +4,12 @@
   `getTSS()` imports. This keeps the number of retained intermediate chunk
   tables bounded while preserving exact integer counts and final row order.
 
+* Batched terminal-G correction during BAM imports. Reverse complements are
+  now computed by the vectorized Biostrings implementation, and leading
+  mismatched G widths are evaluated across each read batch rather than through
+  one R function call per alignment. Coordinate and trimming rules are
+  unchanged.
+
 * Added `clusterTSS(method = "peakcluMax")`, a greedy maximum-signal
   alternative to the published `peakclu` method. It repeatedly retains the
   strongest remaining TSS, resolves ties toward the lower genomic position,

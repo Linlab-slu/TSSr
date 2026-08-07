@@ -38,30 +38,50 @@
 
 .reverseComplementText <- function(seq) {
     seq <- toupper(as.character(seq))
-    vapply(strsplit(seq, ""), function(bases) {
-        paste(rev(chartr("ACGTRYSWKMBDHVN", "TGCAYRSWMKVHDBN", bases)), collapse = "")
-    }, character(1))
+    complemented <- chartr(
+        "ACGTRYSWKMBDHVN", "TGCAYRSWMKVHDBN", seq
+    )
+    as.character(Biostrings::reverse(Biostrings::BStringSet(complemented)))
+}
+
+.uncodedGTrimWidths <- function(read.seq, reference.seq) {
+    read.seq <- toupper(as.character(read.seq))
+    reference.seq <- toupper(as.character(reference.seq))
+    if (length(read.seq) != length(reference.seq)) {
+        stop("read.seq and reference.seq must have equal lengths.")
+    }
+
+    trim.width <- integer(length(read.seq))
+    read.width <- nchar(read.seq)
+    reference.width <- nchar(reference.seq)
+    active <- which(read.width > 0L & reference.width > 0L)
+    position <- 1L
+
+    while (length(active) > 0L) {
+        active <- active[
+            read.width[active] >= position &
+                reference.width[active] >= position
+        ]
+        if (length(active) == 0L) {
+            break
+        }
+
+        active <- active[
+            substr(read.seq[active], position, position) == "G" &
+                substr(reference.seq[active], position, position) != "G"
+        ]
+        if (length(active) == 0L) {
+            break
+        }
+
+        trim.width[active] <- trim.width[active] + 1L
+        position <- position + 1L
+    }
+    trim.width
 }
 
 .uncodedGTrimWidth <- function(read.seq, reference.seq) {
-    read.seq <- toupper(as.character(read.seq))
-    reference.seq <- toupper(as.character(reference.seq))
-    limit <- min(nchar(read.seq), nchar(reference.seq))
-    trim.width <- 0L
-    if (limit == 0L) {
-        return(trim.width)
-    }
-
-    for (i in seq_len(limit)) {
-        read.base <- substr(read.seq, i, i)
-        reference.base <- substr(reference.seq, i, i)
-        if (read.base == "G" && reference.base != "G") {
-            trim.width <- trim.width + 1L
-        } else {
-            break
-        }
-    }
-    trim.width
+    .uncodedGTrimWidths(read.seq, reference.seq)[[1L]]
 }
 
 .trimUncodedGOneStrand <- function(readsGR, Genome, minusStrand = FALSE) {
@@ -98,9 +118,7 @@
         query.seq <- substr(read.seq[valid], 1L, terminal.width[valid])
     }
 
-    trim.width[valid] <- vapply(seq_along(query.seq), function(i) {
-        .uncodedGTrimWidth(query.seq[i], reference.seq[i])
-    }, integer(1))
+    trim.width[valid] <- .uncodedGTrimWidths(query.seq, reference.seq)
 
     trimmed <- which(trim.width > 0L)
     if (length(trimmed) > 0L) {
