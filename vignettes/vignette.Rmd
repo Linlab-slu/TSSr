@@ -165,6 +165,10 @@ myTSSr <- clusterTSS(myTSSr,
     useMultiCore = FALSE, numCores = NULL
 )
 
+# peakclu is the published default. peakcluMax is an optional, more
+# sensitive greedy candidate method. Use the same clusterThreshold for
+# every sample and method included in a comparison.
+
 # Aggregating consensus clusters
 myTSSr <- consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 ```

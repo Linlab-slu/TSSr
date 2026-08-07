@@ -16,6 +16,13 @@
   the open boundary added 3--32 clusters per sample relative to the earlier
   closed implementation.
 
+* Documented the sensitivity/reproducibility tradeoff controlled by
+  `clusterThreshold`. Scans at 1, 2, 3, and 5 on full yeast and Arabidopsis
+  data showed that higher values usually improve cross-sample support but
+  also remove gene-associated clusters, with strongly dataset-dependent
+  effects. The default remains 1; comparisons should use and report the same
+  explicit threshold across samples and clustering methods.
+
 * Vectorized the shared tag-cluster assembly path used by `peakclu` and
   `peakcluMax`. Directional local filtering now uses indexed range maxima,
   and cluster summaries operate on sorted interval indices instead of

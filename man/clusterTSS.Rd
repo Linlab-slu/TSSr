@@ -34,7 +34,11 @@ neighboring TSSs to be grouped in the same cluster. Default value = 30.}
 clusters, which is used to filter TSS signals brought from possible recapping events,
 or sequencing noise. Default value = 0.02.}
 
-\item{clusterThreshold}{Ignore clusters if signal < clusterThreshold. Default value = 1.}
+\item{clusterThreshold}{Retain clusters only when their total signal is
+strictly greater than this value. The threshold is applied after cluster
+assembly. Increasing it trades sensitivity for stronger cross-sample
+support, but can also remove gene-associated clusters; use the same value
+across samples and methods being compared. Default value = 1.}
 
 \item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or not (FALSE).
 Default is FALSE.}
