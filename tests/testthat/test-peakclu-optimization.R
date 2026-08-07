@@ -224,3 +224,41 @@ test_that("peakclu multicore branch preserves single-core output", {
         tolerance = 0
     )
 })
+
+test_that("cluster assembly preserves directional local filtering", {
+    expected <- list(
+        `+` = data.frame(
+            start = 100L, end = 100L, tags = 10,
+            interquantile_width = 1
+        ),
+        `-` = data.frame(
+            start = 100L, end = 120L, tags = 10.1,
+            interquantile_width = 1
+        )
+    )
+
+    for (strand in names(expected)) {
+        object <- make_peakclu_test_object(
+            positions = c(100, 120, 140),
+            tags = c(10, 0.1, 1),
+            strand = strand
+        )
+        result <- clusterTSS(
+            object,
+            method = "peakcluMax",
+            peakDistance = 100,
+            extensionDistance = 30,
+            localThreshold = 0.02,
+            clusterThreshold = 0,
+            useMultiCore = FALSE
+        )
+        observed <- as.data.frame(result@tagClusters$sample)
+        columns <- names(expected[[strand]])
+
+        expect_identical(
+            observed[, columns, drop = FALSE],
+            expected[[strand]],
+            info = strand
+        )
+    }
+})

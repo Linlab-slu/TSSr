@@ -82,6 +82,70 @@
     sort(selected[seq_len(selected_count)])
 }
 
+.localFilterMask <- function(
+    positions, tags, peakID, peakDistance, localThreshold, strand
+) {
+    n <- length(positions)
+    if (n == 0L || !any(peakID > 0L)) {
+        return(logical(n))
+    }
+
+    peak_tags <- rep.int(-Inf, n)
+    peak_tags[peakID > 0L] <- tags[peakID > 0L]
+    if (strand == "+") {
+        left <- findInterval(
+            positions - peakDistance,
+            positions,
+            left.open = TRUE
+        ) + 1L
+        right <- seq_len(n)
+    } else {
+        left <- seq_len(n)
+        right <- findInterval(positions + peakDistance, positions)
+    }
+    strongest_peak <- .rangeMaxFirstIndex(peak_tags)$query(left, right)
+    thresholds <- peak_tags[strongest_peak] * localThreshold
+    remove <- is.finite(peak_tags[strongest_peak]) & tags < thresholds
+    remove[is.na(remove)] <- FALSE
+    remove
+}
+
+.summarizeClusterIntervals <- function(tss.dt, clusters) {
+    positions <- tss.dt[["pos"]]
+    tags <- tss.dt[["tags"]]
+    starts <- clusters[["V1"]]
+    ends <- clusters[["V2"]]
+    left <- findInterval(starts, positions, left.open = TRUE) + 1L
+    right <- findInterval(ends, positions)
+    dominant <- .rangeMaxFirstIndex(tags)$query(left, right)
+
+    summaries <- lapply(seq_along(left), function(index) {
+        rows <- seq.int(left[[index]], right[[index]])
+        cluster_tags <- tags[rows]
+        q1_relative <- .firstCumulativeFractionIndex(cluster_tags, 0.1)
+        q9_reverse <- .firstCumulativeFractionIndex(
+            rev(cluster_tags), 0.1
+        )
+        q1 <- positions[rows[[q1_relative]]]
+        q9 <- positions[rows[[length(rows) - q9_reverse + 1L]]]
+
+        list(
+            index,
+            tss.dt[["chr"]][[rows[[1L]]]],
+            starts[[index]],
+            ends[[index]],
+            tss.dt[["strand"]][[rows[[1L]]]],
+            positions[dominant[[index]]],
+            sum(cluster_tags),
+            tags[dominant[[index]]],
+            q1,
+            q9,
+            q9 - q1 + 1
+        )
+    })
+    rbindlist(summaries)
+}
+
 .clusterByPeak <- function(
     tss.dt, peakDistance, localThreshold, extensionDistance
 ) {
@@ -134,19 +198,12 @@
     ###############################################################################
     ## local filtering
     ###############################################################################
-    if (unique(tss.dt$strand) == "+") {
-        localF <- lapply(peakID[peakID > 0], function(i) {
-            temp <- tss.dt[pos >= tss.dt$pos[i] & pos <= tss.dt$pos[i] + peakDistance, ]
-            temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
-        })
-    } else {
-        localF <- lapply(peakID[peakID > 0], function(i) {
-            temp <- tss.dt[pos >= tss.dt$pos[i] - peakDistance & pos <= tss.dt$pos[i], ]
-            temp$ID[which(temp$tag < tss.dt$tags[i] * localThreshold)]
-        })
-    }
-    if (length(unlist(localF)) > 0) {
-        tss.dt <- tss.dt[-unlist(localF), ]
+    local_filter <- .localFilterMask(
+        tss.dt[["pos"]], tss.dt[["tags"]], peakID,
+        peakDistance, localThreshold, unique(tss.dt$strand)
+    )
+    if (any(local_filter)) {
+        tss.dt <- tss.dt[!local_filter, ]
     }
     ###############################################################################
     ###############################################################################
@@ -195,39 +252,7 @@
 
     # get full clustering data
     # core promoter boundaries are calculated here (i.e. cumsum distribution)
-    tss_clusters <- lapply(as.list(seq_len(clusters[, .N])), function(i) {
-        start <- clusters[i, V1]
-        end <- clusters[i, V2]
-        # copied.dt[, ID := .I]##NEW April18
-        cluster.data <- copied.dt[pos >= start & pos <= end, ]
-        tags.sum <- cluster.data[, sum(tags)] ## NEW Sep25, tags -> tags.sum
-        q1.index <- .firstCumulativeFractionIndex(
-            cluster.data[["tags"]], 0.1
-        )
-        reverse.data <- cluster.data[order(-pos)]
-        q9.index <- .firstCumulativeFractionIndex(
-            reverse.data[["tags"]], 0.1
-        )
-        q1 <- cluster.data[["pos"]][[q1.index]]
-        q9 <- reverse.data[["pos"]][[q9.index]]
-        list(
-            i,
-            cluster.data[, chr[[1]]],
-            start,
-            end,
-            cluster.data[, strand[[1]]]
-            # ,cluster.data[which(ID %in% peakID), pos]  # NEW - use id column to find the intersection for the peakID vector (should hopefully only be 1!)
-            , cluster.data[which.max(tags), pos],
-            tags.sum,
-            cluster.data[, max(tags)],
-            q1,
-            q9,
-            q9 - q1 + 1
-        )
-    })
-
-    # set names
-    tss_clusters <- rbindlist(tss_clusters)
+    tss_clusters <- .summarizeClusterIntervals(copied.dt, clusters)
     setnames(tss_clusters, c(
         "cluster",
         "chr", "start", "end", "strand",

@@ -7,6 +7,14 @@
   window. Peak selection is implemented in O(n log n) time and O(n) memory;
   the default remains `method = "peakclu"`.
 
+* Vectorized the shared tag-cluster assembly path used by `peakclu` and
+  `peakcluMax`. Directional local filtering now uses indexed range maxima,
+  and cluster summaries operate on sorted interval indices instead of
+  repeatedly scanning data tables. Full yeast outputs for both methods are
+  identical to the pre-refactor tables; single-core runtime decreased from
+  131.5 to 73.7 seconds for `peakclu` and from 175.5 to 98.9 seconds for
+  `peakcluMax` in the pinned Linux validation environment.
+
 * Made the 10th- and 90th-percentile TSS cluster boundaries deterministic
   across platforms. Cumulative signal that equals a percentile threshold
   within a scale-aware floating-point tolerance is now treated as having
