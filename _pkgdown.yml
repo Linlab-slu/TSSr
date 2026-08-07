@@ -1,0 +1,60 @@
+url: https://linlab-slu.github.io/TSSr/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/vignette.html
+    articles:
+      text: Articles
+      menu:
+      - text: Complete TSSr workflow
+        href: articles/vignette.html
+
+reference:
+- title: Create and import data
+  desc: Construct a TSSr object and import, combine, or split TSS tables.
+  contents:
+  - TSSr
+  - getTSS
+  - combineTSSTables
+  - splitTSSTable
+- title: Preprocess TSS signals
+  contents:
+  - mergeSamples
+  - normalizeTSS
+  - filterTSS
+- title: Identify and characterize promoters
+  contents:
+  - clusterTSS
+  - consensusCluster
+  - shapeCluster
+  - annotateCluster
+- title: Downstream analyses
+  contents:
+  - callEnhancer
+  - deGene
+  - shiftPromoter
+- title: Access results
+  contents:
+  - "`TSSr-accessors`"
+  - "`show,TSSr-method`"
+  - exampleTSSr
+- title: Visualize results
+  contents:
+  - starts_with("plot")
+- title: Export results
+  contents:
+  - starts_with("export")
+
+articles:
+- title: Workflow
+  navbar: ~
+  contents:
+  - vignette
