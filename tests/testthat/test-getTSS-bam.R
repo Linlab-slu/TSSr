@@ -79,6 +79,36 @@ test_that("getTSS imports CIGAR-aware BAM coordinates through its public API", {
     expect_false(any(c(1309L, 1509L) %in% minus_positions))
 })
 
+test_that("getTSS combines multiple BAM samples on a shared coordinate table", {
+    bam <- system.file(
+        "extdata", "example-cigar.bam",
+        package = "TSSr", mustWork = TRUE
+    )
+    object <- TSSr(
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        inputFiles = c(bam, bam),
+        inputFilesType = "bam",
+        sampleLabels = c("sample_1", "sample_2")
+    )
+
+    result <- getTSS(
+        object,
+        sequencingQualityThreshold = 10,
+        mappingQualityThreshold = 20,
+        softclippingAllowed = FALSE,
+        bamYieldSize = 5L
+    )
+    expected <- expected_example_bam_tss(correct_uncoded_g = TRUE)
+    names(expected)[[4L]] <- "sample_1"
+    expected$sample_2 <- expected$sample_1
+
+    expect_identical(TSSmatrix(result, data = "raw"), expected)
+    expect_identical(
+        librarySizes(result),
+        c(sample_1 = 13, sample_2 = 13)
+    )
+})
+
 test_that("getTSS streams BAM input one alignment at a time", {
     object <- make_example_bam_object()
 

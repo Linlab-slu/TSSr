@@ -289,7 +289,7 @@
             isFirstMateRead = TRUE
         )
     }
-    first <- TRUE
+    sample.tables <- vector("list", length(bam.files))
     for (i in seq_len(length(bam.files))) {
         message("\nReading in file: ", bam.files[i], "...")
         message("\t-> Filtering out low quality reads...")
@@ -327,17 +327,10 @@
 
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
         setkey(TSS, chr, pos, strand)
-        if (first == TRUE) {
-            TSS.all.samples <- TSS
-        } else {
-            TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-        }
-        first <- FALSE
+        sample.tables[[i]] <- TSS
         gc()
     }
-    TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
-    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
-    return(TSS.all.samples)
+    .combineSampleTSSTables(sample.tables, sampleLabels)
 }
 
 .emptyTSSCounts <- function() {
@@ -399,9 +392,9 @@
 ################################################################################
 ## .getTSS_from_bed function calls TSS from bed files
 .getTSS_from_bed <- function(bed.files, Genome, sampleLabels) {
-    first <- TRUE
     ## define variable as a NULL value
     chr <- pos <- tag_count <- NULL
+    sample.tables <- vector("list", length(bed.files))
 
     for (i in seq_len(length(bed.files))) {
         message("\nReading in file: ", bed.files[i], "...")
@@ -418,17 +411,10 @@
         TSS <- TSS[, as.integer(sum(tag_count)), by = list(chr, pos, strand)]
         setnames(TSS, c("chr", "pos", "strand", sampleLabels[i]))
         setkey(TSS, chr, pos, strand)
-        if (first == TRUE) {
-            TSS.all.samples <- TSS
-        } else {
-            TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-        }
-        first <- FALSE
+        sample.tables[[i]] <- TSS
         gc()
     }
-    TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
-    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
-    return(TSS.all.samples)
+    .combineSampleTSSTables(sample.tables, sampleLabels)
 }
 ################################################################################
 ## .getTSS_from_BigWig function calls TSS from BigWig files
@@ -437,7 +423,7 @@
     # library.sizes <- vector()
     ## define variable as a NULL value
     chr <- pos <- NULL
-    first <- TRUE
+    sample.tables <- vector("list", length(BigWig.files))
     for (i in seq_len(length(BigWig.files))) {
         message("\nReading in file: ", BigWig.files[i], "...")
         readsGR <- import(BigWig.files[i], format = "BigWig")
@@ -456,17 +442,10 @@
         setkey(TSS, chr, pos, strand)
 
         # library.sizes <- c(library.sizes, as.integer(sum(data.table(TSS)[,4])))
-        if (first == TRUE) {
-            TSS.all.samples <- TSS
-        } else {
-            TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-        }
-        first <- FALSE
+        sample.tables[[i]] <- TSS
         gc()
     }
-    TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
-    TSS.all.samples[, pos := .asIntegerCoordinate(pos)]
-    return(TSS.all.samples)
+    .combineSampleTSSTables(sample.tables, sampleLabels)
 }
 
 
@@ -475,7 +454,7 @@
 
 .getTSS_from_tss <- function(tss.files, sampleLabels) {
     pos <- NULL
-    first <- TRUE
+    sample.tables <- vector("list", length(tss.files))
 
     for (i in seq_len(length(tss.files))) {
         message("\nReading in file: ", tss.files[i], "...")
@@ -489,17 +468,10 @@
         TSS[, pos := .asIntegerCoordinate(pos)]
 
         setkeyv(TSS, cols = c("chr", "pos", "strand"))
-        if (first == TRUE) {
-            TSS.all.samples <- TSS
-        } else {
-            TSS.all.samples <- merge(TSS.all.samples, TSS, all = TRUE)
-        }
-        first <- FALSE
+        sample.tables[[i]] <- TSS
         gc()
     }
-    TSS.all.samples <- data.table(TSS.all.samples)
-    TSS.all.samples[, 4:ncol(TSS.all.samples)][is.na(TSS.all.samples[, 4:ncol(TSS.all.samples)])] <- 0
-    return(TSS.all.samples)
+    .combineSampleTSSTables(sample.tables, sampleLabels)
 }
 
 ################################################################################################

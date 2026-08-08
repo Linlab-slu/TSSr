@@ -1,5 +1,14 @@
 # TSSr 0.99.20 (2026-08-04)
 
+* Replaced repeated full outer merges of per-sample TSS count tables with a
+  shared union-backbone and update-join implementation for BAM, paired BAM,
+  BED, BigWig, and per-sample TSS imports. The new path preserves historical
+  row order, count values, column types, missing-coordinate zero filling, and
+  library sizes. In pinned Linux benchmarks it was 1.79--2.06 times faster for
+  8--32 samples and reduced peak RSS by about 17% for 32 samples. Full
+  four-BAM yeast and Arabidopsis imports were identical to their validated
+  baselines column by column and produced no warnings.
+
 * Periodically compacted BAM chunk results by genomic coordinate during
   `getTSS()` imports. This keeps the number of retained intermediate chunk
   tables bounded while preserving exact integer counts and final row order.
