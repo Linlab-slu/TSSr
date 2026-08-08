@@ -173,6 +173,86 @@
     ), by = list(chr, pos, strand)]
 }
 
+.combineSampleTSSTables <- function(tables, sampleLabels) {
+    key.columns <- c("chr", "pos", "strand")
+    if (length(tables) == 0L || length(tables) != length(sampleLabels)) {
+        stop(
+            "The number of sample TSS tables must match the number of ",
+            "sample labels."
+        )
+    }
+
+    sample.info <- lapply(seq_along(tables), function(i) {
+        table <- data.table::copy(data.table::as.data.table(tables[[i]]))
+        expected.names <- c(key.columns, sampleLabels[[i]])
+        if (!identical(names(table), expected.names)) {
+            stop(
+                "The TSS table for sample '", sampleLabels[[i]],
+                "' must contain columns: ",
+                paste(expected.names, collapse = ", "), "."
+            )
+        }
+        data.table::set(
+            table, j = "pos",
+            value = .asIntegerCoordinate(table[["pos"]])
+        )
+        if (anyDuplicated(table, by = key.columns)) {
+            stop(
+                "Duplicate chr/pos/strand coordinates in the TSS table ",
+                "for sample '", sampleLabels[[i]], "'."
+            )
+        }
+        if (!is.numeric(table[[sampleLabels[[i]]]])) {
+            stop(
+                "TSS counts for sample '", sampleLabels[[i]],
+                "' must be numeric."
+            )
+        }
+        missing.count <- anyNA(table[[sampleLabels[[i]]]])
+        data.table::setnafill(
+            table, type = "const", fill = 0,
+            cols = sampleLabels[[i]]
+        )
+        list(table = table, missing.count = missing.count)
+    })
+    sample.tables <- lapply(sample.info, function(info) info$table)
+    missing.counts <- vapply(
+        sample.info, function(info) info$missing.count, logical(1)
+    )
+
+    result <- unique(data.table::rbindlist(lapply(
+        sample.tables,
+        function(table) table[, key.columns, with = FALSE]
+    )))
+    data.table::setorderv(result, c("strand", "chr", "pos"))
+
+    for (i in seq_along(sample.tables)) {
+        sample.label <- sampleLabels[[i]]
+        values <- sample.tables[[i]]
+        count <- values[[sample.label]]
+        needs.missing.fill <- missing.counts[[i]] ||
+            nrow(values) < nrow(result)
+        if (is.integer(count) && !needs.missing.fill) {
+            result[, (sample.label) := rep(0L, .N)]
+        } else if (is.numeric(count)) {
+            result[, (sample.label) := rep(0, .N)]
+        } else {
+            stop("TSS counts for sample '", sample.label,
+                 "' must be numeric.")
+        }
+        data.table::setnames(values, sample.label, "value")
+        if (nrow(values) > 0L) {
+            result[
+                values,
+                on = c("chr", "pos", "strand"),
+                (sample.label) := get("i.value")
+            ]
+        }
+    }
+    data.table::setcolorder(result, c(key.columns, sampleLabels))
+    result
+}
+
 .appendTSSChunkTable <- function(
   tables, chunk, compactionLimit = 8L
 ) {
