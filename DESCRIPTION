@@ -29,8 +29,7 @@ Description: TSSr package provides a comprehensive workflow on TSS data
     Viewer (IGV). TSSr also exports downstream analyses result tables and
     plots.  Multiple cores are supported on Linux or Mac platforms.
 License: MIT + file LICENSE
-URL: https://linlab-slu.github.io/TSSr/,
-    https://github.com/Linlab-slu/TSSr
+URL: https://github.com/Linlab-slu/TSSr
 BugReports: https://github.com/Linlab-slu/TSSr/issues
 Depends: 
     R (>= 4.6.0)
