@@ -24,6 +24,8 @@ test_that("shapeCluster calculates shape scores with PSS method", {
 
 test_that("deGene calculates differential expression tables", {
     object <- exampleTSSr
+    expected_de <- object@DEtables
+    expected_tags <- object@TAGtables
     object@DEtables <- list()
     object@TAGtables <- list()
     before <- tssr_content(object)
@@ -38,6 +40,8 @@ test_that("deGene calculates differential expression tables", {
     expect_s4_class(result, "TSSr")
     expect_true(length(result@DEtables) > 0)
     expect_true(length(result@TAGtables) > 0)
+    expect_equal(result@DEtables, expected_de, tolerance = 1e-12)
+    expect_equal(result@TAGtables, expected_tags, tolerance = 1e-12)
 })
 
 test_that("shiftPromoter detects promoter shifts", {

@@ -30,51 +30,23 @@
     }
     xCounts <- xCounts[, -c(2:11)]
     yCounts <- yCounts[, -c(2:11)]
-    ## tag counts by gene for sampleOne
+    ## tag counts by gene for sampleOne and sampleTwo
     setkey(xCounts, gene)
-    if (useMultiCore) {
-        if (is.null(numCores)) {
-            numCores <- detectCores()
-        }
-        one <- mclapply(as.list(unique(xCounts$gene)), function(my.gene) {
-            data <- xCounts[list(my.gene)]
-            return(c(my.gene, colSums(data[, -c(1, 2, 3)])))
-        }, mc.cores = numCores)
-    } else {
-        one <- lapply(as.list(unique(xCounts$gene)), function(my.gene) {
-            data <- xCounts[list(my.gene)]
-            return(c(my.gene, colSums(data[, -c(1, 2, 3)])))
-        })
-    }
-    one <- data.frame(matrix(unlist(one), nrow = length(one), byrow = TRUE), stringsAsFactors = FALSE)
-
-    ## tag counts by gene for sampleTwo
     setkey(yCounts, gene)
-    if (useMultiCore) {
-        if (is.null(numCores)) {
-            numCores <- detectCores()
-        }
-        two <- mclapply(as.list(unique(yCounts$gene)), function(my.gene) {
-            data <- yCounts[list(my.gene)]
-            return(c(my.gene, colSums(data[, -c(1, 2, 3)])))
-        }, mc.cores = numCores)
-    } else {
-        two <- lapply(as.list(unique(yCounts$gene)), function(my.gene) {
-            data <- yCounts[list(my.gene)]
-            return(c(my.gene, colSums(data[, -c(1, 2, 3)])))
-        })
-    }
-    two <- data.frame(matrix(unlist(two), nrow = length(two), byrow = TRUE), stringsAsFactors = FALSE)
+    one <- xCounts[, lapply(.SD, sum), by = gene, .SDcols = samplex]
+    two <- yCounts[, lapply(.SD, sum), by = gene, .SDcols = sampley]
     ## merge the two raw count tables together by genes
-    one[, 2:ncol(one)] <- lapply(one[, 2:ncol(one), drop = FALSE], as.integer)
-    two[, 2:ncol(two)] <- lapply(two[, 2:ncol(two), drop = FALSE], as.integer)
-    setnames(one, colnames(one), c("gene", samplex))
-    setnames(two, colnames(two), c("gene", sampley))
-    Dtable <- merge(one, two, by = c("gene"), all = TRUE)
+    one[, (samplex) := lapply(.SD, as.integer), .SDcols = samplex]
+    two[, (sampley) := lapply(.SD, as.integer), .SDcols = sampley]
+    Dtable <- merge(
+        as.data.frame(one), as.data.frame(two),
+        by = "gene", all = TRUE
+    )
     Dtable[is.na(Dtable)] <- 0
     ##
-    rownames(Dtable) <- Dtable[, 1]
-    Dtable <- Dtable[, -1]
+    gene.names <- Dtable[["gene"]]
+    Dtable <- Dtable[, c(samplex, sampley), drop = FALSE]
+    rownames(Dtable) <- gene.names
     Dtable <- data.matrix(Dtable)
     condition <- factor(c(rep(sampleOne, times = length(samplex)), rep(sampleTwo, times = length(sampley))))
     dds <- DESeq2::DESeqDataSetFromMatrix(
@@ -99,36 +71,34 @@
     cols <- c("chr", "pos", "strand", samples)
     tss1 <- tss.raw[, .SD, .SDcols = cols]
     # exclude rows with no count
-    tss1$tag_sum <- rowSums(tss1[, -c(1, 2, 3)])
-    tss <- tss1 %>% dplyr::filter(tag_sum != 0)
-    tss$tag_sum <- NULL
-    ## define variable as a NULL value
-    chr <- strand <- start <- end <- NULL
-    if (useMultiCore) {
-        if (is.null(numCores)) {
-            numCores <- detectCores()
+    tss1[, tag_sum := rowSums(tss1[, .SD, .SDcols = samples])]
+    tss <- tss1[tag_sum != 0]
+    tss[, tag_sum := NULL]
+
+    tags <- matrix(
+        0,
+        nrow = nrow(cs),
+        ncol = length(samples),
+        dimnames = list(NULL, samples)
+    )
+    hits <- .mapPointsToIntervals(tss, cs)
+    if (nrow(hits) > 0L) {
+        matched <- data.table(
+            interval_id = hits[["interval_id"]]
+        )
+        for (sample in samples) {
+            matched[[sample]] <-
+                tss[[sample]][hits[["point_id"]]]
         }
-        message("process is running on ", numCores, " cores...")
-        tags <- mclapply(seq_len(cs[, .N]), function(r) {
-            data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- vapply(as.list(samples), function(s) {
-                sum(data[, .SD, .SDcols = s])
-            }, numeric(1))
-            return(temp)
-        }, mc.cores = numCores)
-    } else {
-        tags <- lapply(seq_len(cs[, .N]), function(r) {
-            data <- tss[tss$chr == cs[r, chr] & tss$strand == cs[r, strand] & tss$pos >= cs[r, start] & tss$pos <= cs[r, end], ]
-            temp <- vapply(as.list(samples), function(s) {
-                sum(data[, .SD, .SDcols = s])
-            }, numeric(1))
-            return(temp)
-        })
+        counts <- matched[, lapply(.SD, sum),
+            by = interval_id,
+            .SDcols = samples
+        ]
+        tags[counts[["interval_id"]], ] <- as.matrix(
+            counts[, .SD, .SDcols = samples]
+        )
     }
-    tags <- data.frame(matrix(unlist(tags), nrow = length(tags), byrow = TRUE), stringsAsFactors = FALSE)
-    colnames(tags) <- samples
-    cs <- cbind(cs, tags)
-    return(cs)
+    cbind(data.table::copy(cs), as.data.frame(tags))
 }
 
 ## .tagCount is slow
