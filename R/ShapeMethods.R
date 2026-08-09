@@ -66,61 +66,74 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
 
     sampleLabelsMerged <- object@sampleLabelsMerged
 
+    calculate.sample.shape <- function(i) {
+        cs <- data.table::copy(cs.dt[[sampleLabelsMerged[[i]]]])
+        if (nrow(cs) == 0L) {
+            return(data.table())
+        }
+        tss <- tss.dt[, .SD, .SDcols = c(
+            "chr", "pos", "strand", sampleLabelsMerged[[i]]
+        )]
+        setnames(tss, colnames(tss)[[4L]], "tags")
+        tss <- tss[tags > 0, ]
+
+        if (!method %in% c("PSS", "SI")) {
+            message("\nNo shape method is provided...")
+            return(cs)
+        }
+
+        hits <- .mapPointsToIntervals(
+            tss,
+            cs,
+            intervalStart = "q_0.1",
+            intervalEnd = "q_0.9"
+        )
+        default.score <- if (method == "PSS") 0 else 2
+        score <- rep(default.score, nrow(cs))
+        if (nrow(hits) > 0L) {
+            matched <- hits[, .(
+                interval_id,
+                tags = tss[["tags"]][point_id]
+            )]
+            contributions <- matched[, {
+                total <- sum(tags)
+                proportions <- tags / total
+                .(contribution = sum(
+                    proportions * log(proportions, 2)
+                ))
+            }, by = interval_id]
+            if (method == "PSS") {
+                score[contributions[["interval_id"]]] <-
+                    -contributions[["contribution"]] *
+                    log(
+                        cs[["interquantile_width"]][
+                            contributions[["interval_id"]]
+                        ],
+                        2
+                    )
+            } else {
+                score[contributions[["interval_id"]]] <-
+                    2 + contributions[["contribution"]]
+            }
+        }
+        cs[, shape.score := score]
+        setkey(cs, NULL)
+        cs
+    }
+
+    sample.indices <- seq_along(sampleLabelsMerged)
     if (useMultiCore) {
         if (is.null(numCores)) {
             numCores <- detectCores()
         }
         message("process is running on ", numCores, " cores...")
-        ##
-        cs.shape <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
-            cs <- cs.dt[[sampleLabelsMerged[i]]]
-            tss <- tss.dt[, .SD, .SDcols = c("chr", "pos", "strand", sampleLabelsMerged[i])]
-            setnames(tss, colnames(tss)[[4]], "tags")
-            tss <- tss[tags > 0, ]
-            ce <- mclapply(seq_len(cs[, .N]), function(x) {
-                data <- cs[x, ]
-                tss.sub <- tss[chr == data$chr & strand == data$strand & pos >= data$q_0.1 & pos <= data$q_0.9, ]
-                temp <- sum(tss.sub[, tags])
-                if (method == "PSS") {
-                    data$shape.score <- -sum(vapply(tss.sub[, tags], function(y) {
-                        y / temp * log(y / temp, 2)
-                    }, numeric(1))) * log(data[, interquantile_width], 2)
-                } else if (method == "SI") {
-                    data$shape.score <- 2 + sum(vapply(tss.sub[, tags], function(y) {
-                        y / temp * log(y / temp, 2)
-                    }, numeric(1)))
-                } else {
-                    message("\nNo shape method is provided...")
-                }
-                return(data)
-            }, mc.cores = numCores)
-            ce <- rbindlist(ce)
-        })
+        cs.shape <- mclapply(
+            sample.indices,
+            calculate.sample.shape,
+            mc.cores = numCores
+        )
     } else {
-        cs.shape <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
-            cs <- cs.dt[[sampleLabelsMerged[i]]]
-            tss <- tss.dt[, .SD, .SDcols = c("chr", "pos", "strand", sampleLabelsMerged[i])]
-            setnames(tss, colnames(tss)[[4]], "tags")
-            tss <- tss[tags > 0, ]
-            ce <- lapply(as.list(seq_len(cs[, .N])), function(x) {
-                data <- cs[x, ]
-                tss.sub <- tss[chr == data$chr & strand == data$strand & pos >= data$q_0.1 & pos <= data$q_0.9, ]
-                temp <- sum(tss.sub[, tags])
-                if (method == "PSS") {
-                    data$shape.score <- -sum(vapply(tss.sub[, tags], function(y) {
-                        y / temp * log(y / temp, 2)
-                    }, numeric(1))) * log(data[, interquantile_width], 2)
-                } else if (method == "SI") {
-                    data$shape.score <- 2 + sum(vapply(tss.sub[, tags], function(y) {
-                        y / temp * log(y / temp, 2)
-                    }, numeric(1)))
-                } else {
-                    message("\nNo shape method is provided...")
-                }
-                return(data)
-            })
-            ce <- rbindlist(ce)
-        })
+        cs.shape <- lapply(sample.indices, calculate.sample.shape)
     }
     names(cs.shape) <- sampleLabelsMerged
     object@clusterShape <- cs.shape
