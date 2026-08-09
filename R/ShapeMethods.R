@@ -53,7 +53,8 @@ setGeneric("shapeCluster", function(
 setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters, method, useMultiCore, numCores) {
     message("\nCalculating ", clusters, " shape with ", method, " method...")
     ## define variable as a NULL value
-    pos <- interquantile_width <- chr <- NULL
+    pos <- interquantile_width <- chr <- interval_id <- point_id <- NULL
+    shape.score <- tags <- NULL
 
     ## initialize data
     tss.dt <- object@TSSprocessedMatrix
@@ -91,14 +92,14 @@ setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters,
         default.score <- if (method == "PSS") 0 else 2
         score <- rep(default.score, nrow(cs))
         if (nrow(hits) > 0L) {
-            matched <- hits[, .(
+            matched <- hits[, list(
                 interval_id,
                 tags = tss[["tags"]][point_id]
             )]
             contributions <- matched[, {
                 total <- sum(tags)
                 proportions <- tags / total
-                .(contribution = sum(
+                list(contribution = sum(
                     proportions * log(proportions, 2)
                 ))
             }, by = interval_id]

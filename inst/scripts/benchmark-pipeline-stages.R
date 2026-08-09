@@ -313,8 +313,16 @@ metadata <- list(
     package_path = find.package("TSSr"),
     config_file = config.file,
     config_md5 = unname(tools::md5sum(config.file)),
-    input_files = normalizePath(input_files, mustWork = TRUE),
-    input_md5 = unname(tools::md5sum(input_files)),
+    input_files = ifelse(
+        file.exists(input_files),
+        normalizePath(input_files, mustWork = FALSE),
+        input_files
+    ),
+    input_md5 = ifelse(
+        file.exists(input_files),
+        unname(tools::md5sum(input_files)),
+        NA_character_
+    ),
     selected_stages = selected.stages,
     repetitions = repetitions,
     baseline_dir = baseline.dir,

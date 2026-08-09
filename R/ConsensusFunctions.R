@@ -16,6 +16,9 @@
 ###############################################################################
 ##
 .getConsensusQuantile <- function(tc, gr, tss.temp, useMultiCore, numCores) {
+    interval_id <- point_id <- interquantile_width <- NULL
+    `q_0.1` <- `q_0.9` <- NULL
+
     tc.hits <- .mapPointsToIntervals(
         tc,
         gr,
@@ -25,7 +28,7 @@
         return(data.table())
     }
 
-    spans <- tc.hits[, .(
+    spans <- tc.hits[, list(
         start = min(tc[["start"]][point_id]),
         end = max(tc[["end"]][point_id])
     ), by = interval_id]
@@ -40,7 +43,7 @@
     if (nrow(tss.hits) == 0L) {
         return(data.table())
     }
-    matched <- tss.hits[, .(
+    matched <- tss.hits[, list(
         interval_id = span.intervals[["consensus_id"]][interval_id],
         point_id,
         pos = tss.temp[["pos"]][point_id],

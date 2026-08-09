@@ -2,6 +2,8 @@
   points, intervals, pointColumn = "pos",
   intervalStart = "start", intervalEnd = "end"
 ) {
+    chr <- interval_id <- point_id <- NULL
+
     if (nrow(points) == 0L || nrow(intervals) == 0L) {
         return(data.table(
             interval_id = integer(),
@@ -34,7 +36,7 @@
         type = "within",
         nomatch = NULL
     )
-    hits <- hits[, .(interval_id, point_id)]
+    hits <- hits[, list(interval_id, point_id)]
     setorder(hits, interval_id, point_id)
     hits
 }

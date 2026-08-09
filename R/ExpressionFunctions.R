@@ -66,7 +66,7 @@
 ## .tagCount updated
 .tagCount_updated <- function(cs, tss.raw, samples, useMultiCore, numCores) {
     ## define variable as a NULL value
-    tag_sum <- NULL
+    tag_sum <- interval_id <- NULL
 
     cols <- c("chr", "pos", "strand", samples)
     tss1 <- tss.raw[, .SD, .SDcols = cols]
