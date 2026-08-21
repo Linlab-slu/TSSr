@@ -58,35 +58,38 @@ For technical questions, bug reports and suggestions for new features, we refer 
 
 # Quick start
 
-```{r myTSSr-data, results="hide", tidy=FALSE}
-# Load the example data
-data("exampleTSSr")
-myTSSr <- exampleTSSr
-```
+This vignette runs an analysis from input files rather than beginning with a
+precomputed `TSSr` object. The same object, named `myTSSr`, is returned and
+reassigned at every stage of the workflow.
 
-The bundled object is precomputed so that the main sections below can
-demonstrate every downstream analysis with a sufficiently rich dataset. Its
-source BAM paths are intentionally empty; `inputFilesType = "bam"` is retained
-only as provenance, and its annotation is already stored in `refTable`.
+## Bundled input files
 
-## Starting from your own data
+The example TSS table contains four samples. The accompanying GFF file
+provides gene coordinates for annotation. `system.file()` locates these files
+inside the installed package, and `mustWork = TRUE` ensures that a missing file
+is reported immediately.
 
-For a new analysis, `TSSr()` requires the genome name, input paths, input type,
-and sample labels. Input paths must be existing regular files. `refSource` is
-optional at construction, but when supplied it must also exist; annotation
-later requires either `refSource` or a populated `refTable`.
-
-The package includes a small four-sample TSS table and GFF file that exercise
-the same import-to-annotation path used for user files:
-
-```{r own-data-input}
+```{r bundled-input-files}
 exampleInput <- system.file(
-    "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+    "extdata",
+    "example-tss-table.tsv",
+    package = "TSSr",
+    mustWork = TRUE
 )
 exampleAnnotation <- system.file(
-    "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
+    "extdata",
+    "example-annotation.gff3",
+    package = "TSSr",
+    mustWork = TRUE
 )
-importedTSSr <- TSSr(
+```
+
+We create one `TSSr` object named `myTSSr` and retain this name throughout the
+vignette. The four input samples are assigned to two merged groups: `SL01` and
+`SL02` form the control group, while `SL03` and `SL04` form the treat group.
+
+```{r construct-object}
+myTSSr <- TSSr(
     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
     inputFiles = exampleInput,
     inputFilesType = "TSStable",
@@ -95,80 +98,67 @@ importedTSSr <- TSSr(
     mergeIndex = c(1, 1, 2, 2),
     refSource = exampleAnnotation
 )
+
+myTSSr
 ```
 
-Importing is only the first stage. Before annotation, create tag clusters and
-consensus clusters explicitly:
+## Using your own data
 
-```{r own-data-workflow, message=FALSE}
-importedTSSr <- getTSS(importedTSSr)
-importedTSSr <- mergeSamples(importedTSSr)
-importedTSSr <- normalizeTSS(importedTSSr)
-importedTSSr <- filterTSS(importedTSSr, method = "TPM", tpmLow = 2)
-importedTSSr <- clusterTSS(
-    importedTSSr,
-    method = "peakclu",
-    clusterThreshold = 1,
-    useMultiCore = FALSE
-)
-importedTSSr <- consensusCluster(importedTSSr, useMultiCore = FALSE)
-importedTSSr <- annotateCluster(
-    importedTSSr,
-    clusters = "consensusClusters",
-    filterCluster = TRUE
-)
+To analyse your own data, replace the values in the `TSSr()` call above while
+keeping the object name `myTSSr`. The supplied values must satisfy the
+requirements below.
+
+### Constructor arguments
+
+| Argument | Required | Accepted values and restrictions |
+|:--|:--:|:--|
+| `genomeName` | Yes | A single character string naming an installed `BSgenome` package that matches the genome assembly used to generate the input files, for example `"BSgenome.Scerevisiae.UCSC.sacCer3"`. |
+| `inputFiles` | Yes | A character vector containing paths to existing regular files. For `"bam"`, `"bamPairedEnd"`, `"bed"`, `"tss"`, and `"BigWig"`, supply one file per original sample. For `"TSStable"`, supply exactly one table containing all samples. |
+| `inputFilesType` | Yes | One case-sensitive value chosen from `"bam"`, `"bamPairedEnd"`, `"bed"`, `"tss"`, `"BigWig"`, or `"TSStable"`. See the table below. |
+| `sampleLabels` | Yes | A non-empty character vector naming the original samples. Except for `"TSStable"`, its length must equal `length(inputFiles)`. For `"TSStable"`, the labels identify sample columns in the single input table. |
+| `sampleLabelsMerged` | No | A character vector naming the groups produced by replicate merging, in the order indicated by `mergeIndex`. It must be supplied together with `mergeIndex`. If both arguments are omitted, each sample is treated as a separate group. |
+| `mergeIndex` | No | A numeric vector assigning every original sample to a merged group. Its length must equal `length(sampleLabels)`. Use consecutive positive integers beginning with `1`, such as `c(1, 1, 2, 2)`. The number of unique indices must equal `length(sampleLabelsMerged)`. |
+| `refSource` | No | Zero or one path to an existing genome-annotation file used by `annotateCluster()`. Supply it when cluster annotation will be performed and no annotation table has otherwise been added to the object. |
+| `organismName` | No | Zero or one character string describing the organism. This optional metadata is not required for TSS clustering. |
+
+### Accepted input types
+
+The value of `inputFilesType` is case-sensitive and must be one of the
+following:
+
+| `inputFilesType` | Input represented | Required file arrangement |
+|:--|:--|:--|
+| `"bam"` | Single-end BAM alignments | One BAM file per sample |
+| `"bamPairedEnd"` | Paired-end BAM alignments | One BAM file per sample |
+| `"bed"` | BED-formatted TSS data | One BED file per sample |
+| `"tss"` | CTSS/TSS position-and-signal data | One file per sample |
+| `"BigWig"` | BigWig signal data | One BigWig file per sample |
+| `"TSStable"` | A tabular TSS matrix containing multiple samples | Exactly one table containing all sample columns |
+
+For example, four original samples can be merged into two experimental groups
+using `sampleLabelsMerged = c("control", "treated")` and
+`mergeIndex = c(1, 1, 2, 2)`. Index `1` corresponds to `"control"`, and index
+`2` corresponds to `"treated"`; the ordering of `sampleLabelsMerged` must
+therefore match the numeric group indices.
+
+If replicate merging is not required, omit both `sampleLabelsMerged` and
+`mergeIndex`. `TSSr()` will automatically retain each original sample as a
+separate group. Do not supply only one of these two arguments.
+
+## Importing TSS data
+
+`getTSS()` reads the input file and stores the imported signal in the raw TSS
+matrix. Displaying its dimensions provides a quick confirmation that the data
+were imported before later analysis steps are run.
+
+```{r import-tss, message=FALSE}
+myTSSr <- getTSS(myTSSr)
+dim(TSSmatrix(myTSSr, data = "raw"))
 ```
 
-Both assigned and unassigned clusters are now available:
-
-```{r own-data-results}
-head(assignedClusters(importedTSSr, sample = "control"))
-head(unassignedClusters(importedTSSr, sample = "control"))
-```
-
-### Equivalent quick pipeline
-
-The repeated assignments above are intentional: each workflow function
-returns a modified `TSSr` object without changing its input. Keeping the steps
-separate makes intermediate results easy to inspect. In a script, the same
-workflow can instead be chained with the base R pipe and assigned only once.
-The following self-contained template is equivalent to the step-by-step code:
-
-```{r own-data-pipeline, eval=FALSE}
-exampleInput <- system.file(
-    "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
-)
-exampleAnnotation <- system.file(
-    "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
-)
-quickTSSr <- TSSr(
-    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-    inputFiles = exampleInput,
-    inputFilesType = "TSStable",
-    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
-    sampleLabelsMerged = c("control", "treat"),
-    mergeIndex = c(1, 1, 2, 2),
-    refSource = exampleAnnotation
-) |>
-    getTSS() |>
-    mergeSamples() |>
-    normalizeTSS() |>
-    filterTSS(method = "TPM", tpmLow = 2) |>
-    clusterTSS(
-        method = "peakclu",
-        clusterThreshold = 1,
-        useMultiCore = FALSE
-    ) |>
-    consensusCluster(useMultiCore = FALSE) |>
-    annotateCluster(
-        clusters = "consensusClusters",
-        filterCluster = TRUE
-    )
-```
-
-Both styles produce an annotated object with the same workflow state. Use the
-step-by-step form while exploring intermediate results and the pipeline form
-when the analysis settings are already established.
+For formats other than `"TSStable"`, the import step may require additional
+format-specific settings. See `?getTSS` before adapting the example to BAM or
+other position-based files.
 
 # TSS data processing
 
@@ -274,8 +264,8 @@ method is retained; see `?shapeCluster` for the SI alternative.
 # Annotation of core promoters
 
 Annotation connects consensus clusters to downstream genes so that subsequent
-analyses can operate at gene level. `myTSSr` already contains a 12-gene
-reference table derived from the bundled GFF file. With the settings below, a
+analyses can operate at gene level. The `refSource` supplied when `myTSSr` was
+constructed points to the bundled GFF annotation. With the settings below, a
 cluster is considered up to 1000 bp upstream of a gene start; overlapping
 upstream features use the more restrictive 500-bp rule. Weak downstream
 clusters below 2% of the strongest cluster in the promoter region are filtered
@@ -421,6 +411,87 @@ tracks for the processed TSS signal. BED and bedGraph files can be loaded into
 genome browsers such as UCSC Genome Browser or IGV. In an interactive analysis,
 set the working directory to the desired output location before calling these
 functions; see the individual export help pages for file-naming options.
+
+# Precomputed example object
+
+The package also includes `exampleTSSr`, a precomputed object for users who
+want to inspect a populated `TSSr` object without rerunning the workflow. It is
+not used as the input to the analysis above and does not replace `myTSSr`.
+
+```{r precomputed-example}
+data("exampleTSSr")
+exampleTSSr
+```
+
+# Complete workflow in one pipeline
+
+The step-by-step assignments above make intermediate results easy to inspect.
+Once the settings have been established, the same analysis can be expressed
+as one base R pipeline. The object is still named `myTSSr`; only the style of
+the assignment changes. Replace the constructor values with the paths, labels,
+genome, and annotation for your own experiment.
+
+```{r complete-pipeline, eval=FALSE}
+myTSSr <- TSSr(
+    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+    inputFiles = exampleInput,
+    inputFilesType = "TSStable",
+    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+    sampleLabelsMerged = c("control", "treat"),
+    mergeIndex = c(1, 1, 2, 2),
+    refSource = exampleAnnotation
+) |>
+    getTSS() |>
+    mergeSamples() |>
+    normalizeTSS() |>
+    filterTSS(method = "TPM", tpmLow = 2) |>
+    clusterTSS(
+        method = "peakclu",
+        peakDistance = 100,
+        extensionDistance = 30,
+        localThreshold = 0.02,
+        clusterThreshold = 1,
+        useMultiCore = FALSE,
+        numCores = NULL
+    ) |>
+    consensusCluster(
+        dis = 50,
+        useMultiCore = FALSE
+    ) |>
+    shapeCluster(
+        clusters = "consensusClusters",
+        method = "PSS",
+        useMultiCore = FALSE,
+        numCores = NULL
+    ) |>
+    annotateCluster(
+        clusters = "consensusClusters",
+        filterCluster = TRUE,
+        filterClusterThreshold = 0.02,
+        annotationType = "genes",
+        upstream = 1000,
+        upstreamOverlap = 500,
+        downstream = 0
+    ) |>
+    callEnhancer(
+        flanking = 400,
+        dis2gene = 2000
+    ) |>
+    deGene(
+        comparePairs = list(c("control", "treat")),
+        pval = 0.01,
+        useMultiCore = FALSE,
+        numCores = NULL,
+        fitType = "mean"
+    ) |>
+    shiftPromoter(
+        comparePairs = list(c("control", "treat")),
+        pval = 0.01
+    )
+```
+
+The export functions are intentionally kept outside this pipeline because they
+write files rather than add a new analysis stage to the returned object.
 
 # Session info
 
