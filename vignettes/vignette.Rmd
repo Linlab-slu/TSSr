@@ -136,9 +136,9 @@ following:
 | `"TSStable"` | A tabular TSS matrix containing multiple samples | Exactly one table containing all sample columns |
 
 For example, four original samples can be merged into two experimental groups
-using `sampleLabelsMerged = c("control", "treated")` and
+using `sampleLabelsMerged = c("control", "treat")` and
 `mergeIndex = c(1, 1, 2, 2)`. Index `1` corresponds to `"control"`, and index
-`2` corresponds to `"treated"`; the ordering of `sampleLabelsMerged` must
+`2` corresponds to `"treat"`; the ordering of `sampleLabelsMerged` must
 therefore match the numeric group indices.
 
 If replicate merging is not required, omit both `sampleLabelsMerged` and
@@ -162,9 +162,9 @@ other position-based files.
 
 # TSS data processing
 
-The `myTSSr` object contains chromosome I data and the upstream inputs
-needed for each workflow stage. The chunks below recompute the complete
-workflow and assign the returned object at every step.
+The `myTSSr` object now contains the chromosome I signals imported above. The
+next chunk merges the original samples into their experimental groups,
+normalizes the merged signals, and applies the TPM filter in sequence.
 
 ```{r TSSprocessing, tidy=FALSE}
 # Merge replicates
@@ -182,7 +182,9 @@ c(
 
 These functions populate the processed TSS matrix in the returned object. The
 reported row counts show how many genomic TSS positions remain after the TPM
-filter. Use `TSSmatrix()` to inspect this matrix through the public accessor:
+filter. Both values are 482 for the bundled fixture because no positions are
+removed at the selected threshold; user datasets may show a decrease at this
+step. Use `TSSmatrix()` to inspect this matrix through the public accessor:
 
 ```{r TSSprocessing-show}
 # Access the processed TSS matrix without exposing internal storage
@@ -341,17 +343,20 @@ The returned object stores the gene-level count tables and both complete and
 significant DESeq2 results. `DEtables()` selects a comparison and result set:
 
 ```{r deGene-show}
-# Differential expression results
+# All differential expression results
 head(DEtables(
     myTSSr,
     comparison = "control_VS_treat",
-    result = "significant"
+    result = "all"
 ))
 ```
 
-Each row corresponds to one annotated gene and includes the DESeq2 effect-size
-and significance statistics. Use `result = "all"` to retrieve the unfiltered
-table, `plotDE()` to visualize it, or `exportDETable()` to save it.
+Each row in the displayed table corresponds to one annotated gene and includes
+the DESeq2 effect-size and significance statistics. `result = "significant"`
+returns the subset with an adjusted p value below the `pval` threshold. At
+`pval = 0.01`, none of the six genes in this small bundled dataset meet that
+criterion, so its significant-results table is empty. Use `plotDE()` to
+visualize the results or `exportDETable()` to save them.
 
 # Core promoter shifts
 
