@@ -146,12 +146,29 @@ c(
 )
 ```
 
+These functions populate the processed TSS matrix in the returned object. The
+reported row counts show how many genomic TSS positions remain after the TPM
+filter. Use `TSSmatrix()` to inspect this matrix through the public accessor:
+
 ```{r TSSprocessing-show}
 # Access the processed TSS matrix without exposing internal storage
 head(TSSmatrix(myTSSr, data = "processed"))
 ```
 
+The first three columns identify the chromosome, genomic position, and strand;
+the remaining columns contain processed signals for the merged sample groups.
+This matrix is the input for TSS clustering.
+
 # TSS clustering
+
+Nearby TSSs can represent transcription initiation from the same core
+promoter. `clusterTSS()` groups these positions into sample-specific tag
+clusters using the peak-based `peakclu` method. Here, candidate peaks must be
+at least 100 bp apart, a cluster can extend across gaps of at most 30 bp, TSSs
+below 2% of the local peak are removed, and clusters with signal below 1 TPM
+are discarded. `consensusCluster()` then relates tag clusters across sample
+groups whose dominant TSSs are within 50 bp, providing common regions for
+comparative analyses.
 
 ```{r TSSclustering, tidy=FALSE}
 # TSS clustering
@@ -165,6 +182,10 @@ myTSSr <- clusterTSS(myTSSr,
 myTSSr <- consensusCluster(myTSSr, dis = 50, useMultiCore = FALSE)
 ```
 
+The returned object now contains both `tagClusters` and `consensusClusters`.
+Their accessors expose the sample-specific calls and the cross-sample regions,
+respectively:
+
 ```{r TSSclustering-show}
 # Tag clusters per sample
 head(tagClusters(myTSSr, sample = "control"))
@@ -173,7 +194,18 @@ head(tagClusters(myTSSr, sample = "control"))
 head(consensusClusters(myTSSr, sample = "control"))
 ```
 
+Each table reports cluster coordinates, the dominant TSS, TSS signal, and
+inter-quantile boundaries. Consensus clusters are used below so that promoter
+shape, annotation, and between-group comparisons refer to the same genomic
+regions. See `?clusterTSS` and `?consensusCluster` for parameter details.
+
 # Core promoter shape
+
+Core promoter shape describes how initiation signals are distributed within a
+cluster. `shapeCluster()` can calculate either the Shape Index (SI) or Promoter
+Shape Score (PSS); this example calculates PSS for the consensus clusters. PSS
+combines the inter-quantile width with the distribution of TSS signals. Smaller
+PSS values indicate sharper promoters, and a singleton has a score of zero.
 
 ```{r shapeCluster, tidy=FALSE}
 # Calculating core promoter shape score
@@ -183,12 +215,27 @@ myTSSr <- shapeCluster(myTSSr,
 )
 ```
 
+The scores are stored in `clusterShape` for each merged sample group and can be
+retrieved without accessing the object's internal slots:
+
 ```{r shapeCluster-show}
 # Shape scores per cluster
 head(clusterShape(myTSSr, sample = "control"))
 ```
 
+These values can be used to compare promoter architectures across samples or
+exported with `exportShapeTable()`. Only the most recently calculated shape
+method is retained; see `?shapeCluster` for the SI alternative.
+
 # Annotation of core promoters
+
+Annotation connects consensus clusters to downstream genes so that subsequent
+analyses can operate at gene level. `myTSSr` already contains a 12-gene
+reference table derived from the bundled GFF file. With the settings below, a
+cluster is considered up to 1000 bp upstream of a gene start; overlapping
+upstream features use the more restrictive 500-bp rule. Weak downstream
+clusters below 2% of the strongest cluster in the promoter region are filtered
+to reduce recapping and other low-signal events.
 
 ```{r annotateCluster, tidy=FALSE}
 # Assign clusters to the annotated features
@@ -198,29 +245,62 @@ myTSSr <- annotateCluster(myTSSr, clusters = "consensusClusters",
     upstreamOverlap = 500, downstream = 0)
 ```
 
+The returned object separates clusters into assigned, unassigned, and, when
+filtering is enabled, filtered tables. The following accessor displays clusters
+that were assigned to genes in the control group:
+
 ```{r annotateCluster-show}
 # Clusters assigned to genes
 head(assignedClusters(myTSSr, sample = "control"))
 ```
 
+The `gene` column records the assigned feature, while the cluster columns retain
+the genomic position and signal information. Assigned clusters support the
+gene-level differential expression and promoter-shift analyses below;
+unassigned clusters are considered during enhancer identification. See
+`?annotateCluster` when adapting promoter windows to another organism.
+
 # Enhancer identification
+
+Active enhancers can produce nearby, divergent transcription signals.
+`callEnhancer()` searches the unassigned clusters for opposite-strand pairs no
+more than 400 bp apart, applies a directionality filter, and excludes candidates
+within 2000 bp of a gene's main annotated promoter. The result should therefore
+be interpreted as a set of putative enhancers rather than independently
+validated regulatory elements.
 
 ```{r callEnhancer, tidy=FALSE}
 myTSSr <- callEnhancer(myTSSr, flanking = 400, dis2gene = 2000)
 ```
+
+Candidate pairs and their strand-specific signals are stored in the `enhancers`
+slot. Use the public accessor to inspect one sample group:
 
 ```{r callEnhancer-show}
 # Putative enhancers per sample
 head(enhancers(myTSSr, sample = "control"))
 ```
 
+The output identifies the paired clusters, their dominant TSS positions and
+signals, and the directionality score `D`. See `?callEnhancer` for the candidate
+selection parameters and `exportEnhancerTable()` for saving the complete table.
+
 # Differential expression analysis
+
+After annotation, TSSr can aggregate raw TSS counts from assigned clusters by
+gene and use DESeq2 to compare sample groups. `comparePairs` sets the order of
+the comparison, here `control` versus `treat`, and `pval = 0.01` retains genes
+with an adjusted p value below 0.01 in the significant-results table. DESeq2 is
+a suggested dependency and must be installed to run this step.
 
 ```{r deGene, tidy=FALSE}
 # Gene-level differential expression using DESeq2
 myTSSr <- deGene(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01, useMultiCore = FALSE, numCores = NULL)
 ```
+
+The returned object stores the gene-level count tables and both complete and
+significant DESeq2 results. `DEtables()` selects a comparison and result set:
 
 ```{r deGene-show}
 # Differential expression results
@@ -231,11 +311,18 @@ head(DEtables(
 ))
 ```
 
+Each row corresponds to one annotated gene and includes the DESeq2 effect-size
+and significance statistics. Use `result = "all"` to retrieve the unfiltered
+table, `plotDE()` to visualize it, or `exportDETable()` to save it.
+
 # Core promoter shifts
 
-Sparse gene-level 2-by-2 tables can have small expected counts. In that case,
-`shiftPromoter()` emits one summary warning for all affected tests; their
-approximate p values may be unreliable. See `?shiftPromoter` for details.
+Genes with multiple core promoters may use them at different proportions
+between conditions. `shiftPromoter()` tests the annotated promoter profiles for
+the requested `control`-versus-`treat` comparison. Sparse gene-level 2-by-2
+tables can have small expected counts; in that case, the function emits one
+summary warning for all affected tests and their approximate p values may be
+unreliable. See `?shiftPromoter` for details.
 
 ```{r shiftPromoter, tidy=FALSE}
 # Calculate core promoter shifts
@@ -243,14 +330,24 @@ myTSSr <- shiftPromoter(myTSSr, comparePairs = list(c("control", "treat")),
     pval = 0.01)
 ```
 
+The test results are stored by comparison in the `PromoterShift` slot. The
+accessor below retrieves the table for this pair:
+
 ```{r shiftPromoter-show}
 # Promoter shift results
 head(PromoterShift(myTSSr, comparison = "control_VS_treat"))
 ```
 
+The table reports gene-level promoter-shift statistics and associated p values.
+Because small expected counts weaken the chi-squared approximation, inspect the
+underlying promoter signals before interpreting affected genes.
+
 # Exporting results
 
-TSSr provides several export functions for saving results:
+TSSr can save processed TSS values and cluster tables for downstream analysis,
+or write genome-browser tracks for visualization. The functions below write to
+the current working directory. The vignette temporarily switches to
+`tempdir()` so that rendering does not add result files to the package source.
 
 ```{r export}
 oldwd <- setwd(tempdir())
@@ -270,7 +367,17 @@ exportTSStoBedgraph(myTSSr, data = "processed")
 setwd(oldwd)
 ```
 
+This creates a tab-delimited processed TSS table, per-sample assigned-cluster
+tables, BED files for assigned consensus clusters, and strand-specific bedGraph
+tracks for the processed TSS signal. BED and bedGraph files can be loaded into
+genome browsers such as UCSC Genome Browser or IGV. In an interactive analysis,
+set the working directory to the desired output location before calling these
+functions; see the individual export help pages for file-naming options.
+
 # Session info
+
+Recording package and R versions makes the rendered analysis easier to
+reproduce and diagnose:
 
 ```{r sessionInfo, tidy=FALSE}
 sessionInfo()
