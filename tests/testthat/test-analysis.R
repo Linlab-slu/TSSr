@@ -40,6 +40,26 @@ test_that("deGene calculates differential expression tables", {
     expect_true(length(result@TAGtables) > 0)
 })
 
+test_that("deGene supports mean dispersion fitting for small data sets", {
+    data(exampleTSSr)
+    object <- exampleTSSr
+    object@DEtables <- list()
+    object@TAGtables <- list()
+
+    expect_no_warning(
+        result <- deGene(
+            object,
+            comparePairs = list(c("control", "treat")),
+            pval = 0.01,
+            useMultiCore = FALSE,
+            fitType = "mean"
+        )
+    )
+
+    expect_s4_class(result, "TSSr")
+    expect_gt(length(result@DEtables), 0L)
+})
+
 test_that("shiftPromoter detects promoter shifts", {
     object <- exampleTSSr
     object@PromoterShift <- list()

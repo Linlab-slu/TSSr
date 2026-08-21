@@ -1,5 +1,15 @@
 # TSSr 0.99.21 (2026-08-21)
 
+* Added a `fitType` argument to `deGene()` and now passes it to
+  `DESeq2::DESeq()`.
+  The small bundled example uses the mean dispersion fit to avoid an unstable
+  local fit, while the default remains parametric. Corrected the `pval`
+  documentation to state that significant results use adjusted p values below
+  the threshold.
+
+* Documented the standard return-and-reassign workflow semantics and added an
+  equivalent base-pipe quick workflow to the vignette.
+
 * Made the core `TSSr()` import arguments required and added fail-fast checks
   for missing, blank, non-file, and nonexistent `inputFiles`. `refSource`
   remains optional, but is validated when supplied; `getTSS()` revalidates

@@ -3,15 +3,19 @@
 #'
 #' @description Analyzes gene-level differential expression using DESeq2 method (Love et al., 2014).
 #' @usage deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
-#'  useMultiCore=FALSE, numCores = NULL)
+#'  useMultiCore=FALSE, numCores = NULL, fitType = "parametric")
 #'
 #' @param object A TSSr object.
 #' @param comparePairs Specified list of sample pairs for comparison with DESeq2 method.
-#' @param pval Genes with adjusted p value >= pVal will be returned. Default value = 0.01.
+#' @param pval Genes with an adjusted p value below \code{pval} are stored in
+#'   the significant-results table. Default is 0.01.
 #' @param useMultiCore Logical indicating whether multiple cores are used (TRUE) or
 #' not (FALSE). Default is FALSE.
 #' @param numCores Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 #' Default is NULL.
+#' @param fitType Dispersion trend fitting method passed to
+#'   \code{DESeq2::DESeq()}. One of \code{"parametric"}, \code{"local"},
+#'   or \code{"mean"}. Default is \code{"parametric"}.
 #' @return A modified TSSr object with updated \code{DEtables} and
 #'   \code{TAGtables} slots. The input object is not modified; assign the
 #'   returned object to retain the changes.
@@ -24,7 +28,7 @@
 #' data(exampleTSSr)
 #' exampleTSSr <- deGene(
 #'     exampleTSSr, comparePairs = list(c("control", "treat")),
-#'     pval = 0.01, useMultiCore = FALSE
+#'     pval = 0.01, useMultiCore = FALSE, fitType = "mean"
 #' )
 #' head(DEtables(
 #'     exampleTSSr,
@@ -34,12 +38,19 @@
 setGeneric(
     "deGene",
     function(object, comparePairs = list(c("control", "treat")), pval = 0.01,
-             useMultiCore = FALSE, numCores = NULL) standardGeneric("deGene"),
+             useMultiCore = FALSE, numCores = NULL,
+             fitType = "parametric") standardGeneric("deGene"),
     signature = "object"
 )
 #' @rdname deGene
 #' @export
-setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, pval, useMultiCore, numCores) {
+setMethod("deGene", signature(object = "TSSr"), function(
+    object, comparePairs, pval, useMultiCore, numCores, fitType
+) {
+    fitType <- match.arg(
+        fitType,
+        c("parametric", "local", "mean")
+    )
     .requireWorkflowArtifact(
         object,
         "assignedClusters",
@@ -70,7 +81,7 @@ setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, p
         sampley <- sampleLabels[which(mergeIndex == which(sampleLabelsMerged == sampleTwo))]
         de.result <- .deseq2(
             cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo,
-            useMultiCore, numCores, TAGtables
+            useMultiCore, numCores, TAGtables, fitType
         )
         DE.dt <- de.result$DEtable
         TAGtables <- de.result$TAGtables

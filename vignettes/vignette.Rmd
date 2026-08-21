@@ -126,6 +126,50 @@ head(assignedClusters(importedTSSr, sample = "control"))
 head(unassignedClusters(importedTSSr, sample = "control"))
 ```
 
+### Equivalent quick pipeline
+
+The repeated assignments above are intentional: each workflow function
+returns a modified `TSSr` object without changing its input. Keeping the steps
+separate makes intermediate results easy to inspect. In a script, the same
+workflow can instead be chained with the base R pipe and assigned only once.
+The following self-contained template is equivalent to the step-by-step code:
+
+```{r own-data-pipeline, eval=FALSE}
+exampleInput <- system.file(
+    "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+)
+exampleAnnotation <- system.file(
+    "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
+)
+quickTSSr <- TSSr(
+    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+    inputFiles = exampleInput,
+    inputFilesType = "TSStable",
+    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+    sampleLabelsMerged = c("control", "treat"),
+    mergeIndex = c(1, 1, 2, 2),
+    refSource = exampleAnnotation
+) |>
+    getTSS() |>
+    mergeSamples() |>
+    normalizeTSS() |>
+    filterTSS(method = "TPM", tpmLow = 2) |>
+    clusterTSS(
+        method = "peakclu",
+        clusterThreshold = 1,
+        useMultiCore = FALSE
+    ) |>
+    consensusCluster(useMultiCore = FALSE) |>
+    annotateCluster(
+        clusters = "consensusClusters",
+        filterCluster = TRUE
+    )
+```
+
+Both styles produce an annotated object with the same workflow state. Use the
+step-by-step form while exploring intermediate results and the pipeline form
+when the analysis settings are already established.
+
 # TSS data processing
 
 The `myTSSr` object contains chromosome I data and the upstream inputs
@@ -291,12 +335,16 @@ After annotation, TSSr can aggregate raw TSS counts from assigned clusters by
 gene and use DESeq2 to compare sample groups. `comparePairs` sets the order of
 the comparison, here `control` versus `treat`, and `pval = 0.01` retains genes
 with an adjusted p value below 0.01 in the significant-results table. DESeq2 is
-a suggested dependency and must be installed to run this step.
+a suggested dependency and must be installed to run this step. The bundled
+example contains only a few annotated genes, so it uses `fitType = "mean"` to
+avoid an unstable local dispersion-trend fit. The default remains
+`fitType = "parametric"` for ordinary analyses.
 
 ```{r deGene, tidy=FALSE}
 # Gene-level differential expression using DESeq2
 myTSSr <- deGene(myTSSr, comparePairs = list(c("control", "treat")),
-    pval = 0.01, useMultiCore = FALSE, numCores = NULL)
+    pval = 0.01, useMultiCore = FALSE, numCores = NULL,
+    fitType = "mean")
 ```
 
 The returned object stores the gene-level count tables and both complete and

@@ -6,14 +6,15 @@
 \title{Analysis of gene differential expression.}
 \usage{
 deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
- useMultiCore=FALSE, numCores = NULL)
+ useMultiCore=FALSE, numCores = NULL, fitType = "parametric")
 
 \S4method{deGene}{TSSr}(
   object,
   comparePairs = list(c("control", "treat")),
   pval = 0.01,
   useMultiCore = FALSE,
-  numCores = NULL
+  numCores = NULL,
+  fitType = "parametric"
 )
 }
 \arguments{
@@ -21,13 +22,18 @@ deGene(object,comparePairs=list(c("control","treat")), pval = 0.01,
 
 \item{comparePairs}{Specified list of sample pairs for comparison with DESeq2 method.}
 
-\item{pval}{Genes with adjusted p value >= pVal will be returned. Default value = 0.01.}
+\item{pval}{Genes with an adjusted p value below \code{pval} are stored in
+the significant-results table. Default is 0.01.}
 
 \item{useMultiCore}{Logical indicating whether multiple cores are used (TRUE) or
 not (FALSE). Default is FALSE.}
 
 \item{numCores}{Number of cores are used in clustering step. Used only if useMultiCore = TRUE.
 Default is NULL.}
+
+\item{fitType}{Dispersion trend fitting method passed to
+\code{DESeq2::DESeq()}. One of \code{"parametric"}, \code{"local"},
+or \code{"mean"}. Default is \code{"parametric"}.}
 }
 \value{
 A modified TSSr object with updated \code{DEtables} and
@@ -44,7 +50,7 @@ Requires the suggested package \pkg{DESeq2}.
 data(exampleTSSr)
 exampleTSSr <- deGene(
     exampleTSSr, comparePairs = list(c("control", "treat")),
-    pval = 0.01, useMultiCore = FALSE
+    pval = 0.01, useMultiCore = FALSE, fitType = "mean"
 )
 head(DEtables(
     exampleTSSr,

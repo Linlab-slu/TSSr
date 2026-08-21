@@ -409,9 +409,9 @@ exportClustersTable(myTSSr, data = "unassigned")
 
 * Differential expression analysis
 
-  The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis. 
+  The number of tags at each TSS reflects the number of transcripts initiated at the TSS. Thus, TSS data can be used for expression profiling. With specified sample pairs for comparison, deGene function counts raw tags of each consensus clusters and utilizes the DESeq2 package (Love, Huber et al. 2014) for differential expression analysis. The bundled example contains few annotated genes, so it uses the mean dispersion fit; `fitType = "parametric"` remains the default for ordinary analyses.
         
-        myTSSr <- deGene(myTSSr,comparePairs=list(c("control","treat")), pval = 0.01,useMultiCore=FALSE, numCores=NULL)
+        myTSSr <- deGene(myTSSr, comparePairs = list(c("control", "treat")), pval = 0.01, useMultiCore = FALSE, numCores = NULL, fitType = "mean")
   
   Differential expression analysis results can be visualized by plotDE function which generates a volcano plots. Names of genes differential expressed between the compared pairs are displayed on the dots when the withGeneName argument is set as TRUE.  
 

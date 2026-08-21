@@ -11,7 +11,7 @@
 ## tss.raw is the raw tss merged tables, before any sums
 ############################################################################
 .deseq2 <- function(cx, cy, tss.raw, samplex, sampley, sampleOne, sampleTwo,
-                    useMultiCore, numCores, TAGtables) {
+                    useMultiCore, numCores, TAGtables, fitType) {
     .requireSuggestedPackage("DESeq2", "deGene()")
     ## get raw count tables
     if (sampleOne %in% names(TAGtables)) {
@@ -81,7 +81,7 @@
         countData = Dtable, data.frame(condition), ~condition
     )
     dds$condition <- factor(dds$condition, levels = c(sampleOne, sampleTwo))
-    dds <- DESeq2::DESeq(dds)
+    dds <- DESeq2::DESeq(dds, fitType = fitType)
     res <- DESeq2::results(dds)
     res <- res[order(res$padj), ]
     return(list(
