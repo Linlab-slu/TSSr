@@ -129,7 +129,19 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
         data(exampleTSSr)
         myTSSr <- exampleTSSr 
     
-* Generating a new TSSr object from BAM or TSS table files. To generate a new TSSr object, several arguments of the constructer "new" function must be specified. The first step is to provide the path and file names of input files for argument "inputFiles". Four example BAM files (S01.sorted.bam, S02.sorted.bam, S03.sorted.bam, S04.sorted.bam) can be downloaded from http://www.zlinlab.org/TSSr.html. These BAM files were generated using nAnT-iCAGE from a budding yeast Saccharomyces cerevisiae (Lu and Lin 2019). The nAnT-iCAGE reads were mapped to the reference genome of S. cerevisiae (R64-2-1) using HISAT2 (Kim, Langmead et al. 2015). To reduced sample file size, each BAM file only includes sequencing reads mapped to two chromosomes (Chr I and Chr II). A TSS table genereated from the four BAM files can be downloaded from http://zlinlab.org/TSSr/ALL.samples.TSS.raw.txt, which can also be used as a input file. Assuming the bam or TSS files are saved to the current working directory: 
+* Generating a new TSSr object from BAM or TSS table files. Use the public
+  `TSSr()` constructor, which validates required metadata and input paths when
+  the object is created. Four example BAM files (S01.sorted.bam,
+  S02.sorted.bam, S03.sorted.bam, S04.sorted.bam) can be downloaded from
+  http://www.zlinlab.org/TSSr.html. These BAM files were generated using
+  nAnT-iCAGE from budding yeast *Saccharomyces cerevisiae* (Lu and Lin 2019).
+  The reads were mapped to the S. cerevisiae R64-2-1 reference with HISAT2
+  (Kim, Langmead et al. 2015); to reduce file size, each BAM contains only
+  reads mapped to chromosomes I and II. A TSS table generated from the four
+  BAM files is available from
+  http://zlinlab.org/TSSr/ALL.samples.TSS.raw.txt. Download the selected input
+  files before running the code below. The example assumes they are in the
+  current working directory:
 
         inputFiles <- c("S01.sorted.bam", "S02.sorted.bam", "S03.sorted.bam", "S04.sorted.bam") # if use a TSS table: inputFiles <- "ALL.samples.TSS.raw.txt"
         inputFilesType <- "bam" # set “inputFilesType” as “bamPairedEnd” for paired-end BAM files, and as "TSStable" if the input file is a TSS table 
@@ -140,16 +152,23 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
         BiocManager::install("BSgenome.Scerevisiae.UCSC.sacCer3")
         library(BSgenome.Scerevisiae.UCSC.sacCer3) 
 	
-* Provide path and file name of genome annotation file. The example genome annotation of S. cerevisiae (R64-2-1) was originally obtained from the Saccharomyces Genome Database. It ban be downlaoded from http://zlinlab.org/TSSr/saccharomyces_cerevisiae_R64-2-1.gff. Assuming the gff file is saved to the current working directory: 
+* Provide the path to a genome annotation file when annotation will be run.
+  The example S. cerevisiae R64-2-1 annotation was originally obtained from
+  the Saccharomyces Genome Database and can be downloaded from
+  http://zlinlab.org/TSSr/saccharomyces_cerevisiae_R64-2-1.gff. Download the
+  GFF before constructing the object. The example assumes it is in the current
+  working directory:
 
         refSource <- "saccharomyces_cerevisiae_R64-2-1.gff" 
 	
-* Creating a new TSSr object using the constructor function. In addition to
-  `inputFiles`, `inputFilesType`, `genomeName`, and the optional annotation
-  file `refSource`, users provide `sampleLabels`, `sampleLabelsMerged`, and
-  `mergeIndex`. In this example, SL01 and SL02 are biological replicates from
-  the control condition, while SL03 and SL04 are replicates from the treatment
-  condition. Therefore, `sampleLabelsMerged = c("control", "treat")` and
+* Create a new object with `TSSr()`. The required arguments are `genomeName`,
+  `inputFiles`, `inputFilesType`, and `sampleLabels`. `refSource` is optional,
+  but any supplied path must identify an existing file. The optional
+  `sampleLabelsMerged` and `mergeIndex` arguments must be supplied together;
+  if both are omitted, every sample forms its own group. In this example, SL01
+  and SL02 are biological replicates from the control condition, while SL03
+  and SL04 are replicates from the treatment condition. Therefore,
+  `sampleLabelsMerged = c("control", "treat")` and
   `mergeIndex = c(1, 1, 2, 2)` merge the four samples into two groups.
 
   (`organismName` is retained as optional descriptive metadata for backward
@@ -157,13 +176,15 @@ TSSr uses S4 object to store all input files and arguments and generate downstre
   affect cluster-to-gene assignment, which is determined by the genomic
   coordinates and strands in `refSource` or `refTable`.)
 
-        myTSSr <- new("TSSr", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3"
-	              ,inputFiles = inputFiles
-	              ,inputFilesType = inputFilesType
-	              ,sampleLabels = c("SL01","SL02","SL03","SL04")
-	              ,sampleLabelsMerged = c("control","treat")
-	              ,mergeIndex = c(1,1,2,2)
-	              ,refSource = refSource)
+        myTSSr <- TSSr(
+            genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+            inputFiles = inputFiles,
+            inputFilesType = inputFilesType,
+            sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+            sampleLabelsMerged = c("control", "treat"),
+            mergeIndex = c(1, 1, 2, 2),
+            refSource = refSource
+        )
 	
 	Typing the object name displays a compact summary. Analysis results are
     initially marked as not run:

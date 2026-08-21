@@ -3,7 +3,12 @@
 * Made the core `TSSr()` import arguments required and added fail-fast checks
   for missing, blank, non-file, and nonexistent `inputFiles`. `refSource`
   remains optional, but is validated when supplied; `getTSS()` revalidates
-  paths immediately before import.
+  paths immediately before import. The README now uses this validated public
+  constructor and documents which inputs must be downloaded before use.
+
+* Workflow-stage checks now treat data frames with zero rows as empty. If
+  filtering removes every TSS, `clusterTSS()` reports that filtering thresholds
+  may need to be relaxed instead of exposing an internal data.table error.
 
 * Added explicit annotation-stage and chromosome-name checks. Fixed loss of
   all clusters when a chromosome/strand subset has zero promoter or coding

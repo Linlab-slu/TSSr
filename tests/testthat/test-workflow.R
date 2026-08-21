@@ -97,11 +97,11 @@ test_that("workflow methods report missing upstream stages clearly", {
     )
     clustered_input <- empty
     clustered_input@TSSprocessedMatrix <- data.table::data.table(
-        chr = character(),
-        pos = integer(),
-        strand = character(),
-        control = numeric(),
-        treat = numeric()
+        chr = "chrI",
+        pos = 1L,
+        strand = "+",
+        control = 0,
+        treat = 0
     )
 
     expect_error(
@@ -135,5 +135,34 @@ test_that("workflow methods report missing upstream stages clearly", {
     expect_error(
         shiftPromoter(empty, comparePairs = list(c("control", "treat"))),
         "assignedClusters.*empty.*annotateCluster"
+    )
+})
+
+test_that("clusterTSS explains when filtering removes every TSS", {
+    input_file <- system.file(
+        "extdata", "example-tss-table.tsv",
+        package = "TSSr",
+        mustWork = TRUE
+    )
+    object <- TSSr(
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        inputFiles = input_file,
+        inputFilesType = "TSStable",
+        sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+        sampleLabelsMerged = c("control", "treat"),
+        mergeIndex = c(1, 1, 2, 2)
+    )
+    object <- getTSS(object)
+    object <- mergeSamples(object)
+    object <- normalizeTSS(object)
+    object <- filterTSS(object, method = "TPM", tpmLow = 1e12)
+
+    expect_equal(nrow(TSSmatrix(object, data = "processed")), 0L)
+    expect_error(
+        clusterTSS(object, useMultiCore = FALSE),
+        paste0(
+            "TSSprocessedMatrix.*empty.*relax filterTSS\\(\\) ",
+            "thresholds"
+        )
     )
 })

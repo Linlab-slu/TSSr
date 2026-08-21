@@ -94,7 +94,7 @@ utils::globalVariables(c("gene", "tags"))
 .requireWorkflowArtifact <- function(object, slotName, nextStep) {
     value <- methods::slot(object, slotName)
     is_missing <- if (is.data.frame(value)) {
-        ncol(value) == 0L
+        nrow(value) == 0L || ncol(value) == 0L
     } else {
         length(value) == 0L
     }

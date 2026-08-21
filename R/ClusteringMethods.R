@@ -64,7 +64,10 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
     tss.dt <- .requireWorkflowArtifact(
         object,
         "TSSprocessedMatrix",
-        "run getTSS() and mergeSamples() first"
+        paste(
+            "run getTSS() and mergeSamples() first, or relax filterTSS()",
+            "thresholds"
+        )
     )
     message("\nClustering TSS data with ", method, " method...")
     if (length(peakDistance) != 1L || !is.numeric(peakDistance) ||
