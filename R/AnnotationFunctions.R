@@ -72,7 +72,7 @@
             hits <- as.data.frame(hits)
             hits <- hits[!duplicated(hits$queryHits), ]
             gr1 <- gr[hits$queryHits]
-            gr2 <- gr[-hits$queryHits]
+            gr2 <- gr[setdiff(seq_along(gr), hits$queryHits)]
             GenomicRanges::mcols(gr1)[, "gene"] <- names(ref_sub)[hits$subjectHits]
             GenomicRanges::mcols(gr2)[, "gene"] <- NA
             gr <- c(gr1, gr2)
@@ -95,8 +95,8 @@
                 hits <- as.data.frame(hits)
                 hits <- hits[!duplicated(hits$queryHits), ]
                 gr1 <- gr[hits$queryHits]
-                gr2 <- gr[-hits$queryHits]
-                GenomicRanges::mcols(gr1)[, "inCoding"] <- names(ref_sub)[hits$subjectHits]
+                gr2 <- gr[setdiff(seq_along(gr), hits$queryHits)]
+                GenomicRanges::mcols(gr1)[, "inCoding"] <- names(ref_coding)[hits$subjectHits]
                 GenomicRanges::mcols(gr2)[, "inCoding"] <- NA
                 gr <- c(gr1, gr2)
                 # hits <- breakTies(hits, method = "first")

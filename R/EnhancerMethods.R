@@ -30,18 +30,21 @@ setGeneric(
 setMethod(
     "callEnhancer", signature(object = "TSSr"),
     function(object, flanking, dis2gene) {
+        asn.dt <- .requireWorkflowArtifact(
+            object,
+            "assignedClusters",
+            "run annotateCluster() first"
+        )
+        cs.dt <- .requireWorkflowArtifact(
+            object,
+            "unassignedClusters",
+            "run annotateCluster() first"
+        )
         message("\nCalculating enhancers...")
         ## define variable as a NULL value
         inCoding <- dominant_tss <- strand.m <- strand.p <- cluster <- D <- chr <- NULL
         dominant_tss.m <- dominant_tss.p <- tags.p <- tags.m <- NULL
         ## initialize data
-        cs.dt <- object@unassignedClusters
-        asn.dt <- object@assignedClusters
-
-        if (length(cs.dt) == 0) {
-            stop("Clusters must be annotated before calling enhancers.")
-        }
-
         sampleLabelsMerged <- object@sampleLabelsMerged
 
         cs.en <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {

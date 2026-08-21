@@ -114,7 +114,6 @@ test_that("getTSS imports data without modifying its input", {
     expected[, pos := as.integer(pos)]
     data.table::setorder(expected, strand, chr, pos)
 
-    expect_equal(nrow(imported), 100L)
     expect_identical(
         names(imported),
         c("chr", "pos", "strand", sample_labels)

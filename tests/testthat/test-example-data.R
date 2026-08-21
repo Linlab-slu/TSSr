@@ -43,6 +43,14 @@ test_that("exampleTSSr has all expected slots populated", {
     expect_true(length(exampleTSSr@PromoterShift) > 0)
 })
 
+test_that("exampleTSSr does not retain machine-specific source paths", {
+    data(exampleTSSr)
+
+    expect_length(exampleTSSr@inputFiles, 0L)
+    expect_length(exampleTSSr@refSource, 0L)
+    expect_identical(exampleTSSr@inputFilesType, "bam")
+})
+
 test_that("exampleTSSr annotation inputs contain no internal indexing fields", {
     data(exampleTSSr)
 

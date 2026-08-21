@@ -1,3 +1,31 @@
+# TSSr 0.99.21 (2026-08-21)
+
+* Made the core `TSSr()` import arguments required and added fail-fast checks
+  for missing, blank, non-file, and nonexistent `inputFiles`. `refSource`
+  remains optional, but is validated when supplied; `getTSS()` revalidates
+  paths immediately before import.
+
+* Added explicit annotation-stage and chromosome-name checks. Fixed loss of
+  all clusters when a chromosome/strand subset has zero promoter or coding
+  overlaps, and corrected negative-strand `inCoding` gene-name lookup.
+
+* Removed an unused BSgenome load from `annotateCluster()`. GFF annotation now
+  suppresses only txdbmaker's known missing-genome-version warning while all
+  other warnings continue to propagate.
+
+* Consolidated repeated sparse chi-squared warnings from `shiftPromoter()` into
+  one summary warning. The documentation now states that affected approximate
+  p values may be unreliable when expected counts are small.
+
+* Rebuilt `exampleTSSr` without stale machine-specific input or annotation
+  paths while retaining `inputFilesType = "bam"` as provenance. Its reference
+  table is regenerated from the frozen bundled GFF.
+
+* Replaced the 100-row position-truncated TSStable fixture with a deterministic
+  482-row promoter-aware fixture containing equal promoter-near and background
+  positions. The vignette now shows the complete import-to-annotation workflow
+  for user data and consistently names the main example object `myTSSr`.
+
 # TSSr 0.99.20 (2026-08-04)
 
 * Made the 10th- and 90th-percentile TSS cluster boundaries deterministic

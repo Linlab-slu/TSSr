@@ -53,6 +53,36 @@ annotation_result_tables <- function(object, slot_name) {
     })
 }
 
+minimal_consensus_clusters <- function(position, strand = "+") {
+    n <- length(position)
+    data.table::data.table(
+        cluster = seq_len(n),
+        chr = rep("chrI", n),
+        start = as.integer(position),
+        end = as.integer(position),
+        strand = rep(strand, length.out = n),
+        dominant_tss = as.integer(position),
+        tags = rep(10, n),
+        tags.dominant_tss = rep(10, n),
+        q_0.1 = as.integer(position),
+        q_0.9 = as.integer(position),
+        interquantile_width = rep(1, n)
+    )
+}
+
+minimal_annotation_object <- function(clusters, reference) {
+    object <- methods::new(
+        "TSSr",
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        sampleLabels = "sample",
+        sampleLabelsMerged = "sample",
+        mergeIndex = 1,
+        consensusClusters = list(sample = clusters)
+    )
+    object@refTable <- reference
+    object
+}
+
 test_that("GFF annotation matches the equivalent reference-table path", {
     gff_object <- make_gff_annotation_object()
     before <- tssr_content(gff_object)
@@ -61,13 +91,12 @@ test_that("GFF annotation matches the equivalent reference-table path", {
     table_object@refSource <- character()
     table_object@refTable <- example_annotation_reference()
 
-    expect_warning(
+    expect_no_warning(
         from_gff <- annotateCluster(
             gff_object,
             clusters = "consensusClusters",
             filterCluster = TRUE
-        ),
-        "genome version information is not available"
+        )
     )
     from_table <- annotateCluster(
         table_object,
@@ -117,13 +146,12 @@ test_that("organismName is optional descriptive metadata for GFF annotation", {
     annotate_with_name <- function(organism_name) {
         object <- make_gff_annotation_object()
         object@organismName <- organism_name
-        expect_warning(
+        expect_no_warning(
             result <- annotateCluster(
                 object,
                 clusters = "consensusClusters",
                 filterCluster = FALSE
-            ),
-            "genome version information is not available"
+            )
         )
         result
     }
@@ -154,3 +182,192 @@ test_that("organismName is optional descriptive metadata for GFF annotation", {
         "Saccharomyces cerevisiae"
     )
 })
+
+test_that("GFF transcript annotation uses transcript names as identifiers", {
+    object <- make_gff_annotation_object()
+
+    expect_no_warning(
+        result <- annotateCluster(
+            object,
+            annotationType = "transcripts",
+            filterCluster = FALSE
+        )
+    )
+
+    expect_true("gene_id" %in% names(result@refTable))
+    expect_true(all(grepl("_mRNA$", result@refTable$gene_id)))
+    expect_true(all(vapply(
+        result@assignedClusters,
+        nrow,
+        integer(1L)
+    ) > 0L))
+})
+
+test_that("annotation preserves clusters with no promoter overlap", {
+    reference <- data.table::data.table(
+        seqnames = "chrI",
+        start = 1000L,
+        end = 2000L,
+        width = 1001L,
+        strand = "+",
+        gene_id = "gene_1"
+    )
+    object <- minimal_annotation_object(
+        minimal_consensus_clusters(5000L),
+        reference
+    )
+
+    result <- annotateCluster(object, filterCluster = TRUE)
+
+    expect_equal(nrow(result@unassignedClusters$sample), 1L)
+    expect_true(is.na(result@unassignedClusters$sample$gene[[1L]]))
+    expect_equal(nrow(result@filteredClusters$sample), 1L)
+    expect_named(
+        result@filteredClusters$sample,
+        c(
+            "cluster", "chr", "start", "end", "strand", "dominant_tss",
+            "tags", "tags.dominant_tss", "q_0.1", "q_0.9",
+            "interquantile_width", "gene"
+        )
+    )
+})
+
+test_that("annotation reports a missing consensus-cluster stage clearly", {
+    object <- methods::new(
+        "TSSr",
+        genomeName = "BSgenome.DoesNotExist",
+        sampleLabels = "sample",
+        sampleLabelsMerged = "sample"
+    )
+
+    expect_error(
+        annotateCluster(object),
+        regexp = paste0(
+            "consensusClusters.*empty.*run clusterTSS\\(\\) and ",
+            "consensusCluster\\(\\)"
+        )
+    )
+})
+
+test_that("annotation rejects incompatible chromosome names", {
+    reference <- data.table::data.table(
+        seqnames = "chrII",
+        start = 1000L,
+        end = 2000L,
+        width = 1001L,
+        strand = "+",
+        gene_id = "gene_1"
+    )
+    object <- minimal_annotation_object(
+        minimal_consensus_clusters(500L),
+        reference
+    )
+
+    expect_error(
+        annotateCluster(object, filterCluster = FALSE),
+        regexp = "No chromosome names are shared.*clusters.*reference"
+    )
+})
+
+test_that("filtering handles clusters with no coding overlap", {
+    reference <- data.table::data.table(
+        seqnames = "chrI",
+        start = 1000L,
+        end = 2000L,
+        width = 1001L,
+        strand = "+",
+        gene_id = "gene_1"
+    )
+    object <- minimal_annotation_object(
+        minimal_consensus_clusters(500L),
+        reference
+    )
+
+    expect_no_error(result <- annotateCluster(object, filterCluster = TRUE))
+    expect_equal(nrow(result@assignedClusters$sample), 1L)
+    expect_equal(nrow(result@filteredClusters$sample), 1L)
+    expect_named(
+        result@filteredClusters$sample,
+        c(
+            "cluster", "chr", "start", "end", "strand", "dominant_tss",
+            "tags", "tags.dominant_tss", "q_0.1", "q_0.9",
+            "interquantile_width", "gene"
+        )
+    )
+})
+
+test_that("negative-strand coding overlaps use coding-reference gene names", {
+    reference <- data.table::data.table(
+        seqnames = c("chrI", "chrI"),
+        start = c(100L, 500L),
+        end = c(1000L, 600L),
+        width = c(901L, 101L),
+        strand = c("-", "-"),
+        gene_id = c("outer_gene", "inner_gene")
+    )
+    object <- minimal_annotation_object(
+        minimal_consensus_clusters(200L, strand = "-"),
+        reference
+    )
+
+    result <- annotateCluster(object, filterCluster = TRUE)
+
+    expect_identical(
+        result@unassignedClusters$sample$inCoding,
+        "outer_gene"
+    )
+})
+
+test_that("a TSStable import reaches GFF annotation through the full workflow", {
+    input_file <- system.file(
+        "extdata", "example-tss-table.tsv",
+        package = "TSSr",
+        mustWork = TRUE
+    )
+    annotation_file <- system.file(
+        "extdata", "example-annotation.gff3",
+        package = "TSSr",
+        mustWork = TRUE
+    )
+    object <- TSSr(
+        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
+        inputFiles = input_file,
+        inputFilesType = "TSStable",
+        sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+        sampleLabelsMerged = c("control", "treat"),
+        mergeIndex = c(1, 1, 2, 2),
+        refSource = annotation_file
+    )
+    expect_equal(nrow(object@refTable), 0L)
+
+    object <- getTSS(object)
+    object <- mergeSamples(object)
+    object <- normalizeTSS(object)
+    object <- filterTSS(object, method = "TPM", tpmLow = 2)
+    object <- clusterTSS(
+        object,
+        method = "peakclu",
+        clusterThreshold = 1,
+        useMultiCore = FALSE
+    )
+    object <- consensusCluster(object, useMultiCore = FALSE)
+    expect_no_warning(
+        object <- annotateCluster(object, filterCluster = TRUE)
+    )
+
+    expect_true(all(vapply(
+        object@assignedClusters,
+        nrow,
+        integer(1L)
+    ) > 0L))
+    expect_true(all(vapply(
+        object@unassignedClusters,
+        nrow,
+        integer(1L)
+    ) > 0L))
+    expect_equal(nrow(object@refTable), 12L)
+})
+
+# The full-workflow test above is an integration smoke test. The deliberate
+# zero-overlap and negative-strand cases remain the acceptance evidence for the
+# annotation bugs because this fixture contains many ordinary overlaps.

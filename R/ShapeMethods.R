@@ -51,18 +51,27 @@ setGeneric("shapeCluster", function(
 #' @rdname shapeCluster
 #' @export
 setMethod("shapeCluster", signature(object = "TSSr"), function(object, clusters, method, useMultiCore, numCores) {
+    if (length(clusters) != 1L ||
+        !clusters %in% c("tagClusters", "consensusClusters")) {
+        stop(
+            "'clusters' must be either 'tagClusters' or 'consensusClusters'.",
+            call. = FALSE
+        )
+    }
+    tss.dt <- .requireWorkflowArtifact(
+        object,
+        "TSSprocessedMatrix",
+        "run getTSS() and mergeSamples() first"
+    )
+    next_step <- if (identical(clusters, "tagClusters")) {
+        "run clusterTSS() first"
+    } else {
+        "run clusterTSS() and consensusCluster() first"
+    }
+    cs.dt <- .requireWorkflowArtifact(object, clusters, next_step)
     message("\nCalculating ", clusters, " shape with ", method, " method...")
     ## define variable as a NULL value
     pos <- interquantile_width <- chr <- NULL
-
-    ## initialize data
-    tss.dt <- object@TSSprocessedMatrix
-
-    if (clusters == "tagClusters") {
-        cs.dt <- object@tagClusters
-    } else if (clusters == "consensusClusters") {
-        cs.dt <- object@consensusClusters
-    }
 
     sampleLabelsMerged <- object@sampleLabelsMerged
 

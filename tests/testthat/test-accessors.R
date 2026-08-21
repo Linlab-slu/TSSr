@@ -179,7 +179,7 @@ test_that("DEtables selects all or significant results explicitly", {
 })
 
 test_that("accessors handle an empty TSSr object", {
-    object <- TSSr()
+    object <- methods::new("TSSr")
 
     expect_s3_class(TSSmatrix(object, data = "raw"), "data.frame")
     expect_s3_class(TSSmatrix(object, data = "processed"), "data.frame")

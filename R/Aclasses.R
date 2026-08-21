@@ -184,17 +184,20 @@ setClass(
 #'   (e.g., "BSgenome.Scerevisiae.UCSC.sacCer3").
 #' @param inputFiles A character vector of input file paths. For
 #'   \code{inputFilesType = "TSStable"}, provide one table containing all
-#'   sample columns; other input types require one file per sample.
+#'   sample columns; other input types require one file per sample. Every path
+#'   must identify an existing regular file when the object is created.
 #' @param inputFilesType A character string specifying the type of input files.
 #'   Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".
 #' @param sampleLabels A character vector of sample labels corresponding to
 #'   input files, or to sample columns in a TSStable table.
-#' @param sampleLabelsMerged A character vector of merged sample labels for
-#'   biological replicates.
-#' @param mergeIndex A numeric vector indicating which samples to merge
-#'   together.
-#' @param refSource A character string specifying the path to GFF annotation
-#'   file.
+#' @param sampleLabelsMerged An optional character vector of merged sample
+#'   labels for biological replicates. Supply this together with
+#'   \code{mergeIndex}; when both are omitted, every sample forms its own group.
+#' @param mergeIndex An optional numeric vector indicating which samples to
+#'   merge together. Supply this together with \code{sampleLabelsMerged}.
+#' @param refSource An optional path to a GFF annotation file. If supplied, it
+#'   must identify an existing regular file. \code{annotateCluster()} requires
+#'   either this path or a populated \code{refTable} slot.
 #' @param organismName An optional character string describing the organism.
 #'   This metadata is retained for backward compatibility and is not required
 #'   by \code{annotateCluster()}.
@@ -205,24 +208,38 @@ setClass(
 #' @rdname TSSr-class
 #'
 #' @examples
-#' # Create a TSSr object (files do not need to exist for object creation)
+#' exampleInput <- system.file(
+#'     "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+#' )
+#' exampleAnnotation <- system.file(
+#'     "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
+#' )
 #' myTSSr <- TSSr(
 #'     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-#'     inputFiles = c("sample1.bam", "sample2.bam"),
-#'     inputFilesType = "bam",
-#'     sampleLabels = c("S1", "S2"),
-#'     sampleLabelsMerged = c("merged"),
-#'     mergeIndex = c(1, 1)
+#'     inputFiles = exampleInput,
+#'     inputFilesType = "TSStable",
+#'     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+#'     sampleLabelsMerged = c("control", "treat"),
+#'     mergeIndex = c(1, 1, 2, 2),
+#'     refSource = exampleAnnotation
 #' )
 #'
-TSSr <- function(genomeName = character(),
-                 inputFiles = character(),
-                 inputFilesType = character(),
-                 sampleLabels = character(),
+TSSr <- function(genomeName,
+                 inputFiles,
+                 inputFilesType,
+                 sampleLabels,
                  sampleLabelsMerged = character(),
                  mergeIndex = numeric(),
                  refSource = character(),
                  organismName = character()) {
+    .validateNonEmptyCharacter(genomeName, "genomeName", requireSingle = TRUE)
+    .validateNonEmptyCharacter(
+        inputFilesType,
+        "inputFilesType",
+        requireSingle = TRUE
+    )
+    .validateNonEmptyCharacter(sampleLabels, "sampleLabels")
+
     ## Validate inputFilesType
     supportedTypes <- c("bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig")
     if (length(inputFilesType) > 0 && !(inputFilesType %in% supportedTypes)) {
@@ -232,9 +249,37 @@ TSSr <- function(genomeName = character(),
         )
     }
 
+    .validateFilePaths(inputFiles, "inputFiles")
+    .validateFilePaths(
+        refSource,
+        "refSource",
+        allowEmpty = TRUE,
+        requireSingle = TRUE
+    )
+
+    has_merged_labels <- length(sampleLabelsMerged) > 0L
+    has_merge_index <- length(mergeIndex) > 0L
+    if (xor(has_merged_labels, has_merge_index)) {
+        stop(
+            "'sampleLabelsMerged' and 'mergeIndex' must be provided together.",
+            call. = FALSE
+        )
+    }
+    if (!has_merged_labels && !has_merge_index) {
+        sampleLabelsMerged <- sampleLabels
+        mergeIndex <- as.numeric(seq_along(sampleLabels))
+    }
+
     ## Validate inputFiles and sampleLabels correspondence
     is_ts_table <- length(inputFilesType) == 1L &&
         identical(inputFilesType, "TSStable")
+    if (is_ts_table && length(inputFiles) != 1L) {
+        stop(
+            "Exactly one input file is required when 'inputFilesType' is ",
+            "'TSStable'.",
+            call. = FALSE
+        )
+    }
     if (!is_ts_table && length(inputFiles) > 0 && length(sampleLabels) > 0) {
         if (length(inputFiles) != length(sampleLabels)) {
             stop("Length of 'inputFiles' (", length(inputFiles),

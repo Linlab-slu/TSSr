@@ -7,10 +7,10 @@
 \title{TSSr: A package for transcription start site sequencing data analyses.}
 \usage{
 TSSr(
-  genomeName = character(),
-  inputFiles = character(),
-  inputFilesType = character(),
-  sampleLabels = character(),
+  genomeName,
+  inputFiles,
+  inputFilesType,
+  sampleLabels,
   sampleLabelsMerged = character(),
   mergeIndex = numeric(),
   refSource = character(),
@@ -23,7 +23,8 @@ TSSr(
 
 \item{inputFiles}{A character vector of input file paths. For
 \code{inputFilesType = "TSStable"}, provide one table containing all
-sample columns; other input types require one file per sample.}
+sample columns; other input types require one file per sample. Every path
+must identify an existing regular file when the object is created.}
 
 \item{inputFilesType}{A character string specifying the type of input files.
 Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".}
@@ -31,14 +32,16 @@ Must be one of: "bam", "bamPairedEnd", "bed", "tss", "TSStable", "BigWig".}
 \item{sampleLabels}{A character vector of sample labels corresponding to
 input files, or to sample columns in a TSStable table.}
 
-\item{sampleLabelsMerged}{A character vector of merged sample labels for
-biological replicates.}
+\item{sampleLabelsMerged}{An optional character vector of merged sample
+labels for biological replicates. Supply this together with
+\code{mergeIndex}; when both are omitted, every sample forms its own group.}
 
-\item{mergeIndex}{A numeric vector indicating which samples to merge
-together.}
+\item{mergeIndex}{An optional numeric vector indicating which samples to
+merge together. Supply this together with \code{sampleLabelsMerged}.}
 
-\item{refSource}{A character string specifying the path to GFF annotation
-file.}
+\item{refSource}{An optional path to a GFF annotation file. If supplied, it
+must identify an existing regular file. \code{annotateCluster()} requires
+either this path or a populated \code{refTable} slot.}
 
 \item{organismName}{An optional character string describing the organism.
 This metadata is retained for backward compatibility and is not required
@@ -129,14 +132,20 @@ cluster-to-gene assignment.}
 }}
 
 \examples{
-# Create a TSSr object (files do not need to exist for object creation)
+exampleInput <- system.file(
+    "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+)
+exampleAnnotation <- system.file(
+    "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
+)
 myTSSr <- TSSr(
     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-    inputFiles = c("sample1.bam", "sample2.bam"),
-    inputFilesType = "bam",
-    sampleLabels = c("S1", "S2"),
-    sampleLabelsMerged = c("merged"),
-    mergeIndex = c(1, 1)
+    inputFiles = exampleInput,
+    inputFilesType = "TSStable",
+    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
+    sampleLabelsMerged = c("control", "treat"),
+    mergeIndex = c(1, 1, 2, 2),
+    refSource = exampleAnnotation
 )
 
 }

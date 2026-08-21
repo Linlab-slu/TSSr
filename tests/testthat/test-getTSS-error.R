@@ -1,31 +1,21 @@
-# Test getTSS error handling for missing input files
+# Test getTSS error handling for input files removed after construction
 
-test_that("getTSS gives informative error when files don't exist", {
-    obj <- TSSr(
-        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-        inputFiles = c("nonexistent_file.bam"),
-        inputFilesType = "bam",
-        sampleLabels = c("S1"),
-        sampleLabelsMerged = c("S1"),
-        mergeIndex = c(1)
+test_that("getTSS revalidates input files before importing", {
+    input_file <- withr::local_tempfile(
+        pattern = "removed-input-",
+        fileext = ".tsv",
+        lines = ""
     )
+    obj <- TSSr(
+        genomeName = "BSgenome.DoesNotExist",
+        inputFiles = input_file,
+        inputFilesType = "TSStable",
+        sampleLabels = "S1"
+    )
+    unlink(input_file)
+
     expect_error(
         getTSS(obj),
-        regexp = "Input file.*not found"
-    )
-})
-
-test_that("getTSS error message includes the missing file name", {
-    obj <- TSSr(
-        genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-        inputFiles = c("missing_sample.bam"),
-        inputFilesType = "bam",
-        sampleLabels = c("S1"),
-        sampleLabelsMerged = c("S1"),
-        mergeIndex = c(1)
-    )
-    expect_error(
-        getTSS(obj),
-        regexp = "missing_sample\\.bam"
+        regexp = "inputFiles.*existing regular file.*removed-input"
     )
 })

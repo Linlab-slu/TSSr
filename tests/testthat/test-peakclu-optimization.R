@@ -50,7 +50,8 @@ test_that("optimized peakclu preserves the published tag clusters", {
 })
 
 make_peakclu_test_object <- function(positions, tags, strand = "+") {
-    object <- TSSr(
+    object <- methods::new(
+        "TSSr",
         sampleLabels = "sample",
         sampleLabelsMerged = "sample",
         mergeIndex = 1

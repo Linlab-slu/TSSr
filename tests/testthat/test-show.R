@@ -100,7 +100,7 @@ test_that("show summarizes completed analyses without expanding result tables", 
 })
 
 test_that("show handles an empty TSSr object with explicit placeholders", {
-    output <- capture.output(show(TSSr()))
+    output <- capture.output(show(methods::new("TSSr")))
 
     expect_lte(length(output), 20L)
     expect_true(any(output == "  Genome: <unset>"))

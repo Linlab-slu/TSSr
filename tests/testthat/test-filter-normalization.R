@@ -9,7 +9,8 @@ make_filter_test_object <- function(counts) {
         raw[[sample_label]] <- counts[[sample_label]]
     }
 
-    object <- TSSr(
+    object <- methods::new(
+        "TSSr",
         genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
         sampleLabels = sample_labels,
         sampleLabelsMerged = sample_labels,
@@ -117,7 +118,7 @@ test_that("unknown state falls back to integer-valued legacy data", {
 })
 
 test_that("normalization status validity accepts only known scalar states", {
-    object <- TSSr()
+    object <- methods::new("TSSr")
 
     expect_true(validObject(object))
 

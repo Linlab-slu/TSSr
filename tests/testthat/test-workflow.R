@@ -87,3 +87,53 @@ test_that("consensusCluster produces consensus clusters", {
     expect_true(is.data.frame(first_cc) || inherits(first_cc, "data.table"))
     expect_true(all(c("chr", "start", "end", "strand") %in% names(first_cc)))
 })
+
+test_that("workflow methods report missing upstream stages clearly", {
+    empty <- methods::new(
+        "TSSr",
+        sampleLabels = c("control", "treat"),
+        sampleLabelsMerged = c("control", "treat"),
+        mergeIndex = c(1, 2)
+    )
+    clustered_input <- empty
+    clustered_input@TSSprocessedMatrix <- data.table::data.table(
+        chr = character(),
+        pos = integer(),
+        strand = character(),
+        control = numeric(),
+        treat = numeric()
+    )
+
+    expect_error(
+        mergeSamples(empty),
+        "TSSrawMatrix.*empty.*getTSS"
+    )
+    expect_error(
+        normalizeTSS(empty),
+        "TSSprocessedMatrix.*empty.*getTSS"
+    )
+    expect_error(
+        clusterTSS(empty),
+        "TSSprocessedMatrix.*empty.*getTSS"
+    )
+    expect_error(
+        consensusCluster(clustered_input),
+        "tagClusters.*empty.*clusterTSS"
+    )
+    expect_error(
+        shapeCluster(clustered_input),
+        "consensusClusters.*empty.*consensusCluster"
+    )
+    expect_error(
+        deGene(empty),
+        "assignedClusters.*empty.*annotateCluster"
+    )
+    expect_error(
+        callEnhancer(empty),
+        "assignedClusters.*empty.*annotateCluster"
+    )
+    expect_error(
+        shiftPromoter(empty, comparePairs = list(c("control", "treat"))),
+        "assignedClusters.*empty.*annotateCluster"
+    )
+})

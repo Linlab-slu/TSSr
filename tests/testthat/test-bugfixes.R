@@ -3,10 +3,9 @@
 test_that("consensusCluster returns clusters for a single sample", {
     data(exampleTSSr)
     # Create a single-sample scenario
-    obj <- TSSr(
+    obj <- methods::new(
+        "TSSr",
         genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-        inputFiles = c("s1.bam"),
-        inputFilesType = "bam",
         sampleLabels = c("S1"),
         sampleLabelsMerged = c("S1"),
         mergeIndex = c(1)
@@ -98,7 +97,8 @@ test_that("representation() replaced with slots = list()", {
     expect_true("PromoterShift" %in% slot_names)
 
     # Verify object creation still works with new slot syntax
-    obj <- TSSr(
+    obj <- methods::new(
+        "TSSr",
         genomeName = "test",
         inputFilesType = "bam"
     )

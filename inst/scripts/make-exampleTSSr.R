@@ -20,41 +20,129 @@ suppressPackageStartupMessages(library(TSSr))
 
 data("exampleTSSr", package = "TSSr", envir = environment())
 
+exampleTSSr@inputFiles <- character()
+exampleTSSr@refSource <- character()
 exampleTSSr@TSSrawMatrix <- exampleTSSr@TSSrawMatrix[
     exampleTSSr@TSSrawMatrix$chr == "chrI"
 ]
-reference_columns <- c(
-    "seqnames", "start", "end", "width", "strand", "gene_id"
+
+# Rebuild the reference table from the frozen bundled GFF instead of inheriting
+# annotation state from the installed example object.
+annotation_file <- "inst/extdata/example-annotation.gff3"
+annotation_lines <- readLines(annotation_file, warn = FALSE)
+annotation_lines <- annotation_lines[!startsWith(annotation_lines, "#")]
+annotation <- data.table::fread(
+    text = paste(annotation_lines, collapse = "\n"),
+    sep = "\t",
+    header = FALSE,
+    col.names = c(
+        "seqnames", "source", "type", "start", "end", "score",
+        "strand", "phase", "attributes"
+    )
 )
-reference_table <- exampleTSSr@refTable[
-    as.character(exampleTSSr@refTable$seqnames) == "chrI",
-    .SD,
-    .SDcols = reference_columns
+reference_table <- annotation[
+    type == "gene",
+    .(
+        seqnames,
+        start,
+        end,
+        width = end - start + 1L,
+        strand,
+        gene_id = sub(";.*", "", sub("^ID=", "", attributes))
+    )
 ]
 data.table::setorder(reference_table, seqnames, start, end, strand, gene_id)
 data.table::setkey(reference_table, NULL)
 exampleTSSr@refTable <- reference_table
 
-# Build the bundled TSStable import fixture from the same chromosome-I raw
-# data. Keep both strands and all four original samples while remaining small
-# enough for examples and vignette builds.
+# Build a promoter-aware TSStable fixture. Six well-covered promoter
+# neighborhoods provide realistic assigned clusters, while an equal number of
+# background positions keeps the unassigned path represented.
 fixture_columns <- c(
     "chr", "pos", "strand", exampleTSSr@sampleLabels
 )
 fixture_source <- data.table::copy(
     exampleTSSr@TSSrawMatrix[, .SD, .SDcols = fixture_columns]
 )
-if (sum(fixture_source$strand == "+") < 50L ||
-        sum(fixture_source$strand == "-") < 50L) {
-    stop("At least 50 TSS records per strand are required for the fixture.")
+data.table::setorder(fixture_source, strand, chr, pos)
+
+fixture_promoter_genes <- c(
+    "YAL067C", "YAL066W", "YAL064W-B",
+    "YAL064W", "YAL063C-A", "YAL063C"
+)
+promoters <- data.table::copy(
+    reference_table[gene_id %in% fixture_promoter_genes]
+)
+if (!setequal(promoters$gene_id, fixture_promoter_genes)) {
+    stop("The bundled GFF does not contain every fixture promoter gene.")
 }
-example_tss_table <- data.table::rbindlist(list(
-    fixture_source[strand == "+"][seq_len(50L)],
-    fixture_source[strand == "-"][seq_len(50L)]
+promoters[, promoter_start := ifelse(
+    strand == "+",
+    pmax(1L, start - 1000L),
+    end
+)]
+promoters[, promoter_end := ifelse(
+    strand == "+",
+    start,
+    end + 1000L
+)]
+
+promoter_indices_by_gene <- lapply(seq_len(nrow(promoters)), function(i) {
+    which(
+        fixture_source$chr == promoters$seqnames[i] &
+            fixture_source$strand == promoters$strand[i] &
+            fixture_source$pos >= promoters$promoter_start[i] &
+            fixture_source$pos <= promoters$promoter_end[i]
+    )
+})
+names(promoter_indices_by_gene) <- promoters$gene_id
+if (any(lengths(promoter_indices_by_gene) == 0L)) {
+    stop("Every selected promoter must contain at least one TSS position.")
+}
+
+group_coverage <- vapply(promoter_indices_by_gene, function(indices) {
+    rows <- fixture_source[indices]
+    c(
+        control = sum(rows$SL01 + rows$SL02),
+        treat = sum(rows$SL03 + rows$SL04)
+    )
+}, numeric(2L))
+if (any(group_coverage <= 0)) {
+    stop("Every selected promoter must have nonzero control and treat coverage.")
+}
+
+promoter_indices <- sort(unique(unlist(promoter_indices_by_gene)))
+promoter_rows <- fixture_source[promoter_indices]
+background_source <- fixture_source[-promoter_indices]
+background_source <- background_source[
+    (SL01 + SL02) > 0 & (SL03 + SL04) > 0
+]
+
+select_evenly <- function(rows, n) {
+    if (nrow(rows) < n) {
+        stop("Not enough background TSS positions for the fixture.")
+    }
+    rows[as.integer(round(seq(1, nrow(rows), length.out = n)))]
+}
+
+promoter_strand_counts <- promoter_rows[, .N, by = strand]
+background_rows <- data.table::rbindlist(lapply(
+    seq_len(nrow(promoter_strand_counts)),
+    function(i) {
+        select_evenly(
+            background_source[strand == promoter_strand_counts$strand[i]],
+            promoter_strand_counts$N[i]
+        )
+    }
 ))
+example_tss_table <- data.table::rbindlist(
+    list(promoter_rows, background_rows),
+    use.names = TRUE
+)
 data.table::setorder(example_tss_table, strand, chr, pos)
 stopifnot(
-    nrow(example_tss_table) == 100L,
+    nrow(promoter_rows) == nrow(background_rows),
+    nrow(example_tss_table) == 2L * nrow(promoter_rows),
     identical(unique(example_tss_table$strand), c("+", "-"))
 )
 data.table::fwrite(

@@ -40,6 +40,16 @@ setGeneric(
 #' @rdname deGene
 #' @export
 setMethod("deGene", signature(object = "TSSr"), function(object, comparePairs, pval, useMultiCore, numCores) {
+    .requireWorkflowArtifact(
+        object,
+        "assignedClusters",
+        "run annotateCluster() first"
+    )
+    .requireWorkflowArtifact(
+        object,
+        "TSSrawMatrix",
+        "run getTSS() first"
+    )
     ## initialize data
     message("\nCalculating gene differential expression...")
     sampleLabels <- object@sampleLabels

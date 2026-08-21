@@ -1,5 +1,6 @@
 make_shift_test_object <- function() {
-    object <- TSSr(
+    object <- methods::new(
+        "TSSr",
         sampleLabels = c("control", "treat"),
         sampleLabelsMerged = c("control", "treat"),
         mergeIndex = c(1, 2)
@@ -65,4 +66,41 @@ test_that("shiftPromoter tests reconstructed raw counts", {
         unname(expected_pval),
         tolerance = 1e-15
     )
+})
+
+test_that("shiftPromoter summarizes sparse chi-squared warnings once", {
+    object <- make_shift_test_object()
+    object@assignedClusters <- list(
+        control = data.table::data.table(
+            cluster = paste0("cluster_", 1:4),
+            strand = rep("+", 4),
+            dominant_tss = c(100, 200, 300, 400),
+            tags = c(0, 1, 0, 2),
+            gene = rep(c("gene_1", "gene_2"), each = 2)
+        ),
+        treat = data.table::data.table(
+            cluster = paste0("cluster_", 1:4),
+            strand = rep("+", 4),
+            dominant_tss = c(100, 200, 300, 400),
+            tags = c(1, 0, 2, 0),
+            gene = rep(c("gene_1", "gene_2"), each = 2)
+        )
+    )
+    warnings <- character()
+
+    result <- withCallingHandlers(
+        shiftPromoter(
+            object,
+            comparePairs = list(c("control", "treat")),
+            pval = 1
+        ),
+        warning = function(warning_condition) {
+            warnings <<- c(warnings, conditionMessage(warning_condition))
+            invokeRestart("muffleWarning")
+        }
+    )
+
+    expect_s4_class(result, "TSSr")
+    expect_length(warnings, 1L)
+    expect_match(warnings, "2 gene-level test.*p-values may be unreliable")
 })

@@ -55,21 +55,14 @@ setMethod("getTSS", signature(object = "TSSr"), function(
   mappingQualityThreshold,
   softclippingAllowed
 ) {
+    .validateFilePaths(object@inputFiles, "inputFiles")
+
     ## initialize values
     pos <- NULL
     Genome <- .getGenome(object@genomeName)
     sampleLabels <- object@sampleLabels
     inputFilesType <- object@inputFilesType
     inputFiles <- object@inputFiles
-
-    ## Check if input files exist
-    missingFiles <- inputFiles[!file.exists(inputFiles)]
-    if (length(missingFiles) > 0) {
-        stop("Input file(s) not found: ",
-             paste(sQuote(missingFiles), collapse = ", "),
-             ". Please check the 'inputFiles' slot of your TSSr object ",
-             "and ensure the files exist at the specified paths.")
-    }
 
     if (length(object@sampleLabelsMerged) == 0) {
         object@sampleLabelsMerged <- sampleLabels

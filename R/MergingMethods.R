@@ -22,6 +22,11 @@ setGeneric(
 #' @rdname mergeSamples
 #' @export
 setMethod("mergeSamples", signature(object = "TSSr"), function(object, mergeIndex) {
+    tss <- .requireWorkflowArtifact(
+        object,
+        "TSSrawMatrix",
+        "run getTSS() first"
+    )
     if (is.null(mergeIndex)) {
         mergeIndex <- as.integer(object@mergeIndex)
     } else {
@@ -29,8 +34,6 @@ setMethod("mergeSamples", signature(object = "TSSr"), function(object, mergeInde
     }
     sampleLabels <- object@sampleLabels
     sampleLabelsMerged <- object@sampleLabelsMerged
-
-    tss <- object@TSSrawMatrix
 
     if (length(mergeIndex) != length(sampleLabels)) {
         stop("Length of mergeIndex must match number of samples.")

@@ -7,7 +7,9 @@
 #' , filterClusterThreshold = 0.02, annotationType = "genes",upstream=1000
 #' , upstreamOverlap = 500,downstream = 0)
 #'
-#' @param object  A TSSr object
+#' @param object A TSSr object containing the selected cluster tables and
+#'   either a populated \code{refTable} slot or an existing GFF file in
+#'   \code{refSource}.
 #' @param clusters Clusters to be annotated: "consensusClusters" or "tagClusters".
 #' Default is "consensusClusters".
 #' @param filterCluster Logical indicating whether clusters downstream of a highly
@@ -54,9 +56,47 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
   filterClusterThreshold, annotationType,
   upstream, upstreamOverlap, downstream
 ) {
+    if (length(clusters) != 1L ||
+        !clusters %in% c("tagClusters", "consensusClusters")) {
+        stop(
+            "'clusters' must be either 'tagClusters' or 'consensusClusters'.",
+            call. = FALSE
+        )
+    }
+    if (length(annotationType) != 1L ||
+        !annotationType %in% c("genes", "transcripts")) {
+        stop(
+            "'annotationType' must be either 'genes' or 'transcripts'.",
+            call. = FALSE
+        )
+    }
+    if (length(filterCluster) != 1L || is.na(filterCluster) ||
+        !is.logical(filterCluster)) {
+        stop("'filterCluster' must be TRUE or FALSE.", call. = FALSE)
+    }
+    next_steps <- if (identical(clusters, "tagClusters")) {
+        "run clusterTSS() first"
+    } else {
+        "run clusterTSS() and consensusCluster() first"
+    }
+    cs.dt <- .requireWorkflowArtifact(object, clusters, next_steps)
+
     message("\nAnnotating...")
-    Genome <- .getGenome(object@genomeName)
     sampleLabelsMerged <- object@sampleLabelsMerged
+    if (length(sampleLabelsMerged) == 0L) {
+        stop(
+            "'sampleLabelsMerged' is empty; define sample groups before annotation.",
+            call. = FALSE
+        )
+    }
+    missing_samples <- setdiff(sampleLabelsMerged, names(cs.dt))
+    if (length(missing_samples) > 0L) {
+        stop(
+            "'", clusters, "' has no table for merged sample(s): ",
+            paste(sQuote(missing_samples), collapse = ", "), ".",
+            call. = FALSE
+        )
+    }
     refGFF <- object@refSource
     refTable <- object@refTable
 
@@ -68,29 +108,94 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
         if (length(refGFF) == 0) {
             stop("Please provide correct refSource file!")
         }
+        .validateFilePaths(
+            refGFF,
+            "refSource",
+            requireSingle = TRUE
+        )
         ## define variable as a NULL value
-        inCoding <- r <- f <- dominant_tss <- NULL
+        inCoding <- r <- f <- dominant_tss <- gene_id <- tx_name <- tx_id <- NULL
         ## prepare annotation file
-        txdb <- makeTxDbFromGFF(refGFF, format = "auto")
+        txdb <- withCallingHandlers(
+            makeTxDbFromGFF(refGFF, format = "auto"),
+            warning = function(warning_condition) {
+                if (identical(
+                    conditionMessage(warning_condition),
+                    paste(
+                        "genome version information is not available for this",
+                        "TxDb object"
+                    )
+                )) {
+                    invokeRestart("muffleWarning")
+                }
+            }
+        )
         if (annotationType == "genes") {
             ref <- setDT(as.data.frame(genes(txdb)))
         } else if (annotationType == "transcripts") {
             ref <- setDT(as.data.frame(transcripts(txdb)))
+            ref[, gene_id := ifelse(
+                is.na(tx_name) | !nzchar(as.character(tx_name)),
+                paste0("transcript_", tx_id),
+                as.character(tx_name)
+            )]
         }
         object@refTable <- ref
     }
-    ref <- data.table::copy(ref)
+    ref <- data.table::as.data.table(data.table::copy(ref))
+    required_reference_columns <- c(
+        "seqnames", "start", "end", "width", "strand", "gene_id"
+    )
+    missing_reference_columns <- setdiff(required_reference_columns, names(ref))
+    if (length(missing_reference_columns) > 0L) {
+        stop(
+            "Reference annotation is missing required column(s): ",
+            paste(sQuote(missing_reference_columns), collapse = ", "), ".",
+            call. = FALSE
+        )
+    }
 
-    ## prepare clusters
-    if (clusters == "tagClusters") {
-        cs.dt <- object@tagClusters
-    } else if (clusters == "consensusClusters") {
-        cs.dt <- object@consensusClusters
+    required_cluster_columns <- c(
+        "cluster", "chr", "start", "end", "strand", "dominant_tss"
+    )
+    if (isTRUE(filterCluster)) {
+        required_cluster_columns <- c(
+            required_cluster_columns,
+            "tags", "tags.dominant_tss", "q_0.1", "q_0.9",
+            "interquantile_width"
+        )
+    }
+    for (sample_label in sampleLabelsMerged) {
+        missing_cluster_columns <- setdiff(
+            required_cluster_columns,
+            names(cs.dt[[sample_label]])
+        )
+        if (length(missing_cluster_columns) > 0L) {
+            stop(
+                "Cluster table for ", sQuote(sample_label),
+                " is missing required column(s): ",
+                paste(sQuote(missing_cluster_columns), collapse = ", "), ".",
+                call. = FALSE
+            )
+        }
+    }
+    cluster_chromosomes <- unique(unlist(lapply(
+        cs.dt[sampleLabelsMerged],
+        function(cluster_table) as.character(cluster_table$chr)
+    )))
+    if (length(intersect(cluster_chromosomes, as.character(ref$seqnames))) == 0L) {
+        stop(
+            "No chromosome names are shared between clusters and the reference ",
+            "annotation; check chromosome naming conventions.",
+            call. = FALSE
+        )
     }
 
     ##
     asn <- lapply(as.list(seq(sampleLabelsMerged)), function(i) {
-        cs.temp <- data.table::copy(cs.dt[[sampleLabelsMerged[i]]])
+        cs.temp <- data.table::as.data.table(
+            data.table::copy(cs.dt[[sampleLabelsMerged[i]]])
+        )
         cs.asn <- .assign2gene(cs.temp, ref, upstream, upstreamOverlap, downstream, filterCluster)
         return(cs.asn)
     })
@@ -123,18 +228,22 @@ setMethod("annotateCluster", signature(object = "TSSr"), function(
             n[, inCoding := ifelse(!is.na(inCoding) & !is.na(gene), NA, inCoding)]
             n[, r := ifelse(is.na(gene), inCoding, gene)]
             setkey(n, r)
-            new <- lapply(as.list(n[, unique(r)]), function(i) {
-                temp <- n[list(i)]
-                max.tags <- temp[, max(tags)]
-                if (temp[1, strand] == "+") {
-                    temp[, f := ifelse(dominant_tss > temp[which.max(tags), dominant_tss] & tags < max.tags * filterClusterThreshold, 0, 1)]
-                } else {
-                    temp[, f := ifelse(dominant_tss < temp[which.max(tags), dominant_tss] & tags < max.tags * filterClusterThreshold, 0, 1)]
-                }
-                return(temp)
-            })
-            new <- rbindlist(new)
-            new <- new[f == 1, ]
+            if (nrow(n) == 0L) {
+                new <- n
+            } else {
+                new <- lapply(as.list(n[, unique(r)]), function(i) {
+                    temp <- n[list(i)]
+                    max.tags <- temp[, max(tags)]
+                    if (temp[1, strand] == "+") {
+                        temp[, f := ifelse(dominant_tss > temp[which.max(tags), dominant_tss] & tags < max.tags * filterClusterThreshold, 0, 1)]
+                    } else {
+                        temp[, f := ifelse(dominant_tss < temp[which.max(tags), dominant_tss] & tags < max.tags * filterClusterThreshold, 0, 1)]
+                    }
+                    return(temp)
+                })
+                new <- rbindlist(new)
+                new <- new[f == 1, ]
+            }
             cs <- rbindlist(list(
                 m[, .SD, .SDcols = filteredColumns],
                 new[, .SD, .SDcols = filteredColumns]

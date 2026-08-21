@@ -32,11 +32,15 @@ setGeneric("filterTSS", function(
 #' @rdname filterTSS
 #' @export
 setMethod("filterTSS", signature(object = "TSSr"), function(object, method, normalization, pVal, tpmLow) {
+    tss.dt <- .requireWorkflowArtifact(
+        object,
+        "TSSprocessedMatrix",
+        "run getTSS() and mergeSamples() first"
+    )
     ## initialize values
     sampleLabelsMerged <- object@sampleLabelsMerged
     library.size <- object@librarySizes
 
-    tss.dt <- object@TSSprocessedMatrix
     is.normalized <- .isNormalized(object)
     ## define variable as a NULL value
     tags <- NULL

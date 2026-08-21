@@ -1,8 +1,8 @@
 make_export_roundtrip_object <- function() {
     sample_labels <- paste0("SL0", 1:4)
-    object <- TSSr(
+    object <- methods::new(
+        "TSSr",
         genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-        inputFiles = "unused.tsv",
         inputFilesType = "TSStable",
         sampleLabels = sample_labels,
         sampleLabelsMerged = c("control", "treat"),

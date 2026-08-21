@@ -27,8 +27,10 @@ Selects genes which have multiple core promoters and undergo core promoter
 shifting across different experiments. Generates gene list with Ds (degree of shift)
 value (Lu et al., 2019), p value and adjusted p value.
 Chi-squared tests use raw counts reconstructed from TPM values and the
-corresponding library sizes. Sparse 2-by-2 tables may produce R's
-\code{Chi-squared approximation may be incorrect} warning.
+corresponding library sizes. When sparse 2-by-2 tables have small expected
+counts, the function emits one summary warning for all affected gene-level
+tests. Their approximate p values may be unreliable; the warning should not
+be treated as safe to ignore for inferential use.
 }
 \examples{
 data(exampleTSSr)

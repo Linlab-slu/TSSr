@@ -37,3 +37,72 @@ utils::globalVariables(c("gene", "tags"))
     }
     invisible(TRUE)
 }
+
+.validateFilePaths <- function(paths, argument, allowEmpty = FALSE,
+                               requireSingle = FALSE) {
+    if (!is.character(paths)) {
+        stop("'", argument, "' must be a character vector of file paths.",
+             call. = FALSE)
+    }
+    if (length(paths) == 0L) {
+        if (allowEmpty) {
+            return(invisible(paths))
+        }
+        stop("'", argument, "' must contain at least one existing regular file.",
+             call. = FALSE)
+    }
+    if (requireSingle && length(paths) != 1L) {
+        stop("'", argument, "' must identify exactly one existing regular file.",
+             call. = FALSE)
+    }
+
+    has_path <- !is.na(paths) & nzchar(trimws(paths))
+    exists <- rep(FALSE, length(paths))
+    exists[has_path] <- file.exists(paths[has_path])
+    is_regular <- exists
+    is_regular[exists] <- !dir.exists(paths[exists])
+    invalid <- !has_path | !is_regular
+
+    if (any(invalid)) {
+        display <- paths[invalid]
+        display[is.na(display)] <- "<NA>"
+        display[display == ""] <- "<empty>"
+        stop(
+            "'", argument, "' must contain existing regular file path(s). ",
+            "Invalid path(s): ", paste(sQuote(display), collapse = ", "), ".",
+            call. = FALSE
+        )
+    }
+    invisible(paths)
+}
+
+.validateNonEmptyCharacter <- function(value, argument, requireSingle = FALSE) {
+    descriptor <- if (requireSingle) {
+        "a non-empty character string"
+    } else {
+        "a non-empty character vector without missing or blank values"
+    }
+    invalid_value <- !is.character(value) || length(value) == 0L ||
+        anyNA(value) || any(!nzchar(trimws(value)))
+    invalid_length <- requireSingle && length(value) != 1L
+    if (invalid_value || invalid_length) {
+        stop("'", argument, "' must be ", descriptor, ".", call. = FALSE)
+    }
+    invisible(value)
+}
+
+.requireWorkflowArtifact <- function(object, slotName, nextStep) {
+    value <- methods::slot(object, slotName)
+    is_missing <- if (is.data.frame(value)) {
+        ncol(value) == 0L
+    } else {
+        length(value) == 0L
+    }
+    if (is_missing) {
+        stop(
+            "'", slotName, "' is empty; ", nextStep, ".",
+            call. = FALSE
+        )
+    }
+    value
+}

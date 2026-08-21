@@ -61,6 +61,11 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
   object, method, peakDistance, extensionDistance,
   localThreshold, clusterThreshold, useMultiCore, numCores
 ) {
+    tss.dt <- .requireWorkflowArtifact(
+        object,
+        "TSSprocessedMatrix",
+        "run getTSS() and mergeSamples() first"
+    )
     message("\nClustering TSS data with ", method, " method...")
     if (length(peakDistance) != 1L || !is.numeric(peakDistance) ||
             is.na(peakDistance) || !is.finite(peakDistance) ||
@@ -69,9 +74,6 @@ setMethod("clusterTSS", signature(object = "TSSr"), function(
     }
     ## initialize values
     sampleLabelsMerged <- object@sampleLabelsMerged
-
-    # initialize data
-    tss.dt <- object@TSSprocessedMatrix
 
     ## define variable as a NULL value
     chr <- pos <- cluster <- NULL

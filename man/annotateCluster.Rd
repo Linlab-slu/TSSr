@@ -21,7 +21,9 @@ annotateCluster(object,clusters = "consensusClusters",filterCluster = TRUE
 )
 }
 \arguments{
-\item{object}{A TSSr object}
+\item{object}{A TSSr object containing the selected cluster tables and
+either a populated \code{refTable} slot or an existing GFF file in
+\code{refSource}.}
 
 \item{clusters}{Clusters to be annotated: "consensusClusters" or "tagClusters".
 Default is "consensusClusters".}

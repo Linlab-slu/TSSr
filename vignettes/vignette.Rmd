@@ -58,36 +58,33 @@ For technical questions, bug reports and suggestions for new features, we refer 
 
 # Quick start
 
-```{r exampleTSSr, results="hide", tidy=FALSE}
+```{r myTSSr-data, results="hide", tidy=FALSE}
 # Load the example data
 data("exampleTSSr")
 myTSSr <- exampleTSSr
 ```
 
-Or create a new TSSr object using the constructor function. Note that the
-input files do not need to exist at object creation time:
+The bundled object is precomputed so that the main sections below can
+demonstrate every downstream analysis with a sufficiently rich dataset. Its
+source BAM paths are intentionally empty; `inputFilesType = "bam"` is retained
+only as provenance, and its annotation is already stored in `refTable`.
 
-```{r newTSSr, tidy=FALSE}
-# Create a TSSr object using the constructor (files do not need to exist)
-newObj <- TSSr(
-    genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
-    inputFiles = c("S01.sorted.bam", "S02.sorted.bam",
-                    "S03.sorted.bam", "S04.sorted.bam"),
-    inputFilesType = "bam",
-    sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
-    sampleLabelsMerged = c("control", "treat"),
-    mergeIndex = c(1, 1, 2, 2),
-    refSource = "saccharomyces_cerevisiae.SGD.gff"
-)
-newObj
-```
+## Starting from your own data
 
-The package includes a small TSS table that can be used to exercise the import
-step without requiring external files:
+For a new analysis, `TSSr()` requires the genome name, input paths, input type,
+and sample labels. Input paths must be existing regular files. `refSource` is
+optional at construction, but when supplied it must also exist; annotation
+later requires either `refSource` or a populated `refTable`.
 
-```{r getTSS}
+The package includes a small four-sample TSS table and GFF file that exercise
+the same import-to-annotation path used for user files:
+
+```{r own-data-input}
 exampleInput <- system.file(
     "extdata", "example-tss-table.tsv", package = "TSSr", mustWork = TRUE
+)
+exampleAnnotation <- system.file(
+    "extdata", "example-annotation.gff3", package = "TSSr", mustWork = TRUE
 )
 importedTSSr <- TSSr(
     genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
@@ -95,15 +92,43 @@ importedTSSr <- TSSr(
     inputFilesType = "TSStable",
     sampleLabels = c("SL01", "SL02", "SL03", "SL04"),
     sampleLabelsMerged = c("control", "treat"),
-    mergeIndex = c(1, 1, 2, 2)
+    mergeIndex = c(1, 1, 2, 2),
+    refSource = exampleAnnotation
 )
+```
+
+Importing is only the first stage. Before annotation, create tag clusters and
+consensus clusters explicitly:
+
+```{r own-data-workflow, message=FALSE}
 importedTSSr <- getTSS(importedTSSr)
-head(TSSmatrix(importedTSSr, data = "raw"))
+importedTSSr <- mergeSamples(importedTSSr)
+importedTSSr <- normalizeTSS(importedTSSr)
+importedTSSr <- filterTSS(importedTSSr, method = "TPM", tpmLow = 2)
+importedTSSr <- clusterTSS(
+    importedTSSr,
+    method = "peakclu",
+    clusterThreshold = 1,
+    useMultiCore = FALSE
+)
+importedTSSr <- consensusCluster(importedTSSr, useMultiCore = FALSE)
+importedTSSr <- annotateCluster(
+    importedTSSr,
+    clusters = "consensusClusters",
+    filterCluster = TRUE
+)
+```
+
+Both assigned and unassigned clusters are now available:
+
+```{r own-data-results}
+head(assignedClusters(importedTSSr, sample = "control"))
+head(unassignedClusters(importedTSSr, sample = "control"))
 ```
 
 # TSS data processing
 
-The `exampleTSSr` object contains chromosome I data and the upstream inputs
+The `myTSSr` object contains chromosome I data and the upstream inputs
 needed for each workflow stage. The chunks below recompute the complete
 workflow and assign the returned object at every step.
 
@@ -207,6 +232,10 @@ head(DEtables(
 ```
 
 # Core promoter shifts
+
+Sparse gene-level 2-by-2 tables can have small expected counts. In that case,
+`shiftPromoter()` emits one summary warning for all affected tests; their
+approximate p values may be unreliable. See `?shiftPromoter` for details.
 
 ```{r shiftPromoter, tidy=FALSE}
 # Calculate core promoter shifts

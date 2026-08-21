@@ -50,19 +50,22 @@ setGeneric(
 #' @rdname consensusCluster
 #' @export
 setMethod("consensusCluster", signature(object = "TSSr"), function(object, dis, useMultiCore, numCores) {
+    tss.dt <- .requireWorkflowArtifact(
+        object,
+        "TSSprocessedMatrix",
+        "run getTSS() and mergeSamples() first"
+    )
+    cs <- .requireWorkflowArtifact(
+        object,
+        "tagClusters",
+        "run clusterTSS() first"
+    )
     message("\nCreating consensus clusters...")
-
-    ## initialize data
-    tss.dt <- object@TSSprocessedMatrix
 
     ## define variable as a NULL value
     dominant_tss <- NULL
 
     sampleLabelsMerged <- object@sampleLabelsMerged
-    cs <- object@tagClusters
-    if (length(cs) == 0) {
-        stop("You must have tagClusters data in order to proceed.")
-    }
     ## get consensus peak range
     cx <- cs[[sampleLabelsMerged[1]]]
     colnames(cx)[3:4] <- c("start.c", "end.c")

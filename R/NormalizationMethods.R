@@ -24,11 +24,15 @@ setGeneric(
 #'   assign the returned object to retain the changes.
 #' @export
 setMethod("normalizeTSS", signature(object = "TSSr"), function(object) {
+    tss.dt <- .requireWorkflowArtifact(
+        object,
+        "TSSprocessedMatrix",
+        "run getTSS() and mergeSamples() first"
+    )
     message("\nNormalizing TSS matrix...")
     ## initialize values
     sampleLabelsMerged <- object@sampleLabelsMerged
 
-    tss.dt <- object@TSSprocessedMatrix
     if (isTRUE(.isNormalized(object))) {
         stop("\tStopping... data is already normalized")
     }
