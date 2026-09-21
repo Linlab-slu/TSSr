@@ -89,7 +89,7 @@ The main functions of TSSr include identification of TSSs, normalization and fil
 
 ## 3. Installing TSSr Package:
 
-Once TSSr is released through Bioconductor, install with:
+TSSr is available through Bioconductor and can be installed using the BiocManager package:
 
 ```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
